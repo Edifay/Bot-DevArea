@@ -1,6 +1,6 @@
 # Bot_DevArea
 
-Ce projet est un bot discord, pour un serveur de développeurs. Voici une petite présentation du serveur :
+Ce projet est un bot discord, pour un serveur de développeurs français. Voici une petite présentation du serveur :
 
 Dev'Area
 
@@ -19,3 +19,17 @@ https://discord.gg/gpZemxGmrD
 Pour ce qui est du code et des explications, il est pour l'instant à l'état brut sans explications, et sans commentaires. Le code est encore un peu brouillon et brut, mais cela devrait au fure et à meusure du temps s'améliorer.
 
 Merci à vous !
+
+
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 3 of the License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
