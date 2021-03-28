@@ -8,7 +8,7 @@ Dev'Area
 > Ce serveur a été crée surtout pour les développeurs, ou ceux qui en cherchent. Dev'Area possède une communauté française (rare dans ce domaine) autour du développement. 
 > Tout le monde y est le bienvenue, débutants, intermédiaires et professionnels. Des salons sont disponibles pour aider les débutants, et pour les intermédiaires et 
 > professionnels des channels sont créés pour parler autour de sujets plus ou moins complexes.
-> Un bot spécialisé est là pour faciliter les échanges, si vous voulez suivre ou donner des cours, une commande spéciale est là pour ça.
+Un bot spécialisé est là pour faciliter les échanges, si vous voulez suivre ou donner des cours, une commande spéciale est là pour ça.
 
 > Quand vous avez besoin de développeurs, des channels missions payantes et missions gratuites sont présents pour les clients.
 
