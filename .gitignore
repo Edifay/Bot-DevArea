@@ -6,3 +6,4 @@ gradle/wrapper/gradle-wrapper.properties
 gradlew.bat
 settings.gradle
 gradlew
+.token
