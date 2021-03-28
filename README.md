@@ -18,7 +18,7 @@ Dev'Area
 
 ![bannierdic](https://user-images.githubusercontent.com/59512940/112747083-62891100-8fb3-11eb-9102-ea1466f9ecd5.png)
 
-> Pour ce qui est du code et des explications, il est pour l'instant à l'état brut sans explications, et sans commentaire. Le code est encore un peu brouillon et brut, mais > cela devrait au fur et à mesure du temps s'améliorer.
+> Pour ce qui est du code et des explications, il est pour l'instant à l'état brut sans explications, et sans commentaire. Le code est encore un peu brouillon et brut, mais  cela devrait au fur et à mesure du temps s'améliorer.
 
 > Merci à vous !
 
