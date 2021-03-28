@@ -10,7 +10,7 @@ Dev'Area
 > professionnels des channels sont créés pour parler autour de sujets plus ou moins complexes.
 Un bot spécialisé est là pour faciliter les échanges, si vous voulez suivre ou donner des cours, une commande spéciale est là pour ça.
 
-> Quand vous avez besoin de développeurs, des channels missions payantes et missions gratuites sont présents pour les clients.
+> Quand vous avez besoin de développeurs, des canaux missions payantes et missions gratuites sont présents pour les clients.
 
 > Si vous êtes développeurs ou que vous avez besoin d'un service rejoignez-nous !
 
