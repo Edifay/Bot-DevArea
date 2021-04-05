@@ -1,6 +1,5 @@
 package devarea.commands;
 
-
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.MessageCreateSpec;
@@ -23,8 +22,8 @@ public abstract class FirstStape extends Stape {
         return next;
     }
 
-    public void onFirstCall(Consumer<? super MessageCreateSpec> spec) {
-        this.message = this.textChannel.createMessage(spec).block();
+    public void onFirstCall(Consumer<? super MessageCreateSpec> deleteThisVariableAndSetYourOwnMessage) {
+        this.message = this.textChannel.createMessage(deleteThisVariableAndSetYourOwnMessage).block();
     }
 
     public Message getMessage() {

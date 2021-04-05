@@ -4,6 +4,7 @@ import devarea.Main;
 import devarea.Data.ColorsUsed;
 import devarea.automatical.Bump;
 import devarea.automatical.MeetupManager;
+import devarea.automatical.MissionsManager;
 import devarea.automatical.Stats;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -35,6 +36,7 @@ public class Ready {
             Stats.start();
             MeetupManager.init();
             Bump.init();
+            MissionsManager.init();
         } catch (IOException e) {
             e.printStackTrace();
         }

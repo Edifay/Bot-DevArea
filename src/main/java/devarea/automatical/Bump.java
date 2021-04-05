@@ -1,7 +1,7 @@
 package devarea.automatical;
 
-import devarea.Main;
 import devarea.Data.ColorsUsed;
+import devarea.Main;
 import devarea.commands.Command;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
@@ -27,20 +27,23 @@ public class Bump {
             try {
                 while (true) {
                     Thread.sleep(60000);
-                    restartIfNotTheLast();
-                    if (dateToBump - System.currentTimeMillis() > 0) {
-                        if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes."))
-                            edit(msg -> msg.setEmbed(embed -> {
-                                embed.setDescription("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes.");
-                                embed.setColor(ColorsUsed.wrong);
-                            }));
+                    try {
+                        restartIfNotTheLast();
+                        if (dateToBump - System.currentTimeMillis() > 0) {
+                            if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes."))
+                                edit(msg -> msg.setEmbed(embed -> {
+                                    embed.setDescription("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes.");
+                                    embed.setColor(ColorsUsed.wrong);
+                                }));
 
-                    } else {
-                        if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est disponible avec la commande `!d bump`."))
-                            replace(msg -> msg.setEmbed(embed -> {
-                                embed.setDescription("Le bump est disponible avec la commande `!d bump`.");
-                                embed.setColor(ColorsUsed.same);
-                            }));
+                        } else {
+                            if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est disponible avec la commande `!d bump`."))
+                                replace(msg -> msg.setEmbed(embed -> {
+                                    embed.setDescription("Le bump est disponible avec la commande `!d bump`.");
+                                    embed.setColor(ColorsUsed.same);
+                                }));
+                        }
+                    } catch (Exception ignored) {
                     }
                 }
             } catch (InterruptedException ignored) {

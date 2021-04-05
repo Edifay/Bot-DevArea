@@ -2,6 +2,7 @@ package devarea.commands;
 
 import devarea.Data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -17,6 +18,7 @@ import static devarea.Data.TextMessage.haventPermission;
 public abstract class Command {
 
     protected final MessageCreateEvent message;
+    protected final ReactionAddEvent reaction;
     protected final Member member;
     protected final TextChannel channel;
 
@@ -25,10 +27,18 @@ public abstract class Command {
 
     public Command(final MessageCreateEvent message) {
         this.message = message;
+        this.reaction = null;
         this.member = this.message.getMember().get();
         this.channel = (TextChannel) this.message.getMessage().getChannel().block();
         final String[] alls = this.message.getMessage().getContent().split(" ");
         this.args = Arrays.copyOfRange(alls, 1, alls.length);
+    }
+
+    public Command(final ReactionAddEvent message) {
+        this.reaction = message;
+        this.message = null;
+        this.member = this.reaction.getMember().get();
+        this.channel = (TextChannel) this.reaction.getMessage().block().getChannel().block();
     }
 
 

@@ -128,4 +128,53 @@ public class TextMessage {
         embed.setTimestamp(Instant.now());
         embed.setColor(ColorsUsed.just);
     };
+
+    public static final Consumer<? super EmbedCreateSpec> missionTitle = embed -> {
+        embed.setTitle("Creation d'une mission");
+        embed.setDescription("Donnez un titre à votre mission !");
+        embed.setFooter("Vous pouvez annuler | cancel", null);
+        embed.setColor(ColorsUsed.just);
+    };
+
+    public static final Consumer<? super EmbedCreateSpec> missionDescription = embed -> {
+        embed.setTitle("Creation d'une mission");
+        embed.setDescription("Donnez une description complète de votre mission, les aspect difficiles, et le contexte.");
+        embed.setFooter("Vous pouvez annuler | cancel", null);
+        embed.setColor(ColorsUsed.just);
+    };
+
+    public static final Consumer<? super EmbedCreateSpec> missionSupport = embed -> {
+        embed.setTitle("Creation d'une mission");
+        embed.setDescription("Donnez le support sur le quel vous voulez que votre programme fonctionne. Web, linux, windows, discord.js....");
+        embed.setFooter("Vous pouvez annuler | cancel", null);
+        embed.setColor(ColorsUsed.just);
+    };
+
+    public static final Consumer<? super EmbedCreateSpec> missionLangage = embed -> {
+        embed.setTitle("Creation d'une mission");
+        embed.setDescription("Donnez le langage de programmation que vous voulez (si vous n'en avez pas vous pouvez marquer `aucune préférence`).");
+        embed.setFooter("Vous pouvez annuler | cancel", null);
+        embed.setColor(ColorsUsed.just);
+    };
+
+    public static final Consumer<? super EmbedCreateSpec> missionPrix = embed -> {
+        embed.setTitle("Creation d'une mission");
+        embed.setDescription("Donnez le prix/bugdet que vous pouvez mettre dans cette mission ! (Pensez à mettre la devise)");
+        embed.setFooter("Vous pouvez annuler | cancel", null);
+        embed.setColor(ColorsUsed.just);
+    };
+
+    public static final Consumer<? super EmbedCreateSpec> missionDate = embed -> {
+        embed.setTitle("Creation d'une mission");
+        embed.setDescription("Donnez la date de retour de la mission. Elle peut être `non définie`.");
+        embed.setFooter("Vous pouvez annuler | cancel", null);
+        embed.setColor(ColorsUsed.just);
+    };
+
+    public static final Consumer<? super EmbedCreateSpec> missionNiveau = embed -> {
+        embed.setTitle("Creation d'une mission");
+        embed.setDescription("Donnez le niveau du difficulté de la mission (estimation).");
+        embed.setFooter("Vous pouvez annuler | cancel", null);
+        embed.setColor(ColorsUsed.just);
+    };
 }

@@ -8,7 +8,7 @@ compileTestJava.options.encoding = "UTF-8"
 
 jar {
     manifest {
-        attributes 'Main-Class': 'bot.Main'
+        attributes 'Main-Class': 'devarea.Main'
     }
 }
 

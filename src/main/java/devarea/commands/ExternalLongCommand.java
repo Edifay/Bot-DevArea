@@ -6,13 +6,18 @@ import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 
-public abstract class LongCommand extends Command {
+public class ExternalLongCommand extends ExternalCommand {
 
+    protected TextChannel createdChan;
     protected Message lastMessage;
     protected FirstStape firstStape;
 
-    public LongCommand(final MessageCreateEvent message) {
-        super(message);
+    public ExternalLongCommand(MessageCreateEvent event) {
+        super(event);
+    }
+
+    public ExternalLongCommand(ReactionAddEvent event) {
+        super(event);
     }
 
     public void nextStape(final ReactionAddEvent event) {
@@ -33,7 +38,7 @@ public abstract class LongCommand extends Command {
     }
 
     public void nextStape(final MessageCreateEvent event) {
-        if (!event.getMessage().getChannelId().equals(this.channel.getId())) {
+        if (!event.getMessage().getChannelId().equals(this.channel.getId()) && !event.getMessage().getChannelId().equals(createdChan.getId())) {
             deletedEmbed((TextChannel) event.getMessage().getChannel().block(), embed -> {
                 embed.setTitle("Error !");
                 embed.setDescription("Vous avez une commande en cour dans <#" + this.channel.getId().asString() + ">");
@@ -51,12 +56,11 @@ public abstract class LongCommand extends Command {
         delete(event.getMessage());
     }
 
-
-
     protected void removeTrace() {
         sendError("Vous avez annuler la commande !");
         delete(this.lastMessage);
         ended = true;
         endCommand();
     }
+
 }

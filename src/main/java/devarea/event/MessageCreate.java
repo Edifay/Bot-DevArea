@@ -1,11 +1,12 @@
 package devarea.event;
 
-import devarea.Main;
 import devarea.Data.ColorsUsed;
+import devarea.Main;
 import devarea.automatical.Bump;
 import devarea.automatical.XpCount;
 import devarea.commands.Command;
 import devarea.commands.CommandManager;
+import devarea.commands.ExternalLongCommand;
 import devarea.commands.LongCommand;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -55,6 +56,9 @@ public class MessageCreate {
                     if (command instanceof LongCommand) {
                         ((LongCommand) command).nextStape(message);
                         find.set(true);
+                    } else if (command instanceof ExternalLongCommand) {
+                        ((ExternalLongCommand) command).nextStape(message);
+                        find.set(true);
                     }
             }
 
@@ -63,7 +67,8 @@ public class MessageCreate {
 
             if (message.getMessage().getContent().startsWith(Main.prefix))
                 CommandManager.exe(message.getMessage().getContent().substring(Main.prefix.length()).split(" ")[0], message);
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             System.out.println("can't crash");
             e.printStackTrace();
         }

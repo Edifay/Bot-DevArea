@@ -68,6 +68,8 @@ public class Main {
 
     public static Snowflake idDevHelper;
 
+    public static Snowflake idMissionsCategory;
+
     public static void main(String[] args) throws IllegalAccessException, NoSuchFieldException {
         XpCount.init();
         CommandManager.init();
@@ -131,6 +133,8 @@ public class Main {
                     idCommands = Snowflake.of(document.getElementsByTagName("idCommands").item(0).getChildNodes().item(0).getNodeValue());
 
                     idDevHelper = Snowflake.of(document.getElementsByTagName("idDevHelper").item(0).getChildNodes().item(0).getNodeValue());
+
+                    idMissionsCategory = Snowflake.of(document.getElementsByTagName("idMissionsCategory").item(0).getChildNodes().item(0).getNodeValue());
 
                     break;
                 } catch (Exception e) {

@@ -1,6 +1,7 @@
 package devarea.event;
 
 import devarea.automatical.MeetupManager;
+import devarea.automatical.MissionsManager;
 import devarea.commands.Command;
 import devarea.commands.CommandManager;
 import devarea.commands.LongCommand;
@@ -38,6 +39,7 @@ public class ReactionAdd {
         });
 
         MeetupManager.getEvent(reactionAddEvent);
+        MissionsManager.react(reactionAddEvent);
     }
 
 }
