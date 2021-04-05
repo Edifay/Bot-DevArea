@@ -69,10 +69,6 @@ public class Bump {
                 embed.setDescription("Le bump est à nouveau disponible dans " + 120 + "minutes.");
                 embed.setColor(ColorsUsed.wrong);
             }));
-        } else {
-            for (String s : coupes) {
-                System.out.println(s);
-            }
         }
     }
 

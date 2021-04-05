@@ -164,9 +164,7 @@ public class Meetup extends LongCommand {
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 try {
                     int number = Integer.parseInt(event.getMessage().getContent());
-                    System.out.println("le numéro est : " + number + " la taille de canDelete : " + canDelete.size());
                     if (number >= 0 && number < canDelete.size()) {
-                        System.out.println("in first");
                         MeetupManager.remove(canDelete.get(number));
                         return callStape(0);
                     } else {

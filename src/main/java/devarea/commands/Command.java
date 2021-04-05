@@ -91,7 +91,7 @@ public abstract class Command {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
-                if (CommandManager.actualCommands.containsKey(this))
+                if (CommandManager.actualCommands.containsValue(this))
                     this.endCommand();
             }
         }).start();

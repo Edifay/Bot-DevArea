@@ -69,7 +69,6 @@ public class XpCount {
             } else {
                 xp.put(member.getId(), 1);
             }
-            System.out.println("xp : " + xp.get(member.getId()));
             alreay.add(member.getId());
             new Thread(() -> {
                 try {
