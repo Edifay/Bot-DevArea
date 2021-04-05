@@ -8,7 +8,6 @@ import discord4j.core.object.entity.channel.TextChannel;
 
 public class ExternalLongCommand extends ExternalCommand {
 
-    protected TextChannel createdChan;
     protected Message lastMessage;
     protected FirstStape firstStape;
 
@@ -38,7 +37,7 @@ public class ExternalLongCommand extends ExternalCommand {
     }
 
     public void nextStape(final MessageCreateEvent event) {
-        if (!event.getMessage().getChannelId().equals(this.channel.getId()) && !event.getMessage().getChannelId().equals(createdChan.getId())) {
+        if (!event.getMessage().getChannelId().equals(this.channel.getId())) {
             deletedEmbed((TextChannel) event.getMessage().getChannel().block(), embed -> {
                 embed.setTitle("Error !");
                 embed.setDescription("Vous avez une commande en cour dans <#" + this.channel.getId().asString() + ">");

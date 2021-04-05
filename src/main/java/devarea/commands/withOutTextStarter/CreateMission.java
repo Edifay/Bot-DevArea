@@ -22,7 +22,6 @@ import java.util.function.Consumer;
 
 public class CreateMission extends ExternalLongCommand {
 
-
     protected String title;
     protected String descriptionText;
     protected String prix;
@@ -33,17 +32,17 @@ public class CreateMission extends ExternalLongCommand {
 
     public CreateMission(ReactionAddEvent event) {
         super(event);
-
-        this.createdChan = Main.devarea.createTextChannel(textChannelCreateSpec -> {
+        this.deletedCommand();
+        this.channel = Main.devarea.createTextChannel(textChannelCreateSpec -> {
             textChannelCreateSpec.setName("creation de mission");
             textChannelCreateSpec.setParentId(Main.idMissionsCategory);
         }).block();
-        this.createdChan.addRoleOverwrite(Main.idRoleRulesAccepted,
+        this.channel.addRoleOverwrite(Main.idRoleRulesAccepted,
                 PermissionOverwrite.forRole(Main.idRoleRulesAccepted,
                         PermissionSet.of(),
                         PermissionSet.of(Permission.VIEW_CHANNEL)))
                 .block();
-        this.createdChan.addMemberOverwrite(this.member.getId(),
+        this.channel.addMemberOverwrite(this.member.getId(),
                 PermissionOverwrite.forMember(this.member.getId(),
                         PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES),
                         PermissionSet.of(Permission.ADD_REACTIONS)))
@@ -143,10 +142,13 @@ public class CreateMission extends ExternalLongCommand {
             }
         };
 
-        this.firstStape = new FirstStape(this.createdChan, description) {
+        this.firstStape = new FirstStape(this.channel, description) {
             @Override
             public void onFirstCall(Consumer<? super MessageCreateSpec> spec) {
-                super.onFirstCall(messageCreateSpec -> messageCreateSpec.setEmbed(TextMessage.missionTitle));
+                super.onFirstCall(messageCreateSpec -> {
+                    messageCreateSpec.setEmbed(TextMessage.missionTitle);
+                    messageCreateSpec.setContent("<@" + member.getId().asString() + ">,");
+                });
             }
 
             @Override
@@ -160,10 +162,11 @@ public class CreateMission extends ExternalLongCommand {
     @Override
     protected Boolean endCommand() {
         try {
-            createdChan.delete().block();
+            this.channel.delete().block();
         } catch (Exception e) {
         }
         this.ended = true;
         return super.endCommand();
     }
+
 }

@@ -20,7 +20,7 @@ public abstract class Command {
     protected final MessageCreateEvent message;
     protected final ReactionAddEvent reaction;
     protected final Member member;
-    protected final TextChannel channel;
+    protected TextChannel channel;
 
     protected Boolean ended = false;
     protected String[] args;
@@ -84,6 +84,19 @@ public abstract class Command {
         });
     }
 
+    protected void deletedCommand() {
+        new Thread(() -> {
+            try {
+                Thread.sleep(600000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                if (CommandManager.actualCommands.containsKey(this))
+                    this.endCommand();
+            }
+        }).start();
+    }
+
     public static Message send(final TextChannel channel, final Consumer<? super MessageCreateSpec> spec) {
         return channel.createMessage(spec).block();
     }
@@ -127,5 +140,6 @@ public abstract class Command {
     public static Message sendEmbed(final TextChannel channel, final Consumer<? super EmbedCreateSpec> spec) {
         return send(channel, msg -> msg.setEmbed(spec));
     }
+
 
 }
