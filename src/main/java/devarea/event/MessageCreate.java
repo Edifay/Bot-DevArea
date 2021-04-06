@@ -33,8 +33,8 @@ public class MessageCreate {
                 return;
             }
 
-            if (message.getMessage().getChannel().block().getId().equals(Main.idBump) && !message.getMessage().getContent().equalsIgnoreCase("!d bump") && !message.getMessage().getAuthor().get().equals(Main.devarea.getMemberById(Snowflake.of("302050872383242240"))))
-                Bump.messageInChannel();
+            if (message.getMessage().getChannel().block().getId().equals(Main.idBump) && !message.getMessage().getAuthor().get().equals(Main.devarea.getMemberById(Snowflake.of("302050872383242240"))))
+                Bump.messageInChannel(message);
 
             Main.logChannel.createMessage(msg -> msg.setEmbed(embed -> {
                 final DateTimeFormatter hours = DateTimeFormatter.ofPattern("HH:mm");

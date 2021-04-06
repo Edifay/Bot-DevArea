@@ -59,7 +59,7 @@ public class TextMessage {
      */
     public static final Consumer<? super EmbedCreateSpec> helpEmbed = embedCreateSpec -> {
         embedCreateSpec.setTitle("Voici la liste des commandes :");
-        embedCreateSpec.setDescription("`//help` -> donne cette liste.\n`//ping` -> donne le temps de latence du bot.\n`//meetup` -> permet de créer un meetup autour d'un sujet.\n`//start` -> envois un message qui permet de bien commencer dans une langage.\n`//rank` -> donne l'xp et le rang de la personne (mentionnable).");
+        embedCreateSpec.setDescription("`//help` -> donne cette liste.\n`//ping` -> donne le temps de latence du bot.\n`//meetup` -> permet de créer un meetup autour d'un sujet.\n`//start` -> envois un message qui permet de bien commencer dans une langage.\n`//rank` -> donne l'xp et le rang de la personne (mentionnable).\n`//leaderboard` -> permet de voir le classement des membres du serveur en xp.\n`//devhelp` -> mentionne les développeurs ayant pris le rôle DevHelper.\n`//bumps` -> permet simplement de voir le nombre de bumps effectué.\n\n`creationMissions` -> ne se lance pas comme une commande classique, une réaction dans le channel : <#"+Main.idMissionsPayantes.asString()+"> permet de commencer la commande.");
         embedCreateSpec.setColor(ColorsUsed.just);
         embedCreateSpec.setTimestamp(Instant.now());
     };
