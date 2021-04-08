@@ -1,8 +1,8 @@
 package devarea.commands.created;
 
-import devarea.Main;
 import devarea.Data.ColorsUsed;
 import devarea.Data.TextMessage;
+import devarea.Main;
 import devarea.automatical.MeetupManager;
 import devarea.commands.Command;
 import devarea.commands.FirstStape;
@@ -133,7 +133,7 @@ public class Meetup extends LongCommand {
             @Override
             protected boolean onCall(Message message) {
                 setText(embedCreateSpec -> {
-                    embedCreateSpec.setTitle("Le meetup a bien été supprimer !");
+                    embedCreateSpec.setTitle("Le meetup a bien été supprimé !");
                     embedCreateSpec.setColor(ColorsUsed.just);
                     embedCreateSpec.setTimestamp(Instant.now());
                 });
@@ -154,7 +154,9 @@ public class Meetup extends LongCommand {
                     a.getAndIncrement();
                 });
                 setText(spec -> {
-                    spec.setTitle("Donnez moi le numéro du meetup que vous voulez supprimer ");
+                    spec.setTitle("Meetup à delete...");
+                    spec.setDescription("Vous allez voir la liste de tout vos meetup s'afficher. Envoyer son numéro attribué pour le supprimer.");
+                    spec.setFooter("Vous pouvez annuler | cancel", null);
                     spec.setColor(ColorsUsed.just);
                 });
                 return next;

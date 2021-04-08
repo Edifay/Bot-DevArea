@@ -1,6 +1,5 @@
 package devarea.commands.created;
 
-import devarea.Data.ColorsUsed;
 import devarea.Data.TextMessage;
 import devarea.commands.FirstStape;
 import devarea.commands.LongCommand;
@@ -20,16 +19,27 @@ public class Start extends LongCommand {
         Stape java = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setText(embed -> {
-                    embed.setTitle("Java");
-                    embed.setDescription("Le java");
-                    embed.setColor(ColorsUsed.just);
-                });
+                setText(TextMessage.startJava);
                 return end;
             }
         };
 
-        this.firstStape = new FirstStape(this.channel, java) {
+        Stape python = new EndStape() {
+            @Override
+            protected boolean onCall(Message message) {
+                setText(TextMessage.startPython);
+                return end;
+            }
+        };
+        Stape CSharp = new EndStape() {
+            @Override
+            protected boolean onCall(Message message) {
+                setText(TextMessage.startCSharp);
+                return end;
+            }
+        };
+
+        this.firstStape = new FirstStape(this.channel, java, python, CSharp) {
             @Override
             public void onFirstCall(Consumer<? super MessageCreateSpec> spec) {
                 super.onFirstCall(msg -> msg.setEmbed(TextMessage.startCommandExplain));
@@ -38,8 +48,12 @@ public class Start extends LongCommand {
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 String content = event.getMessage().getContent();
-                if (content.equals("java"))
+                if (content.equalsIgnoreCase("java"))
                     return callStape(0);
+                else if (content.equalsIgnoreCase("python"))
+                    return callStape(1);
+                else if (content.equalsIgnoreCase("csharp") || content.equalsIgnoreCase("c#"))
+                    return callStape(2);
                 else
                     sendErrorEntry();
                 return next;

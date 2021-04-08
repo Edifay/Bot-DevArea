@@ -1,7 +1,6 @@
 package devarea.Data;
 
 import devarea.Main;
-import discord4j.core.object.entity.User;
 import discord4j.core.spec.EmbedCreateSpec;
 
 import java.time.Instant;
@@ -59,7 +58,7 @@ public class TextMessage {
      */
     public static final Consumer<? super EmbedCreateSpec> helpEmbed = embedCreateSpec -> {
         embedCreateSpec.setTitle("Voici la liste des commandes :");
-        embedCreateSpec.setDescription("`//help` -> donne cette liste.\n`//ping` -> donne le temps de latence du bot.\n`//meetup` -> permet de créer un meetup autour d'un sujet.\n`//start` -> envois un message qui permet de bien commencer dans une langage.\n`//rank` -> donne l'xp et le rang de la personne (mentionnable).\n`//leaderboard` -> permet de voir le classement des membres du serveur en xp.\n`//devhelp` -> mentionne les développeurs ayant pris le rôle DevHelper.\n`//bumps` -> permet simplement de voir le nombre de bumps effectué.\n\n`creationMissions` -> ne se lance pas comme une commande classique, une réaction dans le channel : <#"+Main.idMissionsPayantes.asString()+"> permet de commencer la commande.");
+        embedCreateSpec.setDescription("`//help` -> donne cette liste.\n`//ping` -> donne le temps de latence du bot.\n`//meetup` -> permet de créer un meetup autour d'un sujet.\n`//start` -> envois un message qui permet de bien commencer dans une langage.\n`//rank` -> donne l'xp et le rang de la personne (mentionnable).\n`//leaderboard` -> permet de voir le classement des membres du serveur en xp.\n`//devhelp` -> mentionne les développeurs ayant pris le rôle DevHelper.\n\n`creationMissions` -> ne se lance pas comme une commande classique, une réaction dans le channel : <#" + Main.idMissionsPayantes.asString() + "> permet de commencer la commande.");
         embedCreateSpec.setColor(ColorsUsed.just);
         embedCreateSpec.setTimestamp(Instant.now());
     };
@@ -76,20 +75,58 @@ public class TextMessage {
         Le message lors de la commande start pour le java
      */
     public static final Consumer<? super EmbedCreateSpec> startJava = embed -> {
-        embed.setTitle("Commencer en Java");
-        embed.setDescription("Tout d'abord il faut");
+        embed.setTitle("Java");
+        embed.setUrl("https://fr.wikipedia.org/wiki/Java_(langage)");
+        embed.setDescription("Java est un langage de programmation orienté objet créé par James Gosling et Patrick Naughton, employés de Sun Microsystems, avec le soutien de Bill Joy, présenté officiellement le 23 mai 1995 au SunWorld. La société Sun a été ensuite rachetée en 2009 par la société Oracle qui détient et maintient désormais Java");
+        embed.setColor(ColorsUsed.same);
+        embed.addField("Installer Java", "Java a besoin d'une JVM (Java Virtual Machine), un programme qui va interpréter le code pour le faire exécuter par la machine. Il existe de nombreuse JVM qui ont chacune des avantages et des inconvénients.\n\nLa JVM \"officielle\" par Oracle: https://www.java.com/fr/\nUne JVM mise à jour régulièrement: https://adoptopenjdk.net/?variant=openjdk11&jvmVariant=openj9", false);
+        embed.addField("Les bases", "Beaucoup de personnes veulent apprendre le java pour différentes raisons. Par exemple minecraft, backend site, par l'envie d'apprendre.... Mais pour toutes les raisons la base est le langage Java. Il faut impérativement passer par les bases pour ensuite partir dans une branche du java.\n\nJava est un langage populaire et connu, il y a donc ne nombreuses ressources pour apprendre ce langage.", false);
+        embed.addField("Les cours écrits.", "OpenClassroom: https://openclassrooms.com/fr/courses/26832-apprenez-a-programmer-en-java\nDeveloppez: https://java.developpez.com/livres-collaboratifs/javaenfants/\nZeste de savoir: https://zestedesavoir.com/tutoriels/646/apprenez-a-programmer-en-java/", false);
+        embed.addField("Ou des cours vidéos...", "Les Teachers Du Net: https://www.youtube.com/watch?v=fmJsqBWkXm4&list=PLlxQJeQRaKDRnvgIvfHTV6ZY8M2eurH95\nEt plein d'autres je vous laisse chercher si cette chaîne ne vous convient pas :/", false);
+        embed.addField("IDE (logiciels simplifiant le développement)", "Les IDE sont des logiciels très puissant, qui rassemblent tout les outils permettant le développement. Je vais vous en proposer 2, qui sont les plus connu dans le langage java.\n\nJetBrain IntelliJ: https://www.jetbrains.com/fr-fr/idea/download/#section=windows\nEclipse: https://www.eclipse.org/downloads/\n\nChoisissez celui qui vous fait le plus envie :)", false);
+        embed.addField("Bonne Chance !", "Maintenant vous pouvez naviger dans les tutos, cours, et vidéos pour apprendre le java. Le serveur est là si vous rencontrez certains problèmes.", false);
+        embed.setAuthor(Main.client.getSelf().block().getUsername(), null, Main.client.getSelf().block().getAvatarUrl());
         embed.setTimestamp(Instant.now());
-        User user = Main.client.getSelf().block();
-        embed.setAuthor(user.getUsername(), user.getAvatarUrl(), user.getAvatarUrl());
+    };
+
+    public static final Consumer<? super EmbedCreateSpec> startCSharp = embed -> {
+        embed.setTitle("C#, CSharp");
+        embed.setDescription("C# (a prononcé C-Sharp) est un langage de programmation centré sur le paradigme Orienté Objet offrant des fonctionnalités d'autres paradigmes.\nDévelopper par Microsoft au début des années 2000 pour construire des applications Windows sans avoir à utiliser Java, et inspiré par le C/C++ et Java, le C# est un langage compilé qui vise le .NET, un Framework qui aide à construire des applications de toutes sortes et ne se limitant pas qu'au C#. (F#, VB, des variantes de Python, C++, etc)");
+        embed.setUrl("https://en.wikipedia.org/wiki/C_Sharp_(programming_language)");
+        embed.addField("C# Pour faire quoi ?", "Le C# est un langage qui se veut simple d'utilisation, fortement typé et robuste.\nIl peut vous aider à créer tout types d'applications ; du site web monolithique utilisant Razor aux APIs performantes et facile d'implémentation, il sert aussi a créer des jeux grâce au moteur de jeu Unity, le CryEngine de CryTek ou encore le framework de jeu MonoGame basé sur le XNA de Microsoft. \nPensé avant tout pour développer des applications Windows, il peut aussi vous permettre de créer des Applications Mobile multi plateforme grâce à .NET MAUI.\n\nSupporté en premier lieu par Microsoft, depuis plusieurs années maintenant le C# tout autant que le .NET sont open source et gérer par des fondations externe a Microsoft.", false);
+        embed.addField("Installer C#", "Il vous suffit de télécharger l'un des package de développement .NET sur le site de Microsoft. \n.NET Core est multi plateforme et peut être utilisé sur Windows tout autant que Linux & MacOS.\n.NET Framework est une implémentation qui tends à être remplacer par Core, et est exclusif à Windows.\nVous pouvez aussi installer Visual studio, il vous permettra d'avoir .NET sur votre machine et un IDE puissant en plus.\n\n.NET Core & Framework => https://dotnet.microsoft.com/download\nVisual studio => https://visualstudio.microsoft.com/fr/", false);
+        embed.addField("Ou apprendre le C# ?", "Le C# en trois parties (FR/EN) :\nhttps://docs.microsoft.com/fr-fr/learn/paths/csharp-first-steps/\nhttps://docs.microsoft.com/fr-fr/learn/paths/csharp-data/\nhttps://docs.microsoft.com/fr-fr/learn/paths/csharp-logic/\n\nLe .Net et Xamarin aka MAUI :\nhttps://docs.microsoft.com/fr-fr/learn/paths/build-dotnet-applications-csharp/\nhttps://docs.microsoft.com/fr-fr/learn/paths/build-mobile-apps-with-xamarin-forms/\n\nSources externes à Microsoft :\nPar Mike dane => https://www.mikedane.com/programming-languages/csharp/\n\nPar Brackeyz(Setp vidéos courtes, c'est la première) => \nhttps://www.youtube.com/watch?v=N775KsWQVkw&t=1s\n\nSur OCR => https://openclassrooms.com/fr/courses/218202-apprenez-a-programmer-en-c-sur-net\n\nSur LernCS => https://www.learncs.org/", false);
+        embed.addField("Les outils", "Visual studio est l'outils de développement C# par excellence, il supporte et sublime la stack de technologie Microsoft au possible. JetBrains Rider est aussi un excellent outil de développement et totalement à niveau de VS.\nVisual studio code est plus proche d'un éditeur de texte qu'un IDE tel que VS ou Rider mais il offre des options de développement digne d'un IDE et a le mérite d'être léger pour le développement.\n\nVS et VSCode => https://visualstudio.microsoft.com/fr/\nRider => https://www.jetbrains.com/fr-fr/rider/", false);
+        embed.addField("Bonne Chance !", "Maintenant vous pouvez naviger dans les tutos, cours, et vidéos pour apprendre le C#. Le serveur est là si vous rencontrez certains problèmes.", false);
+        embed.setAuthor(Main.client.getSelf().block().getUsername(), null, Main.client.getSelf().block().getAvatarUrl());
+        embed.setTimestamp(Instant.now());
         embed.setColor(ColorsUsed.same);
     };
+
+    public static final Consumer<? super EmbedCreateSpec> startPython = embed -> {
+        embed.setTitle("Python");
+        embed.setUrl("https://fr.wikipedia.org/wiki/Python_(langage)");
+        embed.setDescription("Python est un langage de programmation interprété, multi-paradigme et multiplateformes. Il favorise la programmation impérative structurée, fonctionnelle et orientée objet.");
+        embed.setColor(ColorsUsed.same);
+        embed.addField("Installer Python", "Pour pouvoir programmer en python il faut d'abord télécharger la VM,  un programme qui va interpréter le code et pouvoir le faire fonctionner sur la machine.\n\n Il est simple d'installation, il suffit d'aller sur leur site officiel (https://www.python.org/) et de suivre les indications du téléchargement.", false);
+        embed.addField("Les bases", "Ils y a différents moyen pour apprendre le python, de nombreux sites permettent l'apprentissage et la compréhension des notions lié au python.", false);
+        embed.addField("Il y a de nombreux cour écrits, cela permet de lire et d'aller à votre rythme.", "OpenClassroom: https://openclassrooms.com/fr/courses/4262331-demarrez-votre-projet-avec-python\nDeveloppez: https://python.developpez.com/tutoriels/apprendre-programmation-python/les-bases/?page=le-langage-python\nZeste de Savoir: https://zestedesavoir.com/tutoriels/799/apprendre-a-programmer-avec-python-3/", false);
+        embed.addField("Ou encore des cours vidéos...", "CodeAvecJonathan: https://www.youtube.com/watch?v=oUJolR5bX6g\nYvan Monka: https://www.youtube.com/watch?v=VmOPhT4HFNE", false);
+        embed.addField("IDE (logiciels simplifiant le développement)", "Les IDE sont des logiciels très puissant, qui rassemblent tout les outils permettant le développement. Je vais vous en proposer 2, qui sont les plus connu dans le langage python.\n\nJetBrain PyCharm: https://www.jetbrains.com/fr-fr/pycharm/\nVisualStudioCode: https://code.visualstudio.com/\n\nChoisissez celui qui vous fait le plus envie :)", false);
+        embed.addField("Bonne Chance !", "Maintenant vous pouvez naviger dans les tutos, cours, et vidéos pour apprendre le python. Le serveur est là si vous rencontrez certains problèmes.", false);
+        embed.setAuthor(Main.client.getSelf().block().getUsername(), null, Main.client.getSelf().block().getAvatarUrl());
+        embed.setTimestamp(Instant.now());
+    };
+
     /*
         Le message expliquant la commande start, et en disant quels sont les langages qui sont disponibles.
      */
     public static final Consumer<? super EmbedCreateSpec> startCommandExplain = embed -> {
         embed.setTitle("Start");
-        embed.setDescription("Il y a acutellement 1 langage qui possède un starter : java.\nQuel langage voulez vous voir ? (écrivez son nom)\n\nPour annuler la commande utilisez le mot `cancel`.");
+        embed.setDescription("Cette commande permet au débutant d'avoir les liens, et les premières indications sur un langage.");
+        embed.addField("Les langages :", "Java, Python, C#, en développement....\n\nPour choisir le langage, tapez simplement son nom et vous aurez toutes les informations.\n\nVous pouvez annuler la commande avec `annuler` ou `cancel`.", false);
         embed.setColor(ColorsUsed.just);
+        embed.setTimestamp(Instant.now());
     };
 
     public static final Consumer<? super EmbedCreateSpec> meetupCommandExplain = embed -> {
@@ -101,23 +138,23 @@ public class TextMessage {
     };
 
     public static final Consumer<? super EmbedCreateSpec> meetupCreateGetDescription = embedCreateSpec -> {
-        embedCreateSpec.setTitle("Quel est le sujet de meetup ?");
-        embedCreateSpec.setDescription("Vous pouvez faire une petite description (quelques lignges) sur qu'est ce que va être ce meetup.");
-        embedCreateSpec.setFooter("cancel | annuler pour quitter.", null);
+        embedCreateSpec.setTitle("Sujet");
+        embedCreateSpec.setDescription("Quel est le sujet de votre meetup, le but que vous voulez accomplir lors de ce regroupement ?");
+        embedCreateSpec.setFooter("Vous pouvez annuler | cancel", null);
         embedCreateSpec.setColor(ColorsUsed.just);
     };
 
     public static final Consumer<? super EmbedCreateSpec> meetupCreateGetDate = embedCreateSpec -> {
-        embedCreateSpec.setTitle("Quand voulez vous faire le meetup ?");
+        embedCreateSpec.setTitle("Date");
         Calendar calendar = Calendar.getInstance();
-        embedCreateSpec.setDescription("Vous devez répondre sous la forme **dd/MM/yyyy hh:mm**.\nPar exemple `" + calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR) + " " + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + "`.");
+        embedCreateSpec.setDescription("Quand voulez-vous organiser se meetup. Donnez la date et l'heure sous la forme **dd/MM/yyyy hh:mm**. Par exemple `" + calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR) + " " + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + "`.");
         embedCreateSpec.setFooter("cancel | annuler pour quitter.", null);
         embedCreateSpec.setColor(ColorsUsed.just);
     };
 
     public static final Consumer<? super EmbedCreateSpec> meetupCreateGetImage = embed -> {
         embed.setTitle("Image");
-        embed.setDescription("Vous avez la possibilité d'ajouter une image de présentation au meeetup !\nSi vous ne voulez pas ajouter d'image répondez `non`, sinon envoyez votre image.");
+        embed.setDescription("Vous avez la possibilitée d'ajouter une image de présentation au meeetup !\nSi vous ne voulez pas ajouter d'image répondez `non`, sinon envoyez votre image.");
         embed.setFooter("cancel | annuler pour quitter.", null);
         embed.setColor(ColorsUsed.just);
     };
