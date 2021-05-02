@@ -57,7 +57,10 @@ public class Stats {
             try {
                 while (true) {
                     Thread.sleep(600000);
-                    update();
+                    try {
+                        update();
+                    } catch (Exception ignored) {
+                    }
                 }
             } catch (InterruptedException e) {
             }
@@ -71,6 +74,7 @@ public class Stats {
         List<Member> members = Main.devarea.getMembers().buffer().blockLast();
         channelMemberCount.edit(voiceChannelEditSpec -> voiceChannelEditSpec.setName("Member: " + members.size())).block();
 
+        assert members != null;
         for (Member member : members)
             roleBoundToChannel.forEach((role, channel) -> {
                 if (member.getRoleIds().contains(role.getId()))

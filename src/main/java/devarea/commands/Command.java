@@ -85,9 +85,13 @@ public abstract class Command {
     }
 
     protected void deletedCommand() {
+        deletedCommand(600000L);
+    }
+
+    protected void deletedCommand(long millis) {
         new Thread(() -> {
             try {
-                Thread.sleep(600000);
+                Thread.sleep(millis);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {

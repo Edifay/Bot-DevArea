@@ -73,6 +73,12 @@ public class Main {
     public static Snowflake idVoiceChannelHelp;
 
     public static void main(String[] args) throws IllegalAccessException, NoSuchFieldException {
+        try {
+            System.setOut(new PrintStream("out.txt"));
+            System.setErr(new PrintStream("err.txt"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         XpCount.init();
         CommandManager.init();
         try {
@@ -177,7 +183,7 @@ public class Main {
 
             client.getEventDispatcher().on(ReactionAddEvent.class).subscribe(ReactionAdd::reactionAddFunction);
 
-            client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(event -> VoiceStateUpdate.VoiceStateUpdateFucntion(event));
+            client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(VoiceStateUpdate::VoiceStateUpdateFucntion);
 
             client.onDisconnect().block();
 

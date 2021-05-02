@@ -25,12 +25,14 @@ public class ReactionAdd {
         if (reactionAddEvent.getUser().block().isBot())
             return;
 
-        for (Map.Entry<Snowflake, Command> entry : CommandManager.actualCommands.entrySet()) {
-            Snowflake key = entry.getKey();
-            Command command = entry.getValue();
-            if (key.equals(reactionAddEvent.getUserId()))
-                if (command instanceof LongCommand)
-                    ((LongCommand) command).nextStape(reactionAddEvent);
+        synchronized (CommandManager.key) {
+            for (Map.Entry<Snowflake, Command> entry : CommandManager.actualCommands.entrySet()) {
+                Snowflake key = entry.getKey();
+                Command command = entry.getValue();
+                if (key.equals(reactionAddEvent.getUserId()))
+                    if (command instanceof LongCommand)
+                        ((LongCommand) command).nextStape(reactionAddEvent);
+            }
         }
 
         MemberJoin.bindJoin.forEach((id, joining) -> {

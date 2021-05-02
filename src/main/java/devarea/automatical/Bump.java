@@ -54,6 +54,10 @@ public class Bump {
             return;
 
         String[] coupes = event.getMessage().getEmbeds().get(0).getDescription().get().split(" ");
+
+        if (coupes.length == 0)
+            return;
+
         if (coupes[1].equalsIgnoreCase("attendez")) {
             dateToBump = System.currentTimeMillis() + (Integer.parseInt(coupes[3]) * 60000L);
             replace(msg -> msg.setEmbed(embed -> {

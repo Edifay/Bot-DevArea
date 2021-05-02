@@ -15,7 +15,10 @@ public class ExternalCommand extends Command {
 
     @Override
     protected Boolean endCommand() {
-        CommandManager.actualCommands.remove(this.reaction.getMember().get().getId());
+        if (this.reaction != null)
+            CommandManager.actualCommands.remove(this.reaction.getMember().get().getId());
+        else if (this.message != null)
+            super.endCommand();
         return ended;
     }
 }

@@ -11,10 +11,16 @@ public class VoiceStateUpdate {
 
     public static void VoiceStateUpdateFucntion(VoiceStateUpdateEvent event) {
         if (event.getCurrent().getChannelId().isPresent()) {
-            Main.devarea.getChannelById(Main.idNoMic).block().addMemberOverwrite(event.getCurrent().getUserId(), PermissionOverwrite.forMember(event.getCurrent().getUserId(), PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of())).block();
+            if (event.getOld().isEmpty() || event.getOld().get().getChannelId().isEmpty()) {
+                Main.devarea.getChannelById(Main.idNoMic).block().addMemberOverwrite(event.getCurrent().getUserId(), PermissionOverwrite.forMember(event.getCurrent().getUserId(), PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of())).subscribe();
+                System.out.println("Enable access");
+            } else {
+                System.out.println("Don't touch acces");
+            }
             HelpVoiceChannel.join(event);
         } else {
-            Main.devarea.getChannelById(Main.idNoMic).block().addMemberOverwrite(event.getCurrent().getUserId(), PermissionOverwrite.forMember(event.getCurrent().getUserId(), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL))).block();
+            System.out.println("Disable acces");
+            Main.devarea.getChannelById(Main.idNoMic).block().addMemberOverwrite(event.getCurrent().getUserId(), PermissionOverwrite.forMember(event.getCurrent().getUserId(), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL))).subscribe();
             HelpVoiceChannel.leave(event);
         }
     }

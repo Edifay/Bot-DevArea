@@ -42,7 +42,7 @@ public abstract class LongCommand extends Command {
             delete(event.getMessage());
             return;
         }
-        if (event.getMessage().getContent().startsWith("cancel") || event.getMessage().getContent().startsWith("annuler"))
+        if (event.getMessage().getContent().toLowerCase().startsWith("cancel") || event.getMessage().getContent().toLowerCase().startsWith("annuler"))
             this.removeTrace();
         else if (this.firstStape.receiveMessage(event)) {
             this.ended = true;
@@ -50,8 +50,6 @@ public abstract class LongCommand extends Command {
         }
         delete(event.getMessage());
     }
-
-
 
     protected void removeTrace() {
         sendError("Vous avez annuler la commande !");

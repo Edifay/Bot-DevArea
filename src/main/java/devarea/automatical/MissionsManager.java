@@ -21,6 +21,20 @@ public class MissionsManager {
             embedCreateSpec.setDescription("Cliquez sur <:ayy:" + Main.idYes.asString() + "> pour créer une mission !");
         });
         messsage.addReaction(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idYes).block())).block();
+
+        new Thread(() -> {// TODO
+            try {
+                while (true) {
+                    Thread.sleep(600000);
+                    try {
+                        messsage.addReaction(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idYes).block())).block();
+                    } catch (Exception e) {
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public static void update() {
@@ -30,15 +44,19 @@ public class MissionsManager {
             embedCreateSpec.setTitle("Créer une mission.");
             embedCreateSpec.setDescription("Cliquez sur <:ayy:" + Main.idYes.asString() + "> pour créer une mission !");
         });
-        messsage.addReaction(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idYes).block())).block();
+        messsage.addReaction(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idYes).block())).subscribe();
     }
 
     public static void react(ReactionAddEvent event) {
-        if (event.getMessageId().equals(messsage.getId()) && event.getEmoji().asCustomEmoji().get().getId().equals(Main.idYes) && !CommandManager.actualCommands.containsKey(event.getMember().get().getId()))
+        System.out.println("Réact");
+        if (event.getMessageId().equals(messsage.getId()) && event.getEmoji().asCustomEmoji().get().getId().equals(Main.idYes) && !CommandManager.actualCommands.containsKey(event.getMember().get().getId())) {
             CommandManager.actualCommands.put(event.getMember().get().getId(), new CreateMission(event));
+            System.out.println("cond true");
+        } else
+            System.out.println("cond false");
 
         if (event.getMessageId().equals(messsage.getId()))
-            event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).block();
+            event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).subscribe();
 
     }
 

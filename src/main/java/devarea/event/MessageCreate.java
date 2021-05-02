@@ -47,23 +47,23 @@ public class MessageCreate {
             })).block();
 
             XpCount.onMessage(message);
-
-            final AtomicReference<Boolean> find = new AtomicReference<>(false);
-            for (Map.Entry<Snowflake, Command> entry : CommandManager.actualCommands.entrySet()) {
-                final Snowflake id = entry.getKey();
-                final Command command = entry.getValue();
-                if (id.equals(message.getMember().get().getId()))
-                    if (command instanceof LongCommand) {
-                        ((LongCommand) command).nextStape(message);
-                        find.set(true);
-                    } else if (command instanceof ExternalLongCommand) {
-                        ((ExternalLongCommand) command).nextStape(message);
-                        find.set(true);
-                    }
+            synchronized (CommandManager.key) {
+                final AtomicReference<Boolean> find = new AtomicReference<>(false);
+                for (Map.Entry<Snowflake, Command> entry : CommandManager.actualCommands.entrySet()) {
+                    final Snowflake id = entry.getKey();
+                    final Command command = entry.getValue();
+                    if (id.equals(message.getMember().get().getId()))
+                        if (command instanceof LongCommand) {
+                            ((LongCommand) command).nextStape(message);
+                            find.set(true);
+                        } else if (command instanceof ExternalLongCommand) {
+                            ((ExternalLongCommand) command).nextStape(message);
+                            find.set(true);
+                        }
+                }
+                if (find.get())
+                    return;
             }
-
-            if (find.get())
-                return;
 
             if (message.getMessage().getContent().startsWith(Main.prefix))
                 CommandManager.exe(message.getMessage().getContent().substring(Main.prefix.length()).split(" ")[0], message);

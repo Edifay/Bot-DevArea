@@ -1,7 +1,7 @@
 package devarea.commands;
 
-import devarea.Main;
 import devarea.Data.ColorsUsed;
+import devarea.Main;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -22,6 +22,8 @@ import java.util.jar.JarFile;
 import static devarea.Data.TextMessage.commandNotFound;
 
 public class CommandManager {
+
+    public static final Object key = new Object();
 
     private static final Map<String, Constructor> classBound = new HashMap<>();
 
@@ -47,34 +49,38 @@ public class CommandManager {
     }
 
     public static void exe(final String command, final MessageCreateEvent message) {
-        final AtomicReference<Boolean> find = new AtomicReference<>(false);
-        try {
-            classBound.forEach((name, constructor) -> {
-                if (name.equalsIgnoreCase(command)) {
-                    try {
-                        System.out.println("The command " + name + " is executed !");
-                        actualCommands.put(message.getMember().get().getId(), (Command) constructor.newInstance(message));
-                        find.set(true);
-                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
+        synchronized (key) {
+            final AtomicReference<Boolean> find = new AtomicReference<>(false);
+            try {
+                classBound.forEach((name, constructor) -> {
+                    if (name.equalsIgnoreCase(command)) {
+                        try {
+                            System.out.println("The command " + name + " is executed !");
+                            Command actualCommand = (Command) constructor.newInstance(message);
+                            if (actualCommand instanceof LongCommand)
+                                actualCommands.put(message.getMember().get().getId(), actualCommand);
+                            find.set(true);
+                        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            });
-
-            if (!find.get())
-                Command.deletedEmbed((TextChannel) message.getMessage().getChannel().block(), embed -> {
-                    embed.setTitle("Erreur !");
-                    embed.setDescription(commandNotFound);
-                    embed.setColor(ColorsUsed.wrong);
                 });
 
-            if (Main.vanish)
-                try {
-                    message.getMessage().delete().block();
-                } catch (Exception e) {
-                }
-        } catch (Exception e) {
-            e.printStackTrace();
+                if (!find.get())
+                    Command.deletedEmbed((TextChannel) message.getMessage().getChannel().block(), embed -> {
+                        embed.setTitle("Erreur !");
+                        embed.setDescription(commandNotFound);
+                        embed.setColor(ColorsUsed.wrong);
+                    });
+
+                if (Main.vanish)
+                    try {
+                        message.getMessage().delete().block();
+                    } catch (Exception e) {
+                    }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

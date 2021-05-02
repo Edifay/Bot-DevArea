@@ -1,7 +1,7 @@
 package devarea.event;
 
-import devarea.Main;
 import devarea.Data.ColorsUsed;
+import devarea.Main;
 import devarea.automatical.Bump;
 import devarea.automatical.MeetupManager;
 import devarea.automatical.MissionsManager;
@@ -11,16 +11,18 @@ import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.presence.Activity;
 import discord4j.core.object.presence.Presence;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Ready {
+
+    private static boolean already = false;
+
     public static void readyEventFonction(final Snowflake idDevArea, final Snowflake idLogChannel) {
 
         Main.client.updatePresence(Presence.online(Activity.playing("//help | Dev'Area Server !"))).block();
-
         Main.devarea = Main.client.getGuildById(idDevArea).block();
+        assert Main.devarea != null;
         Main.logChannel = (TextChannel) Main.devarea.getChannelById(idLogChannel).block();
 
         Main.logChannel.createMessage(msg -> msg.setEmbed(embed -> {
@@ -33,15 +35,24 @@ public class Ready {
 
         try {
             Stats.init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (already)
+            return;
+
+        try {
             Stats.start();
             MeetupManager.init();
             Bump.init();
             MissionsManager.init();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         System.out.println("Le bot est en ligne !");
 
+        already = true;
     }
 }

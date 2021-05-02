@@ -32,7 +32,7 @@ public class CreateMission extends ExternalLongCommand {
 
     public CreateMission(ReactionAddEvent event) {
         super(event);
-        this.deletedCommand();
+        this.deletedCommand(1200000);
         this.channel = Main.devarea.createTextChannel(textChannelCreateSpec -> {
             textChannelCreateSpec.setName("creation de mission");
             textChannelCreateSpec.setParentId(Main.idMissionsCategory);
