@@ -4,7 +4,7 @@ import devarea.Data.TextMessage;
 import devarea.commands.FirstStape;
 import devarea.commands.LongCommand;
 import devarea.commands.Stape;
-import devarea.event.EndStape;
+import devarea.commands.EndStape;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.spec.MessageCreateSpec;

@@ -40,7 +40,8 @@ public class Bump {
                                 embed.setDescription("Le bump est disponible avec la commande `!d bump`.");
                                 embed.setColor(ColorsUsed.same);
                             }));
-                    } catch (Exception ignored) {
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             } catch (InterruptedException ignored) {

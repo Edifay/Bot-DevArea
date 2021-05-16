@@ -12,6 +12,8 @@ public class MessageDelete {
 
     public static void messageDeleteFunction(MessageDeleteEvent messageDeleted) {
         try {
+            if(messageDeleted.getMessage().isEmpty())
+                return;
             final Message message = messageDeleted.getMessage().get();
             if (message.getAuthor().get().isBot() || messageDeleted.getGuild().block() == null)
                 return;
@@ -26,7 +28,7 @@ public class MessageDelete {
                 embed.setFooter(date.format(now) + " at " + hours.format(now) + ".", message.getAuthor().get().getAvatarUrl());
             })).block();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

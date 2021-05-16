@@ -10,6 +10,8 @@ import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 
+import java.util.Objects;
+
 public class MissionsManager {
 
     public static Message messsage;
@@ -27,8 +29,9 @@ public class MissionsManager {
                 while (true) {
                     Thread.sleep(600000);
                     try {
-                        messsage.addReaction(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idYes).block())).block();
+                        messsage.addReaction(ReactionEmoji.custom(Objects.requireNonNull(Main.devarea.getGuildEmojiById(Main.idYes).block()))).block();
                     } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             } catch (InterruptedException e) {
@@ -49,15 +52,10 @@ public class MissionsManager {
 
     public static void react(ReactionAddEvent event) {
         System.out.println("Réact");
-        if (event.getMessageId().equals(messsage.getId()) && event.getEmoji().asCustomEmoji().get().getId().equals(Main.idYes) && !CommandManager.actualCommands.containsKey(event.getMember().get().getId())) {
+        if (event.getMessageId().equals(messsage.getId()) && event.getEmoji().asCustomEmoji().get().getId().equals(Main.idYes) && !CommandManager.actualCommands.containsKey(event.getMember().get().getId()))
             CommandManager.actualCommands.put(event.getMember().get().getId(), new CreateMission(event));
-            System.out.println("cond true");
-        } else
-            System.out.println("cond false");
-
-        if (event.getMessageId().equals(messsage.getId()))
+        else if (event.getMessageId().equals(messsage.getId()))
             event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).subscribe();
-
     }
 
     public static void stop() {

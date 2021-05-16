@@ -7,7 +7,7 @@ import devarea.automatical.MissionsManager;
 import devarea.commands.ExternalLongCommand;
 import devarea.commands.FirstStape;
 import devarea.commands.Stape;
-import devarea.event.EndStape;
+import devarea.commands.EndStape;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.PermissionOverwrite;

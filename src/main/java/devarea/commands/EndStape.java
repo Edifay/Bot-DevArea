@@ -1,4 +1,4 @@
-package devarea.event;
+package devarea.commands;
 
 import devarea.commands.Stape;
 import discord4j.core.event.domain.message.MessageCreateEvent;

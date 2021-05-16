@@ -16,6 +16,7 @@ import discord4j.core.spec.MessageCreateSpec;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class Joining {
@@ -65,112 +66,118 @@ public class Joining {
 
     }
 
+    final Object obj = new Object();
+
     public void next(final ReactionAddEvent event) {
-        if (!event.getMessageId().equals(this.message.getId()))
-            return;
+        synchronized (obj) {
+            if (!event.getMessageId().equals(this.message.getId()))
+                return;
 
-        boolean choice;
-        if (event.getEmoji().asCustomEmoji().get().getId().equals(Main.idYes) || event.getEmoji().asCustomEmoji().get().getId().equals(Main.idNo)) {
-            choice = event.getEmoji().asCustomEmoji().get().getId().equals(Main.idYes);
-        } else
-            return;
+            boolean choice;
+            if (event.getEmoji().asCustomEmoji().get().getId().equals(Main.idYes) || event.getEmoji().asCustomEmoji().get().getId().equals(Main.idNo)) {
+                choice = event.getEmoji().asCustomEmoji().get().getId().equals(Main.idYes);
+            } else
+                return;
 
-        if (this.status == 0) {
-            this.message.edit(msg -> msg.setEmbed(embed -> {
-                embed.setTitle("Pour quoi es-tu là ?");
-                embed.setDescription("    - Tu es développeur ou tu es ici pour apprendre à développer -> <:ayy:" + Main.idYes.asString() + ">\n    - Tu es là car tu as besoin de développeurs, tu as une mission à donner -> <:ayy:" + Main.idNo.asString() + ">");
-                embed.setColor(ColorsUsed.just);
-            })).block();
-            this.message.addReaction(this.no).block();
-        } else if (this.status == 1) {
-
-            if (choice)
+            if (this.status == 0) {
                 this.message.edit(msg -> msg.setEmbed(embed -> {
-                    embed.setTitle("Conseils de communications du code");
-                    embed.setDescription(TextMessage.rulesForSpeakCode);
+                    embed.setTitle("Pour quoi es-tu là ?");
+                    embed.setDescription("    - Tu es développeur ou tu es ici pour apprendre à développer -> <:ayy:" + Main.idYes.asString() + ">\n    - Tu es là car tu as besoin de développeurs, tu as une mission à donner -> <:ayy:" + Main.idNo.asString() + ">");
+                    embed.setColor(ColorsUsed.just);
+                })).block();
+                this.message.addReaction(this.no).block();
+            } else if (this.status == 1) {
+
+                if (choice)
+                    this.message.edit(msg -> msg.setEmbed(embed -> {
+                        embed.setTitle("Conseils de communications du code");
+                        embed.setDescription(TextMessage.rulesForSpeakCode);
+                        embed.setColor(ColorsUsed.just);
+                    })).block();
+
+                else {
+                    final PermissionOverwrite over = PermissionOverwrite.forMember(this.member.getId(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY), PermissionSet.of());
+                    Main.devarea.getChannelById(Main.idMissionsGratuites).block().addMemberOverwrite(this.member.getId(), over).block();
+                    Main.devarea.getChannelById(Main.idMissionsPayantes).block().addMemberOverwrite(this.member.getId(), over).block();
+
+                    this.message.edit(msg -> msg.setEmbed(embed -> {
+                        embed.setTitle("Conseils pour demander du code (missions)");
+                        embed.setDescription(TextMessage.rulesForAskCode);
+                        embed.setColor(ColorsUsed.just);
+                    })).block();
+
+                }
+
+                this.message.removeReaction(this.no, Main.client.getSelfId()).block();
+
+            } else if (this.status == 2) {
+                this.message.edit(msg -> msg.setEmbed(embed -> {
+                    embed.setTitle("Règles");
+                    embed.setDescription(TextMessage.rules);
                     embed.setColor(ColorsUsed.just);
                 })).block();
 
-            else {
+            } else if (this.status == 3) {
                 final PermissionOverwrite over = PermissionOverwrite.forMember(this.member.getId(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY), PermissionSet.of());
-                Main.devarea.getChannelById(Main.idMissionsGratuites).block().addMemberOverwrite(this.member.getId(), over).block();
-                Main.devarea.getChannelById(Main.idMissionsPayantes).block().addMemberOverwrite(this.member.getId(), over).block();
+                Main.devarea.getChannelById(Main.idPresentation).block().addMemberOverwrite(this.member.getId(), over).block();
 
                 this.message.edit(msg -> msg.setEmbed(embed -> {
-                    embed.setTitle("Conseils pour demander du code (missions)");
-                    embed.setDescription(TextMessage.rulesForAskCode);
+                    embed.setTitle("Avant de commencer !");
+                    embed.setDescription(TextMessage.presentation);
                     embed.setColor(ColorsUsed.just);
                 })).block();
 
+            } else {
+                this.message.removeAllReactions().block();
+
+                final PermissionOverwrite over = PermissionOverwrite.forMember(this.member.getId(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY), PermissionSet.of());
+                Main.devarea.getChannelById(Main.idRolesChannel).block().addMemberOverwrite(this.member.getId(), over).block();
+
+                this.message.edit(msg -> msg.setEmbed(embed -> {
+                    embed.setTitle("Et le plus important...");
+                    embed.setDescription(TextMessage.roles);
+                    embed.setColor(ColorsUsed.just);
+                })).block();
+                this.ended = true;
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(30000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    this.member.addRole(Main.idRoleRulesAccepted).block();
+                    this.disconnect();
+
+                    try {
+                        this.member.getPrivateChannel().block().createEmbed(TextMessage.helpEmbed).block();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    ((TextChannel) Main.devarea.getChannelById(Main.idWelcomChannel).block()).createMessage(msg -> msg.setEmbed(embed -> {
+                        embed.setTitle("Salut ! " + this.member.getTag() + ", bienvenue sur **Dev'Area**, amuse toi bien !");
+                        embed.setDescription("Membre n°" + Main.devarea.getMembers().buffer().blockLast().size());
+                        embed.setImage(this.member.getAvatarUrl());
+                        embed.setColor(ColorsUsed.just);
+                    })).block();
+
+                    ((TextChannel) Main.devarea.getChannelById(Main.idGeneralChannel).block())
+                            .createMessage(msg -> msg
+                                    .setContent("<@" + this.member.getId().asString() + "> a passé le petit questionnaire d'arrivée ! Vous pouvez lui souhaiter la bienvenue !"))
+                            .block();
+
+                }).start();
             }
 
-            this.message.removeReaction(this.no, Main.client.getSelfId()).block();
+            try {
+                Objects.requireNonNull(event.getMessage().block()).removeReaction(event.getEmoji(), event.getUserId()).block();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-        } else if (this.status == 2) {
-            this.message.edit(msg -> msg.setEmbed(embed -> {
-                embed.setTitle("Règles");
-                embed.setDescription(TextMessage.rules);
-                embed.setColor(ColorsUsed.just);
-            })).block();
-
-        } else if (this.status == 3) {
-            final PermissionOverwrite over = PermissionOverwrite.forMember(this.member.getId(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY), PermissionSet.of());
-            Main.devarea.getChannelById(Main.idPresentation).block().addMemberOverwrite(this.member.getId(), over).block();
-
-            this.message.edit(msg -> msg.setEmbed(embed -> {
-                embed.setTitle("Avant de commencer !");
-                embed.setDescription(TextMessage.presentation);
-                embed.setColor(ColorsUsed.just);
-            })).block();
-
-        } else {
-            this.message.removeAllReactions().block();
-
-            final PermissionOverwrite over = PermissionOverwrite.forMember(this.member.getId(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY), PermissionSet.of());
-            Main.devarea.getChannelById(Main.idRolesChannel).block().addMemberOverwrite(this.member.getId(), over).block();
-
-            this.message.edit(msg -> msg.setEmbed(embed -> {
-                embed.setTitle("Et le plus important...");
-                embed.setDescription(TextMessage.roles);
-                embed.setColor(ColorsUsed.just);
-            })).block();
-            this.ended = true;
-            new Thread(() -> {
-                try {
-                    Thread.sleep(30000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                this.member.addRole(Main.idRoleRulesAccepted).block();
-                this.disconnect();
-
-                try {
-                    this.member.getPrivateChannel().block().createEmbed(TextMessage.helpEmbed).block();
-                } catch (Exception exception) {
-                }
-
-                ((TextChannel) Main.devarea.getChannelById(Main.idWelcomChannel).block()).createMessage(msg -> msg.setEmbed(embed -> {
-                    embed.setTitle("Salut ! " + this.member.getTag() + ", bienvenue sur **Dev'Area**, amuse toi bien !");
-                    embed.setDescription("Membre n°" + Main.devarea.getMembers().buffer().blockLast().size());
-                    embed.setImage(this.member.getAvatarUrl());
-                    embed.setColor(ColorsUsed.just);
-                })).block();
-
-                ((TextChannel) Main.devarea.getChannelById(Main.idGeneralChannel).block())
-                        .createMessage(msg -> msg
-                                .setContent("<@" + this.member.getId().asString() + "> a passé le petit questionnaire d'arrivée ! Vous pouvez lui souhaiter la bienvenue !"))
-                        .block();
-
-            }).start();
+            this.status++;
         }
-
-        try {
-            event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).block();
-        } catch (Exception ignored) {
-        }
-
-        this.status++;
     }
 
     public void disconnect() {
@@ -178,7 +185,8 @@ public class Joining {
             this.ended = true;
             MemberJoin.bindJoin.remove(this.member.getId());
             textChannel.delete().block();
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

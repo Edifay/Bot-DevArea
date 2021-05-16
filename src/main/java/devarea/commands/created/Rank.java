@@ -29,52 +29,52 @@ public class Rank extends ShortCommand {
             if (!XpCount.haveBeenSet(pinged.getId())) {
                 sendError("Ce membre n'a pas encore parlé !");
                 this.endCommand();
-                return;
-            }
+            }else {
 
-            try {
-                BufferedImage img = new BufferedImage(Main.backgroundXp.getWidth(), Main.backgroundXp.getHeight(), BufferedImage.TYPE_INT_ARGB);
-                img.getGraphics().drawImage(Main.backgroundXp, 0, 0, img.getWidth(), img.getHeight(), null);
-                Graphics2D g = (Graphics2D) img.getGraphics();
+                try {
+                    BufferedImage img = new BufferedImage(Main.backgroundXp.getWidth(), Main.backgroundXp.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                    img.getGraphics().drawImage(Main.backgroundXp, 0, 0, img.getWidth(), img.getHeight(), null);
+                    Graphics2D g = (Graphics2D) img.getGraphics();
 
-                int xp = XpCount.getXpOf(pinged.getId());
-                int level = XpCount.getLevelForXp(xp);
+                    int xp = XpCount.getXpOf(pinged.getId());
+                    int level = XpCount.getLevelForXp(xp);
 
-                float pourcentage = (float) (xp - XpCount.getAmountForLevel(level)) / (XpCount.getAmountForLevel(level + 1) - XpCount.getAmountForLevel(level));
+                    float pourcentage = (float) (xp - XpCount.getAmountForLevel(level)) / (XpCount.getAmountForLevel(level + 1) - XpCount.getAmountForLevel(level));
 
-                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-                g.drawImage(makeRoundedCorner(ImageIO.read(new URL(pinged.getAvatarUrl())), 600), 25, 25, 200, 200, null);
+                    g.drawImage(makeRoundedCorner(ImageIO.read(new URL(pinged.getAvatarUrl())), 600), 25, 25, 200, 200, null);
 
-                g.setColor(Color.white);
-                g.setStroke(new BasicStroke(18.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, null, 0.0f));
-                g.draw(new Line2D.Float(250, 200, 650, 200));
-                g.setColor(new Color(120, 238, 96));
-                g.draw(new Line2D.Float(250, 200, 250 + (pourcentage * 400), 200));
+                    g.setColor(Color.white);
+                    g.setStroke(new BasicStroke(18.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, null, 0.0f));
+                    g.draw(new Line2D.Float(250, 200, 650, 200));
+                    g.setColor(new Color(120, 238, 96));
+                    g.draw(new Line2D.Float(250, 200, 250 + (pourcentage * 400), 200));
 
-                g.setColor(Color.WHITE);
-                Font font = Font.createFont(Font.TRUETYPE_FONT, Main.class.getResource("/assets/font.otf").openStream()).deriveFont(45f);
-                g.setFont(font);
-                g.drawString(level + "", 240, 182);
-                drawLeft(g, (level + 1) + "", 659, 182, g.getFont());
-                drawCenteredString(g, "xp-" + xp, 450, 182, g.getFont());
-                String name = pinged.getDisplayName() + "#" + XpCount.getRankOf(pinged.getId());
-                drawLeftAndTop(g, name, 685, -10, getFontSize(name, g));
+                    g.setColor(Color.WHITE);
+                    Font font = Font.createFont(Font.TRUETYPE_FONT, Main.class.getResource("/assets/font.otf").openStream()).deriveFont(45f);
+                    g.setFont(font);
+                    g.drawString(level + "", 240, 182);
+                    drawLeft(g, (level + 1) + "", 659, 182, g.getFont());
+                    drawCenteredString(g, "xp-" + xp, 450, 182, g.getFont());
+                    String name = pinged.getDisplayName() + "#" + XpCount.getRankOf(pinged.getId());
+                    drawLeftAndTop(g, name, 685, -10, getFontSize(name, g));
 
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                ImageIO.write(img, "png", outputStream);
-                Member finalPinged = pinged;
-                this.send(messageCreateSpec -> {
-                    messageCreateSpec.addFile("xp.png", new ByteArrayInputStream(outputStream.toByteArray()));
-                    messageCreateSpec.setEmbed(embedCreateSpec -> {
-                        embedCreateSpec.setColor(ColorsUsed.just);
-                        embedCreateSpec.setTitle("Voici l'xp de " + finalPinged.getDisplayName());
-                        embedCreateSpec.setImage("attachment://xp.png");
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    ImageIO.write(img, "png", outputStream);
+                    Member finalPinged = pinged;
+                    this.send(messageCreateSpec -> {
+                        messageCreateSpec.addFile("xp.png", new ByteArrayInputStream(outputStream.toByteArray()));
+                        messageCreateSpec.setEmbed(embedCreateSpec -> {
+                            embedCreateSpec.setColor(ColorsUsed.just);
+                            embedCreateSpec.setTitle("Voici l'xp de " + finalPinged.getDisplayName());
+                            embedCreateSpec.setImage("attachment://xp.png");
+                        });
                     });
-                });
-            } catch (IOException | FontFormatException e) {
-                e.printStackTrace();
+                } catch (IOException | FontFormatException e) {
+                    e.printStackTrace();
+                }
             }
             this.endCommand();
         }

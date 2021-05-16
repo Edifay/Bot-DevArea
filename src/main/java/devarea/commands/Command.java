@@ -102,7 +102,16 @@ public abstract class Command {
     }
 
     public static Message send(final TextChannel channel, final Consumer<? super MessageCreateSpec> spec) {
-        return channel.createMessage(spec).block();
+        try{
+            try {
+                return channel.createMessage(spec).block();
+            }catch (Exception ignored){
+                throw new Exception("Message is more than 2000 character !");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static Message sendError(final TextChannel channel, final String error) {

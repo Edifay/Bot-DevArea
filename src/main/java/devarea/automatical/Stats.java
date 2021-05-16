@@ -59,7 +59,8 @@ public class Stats {
                     Thread.sleep(600000);
                     try {
                         update();
-                    } catch (Exception ignored) {
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             } catch (InterruptedException e) {
