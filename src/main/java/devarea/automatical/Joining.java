@@ -36,19 +36,25 @@ public class Joining {
         this.status = 0;
         this.yes = ReactionEmoji.custom(Main.idYes, "valide-1", false);
         this.no = ReactionEmoji.custom(Main.idNo, "crois", false);
-
+        System.out.println("Actualy before create");
         this.textChannel = Main.devarea.createTextChannel(textChannelCreateSpec -> {
             textChannelCreateSpec.setName(member.getDisplayName());
             textChannelCreateSpec.setParentId(Main.idCategoryJoin);
             textChannelCreateSpec.setTopic("Petit questionnaire d'arrivé !");
         }).block();
-        this.textChannel.addMemberOverwrite(member.getId(), PermissionOverwrite.forMember(member.getId(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY), PermissionSet.of(Permission.ADD_REACTIONS, Permission.SEND_MESSAGES))).block();
+        System.out.println("After create !");
+        do
+            this.textChannel.addMemberOverwrite(member.getId(), PermissionOverwrite.forMember(member.getId(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY), PermissionSet.of(Permission.ADD_REACTIONS, Permission.SEND_MESSAGES))).block();
+        while (Objects.equals(this.textChannel.getEffectivePermissions(member.getId()).block(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY)));
+        System.out.println("After changing perms");
         this.message = sendEmbed(embed -> {
             embed.setTitle("Bienvenue " + member.getDisplayName() + " sur Dev'Area !");
             embed.setDescription(TextMessage.firstText);
             embed.setColor(ColorsUsed.just);
         });
+        System.out.println("After message !");
         this.message.addReaction(this.yes).block();
+        System.out.println("after reaction !");
 
         new Thread(() -> {
             try {
