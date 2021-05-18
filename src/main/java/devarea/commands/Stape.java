@@ -83,11 +83,11 @@ public abstract class Stape {
     }
 
     protected void addYesEmoji() {
-        this.message.addReaction(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idYes).block())).block();
+        this.message.addReaction(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idYes).block())).subscribe();
     }
 
     protected void addNoEmoji() {
-        this.message.addReaction(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idNo).block())).block();
+        this.message.addReaction(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idNo).block())).subscribe();
     }
 
     protected void addYesNoEmoji() {
@@ -96,7 +96,7 @@ public abstract class Stape {
     }
 
     protected void removeAllEmoji() {
-        this.message.removeAllReactions().block();
+        this.message.removeAllReactions().subscribe();
     }
 
     protected boolean isYes(ReactionAddEvent event) {

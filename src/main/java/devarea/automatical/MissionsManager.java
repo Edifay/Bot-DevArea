@@ -51,7 +51,6 @@ public class MissionsManager {
     }
 
     public static void react(ReactionAddEvent event) {
-        System.out.println("Réact");
         if (event.getMessageId().equals(messsage.getId()) && event.getEmoji().asCustomEmoji().get().getId().equals(Main.idYes) && !CommandManager.actualCommands.containsKey(event.getMember().get().getId()))
             CommandManager.actualCommands.put(event.getMember().get().getId(), new CreateMission(event));
         else if (event.getMessageId().equals(messsage.getId()))

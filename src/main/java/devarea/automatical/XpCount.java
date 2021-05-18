@@ -22,8 +22,11 @@ public class XpCount {
 
     public static void init() {
         ObjectMapper mapper = new ObjectMapper();
+        File file = new File("./xp.json");
+        if(!file.exists())
+            save();
         try {
-            HashMap<String, Integer> obj = mapper.readValue(new File("./xp.json"), HashMap.class);
+            HashMap<String, Integer> obj = mapper.readValue(file, HashMap.class);
             obj.forEach((s, aLong) -> xp.put(Snowflake.of(s), aLong));
         } catch (IOException e) {
             e.printStackTrace();

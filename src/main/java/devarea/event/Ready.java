@@ -2,10 +2,7 @@ package devarea.event;
 
 import devarea.Data.ColorsUsed;
 import devarea.Main;
-import devarea.automatical.Bump;
-import devarea.automatical.MeetupManager;
-import devarea.automatical.MissionsManager;
-import devarea.automatical.Stats;
+import devarea.automatical.*;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.presence.Activity;
@@ -43,6 +40,7 @@ public class Ready {
             return;
 
         try {
+            RolesReacts.load();
             Stats.start();
             MeetupManager.init();
             Bump.init();

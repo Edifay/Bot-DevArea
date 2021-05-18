@@ -10,10 +10,7 @@ import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.core.event.domain.guild.MemberLeaveEvent;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
-import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.event.domain.message.MessageDeleteEvent;
-import discord4j.core.event.domain.message.MessageUpdateEvent;
-import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.event.domain.message.*;
 import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.channel.TextChannel;
 import org.w3c.dom.Document;
@@ -24,6 +21,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
@@ -182,6 +180,8 @@ public class Main {
             client.getEventDispatcher().on(MemberLeaveEvent.class).subscribe(memberLeaveEvent -> MemberLeave.memberLeaveFunction(finalIdDevArea, finalIdJoinLogChannel, memberLeaveEvent));
 
             client.getEventDispatcher().on(ReactionAddEvent.class).subscribe(ReactionAdd::reactionAddFunction);
+
+            client.getEventDispatcher().on(ReactionRemoveEvent.class).subscribe(ReactionRemove::FunctionReactionRemoveEvent);
 
             client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(VoiceStateUpdate::VoiceStateUpdateFucntion);
 

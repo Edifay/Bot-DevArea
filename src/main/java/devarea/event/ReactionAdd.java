@@ -12,6 +12,7 @@ import discord4j.core.object.entity.Message;
 import java.util.Map;
 
 import static devarea.Data.TextMessage.messageDisableInPrivate;
+import static devarea.automatical.RolesReacts.onReact;
 
 public class ReactionAdd {
 
@@ -24,6 +25,8 @@ public class ReactionAdd {
 
         if (reactionAddEvent.getUser().block().isBot())
             return;
+
+        onReact(reactionAddEvent);
 
         synchronized (CommandManager.key) {
             for (Map.Entry<Snowflake, Command> entry : CommandManager.actualCommands.entrySet()) {
