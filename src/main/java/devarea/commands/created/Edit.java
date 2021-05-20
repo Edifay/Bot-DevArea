@@ -24,7 +24,7 @@ public class Edit extends LongCommand {
         super(message);
         if (!message.getMember().get().getBasePermissions().block().contains(Permission.MANAGE_MESSAGES)) {
             sendError("Vous n'avez pas les permissions d'utiliser cette commande !");
-            new Thread(()->{
+            new Thread(() -> {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {

@@ -8,6 +8,7 @@ import devarea.commands.ObjetForStock.RoleReact;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.event.domain.message.ReactionRemoveEvent;
+import discord4j.core.object.entity.Member;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,17 +62,35 @@ public class RolesReacts {
         }
     }
 
-    public static void onReact(ReactionAddEvent event) {
+    public synchronized static void onReact(ReactionAddEvent event) {
         rolesReacts.forEach((k, v) -> {
-            if (k.is(event))
-                event.getMember().get().addRole(v).subscribe();
+            try {
+                if (k.is(event)) {
+                    System.out.println("Ajout de rôle detected:");
+                    assert event.getMember().isPresent();
+                    Member member = event.getMember().get();
+                    member.addRole(v).subscribe();
+                    System.out.println("Le rôle : " + Main.devarea.getRoleById(v).block().getName() + " a été ajouter à : " + member.getDisplayName());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 
-    public static void onRemoveReact(ReactionRemoveEvent event) {
+    public synchronized static void onRemoveReact(ReactionRemoveEvent event) {
         rolesReacts.forEach((k, v) -> {
-            if (k.is(event))
-                Main.devarea.getMemberById(event.getUserId()).block().removeRole(v).subscribe();
+            try {
+                if (k.is(event)) {
+                    System.out.println("Detect remove :");
+                    Member member = Main.devarea.getMemberById(event.getUserId()).block();
+                    assert member != null;
+                    member.removeRole(v).subscribe();
+                    System.out.println("Le rôle : " + Main.devarea.getRoleById(v).block().getName() + " a été retirer a : " + member.getDisplayName());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 
