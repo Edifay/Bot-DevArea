@@ -16,11 +16,13 @@ public abstract class Stape {
     public final static boolean end = true;
     public final static boolean next = false;
 
-    protected final Stape[] stapes;
+    protected Stape[] stapes;
     protected Message message;
     protected Stape called;
 
     public Stape(Stape... stapes) {
+        System.out.println(stapes.length);
+        assert stapes.length != 0;
         this.stapes = stapes;
     }
 
@@ -57,7 +59,10 @@ public abstract class Stape {
     }
 
 
-    protected Stape stape(int nb) {
+    protected Stape stape(int nb) throws Exception {
+        if (nb < 0 || nb >= stapes.length) {
+            throw new Exception("Le numero de la stape n'est pas associe !");
+        }
         return stapes[nb];
     }
 
@@ -75,7 +80,12 @@ public abstract class Stape {
     }
 
     protected boolean callStape(int nb) {
-        return this.call(stape(nb));
+        try {
+            return this.call(stape(nb));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return end;
     }
 
     protected void sendErrorEntry() {

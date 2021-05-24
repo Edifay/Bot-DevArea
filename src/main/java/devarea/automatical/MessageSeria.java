@@ -48,4 +48,12 @@ public class MessageSeria implements Serializable {
     public boolean equalsTo(Message o) {
         return idMessage.equals(o.getId().asString()) && idChannel.equals(o.getChannelId().asString());
     }
+
+    public Snowflake getMessageID() {
+        return Snowflake.of(this.idMessage);
+    }
+
+    public Snowflake getChannelID() {
+        return Snowflake.of(this.idChannel);
+    }
 }

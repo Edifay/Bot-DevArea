@@ -18,6 +18,11 @@ public class MemberJoin {
         bindJoin.put(member.getId(), new Joining(member));
     }
 
+    public static void join(final Member member){
+        bindJoin.put(member.getId(), new Joining(member));
+    }
+
+
     public static void memberJoinFunction(Snowflake finalIdDevArea, Snowflake finalIdJoinLogChannel, MemberJoinEvent memberJoinEvent) {
         ((TextChannel) Main.client.getGuildById(finalIdDevArea).block().getChannelById(finalIdJoinLogChannel).block()).createMessage(msg -> msg.setContent(memberJoinEvent.getMember().getDisplayName() + " a rejoins le serveur !")).block();
         MemberJoin.join(memberJoinEvent);

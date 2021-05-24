@@ -81,4 +81,20 @@ public class RoleReact {
         }
     }
 
+    public boolean isID() {
+        return this.isID.equals("true");
+    }
+
+    public String getStringEmoji() {
+        return this.isID() ? "<:ayy:" + this.reactionId + ">" : this.reactionId;
+    }
+
+    public MessageSeria getMessageSeria(){
+        return this.message;
+    }
+
+    public void delete(){
+        message.getMessage().removeReactions(this.getEmoji()).subscribe();
+    }
+
 }
