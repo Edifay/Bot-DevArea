@@ -1,6 +1,6 @@
 package devarea.commands.created;
 
-import devarea.Data.TextMessage;
+import devarea.data.TextMessage;
 import devarea.commands.FirstStape;
 import devarea.commands.LongCommand;
 import devarea.commands.Stape;

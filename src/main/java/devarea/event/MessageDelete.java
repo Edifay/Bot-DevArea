@@ -1,7 +1,7 @@
 package devarea.event;
 
 import devarea.Main;
-import devarea.Data.ColorsUsed;
+import devarea.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageDeleteEvent;
 import discord4j.core.object.entity.Message;
 

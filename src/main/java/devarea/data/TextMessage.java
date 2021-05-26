@@ -1,4 +1,4 @@
-package devarea.Data;
+package devarea.data;
 
 import devarea.Main;
 import discord4j.core.spec.EmbedCreateSpec;

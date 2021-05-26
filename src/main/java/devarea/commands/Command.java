@@ -1,6 +1,6 @@
 package devarea.commands;
 
-import devarea.Data.ColorsUsed;
+import devarea.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Member;
@@ -13,7 +13,7 @@ import discord4j.rest.util.Permission;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-import static devarea.Data.TextMessage.haventPermission;
+import static devarea.data.TextMessage.haventPermission;
 
 public abstract class Command {
 

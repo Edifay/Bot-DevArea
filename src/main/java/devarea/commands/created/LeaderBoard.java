@@ -1,6 +1,6 @@
 package devarea.commands.created;
 
-import devarea.Data.ColorsUsed;
+import devarea.data.ColorsUsed;
 import devarea.automatical.XpCount;
 import devarea.commands.ShortCommand;
 import discord4j.common.util.Snowflake;

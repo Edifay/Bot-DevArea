@@ -1,12 +1,10 @@
 package devarea.commands;
 
-import devarea.Data.ColorsUsed;
+import devarea.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
-
-import java.util.Locale;
 
 public class ExternalLongCommand extends ExternalCommand {
 

@@ -11,7 +11,7 @@ import discord4j.core.object.entity.Message;
 
 import java.util.Map;
 
-import static devarea.Data.TextMessage.messageDisableInPrivate;
+import static devarea.data.TextMessage.messageDisableInPrivate;
 import static devarea.automatical.RolesReacts.onReact;
 
 public class ReactionAdd {

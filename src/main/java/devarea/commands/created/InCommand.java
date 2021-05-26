@@ -1,6 +1,6 @@
 package devarea.commands.created;
 
-import devarea.Data.ColorsUsed;
+import devarea.data.ColorsUsed;
 import devarea.commands.Command;
 import devarea.commands.CommandManager;
 import devarea.commands.ShortCommand;

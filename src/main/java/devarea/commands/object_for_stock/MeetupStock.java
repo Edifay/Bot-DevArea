@@ -1,7 +1,7 @@
-package devarea.commands.ObjetForStock;
+package devarea.commands.object_for_stock;
 
 import devarea.Main;
-import devarea.Data.ColorsUsed;
+import devarea.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 import discord4j.core.spec.EmbedCreateSpec;

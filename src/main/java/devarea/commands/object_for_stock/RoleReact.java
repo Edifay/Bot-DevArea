@@ -1,4 +1,4 @@
-package devarea.commands.ObjetForStock;
+package devarea.commands.object_for_stock;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

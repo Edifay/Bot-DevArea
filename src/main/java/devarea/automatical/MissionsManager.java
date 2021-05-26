@@ -1,10 +1,10 @@
 package devarea.automatical;
 
-import devarea.Data.ColorsUsed;
+import devarea.data.ColorsUsed;
 import devarea.Main;
 import devarea.commands.Command;
 import devarea.commands.CommandManager;
-import devarea.commands.withOutTextStarter.CreateMission;
+import devarea.commands.with_out_text_starter.CreateMission;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;

@@ -1,9 +1,9 @@
 package devarea.automatical;
 
-import devarea.Data.ColorsUsed;
+import devarea.data.ColorsUsed;
 import devarea.Main;
 import devarea.commands.Command;
-import devarea.commands.ObjetForStock.MeetupStock;
+import devarea.commands.object_for_stock.MeetupStock;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;

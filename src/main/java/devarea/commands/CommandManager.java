@@ -1,6 +1,6 @@
 package devarea.commands;
 
-import devarea.Data.ColorsUsed;
+import devarea.data.ColorsUsed;
 import devarea.Main;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import static devarea.Data.TextMessage.commandNotFound;
+import static devarea.data.TextMessage.commandNotFound;
 
 public class CommandManager {
 

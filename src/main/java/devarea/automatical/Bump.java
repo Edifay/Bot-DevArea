@@ -1,6 +1,6 @@
 package devarea.automatical;
 
-import devarea.Data.ColorsUsed;
+import devarea.data.ColorsUsed;
 import devarea.Main;
 import devarea.commands.Command;
 import discord4j.core.event.domain.message.MessageCreateEvent;

@@ -1,6 +1,6 @@
 package devarea.event;
 
-import devarea.Data.ColorsUsed;
+import devarea.data.ColorsUsed;
 import devarea.Main;
 import devarea.automatical.*;
 import discord4j.common.util.Snowflake;

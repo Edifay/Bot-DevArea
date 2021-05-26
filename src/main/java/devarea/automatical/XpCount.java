@@ -1,7 +1,7 @@
 package devarea.automatical;
 
 import devarea.Main;
-import devarea.Data.ColorsUsed;
+import devarea.data.ColorsUsed;
 import devarea.commands.Command;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import discord4j.common.util.Snowflake;

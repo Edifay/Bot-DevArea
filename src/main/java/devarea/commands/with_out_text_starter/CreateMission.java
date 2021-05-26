@@ -1,7 +1,7 @@
-package devarea.commands.withOutTextStarter;
+package devarea.commands.with_out_text_starter;
 
-import devarea.Data.ColorsUsed;
-import devarea.Data.TextMessage;
+import devarea.data.ColorsUsed;
+import devarea.data.TextMessage;
 import devarea.Main;
 import devarea.automatical.MissionsManager;
 import devarea.commands.ExternalLongCommand;

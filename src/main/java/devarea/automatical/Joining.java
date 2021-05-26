@@ -1,10 +1,11 @@
 package devarea.automatical;
 
+import devarea.data.ColorsUsed;
+import devarea.data.TextMessage;
 import devarea.Main;
-import devarea.Data.ColorsUsed;
-import devarea.Data.TextMessage;
 import devarea.commands.Command;
 import devarea.event.MemberJoin;
+import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.PermissionOverwrite;
 import discord4j.core.object.entity.Member;
@@ -37,6 +38,7 @@ public class Joining {
         this.yes = ReactionEmoji.custom(Main.idYes, "valide-1", false);
         this.no = ReactionEmoji.custom(Main.idNo, "crois", false);
         System.out.println("Actualy before create");
+        Main.devarea.getChannelById(Snowflake.of("843823896222629888")).block().addMemberOverwrite(member.getId(), PermissionOverwrite.forMember(member.getId(), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL))).subscribe();
         this.textChannel = Main.devarea.createTextChannel(textChannelCreateSpec -> {
             textChannelCreateSpec.setName(member.getDisplayName());
             textChannelCreateSpec.setParentId(Main.idCategoryJoin);

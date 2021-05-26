@@ -1,7 +1,7 @@
 package devarea.commands.created;
 
 import devarea.Main;
-import devarea.Data.TextMessage;
+import devarea.data.TextMessage;
 import devarea.commands.ShortCommand;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.rest.util.Permission;

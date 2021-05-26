@@ -1,13 +1,13 @@
 package devarea.commands.created;
 
-import devarea.Data.ColorsUsed;
-import devarea.Data.TextMessage;
+import devarea.data.ColorsUsed;
+import devarea.data.TextMessage;
 import devarea.Main;
 import devarea.automatical.MeetupManager;
 import devarea.commands.Command;
 import devarea.commands.FirstStape;
 import devarea.commands.LongCommand;
-import devarea.commands.ObjetForStock.MeetupStock;
+import devarea.commands.object_for_stock.MeetupStock;
 import devarea.commands.Stape;
 import devarea.commands.EndStape;
 import discord4j.core.event.domain.message.MessageCreateEvent;

@@ -1,4 +1,4 @@
-package devarea.Data;
+package devarea.data;
 
 import discord4j.rest.util.Color;
 

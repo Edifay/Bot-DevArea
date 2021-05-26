@@ -1,6 +1,6 @@
 package devarea.commands.created;
 
-import devarea.Data.ColorsUsed;
+import devarea.data.ColorsUsed;
 import devarea.Main;
 import devarea.automatical.RolesReacts;
 import devarea.commands.*;
@@ -22,7 +22,7 @@ public class RoleReact extends LongCommand {
     Snowflake roleID;
     Message atModif;
     String isID;
-    devarea.commands.ObjetForStock.RoleReact[] removeTable;
+    devarea.commands.object_for_stock.RoleReact[] removeTable;
 
     public RoleReact(MessageCreateEvent message) {
         super(message);
@@ -56,7 +56,7 @@ public class RoleReact extends LongCommand {
                     try {
                         if (event.getMessage().getRoleMentionIds().stream().findFirst().isPresent()) {
                             roleID = event.getMessage().getRoleMentionIds().stream().findFirst().get();
-                            devarea.commands.ObjetForStock.RoleReact react = new devarea.commands.ObjetForStock.RoleReact(emojiID, atModif, isID);
+                            devarea.commands.object_for_stock.RoleReact react = new devarea.commands.object_for_stock.RoleReact(emojiID, atModif, isID);
                             RolesReacts.rolesReacts.put(react, roleID);
                             RolesReacts.save();
                             atModif.addReaction(react.getEmoji()).subscribe();
@@ -130,9 +130,9 @@ public class RoleReact extends LongCommand {
                     String str = "";
                     ArrayList<Snowflake> messageAlready = new ArrayList<>();
                     int number = 0;
-                    removeTable = new devarea.commands.ObjetForStock.RoleReact[RolesReacts.rolesReacts.size()];
-                    for (Map.Entry<devarea.commands.ObjetForStock.RoleReact, Snowflake> entry : RolesReacts.rolesReacts.entrySet()) {
-                        devarea.commands.ObjetForStock.RoleReact k = entry.getKey();
+                    removeTable = new devarea.commands.object_for_stock.RoleReact[RolesReacts.rolesReacts.size()];
+                    for (Map.Entry<devarea.commands.object_for_stock.RoleReact, Snowflake> entry : RolesReacts.rolesReacts.entrySet()) {
+                        devarea.commands.object_for_stock.RoleReact k = entry.getKey();
                         Snowflake v = entry.getValue();
                         Snowflake snow = k.getMessageSeria().getMessageID();
                         boolean find = false;
@@ -144,8 +144,8 @@ public class RoleReact extends LongCommand {
 
                         if (!find) {
                             str += "https://discord.com/channels/" + Main.devarea.getId().asString() + "/" + k.getMessageSeria().getChannelID().asString() + "/" + snow.asString() + " :\n";
-                            for (Map.Entry<devarea.commands.ObjetForStock.RoleReact, Snowflake> e : RolesReacts.rolesReacts.entrySet()) {
-                                devarea.commands.ObjetForStock.RoleReact k1 = e.getKey();
+                            for (Map.Entry<devarea.commands.object_for_stock.RoleReact, Snowflake> e : RolesReacts.rolesReacts.entrySet()) {
+                                devarea.commands.object_for_stock.RoleReact k1 = e.getKey();
                                 Snowflake v1 = e.getValue();
                                 if (k1.getMessageSeria().getMessageID().equals(snow)) {
                                     str += "`" + number + "`:" + k1.getStringEmoji() + " -> <@&" + v1.asString() + ">\n";

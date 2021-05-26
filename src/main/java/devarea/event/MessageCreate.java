@@ -1,6 +1,6 @@
 package devarea.event;
 
-import devarea.Data.ColorsUsed;
+import devarea.data.ColorsUsed;
 import devarea.Main;
 import devarea.automatical.Bump;
 import devarea.automatical.XpCount;
@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static devarea.Data.TextMessage.messageDisableInPrivate;
+import static devarea.data.TextMessage.messageDisableInPrivate;
 
 public class MessageCreate {
 
