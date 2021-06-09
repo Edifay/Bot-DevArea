@@ -51,8 +51,10 @@ public class MissionsManager {
     }
 
     public static void react(ReactionAddEvent event) {
-        if (event.getMessageId().equals(messsage.getId()) && event.getEmoji().asCustomEmoji().get().getId().equals(Main.idYes) && !CommandManager.actualCommands.containsKey(event.getMember().get().getId()))
+        if (event.getMessageId().equals(messsage.getId()) && event.getEmoji().asCustomEmoji().get().getId().equals(Main.idYes) && !CommandManager.actualCommands.containsKey(event.getMember().get().getId())){
             CommandManager.actualCommands.put(event.getMember().get().getId(), new CreateMission(event));
+            event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).subscribe();
+        }
         else if (event.getMessageId().equals(messsage.getId()))
             event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).subscribe();
     }
