@@ -3,6 +3,7 @@ package devarea.event;
 import devarea.data.ColorsUsed;
 import devarea.Main;
 import devarea.automatical.*;
+import devarea.github.GithubEvent;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.presence.Activity;
@@ -45,6 +46,7 @@ public class Ready {
             MeetupManager.init();
             Bump.init();
             MissionsManager.init();
+            GithubEvent.init();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -3,6 +3,7 @@ package devarea;
 import devarea.automatical.XpCount;
 import devarea.commands.CommandManager;
 import devarea.event.*;
+import devarea.github.GithubEvent;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
@@ -21,7 +22,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
@@ -70,7 +70,8 @@ public class Main {
 
     public static Snowflake idVoiceChannelHelp;
 
-    public static void main(String[] args) throws IllegalAccessException, NoSuchFieldException {
+
+    public static void main(String[] args) throws IllegalAccessException, NoSuchFieldException, IOException, InterruptedException {
         try {
             System.setOut(new PrintStream("out.txt"));
             System.setErr(new PrintStream("err.txt"));
