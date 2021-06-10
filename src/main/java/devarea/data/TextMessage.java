@@ -58,7 +58,7 @@ public class TextMessage {
      */
     public static final Consumer<? super EmbedCreateSpec> helpEmbed = embedCreateSpec -> {
         embedCreateSpec.setTitle("Voici la liste des commandes :");
-        embedCreateSpec.setDescription("`//help` -> donne cette liste.\n`//ping` -> donne le temps de latence du bot.\n`//meetup` -> permet de créer un meetup autour d'un sujet.\n`//start` -> envois un message qui permet de bien commencer dans une langage.\n`//rank` -> donne l'xp et le rang de la personne (mentionnable).\n`//leaderboard` -> permet de voir le classement des membres du serveur en xp.\n`//devhelp` -> mentionne les développeurs ayant pris le rôle DevHelper.\n`//ask` -> donne les informations nécessaires pour bien poser une question.\n\n`creationMissions` -> ne se lance pas comme une commande classique, une réaction dans le channel : <#" + Main.idMissionsPayantes.asString() + "> permet de commencer la commande.\n\nLes channels d'aides vocaux sont crées automatiquement par le bot lors de la connexion au channel vocal : \"Channels D'aides\".");
+        embedCreateSpec.setDescription("`//help` -> donne cette liste.\n`//ping` -> donne le temps de latence du bot.\n`//meetup` -> permet de créer un meetup autour d'un sujet.\n`//start` -> envois un message qui permet de bien commencer dans un langage.\n`//rank` -> donne l'xp et le rang de la personne (mentionnable).\n`//leaderboard` -> permet de voir le classement des membres du serveur en xp.\n`//devhelp` -> mentionne les développeurs ayant pris le rôle DevHelper.\n`//ask` -> donne les informations nécessaires pour bien poser une question.\n\n`creationMissions` -> ne se lance pas comme une commande classique, une réaction dans le channel : <#" + Main.idMissionsPayantes.asString() + "> permet de commencer la commande.\n\nLes channels d'aides vocaux sont crées automatiquement par le bot lors de la connexion au channel vocal : \"Channels D'aides\".");
         embedCreateSpec.setColor(ColorsUsed.just);
         embedCreateSpec.setTimestamp(Instant.now());
     };
@@ -118,13 +118,27 @@ public class TextMessage {
         embed.setTimestamp(Instant.now());
     };
 
+    public static final Consumer<? super EmbedCreateSpec> startHtmlCss = embed -> {
+        embed.setTitle("HTML / CSS");
+        embed.setDescription("Le HTML (HyperText Markup Language), est un langage de balisage conçu pour réaliser des pages web. HTML est une des trois inventions à la base du World Wide Web, avec le HyperText Transfer Protocol et les adresses web. HTML a été inventé pour permettre d'écrire des documents hypertextuels liant les différentes ressources d’Internet avec des hyperliens.");
+        embed.setColor(ColorsUsed.same);
+        embed.setUrl("https://fr.wikipedia.org/wiki/HTML5");
+        embed.addField("Les bases", "On apprends l'HTML et le CSS pour faire des sites web.\nCe langage est très connu pour le dev web.", false);
+        embed.addField("Les cours écrits", "OpenClassroom : https://openclassrooms.com/fr/courses/1603881-apprenez-a-creer-votre-site-web-avec-html5-et-css3\nDeveloppez : https://www.developpez.com/actu/177723/Apprendre-la-programmation-Web-moins-HTML-CSS-a-travers-des-TD-un-tutoriel-de-Romain-Lebreton/\nZeste de savoir : https://zestedesavoir.com/tutoriels/599/creer-un-jeu-html5-avec-quintus/272_decouverte-de-la-librairie/1554_creer-une-page-html-basique/", false);
+        embed.addField("Les cours vidéos", "Les Teachers Du Net: https://www.youtube.com/watch?v=YT7eJufmOQM\nEt plein d'autres je vous laisse chercher si cette chaîne ne vous convient pas :/", false);
+        embed.addField("IDE (logiciels simplifiant le développement)", "Les IDE sont des logiciels très puissant, qui rassemblent tout les outils permettant le développement.\n\nVisual Studio Code : https://code.visualstudio.com/\nWebStorm : https://www.jetbrains.com/fr-fr/webstorm/\nSublime Text : http://www.sublimetext.com/\nAtom : https://atom.io/\nChoisissez celui qui vous fait le plus envie :)", false);
+        embed.addField("Bonne Chance !", "Maintenant vous pouvez naviguer dans les tutos, cours, et vidéos pour apprendre l'HTML/CSS. Le serveur est là si vous rencontrez certains problèmes.", false);
+        embed.setAuthor(Main.client.getSelf().block().getUsername(), null, Main.client.getSelf().block().getAvatarUrl());
+        embed.setTimestamp(Instant.now());
+    };
+
     /*
         Le message expliquant la commande start, et en disant quels sont les langages qui sont disponibles.
      */
     public static final Consumer<? super EmbedCreateSpec> startCommandExplain = embed -> {
         embed.setTitle("Start");
         embed.setDescription("Cette commande permet au débutant d'avoir les liens, et les premières indications sur un langage.");
-        embed.addField("Les langages :", "Java, Python, C#, en développement....\n\nPour choisir le langage, tapez simplement son nom et vous aurez toutes les informations.\n\nVous pouvez annuler la commande avec `annuler` ou `cancel`.", false);
+        embed.addField("Les langages :", "Java, Python, C#, html/css, en développement....\n\nPour choisir le langage, tapez simplement son nom et vous aurez toutes les informations.\n\nVous pouvez annuler la commande avec `annuler` ou `cancel`.", false);
         embed.setColor(ColorsUsed.just);
         embed.setTimestamp(Instant.now());
     };

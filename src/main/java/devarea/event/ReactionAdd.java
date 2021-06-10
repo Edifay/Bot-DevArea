@@ -2,6 +2,7 @@ package devarea.event;
 
 import devarea.automatical.MeetupManager;
 import devarea.automatical.MissionsManager;
+import devarea.automatical.RolesReacts;
 import devarea.commands.Command;
 import devarea.commands.CommandManager;
 import devarea.commands.LongCommand;
@@ -12,7 +13,6 @@ import discord4j.core.object.entity.Message;
 import java.util.Map;
 
 import static devarea.data.TextMessage.messageDisableInPrivate;
-import static devarea.automatical.RolesReacts.onReact;
 
 public class ReactionAdd {
 
@@ -26,7 +26,7 @@ public class ReactionAdd {
         if (reactionAddEvent.getUser().block().isBot())
             return;
 
-        onReact(reactionAddEvent);
+        RolesReacts.onReact(reactionAddEvent);
 
         synchronized (CommandManager.key) {
             for (Map.Entry<Snowflake, Command> entry : CommandManager.actualCommands.entrySet()) {

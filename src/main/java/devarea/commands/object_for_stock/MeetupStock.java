@@ -81,7 +81,7 @@ public class MeetupStock implements Serializable {
             if (this.date != null) {
                 embedCreateSpec.setDescription("Le meetup aura lieu le " +
                         new SimpleDateFormat("dd/MM/yyyy").format(this.date) + " à " +
-                        new SimpleDateFormat("hh").format(this.date) + "h" + new SimpleDateFormat("mm").format(this.date) + ".");
+                        new SimpleDateFormat("HH").format(this.date) + "h" + new SimpleDateFormat("mm").format(this.date) + ".");
             }
             embedCreateSpec.setColor(ColorsUsed.just);
         };
@@ -103,7 +103,7 @@ public class MeetupStock implements Serializable {
             if (this.date != null) {
                 embedCreateSpec.setDescription("Le meetup aura lieu le " +
                         new SimpleDateFormat("dd/MM/yyyy").format(this.date) + " à " +
-                        new SimpleDateFormat("hh").format(this.date) + "h" + new SimpleDateFormat("mm").format(this.date) + ".");
+                        new SimpleDateFormat("HH").format(this.date) + "h" + new SimpleDateFormat("mm").format(this.date) + ".");
             }
             embedCreateSpec.setColor(ColorsUsed.just);
         };

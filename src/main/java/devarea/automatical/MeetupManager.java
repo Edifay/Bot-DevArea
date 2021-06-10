@@ -1,12 +1,13 @@
 package devarea.automatical;
 
-import devarea.data.ColorsUsed;
 import devarea.Main;
 import devarea.commands.Command;
 import devarea.commands.object_for_stock.MeetupStock;
+import devarea.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.NewsChannel;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 
@@ -112,7 +113,7 @@ public class MeetupManager {
                         e.printStackTrace();
                     }
                     messageBoundToMeetup.remove(message);
-                    Message message1 = Command.sendEmbed((TextChannel) Main.devarea.getChannelById(Main.idMeetupAnnonce).block(), meetup.getEmbed());
+                    Message message1 = ((TextChannel) Main.devarea.getChannelById(Main.idMeetupAnnonce).block()).createEmbed(meetup.getEmbed()).block();
                     addYes(message1);
                     messageSended.put(meetup, message1);
                     save();

@@ -1,10 +1,10 @@
 package devarea.commands.created;
 
-import devarea.data.TextMessage;
+import devarea.commands.EndStape;
 import devarea.commands.FirstStape;
 import devarea.commands.LongCommand;
 import devarea.commands.Stape;
-import devarea.commands.EndStape;
+import devarea.data.TextMessage;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.spec.MessageCreateSpec;
@@ -38,8 +38,15 @@ public class Start extends LongCommand {
                 return end;
             }
         };
+        Stape HtmlCss = new EndStape() {
+            @Override
+            protected boolean onCall(Message message) {
+                setText(TextMessage.startHtmlCss);
+                return end;
+            }
+        };
 
-        this.firstStape = new FirstStape(this.channel, java, python, CSharp) {
+        this.firstStape = new FirstStape(this.channel, java, python, CSharp, HtmlCss) {
             @Override
             public void onFirstCall(Consumer<? super MessageCreateSpec> spec) {
                 super.onFirstCall(msg -> msg.setEmbed(TextMessage.startCommandExplain));
@@ -54,6 +61,8 @@ public class Start extends LongCommand {
                     return callStape(1);
                 else if (content.equalsIgnoreCase("csharp") || content.equalsIgnoreCase("c#"))
                     return callStape(2);
+                else if (content.equalsIgnoreCase("html/css") || content.equalsIgnoreCase("htmlcss") || content.equalsIgnoreCase("html") || content.equalsIgnoreCase("css"))
+                    return callStape(3);
                 else
                     sendErrorEntry();
                 return next;
