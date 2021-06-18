@@ -20,7 +20,7 @@ public class Stop extends ShortCommand {
             sendEmbed(embedCreateSpec -> {
                 embedCreateSpec.setTitle(stopCommand);
                 embedCreateSpec.setColor(ColorsUsed.wrong);
-            });
+            }, false);
             Main.client.logout().block();
             Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
             for(Thread t : threadSet){

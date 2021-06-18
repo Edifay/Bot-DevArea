@@ -23,13 +23,16 @@ public class Ready {
         assert Main.devarea != null;
         Main.logChannel = (TextChannel) Main.devarea.getChannelById(idLogChannel).block();
 
+        Main.idYes = Main.devarea.getGuildEmojiById(Snowflake.of(Main.document.getElementsByTagName("yes").item(0).getChildNodes().item(0).getNodeValue())).block();
+        Main.idNo = Main.devarea.getGuildEmojiById(Snowflake.of(Main.document.getElementsByTagName("no").item(0).getChildNodes().item(0).getNodeValue())).block();
+
         Main.logChannel.createMessage(msg -> msg.setEmbed(embed -> {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss  dd/MM/yyyy");
             LocalDateTime now = LocalDateTime.now();
             embed.setColor(ColorsUsed.same);
             embed.setTitle("Bot Online !");
             embed.setDescription("Le bot a été allumé le " + dtf.format(now) + ".");
-        })).block();
+        })).subscribe();
 
         try {
             Stats.init();

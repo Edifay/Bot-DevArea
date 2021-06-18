@@ -21,7 +21,7 @@ public class LeaderBoard extends ShortCommand {
             text += "\n---------------------------------------------------------------\n\n";
             text += "`#" + XpCount.getRankOf(this.member.getId()) + ":` <@" + this.member.getId().asString() + ">: " + XpCount.getXpOf(this.member.getId()) + "xp.";
             embedCreateSpec.setDescription(text);
-        });
+        }, false);
         this.endCommand();
     }
 }

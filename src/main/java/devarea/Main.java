@@ -3,7 +3,6 @@ package devarea;
 import devarea.automatical.XpCount;
 import devarea.commands.CommandManager;
 import devarea.event.*;
-import devarea.github.GithubEvent;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
@@ -13,6 +12,7 @@ import discord4j.core.event.domain.guild.MemberLeaveEvent;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.*;
 import discord4j.core.object.entity.Guild;
+import discord4j.core.object.entity.GuildEmoji;
 import discord4j.core.object.entity.channel.TextChannel;
 import org.w3c.dom.Document;
 
@@ -33,8 +33,8 @@ public class Main {
     public static Snowflake idCategoryJoin;
     public static Guild devarea;
 
-    public static Snowflake idYes;
-    public static Snowflake idNo;
+    public static GuildEmoji idYes;
+    public static GuildEmoji idNo;
 
     public static Snowflake idMissionsPayantes;
     public static Snowflake idMissionsGratuites;
@@ -70,6 +70,8 @@ public class Main {
 
     public static Snowflake idVoiceChannelHelp;
 
+    public static Document document;
+
 
     public static void main(String[] args) throws IllegalAccessException, NoSuchFieldException, IOException, InterruptedException {
         try {
@@ -99,7 +101,7 @@ public class Main {
 
             while (true) {
                 try {
-                    final Document document = builder.parse(fileNextToJar);
+                    document = builder.parse(fileNextToJar);
 
                     token = new Scanner(new FileInputStream("./.token")).nextLine();
                     prefix = document.getElementsByTagName("prefix").item(0).getChildNodes().item(0).getNodeValue();
@@ -108,8 +110,6 @@ public class Main {
                     idLogChannel = Snowflake.of(document.getElementsByTagName("idLogChannel").item(0).getChildNodes().item(0).getNodeValue());
                     idJoinLogChannel = Snowflake.of(document.getElementsByTagName("idLogJoinChannel").item(0).getChildNodes().item(0).getNodeValue());
                     idCategoryJoin = Snowflake.of(document.getElementsByTagName("idJoinCategory").item(0).getChildNodes().item(0).getNodeValue());
-                    idYes = Snowflake.of(document.getElementsByTagName("yes").item(0).getChildNodes().item(0).getNodeValue());
-                    idNo = Snowflake.of(document.getElementsByTagName("no").item(0).getChildNodes().item(0).getNodeValue());
 
                     idMissionsGratuites = Snowflake.of(document.getElementsByTagName("missions-gratuites").item(0).getChildNodes().item(0).getNodeValue());
                     idMissionsPayantes = Snowflake.of(document.getElementsByTagName("mission-payantes").item(0).getChildNodes().item(0).getNodeValue());

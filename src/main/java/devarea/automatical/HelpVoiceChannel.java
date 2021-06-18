@@ -22,7 +22,7 @@ public class HelpVoiceChannel {
                 }).block()).getId();
                 Objects.requireNonNull(event.getCurrent().getMember().block()).edit(guildMemberEditSpec -> {
                     guildMemberEditSpec.setNewVoiceChannel(id);
-                }).block();
+                }).subscribe();
             }
             if (event.getOld().isPresent())
                 leave(event);
@@ -38,7 +38,7 @@ public class HelpVoiceChannel {
         if (channel.getVoiceStates().buffer().blockLast() == null && channel.getName().startsWith("Aide")) {
             number--;
             try {
-                channel.delete().block();
+                channel.delete().subscribe();
             } catch (Exception ignored) {
             }
         }

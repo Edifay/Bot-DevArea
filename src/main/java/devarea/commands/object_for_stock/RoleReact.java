@@ -48,7 +48,6 @@ public class RoleReact {
             reactionId = map.get("reactionId");
             ObjectMapper mapper = new ObjectMapper();
             String str = map.get("message").replace("=", "\":\"").replace(", ", "\", \"").replace("{", "{\"").replace("}", "\"}");
-            System.out.println("Str : " + str);
             message = new MessageSeria(mapper.readValue(str, new TypeReference<HashMap<String, String>>() {
             }));
             isID = map.get("isID");

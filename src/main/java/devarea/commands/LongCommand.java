@@ -15,6 +15,10 @@ public abstract class LongCommand extends Command {
         super(message);
     }
 
+    public LongCommand(final ReactionAddEvent event) {
+        super(event);
+    }
+
     public void nextStape(final ReactionAddEvent event) {
         Message message = event.getMessage().block();
         if (!message.getId().equals(this.lastMessage.getId())) {
@@ -39,7 +43,7 @@ public abstract class LongCommand extends Command {
                 embed.setDescription("Vous avez une commande en cour dans <#" + this.channel.getId().asString() + ">");
                 embed.setColor(ColorsUsed.wrong);
             });
-            delete(event.getMessage());
+            delete(false, event.getMessage());
             return;
         }
         if (event.getMessage().getContent().toLowerCase().startsWith("cancel") || event.getMessage().getContent().toLowerCase().startsWith("annuler"))
@@ -48,12 +52,12 @@ public abstract class LongCommand extends Command {
             this.ended = true;
             this.endCommand();
         }
-        delete(event.getMessage());
+        delete(false, event.getMessage());
     }
 
     protected void removeTrace() {
         sendError("Vous avez annuler la commande !");
-        delete(this.lastMessage);
+        delete(false, this.lastMessage);
         ended = true;
         endCommand();
     }

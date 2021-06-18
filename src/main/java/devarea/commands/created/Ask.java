@@ -15,7 +15,7 @@ public class Ask extends ShortCommand {
                 embedCreateSpec.setImage("attachment://image_ask.png");
                 embedCreateSpec.setColor(ColorsUsed.same);
             });
-        });
+        }, false);
         this.endCommand();
     }
 }

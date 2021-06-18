@@ -19,7 +19,7 @@ public class Join extends ShortCommand {
                 sendEmbed(embed -> {
                     embed.setTitle("Vous avez fait join <@" + member.getId().asString() + ">");
                     embed.setColor(ColorsUsed.just);
-                });
+                }, false);
             }
         } else {
             sendError("Vous n'avez pas la permission d'utiliser cette commande !");

@@ -43,7 +43,10 @@ public abstract class Command {
 
 
     protected Boolean endCommand() {
-        CommandManager.actualCommands.remove(message.getMember().get().getId());
+        if (this.reaction != null)
+            CommandManager.actualCommands.remove(this.reaction.getMember().get().getId());
+        else if (this.message != null)
+            CommandManager.actualCommands.remove(message.getMember().get().getId());
         return ended;
     }
 
@@ -68,12 +71,12 @@ public abstract class Command {
         return false;
     }
 
-    protected Message send(final Consumer<? super MessageCreateSpec> spec) {
-        return send(this.channel, spec);
+    protected Message send(final Consumer<? super MessageCreateSpec> spec, boolean block) {
+        return send(this.channel, spec, block);
     }
 
-    protected Message sendEmbed(final Consumer<? super EmbedCreateSpec> spec) {
-        return send(msg -> msg.setEmbed(spec));
+    protected Message sendEmbed(final Consumer<? super EmbedCreateSpec> spec, boolean block) {
+        return send(msg -> msg.setEmbed(spec), block);
     }
 
     protected Message sendError(final String error) {
@@ -101,14 +104,19 @@ public abstract class Command {
         }).start();
     }
 
-    public static Message send(final TextChannel channel, final Consumer<? super MessageCreateSpec> spec) {
-        try{
+    public static Message send(final TextChannel channel, final Consumer<? super MessageCreateSpec> spec, boolean block) {
+        try {
             try {
-                return channel.createMessage(spec).block();
-            }catch (Exception ignored){
+                if (block)
+                    return channel.createMessage(spec).block();
+                else {
+                    channel.createMessage(spec).subscribe();
+                    return null;
+                }
+            } catch (Exception ignored) {
                 throw new Exception("Message is more than 2000 character !");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -123,23 +131,28 @@ public abstract class Command {
     }
 
     public static Message deletedMessage(final TextChannel channel, final Consumer<? super MessageCreateSpec> spec) {
-        final Message atDelete = send(channel, spec);
+        final Message atDelete = send(channel, spec, true);
         new Thread(() -> {
             try {
                 Thread.sleep(30000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            delete(atDelete);
+            delete(false, atDelete);
         }).start();
         return atDelete;
     }
 
-    public static Boolean delete(final Message... messages) {
+    public static Boolean delete(boolean block, final Message... messages) {
         boolean bool = true;
         for (Message message : messages)
             try {
-                message.delete().block();
+                if (block)
+                    message.delete().block();
+                else
+                    message.delete().subscribe(unused -> {}, throwable -> {
+
+                    });
             } catch (Exception e) {
                 bool = false;
             }
@@ -150,8 +163,8 @@ public abstract class Command {
         return deletedMessage(channel, msg -> msg.setEmbed(spec));
     }
 
-    public static Message sendEmbed(final TextChannel channel, final Consumer<? super EmbedCreateSpec> spec) {
-        return send(channel, msg -> msg.setEmbed(spec));
+    public static Message sendEmbed(final TextChannel channel, final Consumer<? super EmbedCreateSpec> spec, boolean block) {
+        return send(channel, msg -> msg.setEmbed(spec), block);
     }
 
 

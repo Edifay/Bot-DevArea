@@ -12,7 +12,7 @@ public class Ping extends ShortCommand {
             embed.setTitle("Pong !");
             embed.setDescription("La latence avec le bot est de `" + (System.currentTimeMillis() - message.getMessage().getTimestamp().toEpochMilli()) + "`ms.");
             embed.setColor(ColorsUsed.same);
-        });
+        }, false);
         this.endCommand();
     }
 }

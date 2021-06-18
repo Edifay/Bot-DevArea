@@ -27,7 +27,7 @@ public class InCommand extends ShortCommand {
             embedCreateSpec.setDescription(text);
             embedCreateSpec.setColor(ColorsUsed.same);
             embedCreateSpec.setTimestamp(Instant.now());
-        });
+        }, false);
         this.endCommand();
     }
 }

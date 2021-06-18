@@ -21,7 +21,6 @@ public abstract class Stape {
     protected Stape called;
 
     public Stape(Stape... stapes) {
-        System.out.println(stapes.length);
         assert stapes.length != 0;
         this.stapes = stapes;
     }
@@ -67,11 +66,11 @@ public abstract class Stape {
     }
 
     protected void setText(Consumer<? super EmbedCreateSpec> spec) {
-        this.message.edit(msg -> msg.setEmbed(spec)).block();
+        this.message.edit(msg -> msg.setEmbed(spec)).subscribe();
     }
 
     protected void setMessage(Consumer<? super MessageEditSpec> spec) {
-        this.message.edit(spec).block();
+        this.message.edit(spec).subscribe();
     }
 
     protected boolean call(Stape stape) {
@@ -82,7 +81,7 @@ public abstract class Stape {
     protected boolean callStape(int nb) {
         try {
             return this.call(stape(nb));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return end;
@@ -93,11 +92,11 @@ public abstract class Stape {
     }
 
     protected void addYesEmoji() {
-        this.message.addReaction(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idYes).block())).subscribe();
+        this.message.addReaction(ReactionEmoji.custom(Main.idYes)).subscribe();
     }
 
     protected void addNoEmoji() {
-        this.message.addReaction(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idNo).block())).subscribe();
+        this.message.addReaction(ReactionEmoji.custom(Main.idNo)).subscribe();
     }
 
     protected void addYesNoEmoji() {
@@ -110,11 +109,11 @@ public abstract class Stape {
     }
 
     protected boolean isYes(ReactionAddEvent event) {
-        return ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idYes).block()).equals(event.getEmoji());
+        return ReactionEmoji.custom(Main.idYes).equals(event.getEmoji());
     }
 
     protected boolean isNo(ReactionAddEvent event) {
-        return ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idNo).block()).equals(event.getEmoji());
+        return ReactionEmoji.custom(Main.idNo).equals(event.getEmoji());
     }
 
 }

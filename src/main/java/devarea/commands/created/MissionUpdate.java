@@ -9,7 +9,7 @@ public class MissionUpdate extends ShortCommand {
     public MissionUpdate(MessageCreateEvent message) {
         super(message);
         this.commandWithPerm(Permission.ADMINISTRATOR, () -> {
-            this.send(messageCreateSpec -> messageCreateSpec.setContent("Vous avez update le message des missions !"));
+            this.send(messageCreateSpec -> messageCreateSpec.setContent("Vous avez update le message des missions !"), false);
             MissionsManager.update();
         });
         this.endCommand();

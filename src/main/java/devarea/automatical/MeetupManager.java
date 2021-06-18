@@ -7,7 +7,6 @@ import devarea.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.NewsChannel;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 
@@ -47,11 +46,11 @@ public class MeetupManager {
                             if (meetupStock.getDate().after(date)) {
                                 Command.send((TextChannel) message.getChannel().block(), msg -> {
                                     msg.setContent("Un meetup a commencer avec sujet : " + meetupStock.getDescription() + ".\n<@&" + Main.idPingMeetup + ">");
-                                });
+                                }, false);
                                 Main.devarea.createVoiceChannel(voiceChannelCreateSpec -> {
                                     voiceChannelCreateSpec.setParentId(Main.idCategoryGeneral);
                                     voiceChannelCreateSpec.setName("Meetup by " + Main.devarea.getMemberById(meetupStock.getAuthor()).block().getDisplayName());
-                                }).block();
+                                }).subscribe();
                                 meetupStock.setAlreadyMake(true);
                             }
                         }
@@ -83,18 +82,18 @@ public class MeetupManager {
 
     public static void addMeetupAtValide(MeetupStock meetup) {
         TextChannel meetupVerif = (TextChannel) Main.devarea.getChannelById(Main.idMeetupVerif).block();
-        Message message = Command.sendEmbed(meetupVerif, meetup.getEmbed());
+        Message message = Command.sendEmbed(meetupVerif, meetup.getEmbed(), true);
         messageBoundToMeetup.put(message, meetup);
         addYesAndNo(message);
     }
 
     public static void addYesAndNo(Message message) {
-        message.addReaction(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idYes).block())).block();
-        message.addReaction(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idNo).block())).block();
+        message.addReaction(ReactionEmoji.custom(Main.idYes)).subscribe();
+        message.addReaction(ReactionEmoji.custom(Main.idNo)).subscribe();
     }
 
     public static void addYes(Message message) {
-        message.addReaction(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idYes).block())).block();
+        message.addReaction(ReactionEmoji.custom(Main.idYes)).subscribe();
     }
 
     public static void getEvent(ReactionAddEvent event) {
@@ -102,13 +101,13 @@ public class MeetupManager {
             Message message = entry.getKey();
             MeetupStock meetup = entry.getValue();
             if (message.getId().equals(event.getMessageId())) {
-                if (event.getEmoji().equals(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idYes).block()))) {
+                if (event.getEmoji().equals(ReactionEmoji.custom(Main.idYes))) {
                     try {
                         Main.devarea.getMemberById(meetup.getAuthor()).block().getPrivateChannel().block().createEmbed(embedCreateSpec -> {
                             embedCreateSpec.setTitle("Votre meetup a été accepté !");
                             embedCreateSpec.setTimestamp(Instant.now());
                             embedCreateSpec.setColor(ColorsUsed.just);
-                        }).block();
+                        }).subscribe();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -117,7 +116,7 @@ public class MeetupManager {
                     addYes(message1);
                     messageSended.put(meetup, message1);
                     save();
-                } else if (event.getEmoji().equals(ReactionEmoji.custom(Main.devarea.getGuildEmojiById(Main.idNo).block()))) {
+                } else if (event.getEmoji().equals(ReactionEmoji.custom(Main.idNo))) {
                     try {
                         Main.devarea.getMemberById(meetup.getAuthor()).block().getPrivateChannel().block().createEmbed(embedCreateSpec -> {
                             embedCreateSpec.setTitle("Votre meetup a été rejeté !");
@@ -128,7 +127,7 @@ public class MeetupManager {
                     }
                     messageBoundToMeetup.remove(message);
                 }
-                Command.delete(message);
+                Command.delete(false, message);
             }
         }
     }
@@ -151,7 +150,7 @@ public class MeetupManager {
             Message key = entry.getKey();
             MeetupStock value = entry.getValue();
             if (value.equals(meetup)) {
-                Command.delete(key);
+                Command.delete(false, key);
                 messageBoundToMeetup.remove(key);
             }
         }
@@ -159,7 +158,7 @@ public class MeetupManager {
             MeetupStock meetupStock = entry.getKey();
             Message message = entry.getValue();
             if (meetupStock.equals(meetup)) {
-                Command.delete(message);
+                Command.delete(false, message);
                 messageSended.remove(meetupStock);
                 save();
             }

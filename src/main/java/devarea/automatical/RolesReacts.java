@@ -46,7 +46,6 @@ public class RolesReacts {
             obj.forEach((k, v) -> {
                 HashMap<String, String> newHash = null;
                 String str = k.replace("reactionId=", "\"reactionId\":\"").replace(", message={", "\", \"message\":\"{").replace("}}", "}\"}").replace("isID=", "\"isID\":").replace("false", "\"false\"").replace("true", "\"true\"");
-                System.out.println(str);
                 try {
                     newHash = mapper.readValue(str, new TypeReference<>() {
                     });
@@ -66,11 +65,9 @@ public class RolesReacts {
         rolesReacts.forEach((k, v) -> {
             try {
                 if (k.is(event)) {
-                    System.out.println("Ajout de rôle detected:");
                     assert event.getMember().isPresent();
                     Member member = event.getMember().get();
                     member.addRole(v).subscribe();
-                    System.out.println("Le rôle : " + Main.devarea.getRoleById(v).block().getName() + " a été ajouter à : " + member.getDisplayName());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -82,11 +79,9 @@ public class RolesReacts {
         rolesReacts.forEach((k, v) -> {
             try {
                 if (k.is(event)) {
-                    System.out.println("Detect remove :");
                     Member member = Main.devarea.getMemberById(event.getUserId()).block();
                     assert member != null;
                     member.removeRole(v).subscribe();
-                    System.out.println("Le rôle : " + Main.devarea.getRoleById(v).block().getName() + " a été retirer a : " + member.getDisplayName());
                 }
             } catch (Exception e) {
                 e.printStackTrace();

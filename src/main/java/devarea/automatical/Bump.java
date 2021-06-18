@@ -1,8 +1,8 @@
 package devarea.automatical;
 
-import devarea.data.ColorsUsed;
 import devarea.Main;
 import devarea.commands.Command;
+import devarea.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -22,7 +22,7 @@ public class Bump {
         message = Command.sendEmbed(channel, embedCreateSpec -> {
             embedCreateSpec.setColor(ColorsUsed.wrong);
             embedCreateSpec.setDescription("Le bot vien de s'initialisé utilisez la commande `!d bump`, pour lancer le compte à rebourd.");
-        });
+        }, true);
         new Thread(() -> {
             try {
                 while (true) {
@@ -35,7 +35,7 @@ public class Bump {
                                     embed.setDescription("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes.");
                                     embed.setColor(ColorsUsed.wrong);
                                 }));
-                        } else if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est disponible avec la commande `!d bump`."))
+                        } else if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est disponible avec la commande `!d bump`.") && !message.getEmbeds().get(0).getDescription().get().equals("Le bot vien de s'initialisé utilisez la commande `!d bump`, pour lancer le compte à rebourd."))
                             replace(msg -> msg.setEmbed(embed -> {
                                 embed.setDescription("Le bump est disponible avec la commande `!d bump`.");
                                 embed.setColor(ColorsUsed.same);
@@ -75,8 +75,8 @@ public class Bump {
     }
 
     private synchronized static void replace(final Consumer<? super MessageCreateSpec> spec) {
-        Command.delete(message);
-        message = Command.send(channel, spec);
+        Command.delete(false, message);
+        message = Command.send(channel, spec, true);
     }
 
     private synchronized static void edit(final Consumer<? super MessageEditSpec> spec) {

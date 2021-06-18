@@ -1,10 +1,12 @@
 package devarea.commands.with_out_text_starter;
 
+import devarea.automatical.MessageSeria;
+import devarea.commands.LongCommand;
+import devarea.commands.object_for_stock.Mission;
 import devarea.data.ColorsUsed;
 import devarea.data.TextMessage;
 import devarea.Main;
 import devarea.automatical.MissionsManager;
-import devarea.commands.ExternalLongCommand;
 import devarea.commands.FirstStape;
 import devarea.commands.Stape;
 import devarea.commands.EndStape;
@@ -20,33 +22,29 @@ import discord4j.rest.util.PermissionSet;
 import java.time.Instant;
 import java.util.function.Consumer;
 
-public class CreateMission extends ExternalLongCommand {
+public class CreateMission extends LongCommand {
 
-    protected String title;
-    protected String descriptionText;
-    protected String prix;
-    protected String dateRetour;
-    protected String langage;
-    protected String support;
-    protected String niveau;
+    protected Mission mission;
 
     public CreateMission(ReactionAddEvent event) {
         super(event);
+        this.mission = new Mission();
         this.deletedCommand(1200000);
         this.channel = Main.devarea.createTextChannel(textChannelCreateSpec -> {
             textChannelCreateSpec.setName("creation de mission");
             textChannelCreateSpec.setParentId(Main.idMissionsCategory);
         }).block();
+        assert this.channel != null;
         this.channel.addRoleOverwrite(Main.idRoleRulesAccepted,
                 PermissionOverwrite.forRole(Main.idRoleRulesAccepted,
                         PermissionSet.of(),
                         PermissionSet.of(Permission.VIEW_CHANNEL)))
-                .block();
+                .subscribe();
         this.channel.addMemberOverwrite(this.member.getId(),
                 PermissionOverwrite.forMember(this.member.getId(),
                         PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES),
                         PermissionSet.of(Permission.ADD_REACTIONS)))
-                .block();
+                .subscribe();
 
         Stape niveauStape = new EndStape() {
             @Override
@@ -57,15 +55,20 @@ public class CreateMission extends ExternalLongCommand {
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                niveau = event.getMessage().getContent();
-                sendEmbed((TextChannel) Main.devarea.getChannelById(Main.idMissionsPayantes).block(), embedCreateSpec -> {
-                    embedCreateSpec.setTitle(title);
-                    embedCreateSpec.setDescription(descriptionText +
-                            "\n\nPrix: " + prix + "\nDate de retour: " + dateRetour + "\nType de support: " + support + "\nLangage: " + langage + "\nNiveau estimé: " + niveau + "\n\nCette mission est posté par : " + "<@" + member.getId().asString() + ">.");
-                    embedCreateSpec.setColor(ColorsUsed.just);
-                    embedCreateSpec.setAuthor(event.getMember().get().getDisplayName(), event.getMember().get().getAvatarUrl(), event.getMember().get().getAvatarUrl());
-                    embedCreateSpec.setTimestamp(Instant.now());
-                });
+                mission.setNiveau(event.getMessage().getContent());
+                mission.setMessage(
+                        new MessageSeria(
+                                sendEmbed((TextChannel) Main.devarea.getChannelById(Main.idMissionsPayantes).block(), embedCreateSpec -> {
+                                    embedCreateSpec.setTitle(mission.getTitle());
+                                    embedCreateSpec.setDescription(mission.getDescriptionText() +
+                                            "\n\nPrix: " + mission.getPrix() + "\nDate de retour: " + mission.getDateRetour() + "\nType de support: " + mission.getSupport() + "\nLangage: " + mission.getLangage() + "\nNiveau estimé: " + mission.getNiveau() + "\n\nCette mission est posté par : " + "<@" + member.getId().asString() + ">.");
+                                    embedCreateSpec.setColor(ColorsUsed.just);
+                                    embedCreateSpec.setAuthor(event.getMember().get().getDisplayName(), event.getMember().get().getAvatarUrl(), event.getMember().get().getAvatarUrl());
+                                    embedCreateSpec.setTimestamp(Instant.now());
+                                }, true)
+                        )
+                );
+                MissionsManager.add(mission);
                 MissionsManager.update();
                 endCommand();
                 return end;
@@ -81,7 +84,7 @@ public class CreateMission extends ExternalLongCommand {
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                support = event.getMessage().getContent();
+                mission.setSupport(event.getMessage().getContent());
                 return callStape(0);
             }
         };
@@ -95,7 +98,7 @@ public class CreateMission extends ExternalLongCommand {
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                langage = event.getMessage().getContent();
+                mission.setLangage(event.getMessage().getContent());
                 return callStape(0);
             }
         };
@@ -109,7 +112,7 @@ public class CreateMission extends ExternalLongCommand {
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                dateRetour = event.getMessage().getContent();
+                mission.setDateRetour(event.getMessage().getContent());
                 return callStape(0);
             }
         };
@@ -123,7 +126,7 @@ public class CreateMission extends ExternalLongCommand {
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                prix = event.getMessage().getContent();
+                mission.setPrix(event.getMessage().getContent());
                 return callStape(0);
             }
         };
@@ -137,7 +140,7 @@ public class CreateMission extends ExternalLongCommand {
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                descriptionText = event.getMessage().getContent();
+                mission.setDescriptionText(event.getMessage().getContent());
                 return callStape(0);
             }
         };
@@ -153,7 +156,8 @@ public class CreateMission extends ExternalLongCommand {
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                title = event.getMessage().getContent();
+                mission.setTitle(event.getMessage().getContent());
+                mission.setMemberId(event.getMember().get().getId().asString());
                 return callStape(0);
             }
         };

@@ -10,9 +10,9 @@ public class Help extends ShortCommand {
 
     public Help(final MessageCreateEvent message) {
         super(message);
-        this.sendEmbed(TextMessage.helpEmbed);
+        this.sendEmbed(TextMessage.helpEmbed, false);
         if (this.member.getBasePermissions().block().contains(Permission.ADMINISTRATOR) || this.member.getRoleIds().contains(Main.idAdmin) || this.member.getRoleIds().contains(Main.idModo)) {
-            this.sendEmbed(TextMessage.helpEmbedAdmin);
+            this.sendEmbed(TextMessage.helpEmbedAdmin, false);
         }
         this.endCommand();
     }

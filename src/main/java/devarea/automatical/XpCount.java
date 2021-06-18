@@ -23,7 +23,7 @@ public class XpCount {
     public static void init() {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("./xp.json");
-        if(!file.exists())
+        if (!file.exists())
             save();
         try {
             HashMap<String, Integer> obj = mapper.readValue(file, HashMap.class);
@@ -66,7 +66,7 @@ public class XpCount {
                             embedCreateSpec.setTimestamp(Instant.now());
                             embedCreateSpec.setColor(ColorsUsed.same);
                         });
-                    });
+                    }, false);
                 }
                 xp.put(member.getId(), xp.get(member.getId()) + 1);
             } else {

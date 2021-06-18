@@ -1,9 +1,9 @@
 package devarea.commands.created;
 
 import devarea.Main;
-import devarea.data.ColorsUsed;
 import devarea.automatical.XpCount;
 import devarea.commands.ShortCommand;
+import devarea.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 
@@ -29,7 +29,7 @@ public class Rank extends ShortCommand {
             if (!XpCount.haveBeenSet(pinged.getId())) {
                 sendError("Ce membre n'a pas encore parlé !");
                 this.endCommand();
-            }else {
+            } else {
 
                 try {
                     BufferedImage img = new BufferedImage(Main.backgroundXp.getWidth(), Main.backgroundXp.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -44,7 +44,11 @@ public class Rank extends ShortCommand {
                     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                     g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-                    g.drawImage(makeRoundedCorner(ImageIO.read(new URL(pinged.getAvatarUrl())), 600), 25, 25, 200, 200, null);
+                    try {
+                        g.drawImage(makeRoundedCorner(ImageIO.read(new URL(pinged.getAvatarUrl())), 600), 25, 25, 200, 200, null);
+                    } catch (Exception e) {
+                        g.drawImage(makeRoundedCorner(ImageIO.read(new URL(pinged.getDefaultAvatarUrl())), 600), 25, 25, 200, 200, null);
+                    }
 
                     g.setColor(Color.white);
                     g.setStroke(new BasicStroke(18.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, null, 0.0f));
@@ -71,7 +75,7 @@ public class Rank extends ShortCommand {
                             embedCreateSpec.setTitle("Voici l'xp de " + finalPinged.getDisplayName());
                             embedCreateSpec.setImage("attachment://xp.png");
                         });
-                    });
+                    }, false);
                 } catch (IOException | FontFormatException e) {
                     e.printStackTrace();
                 }
