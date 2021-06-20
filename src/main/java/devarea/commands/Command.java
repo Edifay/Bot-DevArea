@@ -43,10 +43,12 @@ public abstract class Command {
 
 
     protected Boolean endCommand() {
-        if (this.reaction != null)
-            CommandManager.actualCommands.remove(this.reaction.getMember().get().getId());
-        else if (this.message != null)
-            CommandManager.actualCommands.remove(message.getMember().get().getId());
+        synchronized (CommandManager.key) {
+            if (this.reaction != null)
+                CommandManager.actualCommands.remove(this.reaction.getMember().get().getId());
+            else if (this.message != null)
+                CommandManager.actualCommands.remove(message.getMember().get().getId());
+        }
         return ended;
     }
 

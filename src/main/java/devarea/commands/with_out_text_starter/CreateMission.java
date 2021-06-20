@@ -70,7 +70,6 @@ public class CreateMission extends LongCommand {
                 );
                 MissionsManager.add(mission);
                 MissionsManager.update();
-                endCommand();
                 return end;
             }
         };

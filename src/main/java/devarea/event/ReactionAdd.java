@@ -1,5 +1,6 @@
 package devarea.event;
 
+import devarea.automatical.FreeLanceManager;
 import devarea.automatical.MeetupManager;
 import devarea.automatical.MissionsManager;
 import devarea.automatical.RolesReacts;
@@ -18,12 +19,12 @@ public class ReactionAdd {
 
     public static void reactionAddFunction(ReactionAddEvent reactionAddEvent) {
         final Message message = reactionAddEvent.getMessage().block();
-        if (reactionAddEvent.getGuild().block() == null) {
-            message.getChannel().block().createMessage(messageCreateSpec -> messageCreateSpec.setContent(messageDisableInPrivate)).block();
+        if (!reactionAddEvent.getMember().isPresent()) {
+            message.getChannel().block().createMessage(messageCreateSpec -> messageCreateSpec.setContent(messageDisableInPrivate)).subscribe();
             return;
         }
 
-        if (reactionAddEvent.getUser().block().isBot())
+        if (reactionAddEvent.getMember().get().isBot())
             return;
 
         RolesReacts.onReact(reactionAddEvent);
@@ -45,6 +46,7 @@ public class ReactionAdd {
 
         MeetupManager.getEvent(reactionAddEvent);
         MissionsManager.react(reactionAddEvent);
+        FreeLanceManager.react(reactionAddEvent);
     }
 
 }

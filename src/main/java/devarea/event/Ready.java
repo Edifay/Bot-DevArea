@@ -1,5 +1,6 @@
 package devarea.event;
 
+import devarea.commands.object_for_stock.FreeLance;
 import devarea.data.ColorsUsed;
 import devarea.Main;
 import devarea.automatical.*;
@@ -23,9 +24,6 @@ public class Ready {
         assert Main.devarea != null;
         Main.logChannel = (TextChannel) Main.devarea.getChannelById(idLogChannel).block();
 
-        Main.idYes = Main.devarea.getGuildEmojiById(Snowflake.of(Main.document.getElementsByTagName("yes").item(0).getChildNodes().item(0).getNodeValue())).block();
-        Main.idNo = Main.devarea.getGuildEmojiById(Snowflake.of(Main.document.getElementsByTagName("no").item(0).getChildNodes().item(0).getNodeValue())).block();
-
         Main.logChannel.createMessage(msg -> msg.setEmbed(embed -> {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss  dd/MM/yyyy");
             LocalDateTime now = LocalDateTime.now();
@@ -43,12 +41,16 @@ public class Ready {
         if (already)
             return;
 
+        Main.idYes = Main.devarea.getGuildEmojiById(Snowflake.of(Main.document.getElementsByTagName("yes").item(0).getChildNodes().item(0).getNodeValue())).block();
+        Main.idNo = Main.devarea.getGuildEmojiById(Snowflake.of(Main.document.getElementsByTagName("no").item(0).getChildNodes().item(0).getNodeValue())).block();
+
         try {
             RolesReacts.load();
             Stats.start();
             MeetupManager.init();
             Bump.init();
             MissionsManager.init();
+            FreeLanceManager.init();
             GithubEvent.init();
         } catch (Exception e) {
             e.printStackTrace();

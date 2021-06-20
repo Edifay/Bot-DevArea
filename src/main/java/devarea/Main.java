@@ -70,6 +70,8 @@ public class Main {
 
     public static Snowflake idVoiceChannelHelp;
 
+    public static Snowflake idFreeLance;
+
     public static Document document;
 
 
@@ -144,6 +146,8 @@ public class Main {
                     idMissionsCategory = Snowflake.of(document.getElementsByTagName("idMissionsCategory").item(0).getChildNodes().item(0).getNodeValue());
 
                     idVoiceChannelHelp = Snowflake.of(document.getElementsByTagName("idVoiceChannelHelp").item(0).getChildNodes().item(0).getNodeValue());
+
+                    idFreeLance = Snowflake.of(document.getElementsByTagName("idFreeLance").item(0).getChildNodes().item(0).getNodeValue());
 
                     break;
                 } catch (Exception e) {

@@ -17,7 +17,7 @@ public class Join extends ShortCommand {
                 assert member != null;
                 MemberJoin.join(member);
                 sendEmbed(embed -> {
-                    embed.setTitle("Vous avez fait join <@" + member.getId().asString() + ">");
+                    embed.setTitle("Vous avez fait join " + member.getDisplayName() + " !");
                     embed.setColor(ColorsUsed.just);
                 }, false);
             }

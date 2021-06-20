@@ -25,7 +25,7 @@ public class GithubEvent {
         addEvent(commit -> {
             ((TextChannel) Main.devarea.getChannelById(Snowflake.of("768782153802055710")).block()).createMessage(msg -> {
                 msg.setContent(commit.getHtmlUrl().toString());
-            }).block();
+            }).subscribe();
         });
         new Thread(() -> {
             try {

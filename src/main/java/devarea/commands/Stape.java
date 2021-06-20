@@ -11,7 +11,7 @@ import discord4j.core.spec.MessageEditSpec;
 
 import java.util.function.Consumer;
 
-public abstract class Stape {
+public abstract class Stape implements Cloneable {
 
     public final static boolean end = true;
     public final static boolean next = false;
@@ -74,8 +74,13 @@ public abstract class Stape {
     }
 
     protected boolean call(Stape stape) {
-        this.called = stape;
-        return stape.call(this.message);
+        try {
+            this.called = ((Stape) stape.clone());
+            return this.called.call(this.message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return next;
     }
 
     protected boolean callStape(int nb) {

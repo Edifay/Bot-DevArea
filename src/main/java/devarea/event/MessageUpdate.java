@@ -24,7 +24,7 @@ public class MessageUpdate {
                 embed.setTitle(message.getAuthor().get().getTag() + " a éditer un message :");
                 embed.setDescription(message.getContent());
                 embed.setFooter(date.format(now) + " at " + hours.format(now) + ".", message.getAuthor().get().getAvatarUrl());
-            })).block();
+            })).subscribe();
         }catch (Exception e){
             e.printStackTrace();
         }

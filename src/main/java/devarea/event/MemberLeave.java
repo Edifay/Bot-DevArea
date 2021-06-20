@@ -12,7 +12,7 @@ import java.util.Map;
 public class MemberLeave {
 
     public static void memberLeaveFunction(Snowflake finalIdDevArea, Snowflake finalIdJoinLogChannel, MemberLeaveEvent memberLeaveEvent) {
-        ((TextChannel) Main.client.getGuildById(finalIdDevArea).block().getChannelById(finalIdJoinLogChannel).block()).createMessage(msg -> msg.setContent(memberLeaveEvent.getMember().get().getDisplayName() + " a quitter le serveur !")).block();
+        ((TextChannel) Main.client.getGuildById(finalIdDevArea).block().getChannelById(finalIdJoinLogChannel).block()).createMessage(msg -> msg.setContent(memberLeaveEvent.getMember().get().getDisplayName() + " a quitter le serveur !")).subscribe();
         final Member member = memberLeaveEvent.getMember().get();
         for (Map.Entry<Snowflake, Joining> entry : MemberJoin.bindJoin.entrySet()) {
             final Snowflake id = entry.getKey();

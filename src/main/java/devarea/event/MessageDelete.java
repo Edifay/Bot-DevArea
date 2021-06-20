@@ -26,7 +26,7 @@ public class MessageDelete {
                 embed.setTitle("Le message de " + message.getAuthor().get().getTag() + " a été supprimé :");
                 embed.setDescription(message.getContent());
                 embed.setFooter(date.format(now) + " at " + hours.format(now) + ".", message.getAuthor().get().getAvatarUrl());
-            })).block();
+            })).subscribe();
         } catch (Exception e) {
             e.printStackTrace();
         }

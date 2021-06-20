@@ -19,3 +19,6 @@ err.txt
 xp.json
 stats.xml
 xp.json
+freelance.json
+github.token
+*.token

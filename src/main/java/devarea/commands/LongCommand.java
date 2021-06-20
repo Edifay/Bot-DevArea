@@ -33,7 +33,10 @@ public abstract class LongCommand extends Command {
             this.ended = true;
             this.endCommand();
         }
-        message.removeReaction(event.getEmoji(), event.getUserId()).block();
+        try {
+            message.removeReaction(event.getEmoji(), event.getUserId()).block();
+        } catch (Exception e) {
+        }
     }
 
     public void nextStape(final MessageCreateEvent event) {
