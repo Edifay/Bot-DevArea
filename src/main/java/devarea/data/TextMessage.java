@@ -10,33 +10,33 @@ import java.util.function.Consumer;
 public class TextMessage {
 
     /*
-        Ce message est envoyer aux personnes qui envoient des messages au bot en privé.
+        Ce message est envoyé aux personnes qui envoient des messages au bot en privé.
      */
-    public static final String messageDisableInPrivate = "`Les commandes ne sont pas activé dans les messages privés.`";
+    public static final String messageDisableInPrivate = "`Les commandes ne sont pas activées dans les messages privés.`";
     /*
-        Ce message est envoyer dans un embed quand la commande n'existe pas
+        Ce message est envoyé dans un embed quand la commande n'existe pas
      */
-    public static final String commandNotFound = "La commande que vous avez demandé n'existe pas !";
+    public static final String commandNotFound = "La commande que vous avez demandée n'existe pas !";
     /*
-        Message quand l'utiliseteur n'as pas la permissions de faire la commande qu'il a demandé
+        Message quand l'utiliseteur n'a pas la permissions de faire la commande qu'il a demandé
      */
-    public static final String haventPermission = "Vous n'avez pas la permission d'éxécuter cette commande !";
+    public static final String haventPermission = "Vous n'avez pas la permission d'exécuter cette commande !";
     /*
-        Quand le bot est arrêter !
+        Quand le bot s'arrète !
      */
-    public static final String stopCommand = "Le bot a été arréter ! :o:";
+    public static final String stopCommand = "Le bot a été arrêté ! :o:";
     /*
-        Quand l'utilisateur n'as pas mit d'argument alors que la commande en demandais
+        Quand l'utilisateur n'a pas mis d'argument alors que la commande en demandait
      */
     public static final String errorNeedArguments = "Vous devez mettre du texte après la commande !";
     /*
         Le premier message lors du questionnaire de bienvenue
      */
-    public static final String firstText = "Pour que tu puisses bien t'intégrer au serveur je vais de donner quelques informations, et t'en demander quelques une pour que je puisse bien te diriger !\n\nTu en as pour maximum **2min**, mais attention tu seras kick après 10min sans avoir compléter le questionnaire !\n\nPour passer à la suite il te faut réagir <:ayy:" + Main.idYes.getId().asString() + "> ! Bonne chance !";
+    public static final String firstText = "Pour que tu puisses bien t'intégrer au serveur, je vais te donner quelques informations, et t'en demander quelques une pour que je puisse bien te diriger !\n\nTu en as pour maximum **2min**, mais attention, tu seras kick après 10min sans avoir complété le questionnaire !\n\nPour passer à la suite il te faut réagir <:ayy:" + Main.idYes.getId().asString() + "> ! Bonne chance !";
     /*
         Les règles pour que la communication lors du code sois correcte
      */
-    public static final String rulesForSpeakCode = "Pour pouvoir bien discuter efficacement avec la communautée voici quelques règles de base :\n\n- Essayes de parler avec un bon français.\n\n" + "- Le code ne doit pas être envoyé en brut. Tu peux utiliser \\`\\`\\`code\\`\\`\\` => ```code``` pour les petits codes (moins de 2000 caractères). Pour les codes plus grands tu peux utiliser des sites externes comme hastbin/pastebin.\n\n" + "- Poses ta question directement, pas de \"**Quelqu'un peut m'aider ?**\" ou autres questions sans intérêt. Poses directement ta question dans le channel adapté, avec du code et les recherches que tu as effectuées (avant de poser une question vas regarder rapidement sur google peut être que la réponse y sera).\n\n" + "- Fais attention où tu parles ! **ATTENTION** : le serveur est très structuré pour la bonne compréhension essayes de respecter les channels.\n\nSi tu as bien lu ces règles réagis avec <:ayy:" + Main.idYes.getId().asString() + ">";
+    public static final String rulesForSpeakCode = "Pour pouvoir discuter efficacement avec la communauté voici quelques règles de base :\n\n- Essaye de parler avec un bon français.\n\n" + "- Le code ne doit pas être envoyé en brut. Tu peux utiliser \\`\\`\\`code\\`\\`\\` => ```code``` pour les petits codes (moins de 2000 caractères). Pour les codes plus grands tu peux utiliser des sites externes comme hastbin/pastebin.\n\n" + "- Poses ta question directement, pas de \"**Quelqu'un peut m'aider ?**\" ou autres questions sans intérêt. Poses directement ta question dans le channel adapté, avec du code et les recherches que tu as effectuées (avant de poser une question, vas regarder rapidement sur google peut être sûr que la réponse n'y est pas déjà).\n\n" + "- Fais attention où tu parles ! **ATTENTION** : le serveur est très structuré, pour la bonne compréhension essaye de respecter les channels.\n\nSi tu as bien lu ces règles, réagis avec <:ayy:" + Main.idYes.getId().asString() + ">";
     /*
         Les règles pour demander des missions
      */
@@ -44,21 +44,21 @@ public class TextMessage {
     /*
         Le message de règles
      */
-    public static final String rules = "Tu dois maintenant accepter les règles :" + "\n\nLes règles classique s'applique sur ce serveur, toutes forme de violation de ces règles de vie, sera pour tout le monde le bannissement." + "\n\nNous n'aiderons en aucun cas, à la production de logiciel malveillant, programme lié au darknet, recherche de failles de sécurité ou autres mauvaises intentions." + "\n\nLe serveur ne prend pas en charge la sûreté des missions payantes, en effet le serveur ne s'implique en aucun cas de la fiabilité du client ou du développeur." + "\n\nN'hésitez pas à venir dire Salut dans le channel général certainement d'autres personnes seront là pour vous expliquer le fonctionnement du discord." + "\n\nCliques sur : <:ayy:" + Main.idYes.getId().asString() + "> pour accéder à la suite.";
+    public static final String rules = "Tu dois maintenant accepter les règles :" + "\n\nLes règles classiques s'appliquent sur ce serveur, la sanction pour toute forme de violation de ces règles de vie, sera pour tout le monde le bannissement." + "\n\nNous n'aiderons en aucun cas, à la production de logiciel malveillant, programme lié au darknet, recherche de failles de sécurité ou autres mauvaises intentions." + "\n\nLe serveur ne prend pas en charge la sûreté des missions payantes, en effet le serveur ne s'implique en aucun cas de la fiabilité du client ou du développeur." + "\n\nN'hésitez pas à venir dire Salut dans le channel général. D'autres personnes seront certainement là pour vous expliquer le fonctionnement du discord." + "\n\nCliques sur : <:ayy:" + Main.idYes.getId().asString() + "> pour accéder à la suite.";
     /*
-        Le message méttant en avant le channels présentation
+        Le message mettant en avant le channel présentation
      */
     public static final String presentation = "Avant d'aller parler dans les channels et de rencontrer les membres de la communauté, essaye de faire une présentation de toi qui permettra d'entamer la discussion, et d'en savoir un peu plus sur toi ! <#" + Main.idPresentation.asString() + ">" + "\n\nCliques sur : <:ayy:" + Main.idYes.getId().asString() + "> pour accéder à la suite.";
     /*
-        Le message mmettant en avant le channels des rôles
+        Le message mmettant en avant le channel des rôles
      */
-    public static final String roles = "Tu as maintenant accès au <#" + Main.idRolesChannel.asString() + ">, tu dois choisir tes rôles avec précision, **attention cela est la base du serveur**.\n\nJe te donne accès au serveur dans 30 secondes (ne t'inquiète pas si tu prends plus que 30secondes tu as tout le temps qu'il te faut) tu as donc le temps de prendre tes <#" + Main.idRolesChannel.asString() + ">.\n\nBienvenue !";
+    public static final String roles = "Tu as maintenant accès au <#" + Main.idRolesChannel.asString() + ">, tu dois choisir tes rôles avec précision, **attention cela est la base du serveur**.\n\nJe te donne accès au serveur dans 30 secondes (ne t'inquiète pas si tu prends plus que 30 secondes tu as tout le temps qu'il te faut) tu as donc le temps de prendre tes <#" + Main.idRolesChannel.asString() + ">.\n\nBienvenue !";
     /*
         le message lors de l'help command
      */
     public static final Consumer<? super EmbedCreateSpec> helpEmbed = embedCreateSpec -> {
         embedCreateSpec.setTitle("Voici la liste des commandes :");
-        embedCreateSpec.setDescription("`//help` -> donne cette liste.\n`//ping` -> donne le temps de latence du bot.\n`//meetup` -> permet de créer un meetup autour d'un sujet.\n`//start` -> envois un message qui permet de bien commencer dans un langage.\n`//rank` -> donne l'xp et le rang de la personne (mentionnable).\n`//leaderboard` -> permet de voir le classement des membres du serveur en xp.\n`//devhelp` -> mentionne les développeurs ayant pris le rôle DevHelper.\n`//ask` -> donne les informations nécessaires pour bien poser une question.\n`//mission` -> permet de gérer les missions créés.\n\n`creationMissions` -> ne se lance pas comme une commande classique, une réaction dans le channel : <#" + Main.idMissionsPayantes.asString() + "> permet de commencer la commande.\n\nLes channels d'aides vocaux sont crées automatiquement par le bot lors de la connexion au channel vocal : \"Channels D'aides\".");
+        embedCreateSpec.setDescription("`//help` -> donne cette liste.\n`//ping` -> donne le temps de latence du bot.\n`//meetup` -> permet de créer un meetup autour d'un sujet.\n`//start` -> envoie un message qui permet de bien commencer dans un langage.\n`//rank` -> donne l'xp et le rang de la personne (mentionnable).\n`//leaderboard` -> permet de voir le classement des membres du serveur en xp.\n`//devhelp` -> mentionne les développeurs ayant pris le rôle DevHelper.\n`//ask` -> donne les informations nécessaires pour bien poser une question.\n`//mission` -> permet de gérer les missions créés.\n\n`creationMissions` -> ne se lance pas comme une commande classique, une réaction dans le channel : <#" + Main.idMissionsPayantes.asString() + "> permet de commencer la commande.\n\nLes channels d'aides vocaux sont crées automatiquement par le bot lors de la connexion au channel vocal : \"Channels D'aides\".");
         embedCreateSpec.setColor(ColorsUsed.just);
         embedCreateSpec.setTimestamp(Instant.now());
     };
@@ -67,7 +67,7 @@ public class TextMessage {
      */
     public static final Consumer<? super EmbedCreateSpec> helpEmbedAdmin = embedCreateSpec -> {
         embedCreateSpec.setTitle("Voici la liste des commandes admin:");
-        embedCreateSpec.setDescription("`//send` -> permet de faire envoyer des message aux bots.\n`//stop` -> arrête le skript du bot.");
+        embedCreateSpec.setDescription("`//send` -> permet de faire envoyer des messages aux bots.\n`//stop` -> arrête le script du bot.");
         embedCreateSpec.setColor(ColorsUsed.just);
         embedCreateSpec.setTimestamp(Instant.now());
     };
@@ -137,16 +137,16 @@ public class TextMessage {
      */
     public static final Consumer<? super EmbedCreateSpec> startCommandExplain = embed -> {
         embed.setTitle("Start");
-        embed.setDescription("Cette commande permet au débutant d'avoir les liens, et les premières indications sur un langage.");
+        embed.setDescription("Cette commande permet aux débutants d'avoir les liens, et les premières indications sur un langage.");
         embed.addField("Les langages :", "Java, Python, C#, html/css, en développement....\n\nPour choisir le langage, tapez simplement son nom et vous aurez toutes les informations.\n\nVous pouvez annuler la commande avec `annuler` ou `cancel`.", false);
         embed.setColor(ColorsUsed.just);
         embed.setTimestamp(Instant.now());
     };
 
     public static final Consumer<? super EmbedCreateSpec> meetupCommandExplain = embed -> {
-        embed.setAuthor("Les meetups sont des rencontres vocales/écrits sur un sujet créer par la communauté.", null, null);
+        embed.setAuthor("Les meetups sont des rencontres vocales/écrits sur un sujet créé par la communauté.", null, null);
         embed.setTitle("Commandes");
-        embed.setDescription("`create` => Permet de créer un nouveau meetup.\n`delete` => Permet de supprimer un meetup que vous avez créé.\n`channel` => renvois vers le channel des meetups.\n\nVous pouvez annuler la commande à tout moment avec `cancel` ou `annuler`.");
+        embed.setDescription("`create` => Permet de créer un nouveau meetup.\n`delete` => Permet de supprimer un meetup que vous avez créé.\n`channel` => renvoie vers le channel des meetups.\n\nVous pouvez annuler la commande à tout moment avec `cancel` ou `annuler`.");
         embed.setTimestamp(Instant.now());
         embed.setColor(ColorsUsed.just);
     };
@@ -161,14 +161,14 @@ public class TextMessage {
     public static final Consumer<? super EmbedCreateSpec> meetupCreateGetDate = embedCreateSpec -> {
         embedCreateSpec.setTitle("Date");
         Calendar calendar = Calendar.getInstance();
-        embedCreateSpec.setDescription("Quand voulez-vous organiser se meetup. Donnez la date et l'heure sous la forme **dd/MM/yyyy hh:mm**. Par exemple `" + calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR) + " " + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + "`.");
+        embedCreateSpec.setDescription("Quand voulez-vous organiser ce meetup. Donnez la date et l'heure sous la forme **dd/MM/yyyy hh:mm**. Par exemple `" + calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR) + " " + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + "`.");
         embedCreateSpec.setFooter("cancel | annuler pour quitter.", null);
         embedCreateSpec.setColor(ColorsUsed.just);
     };
 
     public static final Consumer<? super EmbedCreateSpec> meetupCreateGetImage = embed -> {
         embed.setTitle("Image");
-        embed.setDescription("Vous avez la possibilitée d'ajouter une image de présentation au meeetup !\nSi vous ne voulez pas ajouter d'image répondez `non`, sinon envoyez votre image.");
+        embed.setDescription("Vous avez la possibilité d'ajouter une image de présentation au meeetup !\nSi vous ne voulez pas ajouter d'image répondez `non`, sinon envoyez votre image.");
         embed.setFooter("cancel | annuler pour quitter.", null);
         embed.setColor(ColorsUsed.just);
     };
