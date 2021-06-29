@@ -173,7 +173,7 @@ public class FreeLance {
 
         @JsonIgnore
         public String getValue() {
-            return this.description + this.description + ((!this.prix.equalsIgnoreCase("empty") && !this.temps.equalsIgnoreCase("empty")) ? "\n" : "") + (this.prix.equalsIgnoreCase("empty") ? "" : ("\nPrix: " + this.prix));
+            return this.description + ((!this.prix.equalsIgnoreCase("empty") || !this.temps.equalsIgnoreCase("empty")) ? "\n" : "") + (this.prix.equalsIgnoreCase("empty") ? "" : ("\nPrix: " + this.prix) + (this.temps.equalsIgnoreCase("empty") ? "" : ("\nTemps de retour: " + this.temps)));
         }
 
     }

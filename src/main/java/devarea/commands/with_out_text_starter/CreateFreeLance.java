@@ -464,11 +464,10 @@ public class CreateFreeLance extends LongCommand {
         messageAtEdit.edit(msg -> msg.setEmbed(embed -> {
             embed.setTitle(freeLance.getFreeLanceName());
             embed.setDescription(freeLance.getDescription());
-            for (int i = 0; i < freeLance.getFieldNumber(); i++) {
+            for (int i = 0; i < freeLance.getFieldNumber(); i++)
                 embed.addField(freeLance.getField(i).getTitle(), freeLance.getField(i).getValue(), freeLance.getField(i).getInline());
-            }
             embed.addField(actualFied.getTitle(), actualFied.getValue(), actualFied.getInline());
-            embed.addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre...", false);
+            embed.addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, github, ou autre...", false);
             embed.setColor(ColorsUsed.same);
         })).block();
     }

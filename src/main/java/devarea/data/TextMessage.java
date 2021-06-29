@@ -60,9 +60,9 @@ public class TextMessage {
         embed.setTitle("Voici la liste des commandes :");
         embed.setDescription("Voici la liste de toutes les commandes :");
         embed.addField("Les commandes globales :", "`//help` -> donne cette liste.\n`//ping` -> donne le temps de latence du bot.\n`//start` -> envois un message qui permet de bien commencer dans un langage.\n", false);
-        embed.addField("Communication :", "`//devhelp` -> mentionne les dayant pris le rDevHelper.\n`//ask` -> donne les informations npour bien poser une question.\n`//meetup` -> permet de crun meetup autour d'un sujet.\n\nLes channels d'aides vocaux sont crautomatiquement par le bot lors de la connexion au channel vocal : \"Votre channel d'aide\".", false);
+        embed.addField("Communication :", "`//devhelp` -> mentionne les membres ayant pris le rôle Dev'Helper.\n`//ask` -> donne les informations pour bien poser une question.\n`//meetup` -> permet de créer un meetup autour d'un sujet.\n\nLes channels d'aides vocaux sont créé automatiquement par le bot lors de la connexion au channel vocal : \"Votre channel d'aide\".", false);
         embed.addField("XP:", "`//rank` -> donne l'xp et le rang de la personne (mentionnable).\n`//leaderboard` -> permet de voir le classement des membres du serveur en xp.", false);
-        embed.addField("D<-> Clients:", "`//mission` -> permet de gles missions cr\n`//freelance` permet de gle message freelance.\n\n`creationMissions` & `creationFreeLance` -> ne se lancent pas comme des commandes classiques, une rdans le channel : <#" + Main.idMissionsPayantes.asString() + "> & <#" + Main.idFreeLance.asString() + "> permet de commencer la commande.\n\n", false);
+        embed.addField("Développeurs <-> Clients :", "`//mission` -> permet de gérer les missions créé.\n`//freelance` permet de gérer le message freelance.\n\n`creationMissions` & `creationFreeLance` -> ne se lancent pas comme des commandes classiques, une réaction dans le channel : <#" + Main.idMissionsPayantes.asString() + "> & <#" + Main.idFreeLance.asString() + "> permet de commencer la commande.\n\n", false);
         embed.setColor(ColorsUsed.just);
         embed.setTimestamp(Instant.now());
     };
