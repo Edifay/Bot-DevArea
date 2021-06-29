@@ -14,6 +14,7 @@ import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
+import discord4j.rest.http.client.ClientException;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,9 +29,11 @@ public class MissionsManager {
 
     public static void init() {
         load();
-        if (verif())
-            save();
         sendLastMessage();
+        new Thread(() -> {
+            if (verif())
+                save();
+        });
     }
 
     public static void update() {
@@ -92,10 +95,21 @@ public class MissionsManager {
     public static boolean verif() {
         ArrayList<Mission> atRemove = new ArrayList<>();
         for (Mission mission : missions) {
-            Message message = mission.getMessage().getMessage();
-            if (Main.devarea.getMemberById(Snowflake.of(mission.getMemberId())).block() == null || message == null) {
+            boolean isMemberHere = false;
+            Message message = null;
+            try {
+                Main.devarea.getMemberById(Snowflake.of(mission.getMemberId())).block();
+                isMemberHere = true;
+            } catch (ClientException e) {
+            }
+            try {
+                message = mission.getMessage().getMessage();
+            } catch (ClientException e) {
+            }
+            if (!isMemberHere || message == null) {
                 atRemove.add(mission);
-                if (message != null) delete(false, message);
+                if (message != null)
+                    delete(false, message);
             }
         }
 

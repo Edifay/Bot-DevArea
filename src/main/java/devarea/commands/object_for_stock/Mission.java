@@ -124,4 +124,19 @@ public class Mission {
         return this.memberId;
     }
 
+    @JsonIgnore
+    @Override
+    public String toString() {
+        return "Mission{" +
+                "title='" + title + '\'' +
+                ", descriptionText='" + descriptionText + '\'' +
+                ", prix='" + prix + '\'' +
+                ", dateRetour='" + dateRetour + '\'' +
+                ", langage='" + langage + '\'' +
+                ", support='" + support + '\'' +
+                ", niveau='" + niveau + '\'' +
+                ", message=" + message +
+                ", memberId='" + memberId + '\'' +
+                '}';
+    }
 }

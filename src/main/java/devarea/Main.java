@@ -77,8 +77,9 @@ public class Main {
 
     public static void main(String[] args) throws IllegalAccessException, NoSuchFieldException, IOException, InterruptedException {
         try {
-            System.setOut(new PrintStream("out.txt"));
-            System.setErr(new PrintStream("err.txt"));
+            PrintStream out = new PrintStream("out.txt");
+            System.setOut(out);
+            System.setErr(out);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -31,11 +31,13 @@ public class FreeLance extends LongCommand {
         };
         EndStape deleteStape = new EndStape() {
             protected boolean onCall(Message message) {
-                if (FreeLanceManager.hasFreelance(FreeLance.this.member)) {
-                    FreeLanceManager.remove(FreeLanceManager.getFreeLance(FreeLance.this.member));
+                if (FreeLanceManager.hasFreelance(member)) {
+                    devarea.commands.object_for_stock.FreeLance free = FreeLanceManager.getFreeLance(member);
+                    FreeLanceManager.remove(free);
                     try {
-                        Command.delete(false, FreeLanceManager.getFreeLance(FreeLance.this.member).getMessage().getMessage());
-                    } catch (NullPointerException nullPointerException) {
+                        Command.delete(false, free.getMessage().getMessage());
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
                     }
                     setText(embed -> embed.setTitle("Votre mission a bien supprimer !"));
                 } else {

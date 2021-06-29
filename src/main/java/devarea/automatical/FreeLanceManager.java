@@ -15,6 +15,7 @@ import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
+import discord4j.rest.http.client.ClientException;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,9 +32,11 @@ public class FreeLanceManager {
 
     public static void init() {
         load();
-        if (verif())
-            save();
         sendLastMessage();
+        new Thread(() -> {
+            if (verif())
+                save();
+        }).start();
     }
 
     public static void update() {
@@ -79,9 +82,10 @@ public class FreeLanceManager {
     public static FreeLance getFreeLance(Member member) {
         synchronized (freeLances) {
             for (FreeLance freeLance : freeLances)
-                if (freeLance.getMemberId().equals(member.getId().asString())) return freeLance;
+                if (freeLance.getMemberId().equals(member.getId().asString()))
+                    return freeLance;
+            return null;
         }
-        return null;
     }
 
     public static boolean bumpFreeLance(Member member) {
@@ -144,10 +148,21 @@ public class FreeLanceManager {
     public static boolean verif() {
         ArrayList<FreeLance> atRemove = new ArrayList<>();
         for (FreeLance freeLance : freeLances) {
-            Message message = freeLance.getMessage().getMessage();
-            if (Main.devarea.getMemberById(Snowflake.of(freeLance.getMemberId())).block() == null || message == null) {
+            boolean isMemberAlways = false;
+            try {
+                Main.devarea.getMemberById(Snowflake.of(freeLance.getMemberId())).block();
+                isMemberAlways = true;
+            } catch (ClientException e) {
+            }
+            Message message = null;
+            try {
+                message = freeLance.getMessage().getMessage();
+            } catch (ClientException e) {
+            }
+            if (!isMemberAlways || message == null) {
                 atRemove.add(freeLance);
-                if (message != null) delete(false, message);
+                if (message != null)
+                    delete(false, message);
             }
         }
 

@@ -20,42 +20,54 @@ public abstract class LongCommand extends Command {
     }
 
     public void nextStape(final ReactionAddEvent event) {
-        Message message = event.getMessage().block();
-        if (!message.getId().equals(this.lastMessage.getId())) {
-            deletedEmbed((TextChannel) message.getChannel().block(), embed -> {
-                embed.setTitle("Error !");
-                embed.setDescription("Vous avez une commande en cour dans <#" + this.channel.getId().asString() + ">");
-                embed.setColor(ColorsUsed.wrong);
-            });
-            return;
-        }
-        if (this.firstStape.receiveReact(event)) {
-            this.ended = true;
-            this.endCommand();
-        }
-        try {
-            message.removeReaction(event.getEmoji(), event.getUserId()).block();
-        } catch (Exception e) {
+        synchronized (this) {
+            try {
+                Message message = event.getMessage().block();
+                if (!message.getId().equals(this.lastMessage.getId())) {
+                    deletedEmbed((TextChannel) message.getChannel().block(), embed -> {
+                        embed.setTitle("Error !");
+                        embed.setDescription("Vous avez une commande en cour dans <#" + this.channel.getId().asString() + ">");
+                        embed.setColor(ColorsUsed.wrong);
+                    });
+                    return;
+                }
+                if (this.firstStape.receiveReact(event)) {
+                    this.ended = true;
+                    this.endCommand();
+                }
+                try {
+                    message.removeReaction(event.getEmoji(), event.getUserId()).block();
+                } catch (Exception e) {
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void nextStape(final MessageCreateEvent event) {
-        if (!event.getMessage().getChannelId().equals(this.channel.getId())) {
-            deletedEmbed((TextChannel) event.getMessage().getChannel().block(), embed -> {
-                embed.setTitle("Error !");
-                embed.setDescription("Vous avez une commande en cour dans <#" + this.channel.getId().asString() + ">");
-                embed.setColor(ColorsUsed.wrong);
-            });
-            delete(false, event.getMessage());
-            return;
+        synchronized (this) {
+            try {
+                if (!event.getMessage().getChannelId().equals(this.channel.getId())) {
+                    deletedEmbed((TextChannel) event.getMessage().getChannel().block(), embed -> {
+                        embed.setTitle("Error !");
+                        embed.setDescription("Vous avez une commande en cour dans <#" + this.channel.getId().asString() + ">");
+                        embed.setColor(ColorsUsed.wrong);
+                    });
+                    delete(false, event.getMessage());
+                    return;
+                }
+                if (event.getMessage().getContent().toLowerCase().startsWith("cancel") || event.getMessage().getContent().toLowerCase().startsWith("annuler"))
+                    this.removeTrace();
+                else if (this.firstStape.receiveMessage(event)) {
+                    this.ended = true;
+                    this.endCommand();
+                }
+                delete(false, event.getMessage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        if (event.getMessage().getContent().toLowerCase().startsWith("cancel") || event.getMessage().getContent().toLowerCase().startsWith("annuler"))
-            this.removeTrace();
-        else if (this.firstStape.receiveMessage(event)) {
-            this.ended = true;
-            this.endCommand();
-        }
-        delete(false, event.getMessage());
     }
 
     protected void removeTrace() {
