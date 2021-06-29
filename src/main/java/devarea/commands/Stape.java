@@ -121,4 +121,8 @@ public abstract class Stape implements Cloneable {
         return ReactionEmoji.custom(Main.idNo).equals(event.getEmoji());
     }
 
+    protected String getContent(MessageCreateEvent event) {
+        return event.getMessage().getContent();
+    }
+
 }

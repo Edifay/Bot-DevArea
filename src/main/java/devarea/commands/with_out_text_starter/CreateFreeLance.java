@@ -29,7 +29,7 @@ public class CreateFreeLance extends LongCommand {
         super(event);
         this.freeLance = new FreeLance();
         this.freeLance.setMemberId(event.getMember().get().getId().asString());
-        this.deletedCommand(1200000);
+        this.deletedCommand(21600000L);
         this.channel = Main.devarea.createTextChannel(textChannelCreateSpec -> {
             textChannelCreateSpec.setName("creation de freelance");
             textChannelCreateSpec.setParentId(Main.idMissionsCategory);

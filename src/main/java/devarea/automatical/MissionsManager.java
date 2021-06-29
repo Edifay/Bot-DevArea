@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static devarea.commands.Command.delete;
+
 public class MissionsManager {
 
     public static Message messsage;
@@ -26,11 +28,13 @@ public class MissionsManager {
 
     public static void init() {
         load();
+        if (verif())
+            save();
         sendLastMessage();
     }
 
     public static void update() {
-        Command.delete(false, messsage);
+        delete(false, messsage);
         sendLastMessage();
     }
 
@@ -49,14 +53,16 @@ public class MissionsManager {
 
         if (event.getMessageId().equals(messsage.getId()) && event.getEmoji().equals(ReactionEmoji.custom(Main.idYes)) && !CommandManager.actualCommands.containsKey(event.getMember().get().getId())) {
             if (!MemberJoin.bindJoin.containsKey(event.getMember().get().getId()))
-                CommandManager.actualCommands.put(event.getMember().get().getId(), new CreateMission(event));
+                synchronized (CommandManager.key) {
+                    CommandManager.actualCommands.put(event.getMember().get().getId(), new CreateMission(event));
+                }
             else
                 Command.sendError((TextChannel) event.getChannel().block(), "Vous devez finir le questionnaire d'arrivé pour créer une commande !");
         }
     }
 
     public static void stop() {
-        Command.delete(true, messsage);
+        delete(true, messsage);
     }
 
     public static void add(Mission mission) {
@@ -81,6 +87,23 @@ public class MissionsManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean verif() {
+        ArrayList<Mission> atRemove = new ArrayList<>();
+        for (Mission mission : missions) {
+            Message message = mission.getMessage().getMessage();
+            if (Main.devarea.getMemberById(Snowflake.of(mission.getMemberId())).block() == null || message == null) {
+                atRemove.add(mission);
+                if (message != null) delete(false, message);
+            }
+        }
+
+        if (atRemove.size() == 0)
+            return false;
+
+        missions.removeAll(atRemove);
+        return true;
     }
 
     public static void save() {
