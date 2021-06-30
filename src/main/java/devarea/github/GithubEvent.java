@@ -22,16 +22,14 @@ public class GithubEvent {
         GitHub gitHub = new GitHubBuilder().withOAuthToken(new Scanner(new File("github.token")).nextLine()).build();
         GHRepository repo = gitHub.getMyself().getRepository("DevArea_Site");
         number = repo.listCommits().toList().size();
-        addEvent(commit -> {
-            ((TextChannel) Main.devarea.getChannelById(Snowflake.of("768782153802055710")).block()).createMessage(msg -> {
-                msg.setContent(commit.getHtmlUrl().toString());
-            }).subscribe();
-        });
+        addEvent(commit -> ((TextChannel) Main.devarea.getChannelById(Snowflake.of("768782153802055710")).block()).createMessage(msg -> {
+            msg.setContent(commit.getHtmlUrl().toString());
+        }).subscribe());
         new Thread(() -> {
             try {
                 while (true) {
                     try {
-                        Thread.sleep(60000);
+                        Thread.sleep(10000);
                         int actualNumber = repo.listCommits().toList().size();
                         if (actualNumber != number) {
                             emit(repo.listCommits().toList().get(0));
