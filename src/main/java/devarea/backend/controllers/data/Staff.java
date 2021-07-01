@@ -10,7 +10,6 @@ public class Staff {
     private String name;
     @JsonProperty("bio")
     private String bio;
-
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("id")
     private String id;

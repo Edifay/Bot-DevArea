@@ -3,12 +3,10 @@ package devarea;
 import devarea.backend.SpringBackend;
 import devarea.bot.Init;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
-@SpringBootApplication
 public class Main {
 
     public static void main(String[] args) {

@@ -28,6 +28,7 @@ public class Stop extends ShortCommand {
             for (Thread t : threadSet) {
                 t.interrupt();
             }
+            System.exit(0);
         });
         this.endCommand();
     }
