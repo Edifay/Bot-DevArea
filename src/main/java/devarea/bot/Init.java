@@ -75,7 +75,7 @@ public class Init {
     public static Document document;
 
 
-    public static void init() throws IllegalAccessException, NoSuchFieldException, IOException, InterruptedException {
+    public static void initBot() {
         XpCount.init();
         CommandManager.init();
         try {
@@ -99,7 +99,7 @@ public class Init {
                 try {
                     document = builder.parse(fileNextToJar);
 
-                    token = new Scanner(new FileInputStream("./.token")).nextLine();
+                    token = new Scanner(new FileInputStream("./token.token")).nextLine();
                     prefix = document.getElementsByTagName("prefix").item(0).getChildNodes().item(0).getNodeValue();
                     vanish = Boolean.parseBoolean(document.getElementsByTagName("vanish").item(0).getChildNodes().item(0).getNodeValue());
                     idDevArea = Snowflake.of(document.getElementsByTagName("idDevArea").item(0).getChildNodes().item(0).getNodeValue());

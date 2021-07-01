@@ -1,7 +1,7 @@
 package devarea.bot.commands;
 
-import devarea.bot.data.ColorsUsed;
 import devarea.bot.Init;
+import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -32,7 +32,10 @@ public class CommandManager {
     public static void init() {
         try {
 
-            ArrayList<String> names = getClassNamesFromPackage("BOOT-INF.classes.devarea.bot.commands.created");
+            ArrayList<String> names = getClassNamesFromPackage("devarea.bot.commands.created");
+            if (names.size() == 0) {
+                names = getClassNamesFromPackage("BOOT-INF.classes.devarea.bot.commands.created");
+            }
             System.out.println("Class name found : " + Arrays.toString(names.toArray()));
 
             for (String className : names) {

@@ -6,14 +6,14 @@ gradle/wrapper/gradle-wrapper.properties
 gradlew.bat
 settings.gradle
 gradlew
-.token
+token.token
 
 build
-.token
+token.token
 mission.json
 out.txt
 roleReact.json
-.token
+token.token
 config.xml
 err.txt
 xp.json
@@ -23,3 +23,4 @@ freelance.json
 github.token
 *.token
 *.jar
+xp.json

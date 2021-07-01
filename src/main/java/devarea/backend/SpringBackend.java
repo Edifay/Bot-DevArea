@@ -5,8 +5,4 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 @SpringBootApplication
 public class SpringBackend extends SpringBootServletInitializer {
-
-    public static void init() {
-
-    }
 }

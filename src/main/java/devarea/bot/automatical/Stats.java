@@ -82,6 +82,6 @@ public class Stats {
                     channelCount.put(channel, channelCount.get(channel) + 1);
             });
 
-        roleBoundToChannel.forEach((role, channel) -> channel.edit(voiceChannelEditSpec -> voiceChannelEditSpec.setName(role.getName() + ": " + channelCount.get(channel))).block());
+        roleBoundToChannel.forEach((role, channel) -> channel.edit(voiceChannelEditSpec -> voiceChannelEditSpec.setName(role.getName() + ": " + channelCount.get(channel))).subscribe());
     }
 }
