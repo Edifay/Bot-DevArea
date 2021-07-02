@@ -13,7 +13,7 @@ public class RoleCount {
     @JsonProperty("countMember")
     protected int countMember;
     @JsonProperty("color")
-    protected int color;
+    protected String color;
 
     public RoleCount() {
     }
@@ -60,12 +60,12 @@ public class RoleCount {
     }
 
     @JsonIgnore
-    public void setColor(int color) {
+    public void setColor(String color) {
         this.color = color;
     }
 
     @JsonIgnore
-    public int getColor() {
+    public String getColor() {
         return color;
     }
 }

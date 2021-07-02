@@ -9,18 +9,26 @@ import java.io.PrintStream;
 
 public class Main {
 
+    public static final boolean developing = true;
+
     public static void main(String[] args) {
-        try {
-            PrintStream out = new PrintStream("out.txt");
-            System.setOut(out);
-            System.setErr(out);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        if (!developing)
+            try {
+                PrintStream out = new PrintStream("out.txt");
+                System.setOut(out);
+                System.setErr(out);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
         SpringApplication.run(SpringBackend.class, args);
         devarea.bot.Init.initBot();
 
         Init.client.onDisconnect().block();
     }
+
+    public static void test() {
+        String message = new String("test");
+    }
+
 }

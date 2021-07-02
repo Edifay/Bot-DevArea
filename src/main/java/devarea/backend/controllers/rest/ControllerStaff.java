@@ -38,6 +38,8 @@ public class ControllerStaff {
                     staff.setUrlAvatar(idToUrl.get(staff.getId()));
                 staff.resetId();
             }
+            for (int i = 0; i < staffs.length; i++)
+                staffs[i].setIdCss(i % 2f != 0f ? "pair" : "impair");
             return staffs;
 
         } catch (FileNotFoundException e) {

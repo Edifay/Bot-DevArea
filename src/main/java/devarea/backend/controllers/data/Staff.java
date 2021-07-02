@@ -15,6 +15,8 @@ public class Staff {
     private String id;
     @JsonProperty("urlAvatar")
     private String urlAvatar;
+    @JsonProperty("idCss")
+    private String idCss;
 
     public Staff() {
 
@@ -56,6 +58,14 @@ public class Staff {
 
     public String getUrlAvatar() {
         return this.urlAvatar;
+    }
+
+    public void setIdCss(String idCss) {
+        this.idCss = idCss;
+    }
+
+    public String getIdCss() {
+        return this.idCss;
     }
 
 

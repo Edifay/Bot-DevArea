@@ -73,7 +73,7 @@ public class Stats {
         roleBoundToChannel.forEach((role, channel) -> channelCount.put(channel, 0));
 
         List<Member> members = Init.devarea.getMembers().buffer().blockLast();
-        channelMemberCount.edit(voiceChannelEditSpec -> voiceChannelEditSpec.setName("Member: " + members.size())).block();
+        channelMemberCount.edit(voiceChannelEditSpec -> voiceChannelEditSpec.setName("Member: " + members.size())).subscribe();
 
         assert members != null;
         for (Member member : members)

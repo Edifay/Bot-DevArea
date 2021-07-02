@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 public class ControllerFonction {
 
-    private final static ObjectMapper mapper = new ObjectMapper();
+    public final static ObjectMapper mapper = new ObjectMapper();
 
     public static Object[] getObjectsFromJson(final String url, TypeReference reference) throws FileNotFoundException {
         File file = new File(url); // check if file exist ! And create it if not !

@@ -12,6 +12,8 @@ import discord4j.core.object.presence.Presence;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static devarea.Main.developing;
+
 public class Ready {
 
     private static boolean already = false;
@@ -47,9 +49,12 @@ public class Ready {
             RolesReacts.load();
             Stats.start();
             MeetupManager.init();
-            Bump.init();
-            MissionsManager.init();
-            FreeLanceManager.init();
+            XpCount.init();
+            if(!developing) {
+                Bump.init();
+                MissionsManager.init();
+                FreeLanceManager.init();
+            }
             GithubEvent.init();
         } catch (Exception e) {
             e.printStackTrace();

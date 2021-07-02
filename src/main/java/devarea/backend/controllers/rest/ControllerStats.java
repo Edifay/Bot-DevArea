@@ -1,22 +1,24 @@
 package devarea.backend.controllers.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import devarea.backend.controllers.data.RoleCount;
+import devarea.backend.controllers.data.XpMember;
 import devarea.bot.Init;
+import devarea.bot.automatical.XpCount;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Role;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static devarea.backend.controllers.rest.ControllerFonction.getObjectsFromJson;
 
 @CrossOrigin()
 @RestController
@@ -27,22 +29,21 @@ public class ControllerStats {
 
 
     @GetMapping(value = "stats/rolesCount_list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RoleCount[] rolesCounts_list() {
+    public RoleCount[] rolesCounts_list(@RequestParam(value = "roles", defaultValue = "[]", required = true) String rolesString) {
         synchronized (idToRole) {
             try {
-                String[] rolesId = (String[]) getObjectsFromJson("data/stats/stats.json", new TypeReference<String[]>() {
+
+                String[] rolesId = ControllerFonction.mapper.readValue("[" + rolesString + "]", new TypeReference<String[]>() {
                 });
                 boolean newRole = false;
                 for (String id : rolesId) {
                     if (!contain(id)) {
                         idToRole.put(id, new RoleCount(id));
-                        System.out.println("Add new roles !");
                         newRole = true;
                     }
                 }
 
                 if ((System.currentTimeMillis() - lastTimeFetched) > 600000 || newRole) {
-                    System.out.println("Fetch !");
                     fetch();
                     lastTimeFetched = System.currentTimeMillis();
                 }
@@ -52,7 +53,7 @@ public class ControllerStats {
                     atReturn[i] = get(rolesId[i]);
 
                 return atReturn;
-            } catch (FileNotFoundException e) {
+            } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
             return null;
@@ -69,8 +70,7 @@ public class ControllerStats {
             if (value.getName() == null) {
                 Role role = Init.devarea.getRoleById(Snowflake.of(key)).block();
                 value.setName(role.getName());
-                value.setColor(role.getColor().getRGB());
-                System.out.println("Set the name of : " + value.getName());
+                value.setColor(String.format("#%06X", (0xFFFFFF & role.getColor().getRGB())));
             }
         }
 
@@ -98,6 +98,53 @@ public class ControllerStats {
             RoleCount value = set.getValue();
             if (id.equals(key)) {
                 return value;
+            }
+        }
+        return null;
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------
+
+    private static final ArrayList<XpMember> xpMembers = new ArrayList<>();
+
+    @GetMapping(value = "/stats/xp_list")
+    public XpMember[] xp_list(@RequestParam(value = "start", defaultValue = "0") final int start, @RequestParam(value = "end", defaultValue = "50") final int end) {
+        synchronized (xpMembers) {
+            XpMember[] members = XpCount.getListOfIndex(start, end);
+            for (XpMember member : members) {
+                if (contain(member)) {
+                    XpMember memberInList = get(member);
+                    member.setName(memberInList.getName());
+                    member.setUrlAvatar(memberInList.getUrlAvatar());
+                } else {
+                    Member memberDiscord = Init.devarea.getMemberById(Snowflake.of(member.getId())).block();
+                    xpMembers.add(member);
+                    member.setName(memberDiscord.getDisplayName());
+                    member.setUrlAvatar(memberDiscord.getAvatarUrl());
+                }
+            }
+            return members;
+        }
+    }
+
+    public static boolean contain(XpMember member) {
+        synchronized (xpMembers) {
+            for (XpMember memberList : xpMembers) {
+                if (memberList.equals(member)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static XpMember get(XpMember member) {
+        synchronized (xpMembers) {
+            for (XpMember memberList : xpMembers) {
+                if (memberList.equals(member)) {
+                    return memberList;
+                }
             }
         }
         return null;

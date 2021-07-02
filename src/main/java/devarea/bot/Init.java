@@ -76,7 +76,6 @@ public class Init {
 
 
     public static void initBot() {
-        XpCount.init();
         CommandManager.init();
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

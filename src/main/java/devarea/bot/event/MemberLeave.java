@@ -2,6 +2,7 @@ package devarea.bot.event;
 
 import devarea.bot.Init;
 import devarea.bot.automatical.Joining;
+import devarea.bot.automatical.XpCount;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.guild.MemberLeaveEvent;
 import discord4j.core.object.entity.Member;
@@ -12,6 +13,10 @@ import java.util.Map;
 public class MemberLeave {
 
     public static void memberLeaveFunction(Snowflake finalIdDevArea, Snowflake finalIdJoinLogChannel, MemberLeaveEvent memberLeaveEvent) {
+
+        if (XpCount.haveBeenSet(memberLeaveEvent.getUser().getId()))
+            XpCount.remove(memberLeaveEvent.getUser().getId());
+
         ((TextChannel) Init.client.getGuildById(finalIdDevArea).block().getChannelById(finalIdJoinLogChannel).block()).createMessage(msg -> msg.setContent(memberLeaveEvent.getMember().get().getDisplayName() + " a quitter le serveur !")).subscribe();
         final Member member = memberLeaveEvent.getMember().get();
         for (Map.Entry<Snowflake, Joining> entry : MemberJoin.bindJoin.entrySet()) {
