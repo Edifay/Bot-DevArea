@@ -42,11 +42,11 @@ public class XpCount {
             });
             obj.forEach((s, aLong) -> xp.put(Snowflake.of(s), aLong));
             xp = sortByValue(xp);
+            loadLeft();
             verifLeft();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        loadLeft();
         new Thread(() -> {
             try {
                 while (true) {
@@ -216,7 +216,6 @@ public class XpCount {
 
     public static synchronized void addNewMember(Snowflake id) {
         if (xpLeft.containsKey(id.asString())) {
-            System.out.println("Left Xp found !");
             xp.put(id, xpLeft.get(id.asString()));
             xp = sortByValue(xp);
             xpLeft.remove(id.asString());

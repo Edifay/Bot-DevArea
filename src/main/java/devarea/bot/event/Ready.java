@@ -1,5 +1,6 @@
 package devarea.bot.event;
 
+import devarea.backend.controllers.rest.ControllerOAuth2;
 import devarea.bot.data.ColorsUsed;
 import devarea.bot.Init;
 import devarea.bot.automatical.*;
@@ -56,6 +57,7 @@ public class Ready {
                 FreeLanceManager.init();
             }
             GithubEvent.init();
+            ControllerOAuth2.init();
         } catch (Exception e) {
             e.printStackTrace();
         }
