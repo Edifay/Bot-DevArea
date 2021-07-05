@@ -1,19 +1,15 @@
 .gradle
 .idea
-
 gradle/wrapper/gradle-wrapper.jar
 gradle/wrapper/gradle-wrapper.properties
 gradlew.bat
 settings.gradle
 gradlew
 token.token
-
 build
-token.token
 mission.json
 out.txt
 roleReact.json
-token.token
 config.xml
 err.txt
 xp.json
@@ -21,6 +17,6 @@ stats.xml
 xp.json
 freelance.json
 github.token
-*.token
 *.jar
 xp.json
+auth.json
