@@ -1,21 +1,13 @@
 package dependencies.auth.main;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import dependencies.auth.domain.Connection;
-import dependencies.auth.domain.Guild;
 import dependencies.auth.domain.User;
 import dependencies.auth.req.Post;
 import discord4j.common.util.Snowflake;
 import okhttp3.OkHttpClient;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class OAuthBuilder {
 
@@ -23,39 +15,13 @@ public class OAuthBuilder {
     private static final String TOKENURI = "oauth2/token";
     private static final String REVOCATIONURI = "oauth2/token/revoke";
 
-    private static final String CONNECTIONSURI = "users/@me/connections";
     private static final String MEURI = "users/@me";
-    private static final String GUILDURI = "users/@me/guilds";
 
-    //private static final String INVITEURI = "invites/{invite.id}";
-    @JsonIgnore
     private OkHttpClient client;
-    @JsonIgnore
-    private String id;
-    @JsonIgnore
-    private String secret;
-    @JsonProperty
-    private String redirect;
-    @JsonProperty
-    private String scopes;
-    @JsonProperty
-    private String access_token;
-    @JsonProperty
-    private String refresh_token;
-    @JsonIgnore
-    private Snowflake idUser;
+    private String id, secret, redirect, scopes, access_token, refresh_token, idUser;
 
-    @JsonProperty
-    private long refresh_time;
-    @JsonProperty
-    private long last_time_refresh;
-    @JsonIgnore
+    private long refresh_time, last_time_refresh;
     private Thread t_refresh;
-
-    public OAuthBuilder() {
-        this.t_refresh = new Thread();
-        this.client = new OkHttpClient();
-    }
 
     public OAuthBuilder(String clientID, String clientSecret) {
         this.id = clientID;
@@ -65,13 +31,10 @@ public class OAuthBuilder {
         this.client = new OkHttpClient();
     }
 
-    @JsonIgnore
     public OAuthBuilder setRedirectURI(String url) {
         this.redirect = url;
         return this;
     }
-
-    @JsonIgnore
     public OAuthBuilder setScopes(String[] scopes) {
         this.scopes = "";
         for (String scope : scopes) {
@@ -80,8 +43,6 @@ public class OAuthBuilder {
         this.scopes = this.scopes.substring(0, this.scopes.length() - 3);
         return this;
     }
-
-    @JsonIgnore
     public String getAuthorizationUrl(String state) {
         StringBuilder builder = new StringBuilder();
 
@@ -95,8 +56,6 @@ public class OAuthBuilder {
 
         return builder.toString();
     }
-
-    @JsonIgnore
     public Response exchange(String code) {
         try {
             String json = Post.exchangePost(client, BASEURI + TOKENURI, this.id, this.secret, code, this.redirect);
@@ -109,7 +68,7 @@ public class OAuthBuilder {
                 this.refresh_time = js.getInt("expires_in") * 1000L;
                 this.last_time_refresh = System.currentTimeMillis();
 
-                this.idUser = Snowflake.of(this.getUser().getId());
+                this.idUser = Snowflake.of(this.getUser().getId()).asString();
 
                 return Response.OK;
             } catch (JSONException e) {
@@ -120,8 +79,6 @@ public class OAuthBuilder {
             return Response.ERROR;
         }
     }
-
-    @JsonIgnore
     public Response refresh() {
         try {
             String json = Post.refreshPost(client, BASEURI + TOKENURI, this.id, this.secret, this.refresh_token, this.redirect);
@@ -143,8 +100,6 @@ public class OAuthBuilder {
             return Response.ERROR;
         }
     }
-
-    @JsonIgnore
     public Response revoke() {
         try {
             Post.revokePost(client, BASEURI + REVOCATIONURI, access_token);
@@ -153,8 +108,6 @@ public class OAuthBuilder {
             return Response.ERROR;
         }
     }
-
-    @JsonIgnore
     public User getUser() {
         User user = new User();
 
@@ -185,117 +138,31 @@ public class OAuthBuilder {
 
         return user;
     }
-
-    @JsonIgnore
-    public List<Guild> getGuilds() {
-        List<Guild> guilds = new ArrayList<>();
-
-        try {
-            String json = Post.get(client, BASEURI + GUILDURI, access_token);
-
-            JSONArray arrJs = new JSONArray(json);
-
-            for (Object guild : arrJs) {
-                Guild g = new Guild();
-                JSONObject obj = (JSONObject) guild;
-
-                g.setIcon(obj.isNull("icon") ? null : obj.getString("icon"));
-                g.setId(obj.getString("id"));
-                g.setName(obj.getString("name"));
-                g.setOwner(obj.getBoolean("owner"));
-                g.setPermissions(obj.getInt("permissions"));
-
-                guilds.add(g);
-            }
-
-        } catch (IOException e) {
-            return null;
-        }
-
-        return guilds;
-    }
-
-    @JsonIgnore
-    public List<Connection> getConnections() {
-        List<Connection> connections = new ArrayList<>();
-
-        try {
-            String json = Post.get(client, BASEURI + CONNECTIONSURI, access_token);
-
-            JSONArray arrJs = new JSONArray(json);
-
-            for (Object connection : arrJs) {
-                Connection c = new Connection();
-                JSONObject obj = (JSONObject) connection;
-
-                c.setFriend_sync(obj.getBoolean("friend_sync"));
-                c.setId(obj.getString("id"));
-                c.setName(obj.getString("name"));
-                c.setType(obj.getString("type"));
-                c.setVerified(obj.getBoolean("verified"));
-                c.setVisibility(obj.getInt("visibility"));
-
-                connections.add(c);
-            }
-
-        } catch (IOException e) {
-            return null;
-        }
-
-        return connections;
-    }
-
-    @JsonIgnore
-    public String getScopes() {
-        return scopes;
-    }
-
-    @JsonIgnore
-    public void setScopes(String scopes) {
-        this.scopes = scopes;
-    }
-
-    @JsonIgnore
     public String getAccess_token() {
         return access_token;
     }
-
-    @JsonIgnore
     public void setAccess_token(String access_token) {
         this.access_token = access_token;
     }
-
-    @JsonIgnore
     public String getRefresh_token() {
         return refresh_token;
     }
-
-    @JsonIgnore
     public void setRefresh_token(String refresh_token) {
         this.refresh_token = refresh_token;
     }
-
-    @JsonIgnore
     public long getRefresh_time() {
         return this.refresh_time;
     }
-
-    @JsonIgnore
     public void setRefresh_time(long refresh_time) {
         this.refresh_time = refresh_time;
     }
-
-    @JsonIgnore
     public void setLast_time_refresh(long last_time_refresh) {
         this.last_time_refresh = last_time_refresh;
     }
-
-    @JsonIgnore
     public long getLast_time_refresh() {
         return last_time_refresh;
     }
 
-    @JsonIgnore
     public void enableAutoRefresh() {
         synchronized (this.t_refresh) {
             if (this.t_refresh.isAlive()) return;
@@ -312,8 +179,6 @@ public class OAuthBuilder {
             this.t_refresh.start();
         }
     }
-
-    @JsonIgnore
     public void disableAutoRefresh() {
         synchronized (this.t_refresh) {
             if (!this.t_refresh.isAlive()) return;
@@ -322,34 +187,15 @@ public class OAuthBuilder {
         }
     }
 
-    @JsonIgnore
-    public boolean isAlwaysEnable() {
+    public boolean isAlwaysUseful() {
         return System.currentTimeMillis() - this.last_time_refresh < this.refresh_time;
     }
 
-    @JsonIgnore
-    public void setLoaded(String clientID, String clientSecret) {
-        this.id = clientID;
-        this.secret = clientSecret;
+    public String getIdUser() {
+        return idUser;
     }
-
-    @JsonIgnore
-    public void setIdUser(Snowflake idUser) {
+    public void setIdUser(String idUser) {
         this.idUser = idUser;
     }
 
-    @JsonIgnore
-    public Snowflake getIdUser() {
-        return idUser;
-    }
-
-    @JsonSetter("idUser")
-    public void setIdUser(String idUser) {
-        this.idUser = Snowflake.of(idUser);
-    }
-
-    @JsonProperty("idUser")
-    public String getIdUserString() {
-        return this.idUser.asString();
-    }
 }

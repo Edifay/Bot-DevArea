@@ -27,7 +27,6 @@ public class ControllerStats {
     private final static HashMap<String, RoleCount> idToRole = new HashMap<>();
     private long lastTimeFetched = 0;
 
-
     @GetMapping(value = "stats/rolesCount_list", produces = MediaType.APPLICATION_JSON_VALUE)
     public RoleCount[] rolesCounts_list(@RequestParam(value = "roles", defaultValue = "[]", required = true) String rolesString) {
         synchronized (idToRole) {

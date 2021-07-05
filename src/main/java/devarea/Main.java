@@ -27,8 +27,4 @@ public class Main {
         Init.client.onDisconnect().block();
     }
 
-    public static void test() {
-        String message = new String("test");
-    }
-
 }

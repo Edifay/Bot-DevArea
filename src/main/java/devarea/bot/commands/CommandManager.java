@@ -4,6 +4,7 @@ import devarea.bot.Init;
 import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.channel.TextChannel;
 
 import java.io.File;
@@ -15,19 +16,17 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import static devarea.bot.commands.Command.delete;
 import static devarea.bot.data.TextMessage.commandNotFound;
 
 public class CommandManager {
 
-    public static final Object key = new Object();
-
     private static final Map<String, Constructor> classBound = new HashMap<>();
 
-    public static final Map<Snowflake, Command> actualCommands = new HashMap<>();
+    private static final Map<Snowflake, LongCommand> actualCommands = new HashMap<>();
 
     public static void init() {
         try {
@@ -42,48 +41,12 @@ public class CommandManager {
                 if (!className.contains("$")) {
                     final String newName = className.startsWith("/") ? className.substring(1) : className;
                     System.out.println(className + "->" + newName);
-                    classBound.put(newName, Class.forName("devarea.bot.commands.created." + newName).getConstructor(MessageCreateEvent.class));
+                    classBound.put(newName.toLowerCase(Locale.ROOT), Class.forName("devarea.bot.commands.created." + newName).getConstructor(MessageCreateEvent.class));
                 }
             }
 
         } catch (IOException | URISyntaxException | ClassNotFoundException | NoSuchMethodException e) {
             e.printStackTrace();
-        }
-    }
-
-    public static void exe(final String command, final MessageCreateEvent message) {
-        synchronized (key) {
-            final AtomicReference<Boolean> find = new AtomicReference<>(false);
-            try {
-                classBound.forEach((name, constructor) -> {
-                    if (name.equalsIgnoreCase(command)) {
-                        try {
-                            System.out.println("The command " + name + " is executed !");
-                            Command actualCommand = (Command) constructor.newInstance(message);
-                            if (actualCommand instanceof LongCommand)
-                                actualCommands.put(message.getMember().get().getId(), actualCommand);
-                            find.set(true);
-                        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-                if (!find.get())
-                    Command.deletedEmbed((TextChannel) message.getMessage().getChannel().block(), embed -> {
-                        embed.setTitle("Erreur !");
-                        embed.setDescription(commandNotFound);
-                        embed.setColor(ColorsUsed.wrong);
-                    });
-
-                if (Init.vanish)
-                    try {
-                        message.getMessage().delete().block();
-                    } catch (Exception e) {
-                    }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -123,6 +86,107 @@ public class CommandManager {
             }
         }
         return names;
+    }
+
+    public static void exe(String command, final MessageCreateEvent message) {
+        synchronized (actualCommands) {
+            command = command.toLowerCase(Locale.ROOT);
+            if (classBound.containsKey(command)) {
+                try {
+                    System.out.println("The command " + command + " is executed !");
+                    Command actualCommand = (Command) classBound.get(command).newInstance(message);
+                    if (actualCommand instanceof LongCommand)
+                        actualCommands.put(message.getMember().get().getId(), (LongCommand) actualCommand);
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            } else
+                Command.deletedEmbed((TextChannel) message.getMessage().getChannel().block(), embed -> {
+                    embed.setTitle("Erreur !");
+                    embed.setDescription(commandNotFound);
+                    embed.setColor(ColorsUsed.wrong);
+                });
+
+            if (Init.vanish)
+                delete(false, message.getMessage());
+        }
+
+    }
+
+    public static boolean addManualCommand(Snowflake memberId, ConsumableCommand command) {
+        synchronized (actualCommands) {
+            if (!actualCommands.containsKey(memberId) && command.getCommand() instanceof LongCommand) {
+                actualCommands.put(memberId, (LongCommand) command.getCommand());
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public static void react(ReactionAddEvent event) {
+        synchronized (actualCommands) {
+            if (actualCommands.containsKey(event.getUserId()))
+                actualCommands.get(event.getUserId()).nextStape(event);
+        }
+    }
+
+    public static boolean receiveMessage(MessageCreateEvent event) {
+        synchronized (actualCommands) {
+            if (actualCommands.containsKey(event.getMember().get().getId())) {
+                actualCommands.get(event.getMember().get().getId()).nextStape(event);
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public static boolean hasCommand(Snowflake memberId) {
+        synchronized (actualCommands) {
+            return actualCommands.containsKey(memberId);
+        }
+    }
+
+    public static boolean hasCommand(LongCommand command) {
+        synchronized (actualCommands) {
+            return actualCommands.containsValue(command);
+        }
+    }
+
+    public static void removeCommand(Snowflake memberId) {
+        synchronized (actualCommands) {
+            actualCommands.remove(memberId);
+        }
+    }
+
+    public static void removeCommand(Snowflake memberId, Command command) {
+        synchronized (actualCommands) {
+            if (actualCommands.containsValue(command))
+                actualCommands.remove(memberId);
+        }
+    }
+
+    public static void left(Snowflake id) {
+        synchronized (actualCommands) {
+            if (actualCommands.containsKey(id)) {
+                actualCommands.get(id).endCommand();
+            }
+        }
+    }
+
+    public static int size() {
+        synchronized (actualCommands) {
+            return actualCommands.size();
+        }
+    }
+
+    /*
+        DON'T USE THIS METHOD !!!
+     */
+    @Deprecated
+    public static Map<Snowflake, LongCommand> getMap() {
+        synchronized (actualCommands) {
+            return actualCommands;
+        }
     }
 
 }

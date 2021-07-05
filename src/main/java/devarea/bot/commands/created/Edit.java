@@ -1,8 +1,11 @@
 package devarea.bot.commands.created;
 
-import devarea.bot.data.ColorsUsed;
 import devarea.bot.Init;
-import devarea.bot.commands.*;
+import devarea.bot.commands.EndStape;
+import devarea.bot.commands.FirstStape;
+import devarea.bot.commands.LongCommand;
+import devarea.bot.commands.Stape;
+import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
@@ -30,8 +33,6 @@ public class Edit extends LongCommand {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println(CommandManager.actualCommands.containsValue(this));
-                this.ended = true;
                 this.endCommand();
             }).start();
         } else {

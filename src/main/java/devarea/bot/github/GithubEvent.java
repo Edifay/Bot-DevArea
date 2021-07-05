@@ -18,30 +18,34 @@ public class GithubEvent {
     private static ArrayList<devarea.bot.github.EventGitHub> events = new ArrayList<>();
     private static int number = 0;
 
-    public static void init() throws IOException {
-        GitHub gitHub = new GitHubBuilder().withOAuthToken(new Scanner(new File("github.token")).nextLine()).build();
-        GHRepository repo = gitHub.getMyself().getRepository("DevArea_Site");
-        number = repo.listCommits().toList().size();
-        addEvent(commit -> ((TextChannel) Init.devarea.getChannelById(Snowflake.of("768782153802055710")).block()).createMessage(msg -> {
-            msg.setContent(commit.getHtmlUrl().toString());
-        }).subscribe());
-        new Thread(() -> {
-            try {
-                while (true) {
-                    try {
-                        Thread.sleep(10000);
-                        int actualNumber = repo.listCommits().toList().size();
-                        if (actualNumber != number) {
-                            emit(repo.listCommits().toList().get(0));
-                            number = actualNumber;
+    public static void init() {
+        try {
+            GitHub gitHub = new GitHubBuilder().withOAuthToken(new Scanner(new File("github.token")).nextLine()).build();
+            GHRepository repo = gitHub.getMyself().getRepository("DevArea_Site");
+            number = repo.listCommits().toList().size();
+            addEvent(commit -> ((TextChannel) Init.devarea.getChannelById(Snowflake.of("768782153802055710")).block()).createMessage(msg -> {
+                msg.setContent(commit.getHtmlUrl().toString());
+            }).subscribe());
+            new Thread(() -> {
+                try {
+                    while (true) {
+                        try {
+                            Thread.sleep(10000);
+                            int actualNumber = repo.listCommits().toList().size();
+                            if (actualNumber != number) {
+                                emit(repo.listCommits().toList().get(0));
+                                number = actualNumber;
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
+                } catch (InterruptedException e) {
                 }
-            } catch (InterruptedException e) {
-            }
-        }).start();
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void addEvent(devarea.bot.github.EventGitHub event) {

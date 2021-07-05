@@ -7,7 +7,6 @@ public class RoleCount {
 
     @JsonIgnore
     protected String roleId;
-
     @JsonProperty("name")
     protected String name;
     @JsonProperty("countMember")

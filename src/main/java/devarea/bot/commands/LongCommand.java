@@ -1,8 +1,10 @@
 package devarea.bot.commands;
 
 import devarea.bot.data.ColorsUsed;
+import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 
@@ -10,13 +12,20 @@ public abstract class LongCommand extends Command {
 
     protected Message lastMessage;
     protected FirstStape firstStape;
+    protected boolean isLocalChannel;
 
     public LongCommand(final MessageCreateEvent message) {
         super(message);
+        this.isLocalChannel = false;
     }
 
     public LongCommand(final ReactionAddEvent event) {
         super(event);
+        this.isLocalChannel = false;
+    }
+
+    public LongCommand(final Member member) {
+        super(member);
     }
 
     public void nextStape(final ReactionAddEvent event) {
@@ -32,7 +41,6 @@ public abstract class LongCommand extends Command {
                     return;
                 }
                 if (this.firstStape.receiveReact(event)) {
-                    this.ended = true;
                     this.endCommand();
                 }
                 try {
@@ -60,7 +68,6 @@ public abstract class LongCommand extends Command {
                 if (event.getMessage().getContent().toLowerCase().startsWith("cancel") || event.getMessage().getContent().toLowerCase().startsWith("annuler"))
                     this.removeTrace();
                 else if (this.firstStape.receiveMessage(event)) {
-                    this.ended = true;
                     this.endCommand();
                 }
                 delete(false, event.getMessage());
@@ -73,7 +80,23 @@ public abstract class LongCommand extends Command {
     protected void removeTrace() {
         sendError("Vous avez annuler la commande !");
         delete(false, this.lastMessage);
-        ended = true;
         endCommand();
+    }
+
+    @Override
+    protected Boolean endCommand() {
+        if (this.isLocalChannel) {
+            try {
+                this.channel.delete().subscribe();
+            } catch (Exception e) {
+            }
+        }
+        return super.endCommand();
+    }
+
+    @Override
+    protected boolean createLocalChannel(String name, Snowflake parentId) {
+        this.isLocalChannel = true;
+        return super.createLocalChannel(name, parentId);
     }
 }

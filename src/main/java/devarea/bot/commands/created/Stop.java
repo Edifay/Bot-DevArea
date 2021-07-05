@@ -3,6 +3,7 @@ package devarea.bot.commands.created;
 import devarea.bot.Init;
 import devarea.bot.automatical.FreeLanceManager;
 import devarea.bot.automatical.MissionsManager;
+import devarea.bot.automatical.XpCount;
 import devarea.bot.commands.ShortCommand;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -19,6 +20,7 @@ public class Stop extends ShortCommand {
         this.commandWithPerm(Permission.ADMINISTRATOR, () -> {
             MissionsManager.stop();
             FreeLanceManager.stop();
+            XpCount.stop();
             sendEmbed(embedCreateSpec -> {
                 embedCreateSpec.setTitle(stopCommand);
                 embedCreateSpec.setColor(ColorsUsed.wrong);

@@ -8,12 +8,9 @@ import devarea.bot.commands.object_for_stock.FreeLance;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
-import discord4j.core.object.PermissionOverwrite;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.MessageCreateSpec;
-import discord4j.rest.util.Permission;
-import discord4j.rest.util.PermissionSet;
 
 import java.util.function.Consumer;
 
@@ -30,21 +27,8 @@ public class CreateFreeLance extends LongCommand {
         this.freeLance = new FreeLance();
         this.freeLance.setMemberId(event.getMember().get().getId().asString());
         this.deletedCommand(21600000L);
-        this.channel = Init.devarea.createTextChannel(textChannelCreateSpec -> {
-            textChannelCreateSpec.setName("creation de freelance");
-            textChannelCreateSpec.setParentId(Init.idMissionsCategory);
-        }).block();
-        assert this.channel != null;
-        this.channel.addRoleOverwrite(Init.idRoleRulesAccepted,
-                PermissionOverwrite.forRole(Init.idRoleRulesAccepted,
-                        PermissionSet.of(),
-                        PermissionSet.of(Permission.VIEW_CHANNEL)))
-                .subscribe();
-        this.channel.addMemberOverwrite(this.member.getId(),
-                PermissionOverwrite.forMember(this.member.getId(),
-                        PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES),
-                        PermissionSet.of(Permission.ADD_REACTIONS)))
-                .subscribe();
+
+        this.createLocalChannel("creation de freelance", Init.idMissionsCategory);
 
         Stape validateAll = new EndStape() {
             @Override
@@ -448,16 +432,6 @@ public class CreateFreeLance extends LongCommand {
 
         ;
         this.lastMessage = this.firstStape.getMessage();
-    }
-
-    @Override
-    protected Boolean endCommand() {
-        try {
-            this.channel.delete().block();
-        } catch (Exception e) {
-        }
-        this.ended = true;
-        return super.endCommand();
     }
 
     public void updateEmbed() {

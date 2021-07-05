@@ -10,7 +10,6 @@ public abstract class ShortCommand extends Command {
 
     @Override
     protected Boolean endCommand() {
-        ended = true;
         return super.endCommand();
     }
 }

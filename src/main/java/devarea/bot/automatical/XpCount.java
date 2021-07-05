@@ -58,7 +58,7 @@ public class XpCount {
         }).start();
     }
 
-    public static void save() {
+    public static synchronized void save() {
         ObjectMapper mapper = new ObjectMapper();
         try {
             final Map<String, Integer> stock = new LinkedHashMap<>();
@@ -69,7 +69,7 @@ public class XpCount {
         }
     }
 
-    public static void saveLeft() {
+    public static synchronized void saveLeft() {
         ObjectMapper mapper = new ObjectMapper();
         try {
             final Map<String, Integer> stock = new LinkedHashMap<>();
@@ -229,6 +229,10 @@ public class XpCount {
             xpLeft.put(id.asString(), xp.get(id));
         saveLeft();
         xp.remove(id);
+    }
+
+    public static synchronized void stop() {
+        save();
     }
 
 }

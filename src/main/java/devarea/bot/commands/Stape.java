@@ -113,6 +113,14 @@ public abstract class Stape implements Cloneable {
         this.message.removeAllReactions().subscribe();
     }
 
+    protected void removeNoEmoji() {
+        this.message.removeReactions(ReactionEmoji.custom(Init.idNo)).subscribe();
+    }
+
+    protected void removeYesEmoji() {
+        this.message.removeReactions(ReactionEmoji.custom(Init.idYes)).subscribe();
+    }
+
     protected boolean isYes(ReactionAddEvent event) {
         return ReactionEmoji.custom(Init.idYes).equals(event.getEmoji());
     }

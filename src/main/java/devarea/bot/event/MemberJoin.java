@@ -1,33 +1,34 @@
 package devarea.bot.event;
 
 import devarea.bot.Init;
-import devarea.bot.automatical.Joining;
 import devarea.bot.automatical.XpCount;
+import devarea.bot.commands.Command;
+import devarea.bot.commands.CommandManager;
+import devarea.bot.commands.ConsumableCommand;
+import devarea.bot.commands.with_out_text_starter.JoinCommand;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.guild.MemberJoinEvent;
-import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.channel.TextChannel;
-
-import java.util.HashMap;
 
 public class MemberJoin {
 
-    public final static HashMap<Snowflake, Joining> bindJoin = new HashMap<>();
+    private static TextChannel channelJoin;
 
-    public static void join(final MemberJoinEvent event) {
-        final Member member = event.getMember();
-        bindJoin.put(member.getId(), new Joining(member));
-    }
+    public static void memberJoinFunction(Snowflake finalIdDevArea, Snowflake finalIdJoinLogChannel, MemberJoinEvent event) {
+        if (channelJoin == null)
+            channelJoin = (TextChannel) Init.client.getGuildById(finalIdDevArea).block().getChannelById(finalIdJoinLogChannel).block();
+        channelJoin.createMessage(msg -> msg.setContent(event.getMember().getDisplayName() + " a rejoins le serveur !")).subscribe();
 
-    public static void join(final Member member) {
-        bindJoin.put(member.getId(), new Joining(member));
-    }
-
-
-    public static void memberJoinFunction(Snowflake finalIdDevArea, Snowflake finalIdJoinLogChannel, MemberJoinEvent memberJoinEvent) {
-        ((TextChannel) Init.client.getGuildById(finalIdDevArea).block().getChannelById(finalIdJoinLogChannel).block()).createMessage(msg -> msg.setContent(memberJoinEvent.getMember().getDisplayName() + " a rejoins le serveur !")).subscribe();
-        XpCount.addNewMember(memberJoinEvent.getMember().getId());
-        MemberJoin.join(memberJoinEvent);
+        XpCount.addNewMember(event.getMember().getId());
+        synchronized (Init.membersId) {
+            Init.membersId.add(event.getMember().getId());
+        }
+        CommandManager.addManualCommand(event.getMember().getId(), new ConsumableCommand() {
+            @Override
+            protected Command command() {
+                return new JoinCommand(event.getMember());
+            }
+        });
     }
 
 }

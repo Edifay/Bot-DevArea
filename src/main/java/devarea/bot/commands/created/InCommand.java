@@ -1,9 +1,10 @@
 package devarea.bot.commands.created;
 
-import devarea.bot.data.ColorsUsed;
 import devarea.bot.commands.Command;
 import devarea.bot.commands.CommandManager;
+import devarea.bot.commands.LongCommand;
 import devarea.bot.commands.ShortCommand;
+import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 
@@ -16,9 +17,9 @@ public class InCommand extends ShortCommand {
         this.sendEmbed(embedCreateSpec -> {
             embedCreateSpec.setTitle("Voici toutes les personnes ayant des commandes actives.");
             String text = "";
-            if (CommandManager.actualCommands.size() > 0) {
-                text += "Il y a actuellement " + CommandManager.actualCommands.size() + " commandes en cour :\n";
-                for (Map.Entry<Snowflake, Command> entry : CommandManager.actualCommands.entrySet()) {
+            if (CommandManager.size() > 0) {
+                text += "Il y a actuellement " + CommandManager.size() + " commandes en cour :\n";
+                for (Map.Entry<Snowflake, LongCommand> entry : CommandManager.getMap().entrySet()) {
                     String[] names = entry.getValue().getClass().getName().split("\\.");
                     text += "<@" + entry.getKey().asString() + "> : " + names[names.length - 1] + "\n";
                 }

@@ -13,7 +13,7 @@ public class MessageUpdate {
         try {
             final Message message = messageUpdateEvent.getMessage().block();
 
-            if (message.getAuthor().get().isBot() || message.getGuild().block() == null)
+            if (message.getAuthor().get().isBot() || messageUpdateEvent.getGuildId().isEmpty())
                 return;
 
             Init.logChannel.createMessage(msg -> msg.setEmbed(embed -> {

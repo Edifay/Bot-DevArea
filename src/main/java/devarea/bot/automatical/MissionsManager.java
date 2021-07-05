@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.bot.Init;
 import devarea.bot.commands.Command;
 import devarea.bot.commands.CommandManager;
+import devarea.bot.commands.ConsumableCommand;
 import devarea.bot.commands.object_for_stock.Mission;
 import devarea.bot.commands.with_out_text_starter.CreateMission;
 import devarea.bot.data.ColorsUsed;
-import devarea.bot.event.MemberJoin;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static devarea.bot.commands.Command.delete;
+import static devarea.bot.event.FunctionEvent.startAway;
 
 public class MissionsManager {
 
@@ -51,16 +52,17 @@ public class MissionsManager {
     }
 
     public static void react(ReactionAddEvent event) {
-        if (event.getMessageId().equals(messsage.getId()))
-            event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).subscribe();
+        if (event.getMessageId().equals(messsage.getId())) {
+            startAway(() -> event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).subscribe());
 
-        if (event.getMessageId().equals(messsage.getId()) && event.getEmoji().equals(ReactionEmoji.custom(Init.idYes)) && !CommandManager.actualCommands.containsKey(event.getMember().get().getId())) {
-            if (!MemberJoin.bindJoin.containsKey(event.getMember().get().getId()))
-                synchronized (CommandManager.key) {
-                    CommandManager.actualCommands.put(event.getMember().get().getId(), new CreateMission(event));
-                }
-            else
-                Command.sendError((TextChannel) event.getChannel().block(), "Vous devez finir le questionnaire d'arrivé pour créer une commande !");
+            if (event.getEmoji().equals(ReactionEmoji.custom(Init.idYes)))
+                CommandManager.addManualCommand(event.getMember().get().getId(), new ConsumableCommand() {
+                    @Override
+                    protected Command command() {
+                        return new CreateMission(event);
+                    }
+                });
+
         }
     }
 

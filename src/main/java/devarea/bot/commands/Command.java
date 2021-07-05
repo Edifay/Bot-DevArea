@@ -1,55 +1,51 @@
 package devarea.bot.commands;
 
+import devarea.bot.Init;
 import devarea.bot.data.ColorsUsed;
+import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.PermissionOverwrite;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.rest.util.Permission;
+import discord4j.rest.util.PermissionSet;
 
-import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import static devarea.bot.data.TextMessage.haventPermission;
 
 public abstract class Command {
 
-    protected final MessageCreateEvent message;
-    protected final ReactionAddEvent reaction;
     protected final Member member;
     protected TextChannel channel;
 
-    protected Boolean ended = false;
-    protected String[] args;
-
-    public Command(final MessageCreateEvent message) {
-        this.message = message;
-        this.reaction = null;
-        this.member = this.message.getMember().get();
-        this.channel = (TextChannel) this.message.getMessage().getChannel().block();
-        final String[] alls = this.message.getMessage().getContent().split(" ");
-        this.args = Arrays.copyOfRange(alls, 1, alls.length);
+    public Command(final MessageCreateEvent event) {
+        this(event.getMember().get(), (TextChannel) event.getMessage().getChannel().block());
     }
 
-    public Command(final ReactionAddEvent message) {
-        this.reaction = message;
-        this.message = null;
-        this.member = this.reaction.getMember().get();
-        this.channel = (TextChannel) this.reaction.getMessage().block().getChannel().block();
+    public Command(final ReactionAddEvent event) {
+        this(event.getMember().get(), (TextChannel) event.getChannel().block());
+    }
+
+    public Command(final Member member) {
+        this.member = member;
+    }
+
+    public Command(final Member member, final TextChannel channel) {
+        this.member = member;
+        this.channel = channel;
     }
 
 
     protected Boolean endCommand() {
-        synchronized (CommandManager.key) {
-            if (this.reaction != null)
-                CommandManager.actualCommands.remove(this.reaction.getMember().get().getId());
-            else if (this.message != null)
-                CommandManager.actualCommands.remove(message.getMember().get().getId());
-        }
-        return ended;
+        CommandManager.removeCommand(this.member.getId(), this);
+        return true;
     }
 
     protected Message deletedMessage(final Consumer<? super MessageCreateSpec> spec) {
@@ -61,7 +57,7 @@ public abstract class Command {
     }
 
     protected Boolean commandWithPerm(final Permission permission, final Runnable runnable) {
-        if (this.message.getMember().get().getBasePermissions().block().contains(permission) || this.message.getMember().get().getBasePermissions().block().contains(Permission.ADMINISTRATOR)) {
+        if (this.member.getBasePermissions().block().contains(permission) || this.member.getBasePermissions().block().contains(Permission.ADMINISTRATOR)) {
             runnable.run();
             return true;
         } else
@@ -71,6 +67,23 @@ public abstract class Command {
                 embedCreateSpec.setColor(ColorsUsed.wrong);
             });
         return false;
+    }
+
+    protected boolean createLocalChannel(final String name, final Snowflake parentId) {
+        this.channel = Init.devarea.createTextChannel(textChannelCreateSpec -> {
+            textChannelCreateSpec.setName(name);
+            textChannelCreateSpec.setParentId(parentId);
+            Set<PermissionOverwrite> set = new HashSet<>();
+            set.add(PermissionOverwrite.forRole(Init.idRoleRulesAccepted,
+                    PermissionSet.of(),
+                    PermissionSet.of(Permission.VIEW_CHANNEL)));
+            set.add(PermissionOverwrite.forMember(this.member.getId(),
+                    PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES),
+                    PermissionSet.of(Permission.ADD_REACTIONS)));
+            textChannelCreateSpec.setPermissionOverwrites(set);
+        }).block();
+        assert this.channel != null;
+        return true;
     }
 
     protected Message send(final Consumer<? super MessageCreateSpec> spec, boolean block) {
@@ -89,21 +102,22 @@ public abstract class Command {
         });
     }
 
-    protected void deletedCommand() {
-        deletedCommand(600000L);
-    }
-
-    protected void deletedCommand(long millis) {
+    protected void deletedCommand(final long millis, final Runnable runnable) {
         new Thread(() -> {
             try {
                 Thread.sleep(millis);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
-                if (CommandManager.actualCommands.containsValue(this))
-                    this.endCommand();
+                runnable.run();
+                this.endCommand();
             }
         }).start();
+    }
+
+    protected void deletedCommand(final long millis) {
+        this.deletedCommand(millis, () -> {
+        });
     }
 
     public static Message send(final TextChannel channel, final Consumer<? super MessageCreateSpec> spec, boolean block) {
@@ -152,7 +166,8 @@ public abstract class Command {
                 if (block)
                     message.delete().block();
                 else
-                    message.delete().subscribe(unused -> {}, throwable -> {
+                    message.delete().subscribe(unused -> {
+                    }, throwable -> {
 
                     });
             } catch (Exception e) {

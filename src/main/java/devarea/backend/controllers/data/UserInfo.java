@@ -3,7 +3,13 @@ package devarea.backend.controllers.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dependencies.auth.domain.User;
 import dependencies.auth.main.OAuthBuilder;
+import devarea.backend.controllers.rest.ControllerOAuth2;
+import devarea.bot.Init;
+import devarea.bot.automatical.XpCount;
+import discord4j.common.util.Snowflake;
+import discord4j.core.object.entity.Member;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserInfo {
@@ -28,11 +34,13 @@ public class UserInfo {
     private long lastTimeFetch;
 
     public UserInfo() {
-
+        this.lastTimeFetch = 0;
     }
 
     public UserInfo(OAuthBuilder builder) {
         this.builder = builder;
+        this.lastTimeFetch = 0;
+        this.id = this.builder.getIdUser();
     }
 
     @JsonIgnore
@@ -108,5 +116,66 @@ public class UserInfo {
     @JsonIgnore
     public OAuthBuilder getBuilder() {
         return builder;
+    }
+
+    @JsonIgnore
+    public Snowflake getAsSnowflake() {
+        return Snowflake.of(this.id);
+    }
+
+    public boolean needToFetch() {
+        return System.currentTimeMillis() - this.lastTimeFetch > 600000L;
+    }
+
+    @JsonIgnore
+    private boolean fetch() {
+        this.isMember = ControllerOAuth2.isMember(this.id);
+        System.out.println("Fetch is member ! " + this.id + " isMember : " + this.isMember);
+        if (this.isMember) {
+            System.out.println("Member fetched with bot !");
+            Member member = Init.devarea.getMemberById(getAsSnowflake()).block();
+
+            this.setId(member.getId().asString());
+            this.setName(member.getUsername());
+            this.setUrlAvatar(member.getAvatarUrl());
+            if (this.urlAvatar == null)
+                this.setUrlAvatar(member.getDefaultAvatarUrl());
+            this.lastTimeFetch = System.currentTimeMillis();
+            this.setRank(XpCount.getRankOf(getAsSnowflake()));
+            this.setXp(XpCount.getXpOf(getAsSnowflake()));
+
+            return true;
+        } else if (builder != null) {
+            System.out.println("Fetched with builder !");
+            User user = builder.getUser();
+
+            this.setId(user.getId());
+            this.setName(user.getUsername());
+            this.setUrlAvatar(user.getAvatar());
+            if (this.urlAvatar == null) {
+                this.setUrlAvatar("https://discord.com/assets/2d20a45d79110dc5bf947137e9d99b66.svg");
+            }
+            this.lastTimeFetch = System.currentTimeMillis();
+
+            return true;
+        }
+        return false;
+    }
+
+    public boolean canBeFetch() {
+        this.isMember = ControllerOAuth2.isMember(this.id);
+        return this.isMember || builder != null;
+    }
+
+    public boolean verifFetchNeeded(final boolean force) {
+        if (force || needToFetch()) {
+            fetch();
+            return true;
+        }
+        return false;
+    }
+
+    public void setBuilder(OAuthBuilder builder) {
+        this.builder = builder;
     }
 }

@@ -1,9 +1,12 @@
 package devarea.bot.commands.created;
 
-import devarea.bot.data.ColorsUsed;
 import devarea.bot.Init;
 import devarea.bot.automatical.RolesReacts;
-import devarea.bot.commands.*;
+import devarea.bot.commands.EndStape;
+import devarea.bot.commands.FirstStape;
+import devarea.bot.commands.LongCommand;
+import devarea.bot.commands.Stape;
+import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
@@ -34,8 +37,6 @@ public class RoleReact extends LongCommand {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println(CommandManager.actualCommands.containsValue(this));
-                this.ended = true;
                 this.endCommand();
             }).start();
         } else {
@@ -168,20 +169,20 @@ public class RoleReact extends LongCommand {
 
                 @Override
                 protected boolean onReceiveMessage(MessageCreateEvent event) {
-                    try{
+                    try {
                         int number = Integer.parseInt(event.getMessage().getContent());
-                        if(number >= 0 && number < removeTable.length){
+                        if (number >= 0 && number < removeTable.length) {
                             RolesReacts.rolesReacts.remove(removeTable[number]);
                             RolesReacts.save();
                             removeTable[number].delete();
-                            setText(embed ->{
+                            setText(embed -> {
                                 embed.setTitle("Remove effectué !");
                                 embed.setDescription("Vous avez bien supprimer le rolereact !");
                                 embed.setColor(ColorsUsed.just);
                             });
                             return end;
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                     }
                     sendErrorEntry();
                     return next;

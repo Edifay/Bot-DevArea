@@ -1,9 +1,9 @@
 package devarea.bot.event;
 
 import devarea.backend.controllers.rest.ControllerOAuth2;
-import devarea.bot.data.ColorsUsed;
 import devarea.bot.Init;
 import devarea.bot.automatical.*;
+import devarea.bot.data.ColorsUsed;
 import devarea.bot.github.GithubEvent;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static devarea.Main.developing;
+import static devarea.bot.event.FunctionEvent.startAway;
 
 public class Ready {
 
@@ -21,21 +22,30 @@ public class Ready {
 
     public static void readyEventFonction(final Snowflake idDevArea, final Snowflake idLogChannel) {
 
-        Init.client.updatePresence(Presence.online(Activity.playing("//help | Dev'Area Server !"))).block();
+        Init.client.updatePresence(Presence.online(Activity.playing("//help | Dev'Area Server !"))).subscribe();
         Init.devarea = Init.client.getGuildById(idDevArea).block();
         assert Init.devarea != null;
-        Init.logChannel = (TextChannel) Init.devarea.getChannelById(idLogChannel).block();
+        startAway(() -> {
+            Init.logChannel = (TextChannel) Init.devarea.getChannelById(idLogChannel).block();
 
-        Init.logChannel.createMessage(msg -> msg.setEmbed(embed -> {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss  dd/MM/yyyy");
-            LocalDateTime now = LocalDateTime.now();
-            embed.setColor(ColorsUsed.same);
-            embed.setTitle("Bot Online !");
-            embed.setDescription("Le bot a été allumé le " + dtf.format(now) + ".");
-        })).subscribe();
+            Init.logChannel.createMessage(msg -> msg.setEmbed(embed -> {
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss  dd/MM/yyyy");
+                LocalDateTime now = LocalDateTime.now();
+                embed.setColor(ColorsUsed.same);
+                embed.setTitle("Bot Online !");
+                embed.setDescription("Le bot a été allumé le " + dtf.format(now) + ".");
+            })).subscribe();
+        });
+
 
         try {
             Stats.init();
+            startAway(() -> {
+                synchronized (Init.membersId) {
+                    Init.membersId.removeAll(Init.membersId);
+                    Init.devarea.getMembers().buffer().blockLast().forEach(member -> Init.membersId.add(member.getId()));
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,20 +54,20 @@ public class Ready {
             return;
 
         Init.idYes = Init.devarea.getGuildEmojiById(Snowflake.of(Init.document.getElementsByTagName("yes").item(0).getChildNodes().item(0).getNodeValue())).block();
-        Init.idNo = Init.devarea.getGuildEmojiById(Snowflake.of(Init.document.getElementsByTagName("no").item(0).getChildNodes().item(0).getNodeValue())).block();
+        startAway(() -> Init.idNo = Init.devarea.getGuildEmojiById(Snowflake.of(Init.document.getElementsByTagName("no").item(0).getChildNodes().item(0).getNodeValue())).block());
 
         try {
-            RolesReacts.load();
-            Stats.start();
-            MeetupManager.init();
-            XpCount.init();
-            if(!developing) {
-                Bump.init();
-                MissionsManager.init();
-                FreeLanceManager.init();
+            startAway(RolesReacts::load);
+            startAway(Stats::start);
+            startAway(MeetupManager::init);
+            startAway(XpCount::init);
+            if (!developing) {
+                startAway(Bump::init);
+                startAway(MissionsManager::init);
+                startAway(FreeLanceManager::init);
             }
-            GithubEvent.init();
-            ControllerOAuth2.init();
+            startAway(GithubEvent::init);
+            startAway(ControllerOAuth2::init);
         } catch (Exception e) {
             e.printStackTrace();
         }

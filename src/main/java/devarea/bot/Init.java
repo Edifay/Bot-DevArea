@@ -1,6 +1,5 @@
 package devarea.bot;
 
-import devarea.bot.automatical.XpCount;
 import devarea.bot.commands.CommandManager;
 import devarea.bot.event.*;
 import discord4j.common.util.Snowflake;
@@ -22,6 +21,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Init {
@@ -33,46 +33,34 @@ public class Init {
     public static Snowflake idCategoryJoin;
     public static Guild devarea;
 
-    public static GuildEmoji idYes;
-    public static GuildEmoji idNo;
+    public static GuildEmoji idYes, idNo;
 
-    public static Snowflake idMissionsPayantes;
-    public static Snowflake idMissionsGratuites;
-
-    public static Snowflake idPresentation;
-    public static Snowflake idRolesChannel;
-
-    public static Snowflake idRoleRulesAccepted;
-    public static Snowflake idWelcomChannel;
-
-    public static Snowflake idGeneralChannel;
-
-    public static Snowflake idModo;
-    public static Snowflake idAdmin;
-
-    public static Snowflake idNoMic;
-
-    public static Snowflake idMeetupVerif;
-    public static Snowflake idMeetupAnnonce;
-
-    public static Snowflake idBump;
-
-    public static Snowflake idPingMeetup;
-
-    public static Snowflake idCategoryGeneral;
+    public static Snowflake
+            idMissionsPayantes,
+            idMissionsGratuites,
+            idPresentation,
+            idRolesChannel,
+            idRoleRulesAccepted,
+            idWelcomChannel,
+            idGeneralChannel,
+            idModo,
+            idAdmin,
+            idNoMic,
+            idMeetupVerif,
+            idMeetupAnnonce,
+            idBump,
+            idPingMeetup,
+            idCategoryGeneral,
+            idCommands,
+            idDevHelper,
+            idMissionsCategory,
+            idVoiceChannelHelp,
+            idFreeLance;
 
     public static BufferedImage backgroundXp;
-    public static Snowflake idCommands;
-
-    public static Snowflake idDevHelper;
-
-    public static Snowflake idMissionsCategory;
-
-    public static Snowflake idVoiceChannelHelp;
-
-    public static Snowflake idFreeLance;
-
     public static Document document;
+
+    public static final ArrayList<Snowflake> membersId = new ArrayList<>();
 
 
     public static void initBot() {
@@ -101,46 +89,31 @@ public class Init {
                     token = new Scanner(new FileInputStream("./token.token")).nextLine();
                     prefix = document.getElementsByTagName("prefix").item(0).getChildNodes().item(0).getNodeValue();
                     vanish = Boolean.parseBoolean(document.getElementsByTagName("vanish").item(0).getChildNodes().item(0).getNodeValue());
-                    idDevArea = Snowflake.of(document.getElementsByTagName("idDevArea").item(0).getChildNodes().item(0).getNodeValue());
-                    idLogChannel = Snowflake.of(document.getElementsByTagName("idLogChannel").item(0).getChildNodes().item(0).getNodeValue());
-                    idJoinLogChannel = Snowflake.of(document.getElementsByTagName("idLogJoinChannel").item(0).getChildNodes().item(0).getNodeValue());
-                    idCategoryJoin = Snowflake.of(document.getElementsByTagName("idJoinCategory").item(0).getChildNodes().item(0).getNodeValue());
-
-                    idMissionsGratuites = Snowflake.of(document.getElementsByTagName("missions-gratuites").item(0).getChildNodes().item(0).getNodeValue());
-                    idMissionsPayantes = Snowflake.of(document.getElementsByTagName("mission-payantes").item(0).getChildNodes().item(0).getNodeValue());
-
-                    idPresentation = Snowflake.of(document.getElementsByTagName("idPresentation").item(0).getChildNodes().item(0).getNodeValue());
-                    idRolesChannel = Snowflake.of(document.getElementsByTagName("idRolesChannel").item(0).getChildNodes().item(0).getNodeValue());
-
-                    idRoleRulesAccepted = Snowflake.of(document.getElementsByTagName("RulesAccepted").item(0).getChildNodes().item(0).getNodeValue());
-
-                    idWelcomChannel = Snowflake.of(document.getElementsByTagName("idWelcomChannel").item(0).getChildNodes().item(0).getNodeValue());
-                    idGeneralChannel = Snowflake.of(document.getElementsByTagName("idGeneral").item(0).getChildNodes().item(0).getNodeValue());
-
-                    idModo = Snowflake.of(document.getElementsByTagName("idModo").item(0).getChildNodes().item(0).getNodeValue());
-                    idAdmin = Snowflake.of(document.getElementsByTagName("idAdmin").item(0).getChildNodes().item(0).getNodeValue());
-
-                    idNoMic = Snowflake.of(document.getElementsByTagName("noMic").item(0).getChildNodes().item(0).getNodeValue());
-
-                    idMeetupVerif = Snowflake.of(document.getElementsByTagName("idMeetupVerif").item(0).getChildNodes().item(0).getNodeValue());
-                    idMeetupAnnonce = Snowflake.of(document.getElementsByTagName("idMeetupAnnonce").item(0).getChildNodes().item(0).getNodeValue());
-
-                    idBump = Snowflake.of(document.getElementsByTagName("idBump").item(0).getChildNodes().item(0).getNodeValue());
-
-                    idPingMeetup = Snowflake.of(document.getElementsByTagName("idPingMeetup").item(0).getChildNodes().item(0).getNodeValue());
-
-                    idCategoryGeneral = Snowflake.of(document.getElementsByTagName("idCategoryGeneral").item(0).getChildNodes().item(0).getNodeValue());
-
+                    idDevArea = getValue("idDevArea");
+                    idLogChannel = getValue("idLogChannel");
+                    idJoinLogChannel = getValue("idLogJoinChannel");
+                    idCategoryJoin = getValue("idJoinCategory");
+                    idMissionsGratuites = getValue("missions-gratuites");
+                    idMissionsPayantes = getValue("mission-payantes");
+                    idPresentation = getValue("idPresentation");
+                    idRolesChannel = getValue("idRolesChannel");
+                    idRoleRulesAccepted = getValue("RulesAccepted");
+                    idWelcomChannel = getValue("idWelcomChannel");
+                    idGeneralChannel = getValue("idGeneral");
+                    idModo = getValue("idModo");
+                    idAdmin = getValue("idAdmin");
+                    idNoMic = getValue("noMic");
+                    idMeetupVerif = getValue("idMeetupVerif");
+                    idMeetupAnnonce = getValue("idMeetupAnnonce");
+                    idBump = getValue("idBump");
+                    idPingMeetup = getValue("idPingMeetup");
+                    idCategoryGeneral = getValue("idCategoryGeneral");
                     backgroundXp = ImageIO.read(Init.class.getResource("/assets/backgroundXp.jpg").openStream());
-                    idCommands = Snowflake.of(document.getElementsByTagName("idCommands").item(0).getChildNodes().item(0).getNodeValue());
-
-                    idDevHelper = Snowflake.of(document.getElementsByTagName("idDevHelper").item(0).getChildNodes().item(0).getNodeValue());
-
-                    idMissionsCategory = Snowflake.of(document.getElementsByTagName("idMissionsCategory").item(0).getChildNodes().item(0).getNodeValue());
-
-                    idVoiceChannelHelp = Snowflake.of(document.getElementsByTagName("idVoiceChannelHelp").item(0).getChildNodes().item(0).getNodeValue());
-
-                    idFreeLance = Snowflake.of(document.getElementsByTagName("idFreeLance").item(0).getChildNodes().item(0).getNodeValue());
+                    idCommands = getValue("idCommands");
+                    idDevHelper = getValue("idDevHelper");
+                    idMissionsCategory = getValue("idMissionsCategory");
+                    idVoiceChannelHelp = getValue("idVoiceChannelHelp");
+                    idFreeLance = getValue("idFreeLance");
 
                     break;
                 } catch (Exception e) {
@@ -176,17 +149,18 @@ public class Init {
             client.getEventDispatcher().on(MemberJoinEvent.class).subscribe(memberJoinEvent -> MemberJoin.memberJoinFunction(finalIdDevArea, finalIdJoinLogChannel, memberJoinEvent));
 
             client.getEventDispatcher().on(MemberLeaveEvent.class).subscribe(memberLeaveEvent -> MemberLeave.memberLeaveFunction(finalIdDevArea, finalIdJoinLogChannel, memberLeaveEvent));
-
             client.getEventDispatcher().on(ReactionAddEvent.class).subscribe(ReactionAdd::reactionAddFunction);
-
             client.getEventDispatcher().on(ReactionRemoveEvent.class).subscribe(ReactionRemove::FunctionReactionRemoveEvent);
-
             client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(VoiceStateUpdate::VoiceStateUpdateFucntion);
 
 
         } catch (ParserConfigurationException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Snowflake getValue(String caseName) {
+        return Snowflake.of(document.getElementsByTagName(caseName).item(0).getChildNodes().item(0).getNodeValue());
     }
 
 }

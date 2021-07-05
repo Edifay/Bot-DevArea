@@ -1,23 +1,20 @@
 package devarea.bot.commands.with_out_text_starter;
 
+import devarea.bot.Init;
 import devarea.bot.automatical.MessageSeria;
+import devarea.bot.automatical.MissionsManager;
+import devarea.bot.commands.EndStape;
+import devarea.bot.commands.FirstStape;
 import devarea.bot.commands.LongCommand;
+import devarea.bot.commands.Stape;
 import devarea.bot.commands.object_for_stock.Mission;
 import devarea.bot.data.ColorsUsed;
 import devarea.bot.data.TextMessage;
-import devarea.bot.Init;
-import devarea.bot.automatical.MissionsManager;
-import devarea.bot.commands.FirstStape;
-import devarea.bot.commands.Stape;
-import devarea.bot.commands.EndStape;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
-import discord4j.core.object.PermissionOverwrite;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.MessageCreateSpec;
-import discord4j.rest.util.Permission;
-import discord4j.rest.util.PermissionSet;
 
 import java.time.Instant;
 import java.util.function.Consumer;
@@ -30,21 +27,8 @@ public class CreateMission extends LongCommand {
         super(event);
         this.mission = new Mission();
         this.deletedCommand(10800000L);
-        this.channel = Init.devarea.createTextChannel(textChannelCreateSpec -> {
-            textChannelCreateSpec.setName("creation de mission");
-            textChannelCreateSpec.setParentId(Init.idMissionsCategory);
-        }).block();
-        assert this.channel != null;
-        this.channel.addRoleOverwrite(Init.idRoleRulesAccepted,
-                PermissionOverwrite.forRole(Init.idRoleRulesAccepted,
-                        PermissionSet.of(),
-                        PermissionSet.of(Permission.VIEW_CHANNEL)))
-                .subscribe();
-        this.channel.addMemberOverwrite(this.member.getId(),
-                PermissionOverwrite.forMember(this.member.getId(),
-                        PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES),
-                        PermissionSet.of(Permission.ADD_REACTIONS)))
-                .subscribe();
+
+        this.createLocalChannel("creation de mission", Init.idMissionsCategory);
 
         Stape niveauStape = new EndStape() {
             @Override
@@ -160,16 +144,6 @@ public class CreateMission extends LongCommand {
                 return callStape(0);
             }
         };
-    }
-
-    @Override
-    protected Boolean endCommand() {
-        try {
-            this.channel.delete().block();
-        } catch (Exception e) {
-        }
-        this.ended = true;
-        return super.endCommand();
     }
 
 }

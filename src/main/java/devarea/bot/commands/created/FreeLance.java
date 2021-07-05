@@ -13,35 +13,57 @@ import discord4j.core.spec.MessageCreateSpec;
 import java.util.function.Consumer;
 
 public class FreeLance extends LongCommand {
+
     public FreeLance(MessageCreateEvent message) {
         super(message);
         EndStape bumpStape = new EndStape() {
             protected boolean onCall(Message message) {
                 if (FreeLanceManager.hasFreelance(FreeLance.this.member)) {
-                    if (FreeLanceManager.bumpFreeLance(FreeLance.this.member)) {
-                        setText(embed -> embed.setTitle("Le bump a effectu!"));
+                    if (FreeLanceManager.bumpFreeLance(FreeLance.this.member.getId().asString())) {
+                        setText(embed -> {
+                            embed.setTitle("Bump !");
+                            embed.setTitle("Le bump a effectué !");
+                            embed.setColor(ColorsUsed.just);
+                        });
                     } else {
-                        setText(embed -> embed.setTitle("Vous devez attendre 24h entre chaque bump !"));
+                        setText(embed -> {
+                            embed.setTitle("Error");
+                            embed.setDescription("Vous devez attendre 24 heures entre chaque bump !");
+                            embed.setColor(ColorsUsed.wrong);
+                        });
                     }
                 } else {
-                    setText(embed -> embed.setTitle("Vous ne posspas de freelance !"));
+                    setText(embed -> {
+                        embed.setTitle("Error");
+                        embed.setDescription("Vous ne possédez pas de freelance !");
+                        embed.setColor(ColorsUsed.wrong);
+                    });
                 }
                 return true;
             }
         };
+
         EndStape deleteStape = new EndStape() {
             protected boolean onCall(Message message) {
                 if (FreeLanceManager.hasFreelance(member)) {
-                    devarea.bot.commands.object_for_stock.FreeLance free = FreeLanceManager.getFreeLance(member);
+                    devarea.bot.commands.object_for_stock.FreeLance free = FreeLanceManager.getFreelance(member);
                     FreeLanceManager.remove(free);
                     try {
                         Command.delete(false, free.getMessage().getMessage());
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
-                    setText(embed -> embed.setTitle("Votre mission a bien supprimer !"));
+                    setText(embed -> {
+                        embed.setTitle("Suppression");
+                        embed.setDescription("Votre mission a bien été supprimé !");
+                        embed.setColor(ColorsUsed.just);
+                    });
                 } else {
-                    setText(embed -> embed.setTitle("Vous ne posspas de freelance !"));
+                    setText(embed -> {
+                        embed.setTitle("Error");
+                        embed.setDescription("Vous n'avez pas de freelance !");
+                        embed.setColor(ColorsUsed.wrong);
+                    });
                 }
                 return true;
             }
@@ -50,9 +72,10 @@ public class FreeLance extends LongCommand {
             public void onFirstCall(Consumer<? super MessageCreateSpec> deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(msg -> msg.setEmbed(embed -> {
                     embed.setTitle("FreeLance");
-                    embed.setColor(ColorsUsed.just);
-                    embed.setDescription("Vous pouvez ici effectué des modifications sur votre freelance !\n`bump` -> cette commande va bump votre message freelance !\n" +
+                    embed.setColor(ColorsUsed.same);
+                    embed.setDescription("Vous pouvez ici effectuer des modifications sur votre freelance !\n`bump` -> cette commande va bump votre message freelance !\n" +
                             "`delete` -> supprimer votre freelance !");
+                    embed.setFooter("cancel | annuler pour quitter.", null);
                 }));
             }
 
