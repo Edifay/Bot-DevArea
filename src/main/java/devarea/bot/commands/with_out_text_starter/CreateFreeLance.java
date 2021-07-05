@@ -22,6 +22,7 @@ public class CreateFreeLance extends LongCommand {
     private Stape stapeAskForField = null;
     private Stape link;
 
+
     public CreateFreeLance(ReactionAddEvent event) {
         super(event);
         this.freeLance = new FreeLance();

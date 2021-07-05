@@ -25,6 +25,10 @@ public abstract class Command {
     protected final Member member;
     protected TextChannel channel;
 
+    public Command() {
+        this.member = null;
+    }
+
     public Command(final MessageCreateEvent event) {
         this(event.getMember().get(), (TextChannel) event.getMessage().getChannel().block());
     }
@@ -54,19 +58,6 @@ public abstract class Command {
 
     protected Message deletedEmbed(final Consumer<? super EmbedCreateSpec> spec) {
         return deletedMessage(msg -> msg.setEmbed(spec));
-    }
-
-    protected Boolean commandWithPerm(final Permission permission, final Runnable runnable) {
-        if (this.member.getBasePermissions().block().contains(permission) || this.member.getBasePermissions().block().contains(Permission.ADMINISTRATOR)) {
-            runnable.run();
-            return true;
-        } else
-            deletedEmbed(embedCreateSpec -> {
-                embedCreateSpec.setTitle("Erreur !");
-                embedCreateSpec.setDescription(haventPermission);
-                embedCreateSpec.setColor(ColorsUsed.wrong);
-            });
-        return false;
     }
 
     protected boolean createLocalChannel(final String name, final Snowflake parentId) {
@@ -107,7 +98,6 @@ public abstract class Command {
             try {
                 Thread.sleep(millis);
             } catch (InterruptedException e) {
-                e.printStackTrace();
             } finally {
                 runnable.run();
                 this.endCommand();
@@ -152,7 +142,6 @@ public abstract class Command {
             try {
                 Thread.sleep(30000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
             }
             delete(false, atDelete);
         }).start();

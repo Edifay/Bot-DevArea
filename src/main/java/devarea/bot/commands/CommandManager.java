@@ -5,7 +5,9 @@ import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.rest.util.PermissionSet;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +18,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -94,9 +97,20 @@ public class CommandManager {
             if (classBound.containsKey(command)) {
                 try {
                     System.out.println("The command " + command + " is executed !");
-                    Command actualCommand = (Command) classBound.get(command).newInstance(message);
-                    if (actualCommand instanceof LongCommand)
-                        actualCommands.put(message.getMember().get().getId(), (LongCommand) actualCommand);
+                    PermissionSet permissionSet = null;
+                    try {
+                        PermissionCommand defaultCommand = (PermissionCommand) classBound.get(command).getDeclaringClass().getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
+                        permissionSet = defaultCommand.getPermissions();
+                    } catch (NoSuchMethodException ignored) {
+                    }
+
+                    if (permissionSet == null || containPerm(permissionSet, message.getMember().get().getBasePermissions().block())) {
+                        Command actualCommand = (Command) classBound.get(command).newInstance(message);
+                        if (actualCommand instanceof LongCommand)
+                            actualCommands.put(message.getMember().get().getId(), (LongCommand) actualCommand);
+                    } else
+                        Command.sendError((TextChannel) message.getMessage().getChannel().block(), "Vous n'avez pas la permission d'éxécuter cette commande !");
+
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
@@ -113,11 +127,25 @@ public class CommandManager {
 
     }
 
-    public static boolean addManualCommand(Snowflake memberId, ConsumableCommand command) {
+    public static boolean addManualCommand(Member member, ConsumableCommand command) {
         synchronized (actualCommands) {
-            if (!actualCommands.containsKey(memberId) && command.getCommand() instanceof LongCommand) {
-                actualCommands.put(memberId, (LongCommand) command.getCommand());
-                return true;
+            try {
+                PermissionSet permissionSet = null;
+                try {
+                    PermissionCommand defaultCommand = (PermissionCommand) command.commadClass.getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
+                    permissionSet = defaultCommand.getPermissions();
+                } catch (NoSuchMethodException e) {
+                }
+
+                if (permissionSet == null || containPerm(permissionSet, member.getBasePermissions().block())) {
+                    if (!actualCommands.containsKey(member.getId()) && command.getCommand() instanceof LongCommand) {
+                        actualCommands.put(member.getId(), (LongCommand) command.getCommand());
+                        return true;
+                    }
+                }
+                Command.sendError(command.channel, "Vous n'avez pas la permission d'éxécuter cette commande !");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return false;
         }
@@ -187,6 +215,21 @@ public class CommandManager {
         synchronized (actualCommands) {
             return actualCommands;
         }
+    }
+
+    public static boolean containPerm(PermissionSet haveIn, PermissionSet in) {
+        AtomicBoolean atReturn = new AtomicBoolean(true);
+        haveIn.stream().iterator().forEachRemaining(permission -> {
+            System.out.println("Try to find perm : " + permission.toString());
+            AtomicBoolean haveFind = new AtomicBoolean(false);
+            in.stream().iterator().forEachRemaining(permission1 -> {
+                if (permission.equals(permission1))
+                    haveFind.set(true);
+            });
+            if (!haveFind.get())
+                atReturn.set(false);
+        });
+        return atReturn.get();
     }
 
 }

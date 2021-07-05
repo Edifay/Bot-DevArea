@@ -69,7 +69,7 @@ public class FreeLanceManager {
 
             if (event.getEmoji().equals(ReactionEmoji.custom(Init.idYes)))
                 if (!FreeLanceManager.hasFreelance(event.getMember().get()))
-                    CommandManager.addManualCommand(event.getMember().get().getId(), new ConsumableCommand() {
+                    CommandManager.addManualCommand(event.getMember().get(), new ConsumableCommand((TextChannel) event.getChannel().block(), CreateFreeLance.class) {
                         @Override
                         protected Command command() {
                             return new CreateFreeLance(event);

@@ -4,6 +4,10 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 
 public abstract class ShortCommand extends Command {
 
+    public ShortCommand(){
+        super();
+    }
+
     public ShortCommand(final MessageCreateEvent message) {
         super(message);
     }

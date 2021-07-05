@@ -14,6 +14,10 @@ public abstract class LongCommand extends Command {
     protected FirstStape firstStape;
     protected boolean isLocalChannel;
 
+    public LongCommand() {
+        super();
+    }
+
     public LongCommand(final MessageCreateEvent message) {
         super(message);
         this.isLocalChannel = false;

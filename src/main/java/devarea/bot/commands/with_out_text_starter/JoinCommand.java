@@ -29,7 +29,6 @@ public class JoinCommand extends LongCommand {
             try {
                 Thread.sleep(600000L);
             } catch (InterruptedException e) {
-                e.printStackTrace();
             } finally {
                 if (CommandManager.hasCommand(this)) {
                     this.member.kick("Didn't finish QCM !").subscribe();

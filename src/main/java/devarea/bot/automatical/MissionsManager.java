@@ -56,7 +56,7 @@ public class MissionsManager {
             startAway(() -> event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).subscribe());
 
             if (event.getEmoji().equals(ReactionEmoji.custom(Init.idYes)))
-                CommandManager.addManualCommand(event.getMember().get().getId(), new ConsumableCommand() {
+                CommandManager.addManualCommand(event.getMember().get(), new ConsumableCommand((TextChannel) event.getChannel().block(), CreateMission.class) {
                     @Override
                     protected Command command() {
                         return new CreateMission(event);

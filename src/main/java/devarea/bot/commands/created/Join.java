@@ -1,17 +1,20 @@
 package devarea.bot.commands.created;
 
 import devarea.bot.Init;
-import devarea.bot.commands.Command;
-import devarea.bot.commands.CommandManager;
-import devarea.bot.commands.ConsumableCommand;
-import devarea.bot.commands.ShortCommand;
+import devarea.bot.commands.*;
 import devarea.bot.commands.with_out_text_starter.JoinCommand;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.rest.util.Permission;
+import discord4j.rest.util.PermissionSet;
 
-public class Join extends ShortCommand {
+public class Join extends ShortCommand implements PermissionCommand {
+
+    public Join(PermissionCommand permissionCommand) {
+        super();
+    }
 
     public Join(MessageCreateEvent message) {
         super(message);
@@ -19,7 +22,7 @@ public class Join extends ShortCommand {
             if (message.getMessage().getUserMentions().buffer().count().block() > 0) {
                 Member member = message.getMessage().getUserMentions().blockFirst().asMember(Init.devarea.getId()).block();
                 assert member != null;
-                CommandManager.addManualCommand(member.getId(), new ConsumableCommand() {
+                CommandManager.addManualCommand(member, new ConsumableCommand((TextChannel) message.getMessage().getChannel().block(), JoinCommand.class) {
                     @Override
                     protected Command command() {
                         return new JoinCommand(member);
@@ -33,5 +36,10 @@ public class Join extends ShortCommand {
         } else {
             sendError("Vous n'avez pas la permission d'utiliser cette commande !");
         }
+    }
+
+    @Override
+    public PermissionSet getPermissions() {
+        return PermissionSet.of(Permission.ADMINISTRATOR);
     }
 }

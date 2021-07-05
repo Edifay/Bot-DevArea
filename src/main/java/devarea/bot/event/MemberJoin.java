@@ -23,7 +23,7 @@ public class MemberJoin {
         synchronized (Init.membersId) {
             Init.membersId.add(event.getMember().getId());
         }
-        CommandManager.addManualCommand(event.getMember().getId(), new ConsumableCommand() {
+        CommandManager.addManualCommand(event.getMember(), new ConsumableCommand(null, JoinCommand.class) {
             @Override
             protected Command command() {
                 return new JoinCommand(event.getMember());
