@@ -24,7 +24,10 @@ public class ReactionAdd {
             if (event.getMember().get().isBot())
                 return;
 
-            startAway(() -> RolesReacts.onReact(event));
+            if (RolesReacts.onReact(event))
+                return;
+
+
             startAway(() -> CommandManager.react(event));
 
             MeetupManager.getEvent(event);

@@ -103,4 +103,10 @@ public abstract class LongCommand extends Command {
         this.isLocalChannel = true;
         return super.createLocalChannel(name, parentId);
     }
+
+    @Override
+    protected boolean createLocalChannel(String name, Snowflake parentId, boolean canWrite) {
+        this.isLocalChannel = true;
+        return super.createLocalChannel(name, parentId, canWrite);
+    }
 }

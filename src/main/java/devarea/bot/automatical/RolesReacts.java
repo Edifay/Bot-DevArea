@@ -12,6 +12,7 @@ import discord4j.core.object.entity.Member;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RolesReacts {
 
@@ -60,18 +61,21 @@ public class RolesReacts {
         }
     }
 
-    public synchronized static void onReact(ReactionAddEvent event) {
+    public synchronized static boolean onReact(ReactionAddEvent event) {
+        AtomicBoolean haveAdded = new AtomicBoolean(false);
         rolesReacts.forEach((k, v) -> {
             try {
                 if (k.is(event)) {
                     assert event.getMember().isPresent();
                     Member member = event.getMember().get();
                     member.addRole(v).subscribe();
+                    haveAdded.set(true);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
+        return haveAdded.get();
     }
 
     public synchronized static void onRemoveReact(ReactionRemoveEvent event) {

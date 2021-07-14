@@ -18,8 +18,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static devarea.bot.data.TextMessage.haventPermission;
-
 public abstract class Command {
 
     protected final Member member;
@@ -60,7 +58,7 @@ public abstract class Command {
         return deletedMessage(msg -> msg.setEmbed(spec));
     }
 
-    protected boolean createLocalChannel(final String name, final Snowflake parentId) {
+    protected boolean createLocalChannel(final String name, final Snowflake parentId, final boolean canWrite) {
         this.channel = Init.devarea.createTextChannel(textChannelCreateSpec -> {
             textChannelCreateSpec.setName(name);
             textChannelCreateSpec.setParentId(parentId);
@@ -69,12 +67,19 @@ public abstract class Command {
                     PermissionSet.of(),
                     PermissionSet.of(Permission.VIEW_CHANNEL)));
             set.add(PermissionOverwrite.forMember(this.member.getId(),
-                    PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES),
+                    canWrite ?
+                            PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES)
+                            :
+                            PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY),
                     PermissionSet.of(Permission.ADD_REACTIONS)));
             textChannelCreateSpec.setPermissionOverwrites(set);
         }).block();
         assert this.channel != null;
         return true;
+    }
+
+    protected boolean createLocalChannel(final String name, final Snowflake parentId) {
+        return this.createLocalChannel(name, parentId, true);
     }
 
     protected Message send(final Consumer<? super MessageCreateSpec> spec, boolean block) {

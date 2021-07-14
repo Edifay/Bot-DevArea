@@ -14,7 +14,6 @@ import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
-import discord4j.rest.http.client.ClientException;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,9 +31,15 @@ public class MissionsManager {
         load();
         sendLastMessage();
         new Thread(() -> {
-            if (verif())
-                save();
-        });
+            try {
+                while (true) {
+                    if (verif())
+                        save();
+                    Thread.sleep(86400000L);
+                }
+            } catch (InterruptedException e) {
+            }
+        }).start();
     }
 
     public static void update() {
@@ -96,24 +101,17 @@ public class MissionsManager {
 
     public static boolean verif() {
         ArrayList<Mission> atRemove = new ArrayList<>();
-        for (Mission mission : missions) {
-            boolean isMemberHere = false;
-            Message message = null;
-            try {
-                Init.devarea.getMemberById(Snowflake.of(mission.getMemberId())).block();
-                isMemberHere = true;
-            } catch (ClientException e) {
+        for (Mission mission : missions)
+            if (!Init.membersId.contains(Snowflake.of(mission.getMemberId()))) {
+                ((TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block()).createMessage(messageCreateSpec -> {
+                    messageCreateSpec.setContent("Le membre : <@" + mission.getMemberId() + "> est concidéré comme \"left\" ça missions devrait être supprimer !");
+                }).block();
+                /*atRemove.add(mission);
+                try {
+                    delete(false, mission.getMessage().getMessage());
+                } catch (Exception e) {
+                }*/
             }
-            try {
-                message = mission.getMessage().getMessage();
-            } catch (ClientException e) {
-            }
-            if (!isMemberHere || message == null) {
-                atRemove.add(mission);
-                if (message != null)
-                    delete(false, message);
-            }
-        }
 
         if (atRemove.size() == 0)
             return false;

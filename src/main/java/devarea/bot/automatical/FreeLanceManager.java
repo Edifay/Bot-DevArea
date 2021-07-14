@@ -15,7 +15,6 @@ import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
-import discord4j.rest.http.client.ClientException;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,8 +39,14 @@ public class FreeLanceManager {
             load();
             sendLastMessage();
             new Thread(() -> {
-                if (verif())
-                    save();
+                try {
+                    while (true) {
+                        if (verif())
+                            save();
+                        Thread.sleep(86400000L);
+                    }
+                } catch (InterruptedException e) {
+                }
             }).start();
         } catch (IOException e) {
             e.printStackTrace();
@@ -108,27 +113,32 @@ public class FreeLanceManager {
 
     public static boolean bumpFreeLance(String id) {
         synchronized (bumpedFreeLance) {
-            if (!hasFreelance(id)) return false;
-            FreeLance freeLance = FreeLanceManager.getFreelance(id);
+            synchronized (freeLances) {
+                if (!hasFreelance(id)) return false;
+                FreeLance freeLance = FreeLanceManager.getFreelance(id);
 
-            if (!bumpedFreeLance.contains(freeLance)) {
-                delete(false, freeLance.getMessage().getMessage());
-                freeLance.setMessage(new MessageSeria(Command.sendEmbed((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block(), freeLance.getEmbed(), true)));
-                update();
-                save();
-                bumpedFreeLance.add(freeLance);
-                new Thread(() -> {
+                if (!bumpedFreeLance.contains(freeLance)) {
                     try {
-                        Thread.sleep(timeBetweenBump);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } finally {
-                        synchronized (bumpedFreeLance) {
-                            bumpedFreeLance.remove(freeLance);
-                        }
+                        delete(false, freeLance.getMessage().getMessage());
+                    } catch (Exception e) {
                     }
-                }).start();
-                return true;
+                    freeLance.setMessage(new MessageSeria(Command.sendEmbed((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block(), freeLance.getEmbed(), true)));
+                    update();
+                    save();
+                    bumpedFreeLance.add(freeLance);
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(timeBetweenBump);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } finally {
+                            synchronized (bumpedFreeLance) {
+                                bumpedFreeLance.remove(freeLance);
+                            }
+                        }
+                    }).start();
+                    return true;
+                }
             }
         }
         return false;
@@ -140,53 +150,60 @@ public class FreeLanceManager {
     }
 
     public static void add(FreeLance mission) {
-        freeLances.add(mission);
-        save();
+        synchronized (freeLances) {
+            freeLances.add(mission);
+            save();
+        }
     }
 
     public static void remove(FreeLance mission) {
-        freeLances.remove(mission);
-        save();
+        synchronized (freeLances) {
+            freeLances.remove(mission);
+            save();
+        }
     }
 
     private static void load() throws IOException {
-        File file = new File(localFile);
-        if (!file.exists())
-            save();
-        freeLances = mapper.readValue(file, new TypeReference<>() {
-        });
-        System.out.println("FreeLance loaded : " + freeLances.size() + " detected !");
+        synchronized (freeLances) {
+            File file = new File(localFile);
+            if (!file.exists())
+                save();
+            freeLances = mapper.readValue(file, new TypeReference<>() {
+            });
+            System.out.println("FreeLance loaded : " + freeLances.size() + " detected !");
+        }
     }
 
     public static boolean verif() {
-        ArrayList<FreeLance> atRemove = new ArrayList<>();
-        for (FreeLance freeLance : freeLances) {
+        synchronized (freeLances) {
+            ArrayList<FreeLance> atRemove = new ArrayList<>();
+            for (FreeLance freeLance : freeLances)
+                if (!Init.membersId.contains(Snowflake.of(freeLance.getMemberId()))) {
+                    ((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block()).createMessage(messageCreateSpec -> {
+                        messageCreateSpec.setContent("Le membre : <@" + freeLance.getMemberId() + "> est concidéré comme \"left\" ça missions devrait être supprimer !");
+                    }).block();
+                    /*atRemove.add(freeLance);
+                    try {
+                        delete(false, freeLance.getMessage().getMessage());
+                    } catch (Exception e) {
+                    }*/
+                }
 
-            Message message = null;
-            try {
-                message = freeLance.getMessage().getMessage();
-            } catch (ClientException ignored) {
-            }
+            if (atRemove.size() == 0)
+                return false;
 
-            if (!Init.membersId.contains(Snowflake.of(freeLance.getMemberId())) || message == null) {
-                atRemove.add(freeLance);
-                if (message != null)
-                    delete(false, message);
-            }
+            freeLances.removeAll(atRemove);
+            return true;
         }
-
-        if (atRemove.size() == 0)
-            return false;
-
-        freeLances.removeAll(atRemove);
-        return true;
     }
 
     public static void save() {
-        try {
-            mapper.writeValue(new File(localFile), freeLances);
-        } catch (IOException e) {
-            e.printStackTrace();
+        synchronized (freeLances) {
+            try {
+                mapper.writeValue(new File(localFile), freeLances);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
