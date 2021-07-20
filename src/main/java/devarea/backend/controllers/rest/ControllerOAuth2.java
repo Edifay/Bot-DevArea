@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static devarea.bot.event.FunctionEvent.startAway;
+
 @CrossOrigin()
 @RestController
 public class ControllerOAuth2 {
@@ -44,11 +46,35 @@ public class ControllerOAuth2 {
             System.out.println("This value is in !");
             boolean isFetch = builders.get(code).verifFetchNeeded(Boolean.parseBoolean(force));
             System.out.println("is Fetch :" + isFetch);
-            save();
+            startAway(() -> {
+                try {
+                    save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         } else {
             return new UserInfo();
         }
         return builders.get(code);
+    }
+
+    @GetMapping("/auth/remove")
+    public boolean remove(@RequestParam(value = "code") final String code) throws IOException {
+        if (!builders.containsKey(code)) {
+            if (builders.get(code) != null)
+                builders.get(code).getBuilder().revoke();
+            builders.remove(code);
+            startAway(() -> {
+                try {
+                    save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            return true;
+        }
+        return false;
     }
 
     @GetMapping("/auth")
@@ -80,7 +106,13 @@ public class ControllerOAuth2 {
 
             builders.put(code, userInfo);
 
-            save();
+            startAway(() -> {
+                try {
+                    save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
 
         }
 
