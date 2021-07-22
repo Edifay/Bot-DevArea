@@ -32,11 +32,10 @@ public class Stop extends ShortCommand implements PermissionCommand {
         }, false);
         Init.client.logout().block();
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-        for (Thread t : threadSet) {
+        for (Thread t : threadSet)
             t.interrupt();
-        }
-        System.exit(0);
         this.endCommand();
+        System.exit(0);
     }
 
     @Override

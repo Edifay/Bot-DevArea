@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,48 +104,34 @@ public class ControllerStats {
 
     // -----------------------------------------------------------------------------------------------------
 
-    private static final ArrayList<XpMember> xpMembers = new ArrayList<>();
+    private static final HashMap<String, XpMember> xpMembers = new HashMap<>();
 
     @GetMapping(value = "/stats/xp_list")
     public XpMember[] xp_list(@RequestParam(value = "start", defaultValue = "0") final int start, @RequestParam(value = "end", defaultValue = "50") final int end) {
         synchronized (xpMembers) {
             XpMember[] members = XpCount.getListOfIndex(start, end);
+            long actual_time = System.currentTimeMillis();
             for (XpMember member : members) {
-                if (contain(member)) {
-                    XpMember memberInList = get(member);
-                    member.setName(memberInList.getName());
-                    member.setUrlAvatar(memberInList.getUrlAvatar());
+                if (xpMembers.containsValue(member)) {
+                    XpMember actualMember = xpMembers.get(member.getId());
+                    if (actual_time - actualMember.getLastTimeFetch() > 600000L) {
+                        Member memberDiscord = Init.devarea.getMemberById(Snowflake.of(member.getId())).block();
+                        actualMember.setName(memberDiscord.getDisplayName());
+                        actualMember.setUrlAvatar(memberDiscord.getAvatarUrl());
+                        actualMember.setLastTimeFetch(actual_time);
+                    }
+                    member.setName(actualMember.getName());
+                    member.setUrlAvatar(actualMember.getUrlAvatar());
                 } else {
                     Member memberDiscord = Init.devarea.getMemberById(Snowflake.of(member.getId())).block();
-                    xpMembers.add(member);
+                    xpMembers.put(memberDiscord.getId().asString(), member);
                     member.setName(memberDiscord.getDisplayName());
                     member.setUrlAvatar(memberDiscord.getAvatarUrl());
+                    member.setLastTimeFetch(actual_time);
                 }
             }
             return members;
         }
-    }
-
-    public static boolean contain(XpMember member) {
-        synchronized (xpMembers) {
-            for (XpMember memberList : xpMembers) {
-                if (memberList.equals(member)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public static XpMember get(XpMember member) {
-        synchronized (xpMembers) {
-            for (XpMember memberList : xpMembers) {
-                if (memberList.equals(member)) {
-                    return memberList;
-                }
-            }
-        }
-        return null;
     }
 
 }

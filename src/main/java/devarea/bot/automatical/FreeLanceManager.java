@@ -179,9 +179,9 @@ public class FreeLanceManager {
             ArrayList<FreeLance> atRemove = new ArrayList<>();
             for (FreeLance freeLance : freeLances)
                 if (!Init.membersId.contains(Snowflake.of(freeLance.getMemberId()))) {
-                    ((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block()).createMessage(messageCreateSpec -> {
+                   /* ((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block()).createMessage(messageCreateSpec -> {
                         messageCreateSpec.setContent("Le membre : <@" + freeLance.getMemberId() + "> est concidéré comme \"left\" ça missions devrait être supprimer !");
-                    }).block();
+                    }).block();*/
                     /*atRemove.add(freeLance);
                     try {
                         delete(false, freeLance.getMessage().getMessage());

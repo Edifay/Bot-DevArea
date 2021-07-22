@@ -17,11 +17,23 @@ public class XpMember {
     protected int rank;
     @JsonProperty("urlAvatar")
     protected String urlAvatar;
+    @JsonIgnore
+    protected long lastTimeFetch;
 
     public XpMember(final String id, final int xp, final int rank) {
         this.id = id;
         this.xp = xp;
         this.rank = rank;
+    }
+
+    @JsonIgnore
+    public long getLastTimeFetch() {
+        return this.lastTimeFetch;
+    }
+
+    @JsonIgnore
+    public void setLastTimeFetch(long lastTimeFetch) {
+        this.lastTimeFetch = lastTimeFetch;
     }
 
     @JsonIgnore

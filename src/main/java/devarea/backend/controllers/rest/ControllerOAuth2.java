@@ -61,8 +61,8 @@ public class ControllerOAuth2 {
 
     @GetMapping("/auth/remove")
     public boolean remove(@RequestParam(value = "code") final String code) throws IOException {
-        if (!builders.containsKey(code)) {
-            if (builders.get(code) != null)
+        if (builders.containsKey(code)) {
+            if (builders.get(code).getBuilder() != null)
                 builders.get(code).getBuilder().revoke();
             builders.remove(code);
             startAway(() -> {
@@ -78,7 +78,7 @@ public class ControllerOAuth2 {
     }
 
     @GetMapping("/auth")
-    public String auth(@RequestParam(value = "code") final String code) throws IOException {
+    public String auth(@RequestParam(value = "code") final String code) {
         if (!builders.containsKey(code)) {
 
             OAuthBuilder builder = new OAuthBuilder(client_id, client_secret).setScopes(new String[]{"identify"}).setRedirectURI(redirect_url);

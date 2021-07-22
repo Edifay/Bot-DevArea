@@ -103,9 +103,9 @@ public class MissionsManager {
         ArrayList<Mission> atRemove = new ArrayList<>();
         for (Mission mission : missions)
             if (!Init.membersId.contains(Snowflake.of(mission.getMemberId()))) {
-                ((TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block()).createMessage(messageCreateSpec -> {
+                /*((TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block()).createMessage(messageCreateSpec -> {
                     messageCreateSpec.setContent("Le membre : <@" + mission.getMemberId() + "> est concidéré comme \"left\" ça missions devrait être supprimer !");
-                }).block();
+                }).block();*/
                 /*atRemove.add(mission);
                 try {
                     delete(false, mission.getMessage().getMessage());
@@ -136,6 +136,14 @@ public class MissionsManager {
                 newArray.add(missions.get(i));
         }
         return newArray;
+    }
+
+    /*
+    Do not use this method
+     */
+    @Deprecated
+    public static ArrayList<Mission> getMissions() {
+        return missions;
     }
 
 }
