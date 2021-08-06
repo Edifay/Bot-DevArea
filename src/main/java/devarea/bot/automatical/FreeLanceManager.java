@@ -7,6 +7,7 @@ import devarea.bot.commands.Command;
 import devarea.bot.commands.CommandManager;
 import devarea.bot.commands.ConsumableCommand;
 import devarea.bot.commands.object_for_stock.FreeLance;
+import devarea.bot.commands.object_for_stock.MessageSeria;
 import devarea.bot.commands.with_out_text_starter.CreateFreeLance;
 import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;

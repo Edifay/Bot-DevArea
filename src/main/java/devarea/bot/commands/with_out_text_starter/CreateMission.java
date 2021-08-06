@@ -1,7 +1,7 @@
 package devarea.bot.commands.with_out_text_starter;
 
 import devarea.bot.Init;
-import devarea.bot.automatical.MessageSeria;
+import devarea.bot.commands.object_for_stock.MessageSeria;
 import devarea.bot.automatical.MissionsManager;
 import devarea.bot.commands.EndStape;
 import devarea.bot.commands.FirstStape;

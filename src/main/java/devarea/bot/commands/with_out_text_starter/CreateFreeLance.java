@@ -2,7 +2,7 @@ package devarea.bot.commands.with_out_text_starter;
 
 import devarea.bot.Init;
 import devarea.bot.automatical.FreeLanceManager;
-import devarea.bot.automatical.MessageSeria;
+import devarea.bot.commands.object_for_stock.MessageSeria;
 import devarea.bot.commands.*;
 import devarea.bot.commands.object_for_stock.FreeLance;
 import devarea.bot.data.ColorsUsed;

@@ -3,7 +3,6 @@ package devarea.bot.commands.object_for_stock;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import devarea.bot.automatical.MessageSeria;
 
 public class Mission {
 

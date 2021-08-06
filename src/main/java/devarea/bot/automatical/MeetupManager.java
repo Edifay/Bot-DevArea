@@ -3,6 +3,7 @@ package devarea.bot.automatical;
 import devarea.bot.Init;
 import devarea.bot.commands.Command;
 import devarea.bot.commands.object_for_stock.MeetupStock;
+import devarea.bot.commands.object_for_stock.MessageSeria;
 import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.ReactionAddEvent;

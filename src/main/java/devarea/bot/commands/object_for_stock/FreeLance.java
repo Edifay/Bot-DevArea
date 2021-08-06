@@ -3,7 +3,6 @@ package devarea.bot.commands.object_for_stock;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import devarea.bot.Init;
-import devarea.bot.automatical.MessageSeria;
 import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.spec.EmbedCreateSpec;
