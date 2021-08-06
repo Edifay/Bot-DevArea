@@ -36,7 +36,11 @@ public class JoinCommand extends LongCommand {
             }
         }).start();
 
-        this.createLocalChannel(member.getDisplayName(), Init.idCategoryJoin, false);
+
+        this.createLocalChannel(
+                member.getDisplayName(),
+                Init.idCategoryJoin,
+                false);
 
         Stape roles = new Stape() {
             @Override

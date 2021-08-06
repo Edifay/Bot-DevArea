@@ -10,6 +10,7 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import static devarea.bot.data.TextMessage.messageDisableInPrivate;
 
@@ -42,8 +43,9 @@ public class MessageCreate {
             })).subscribe();
 
             XpCount.onMessage(message);
-            if (CommandManager.receiveMessage(message))
-                return;
+            if (!message.getMessage().getContent().toLowerCase(Locale.ROOT).startsWith("//admin"))
+                if (CommandManager.receiveMessage(message))
+                    return;
 
             if (message.getMessage().getContent().startsWith(Init.prefix))
                 CommandManager.exe(message.getMessage().getContent().substring(Init.prefix.length()).split(" ")[0], message);

@@ -21,7 +21,6 @@ public class ControllerMissions {
 
         if (start > MissionsManager.getMissions().size())
             start = MissionsManager.getMissions().size();
-        System.out.println(MissionsManager.getMissions().size());
         return MissionsManager.getMissions().subList(start, end).toArray(new Mission[0]);
     }
 

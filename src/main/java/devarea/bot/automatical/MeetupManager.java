@@ -74,7 +74,6 @@ public class MeetupManager {
             out.write(outByte.toByteArray());
             out.flush();
             out.close();
-            System.out.println("Data writed successfully !");
         } catch (IOException e) {
             e.printStackTrace();
         }

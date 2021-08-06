@@ -44,7 +44,12 @@ public class CommandManager {
                 if (!className.contains("$")) {
                     final String newName = className.startsWith("/") ? className.substring(1) : className;
                     System.out.println(className + "->" + newName);
-                    classBound.put(newName.toLowerCase(Locale.ROOT), Class.forName("devarea.bot.commands.created." + newName).getConstructor(MessageCreateEvent.class));
+                    if (Arrays.stream(Class.forName("devarea.bot.commands.created." + newName).getConstructors())
+                            .anyMatch(constructor -> constructor.getGenericParameterTypes().length == 1 && constructor.getGenericParameterTypes()[0].equals(MessageCreateEvent.class)))
+                        classBound.put(newName.toLowerCase(Locale.ROOT), Class.forName("devarea.bot.commands.created." + newName).getConstructor(MessageCreateEvent.class));
+                    else
+                        System.err.println("Impossibilité de charger la commande : " + "devarea.bot.commands.created." + newName);
+
                 }
             }
 
@@ -136,12 +141,12 @@ public class CommandManager {
                     permissionSet = defaultCommand.getPermissions();
                 } catch (NoSuchMethodException e) {
                 }
-
                 if (permissionSet == null || containPerm(permissionSet, member.getBasePermissions().block())) {
-                    if (!actualCommands.containsKey(member.getId()) && command.getCommand() instanceof LongCommand) {
-                        actualCommands.put(member.getId(), (LongCommand) command.getCommand());
-                        return true;
+                    if (command.getCommand(false) instanceof LongCommand) {
+                        if (!actualCommands.containsKey(member.getId()))
+                            actualCommands.put(member.getId(), (LongCommand) command.getCommand(true));
                     }
+                    return true;
                 }
                 Command.sendError(command.channel, "Vous n'avez pas la permission d'éxécuter cette commande !");
             } catch (Exception e) {
@@ -190,6 +195,8 @@ public class CommandManager {
         synchronized (actualCommands) {
             if (actualCommands.containsValue(command))
                 actualCommands.remove(memberId);
+            if (command.hasBeenMultiplied())
+                actualCommands.values().removeIf(e -> e.equals(command));
         }
     }
 
@@ -217,12 +224,27 @@ public class CommandManager {
         }
     }
 
-    public static boolean containPerm(PermissionSet haveIn, PermissionSet in) {
+    public static LongCommand getCommandOf(Snowflake id) {
+        return actualCommands.get(id);
+    }
+
+    public static void bindMemberToMember(final Snowflake idOut, final Snowflake idIn) {
+        actualCommands.put(idOut, getCommandOf(idIn));
+        getCommandOf(idIn).setHasBeenMultiplied(true);
+    }
+
+    public static void unbindMemberToMember(final Snowflake idOut) {
+        if (!getCommandOf(idOut).member.getId().equals(idOut))
+            actualCommands.remove(idOut);
+        else
+            getCommandOf(idOut).sendError("Vous ne pouvez pas quitter cette mission !");
+    }
+
+    public static boolean containPerm(PermissionSet permissionToBeIn, PermissionSet PermissionsContainers) {
         AtomicBoolean atReturn = new AtomicBoolean(true);
-        haveIn.stream().iterator().forEachRemaining(permission -> {
-            System.out.println("Try to find perm : " + permission.toString());
+        permissionToBeIn.stream().iterator().forEachRemaining(permission -> {
             AtomicBoolean haveFind = new AtomicBoolean(false);
-            in.stream().iterator().forEachRemaining(permission1 -> {
+            PermissionsContainers.stream().iterator().forEachRemaining(permission1 -> {
                 if (permission.equals(permission1))
                     haveFind.set(true);
             });

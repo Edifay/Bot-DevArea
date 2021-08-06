@@ -130,9 +130,7 @@ public class UserInfo {
     @JsonIgnore
     private boolean fetch() {
         this.isMember = ControllerOAuth2.isMember(this.id);
-        System.out.println("Fetch is member ! " + this.id + " isMember : " + this.isMember);
         if (this.isMember) {
-            System.out.println("Member fetched with bot !");
             Member member = Init.devarea.getMemberById(getAsSnowflake()).block();
 
             this.setId(member.getId().asString());
@@ -146,7 +144,6 @@ public class UserInfo {
 
             return true;
         } else if (builder != null) {
-            System.out.println("Fetched with builder !");
             User user = builder.getUser();
 
             this.setId(user.getId());

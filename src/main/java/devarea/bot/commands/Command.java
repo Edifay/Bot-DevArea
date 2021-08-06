@@ -23,6 +23,8 @@ public abstract class Command {
     protected final Member member;
     protected TextChannel channel;
 
+    protected boolean hasBeenMultiplied = false;
+
     public Command() {
         this.member = null;
     }
@@ -124,7 +126,8 @@ public abstract class Command {
                     channel.createMessage(spec).subscribe();
                     return null;
                 }
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
                 throw new Exception("Message is more than 2000 character !");
             }
         } catch (Exception e) {
@@ -178,5 +181,19 @@ public abstract class Command {
         return send(channel, msg -> msg.setEmbed(spec), block);
     }
 
+    public static Snowflake getMention(final MessageCreateEvent event) {
+        return event.getMessage().getUserMentionIds().toArray(new Snowflake[0])[0];
+    }
 
+    public void setHasBeenMultiplied(boolean hasBeenMultiplied) {
+        this.hasBeenMultiplied = hasBeenMultiplied;
+    }
+
+    public boolean hasBeenMultiplied() {
+        return hasBeenMultiplied;
+    }
+
+    public Member getMember() {
+        return member;
+    }
 }

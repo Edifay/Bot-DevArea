@@ -113,7 +113,6 @@ public class OAuthBuilder {
 
         try {
             String json = Post.get(client, BASEURI + MEURI, access_token);
-            System.out.println("Get after request : " + json);
             JSONObject js = new JSONObject(json);
             try {
                 user.setId(js.getString("id"));

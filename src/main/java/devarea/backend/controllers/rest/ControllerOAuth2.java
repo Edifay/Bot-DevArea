@@ -43,9 +43,7 @@ public class ControllerOAuth2 {
     @GetMapping("/auth/get")
     public UserInfo get(@RequestParam(value = "code") final String code, @RequestParam(value = "force", required = false, defaultValue = "false") final String force) throws IOException {
         if (builders.containsKey(code)) {
-            System.out.println("This value is in !");
             boolean isFetch = builders.get(code).verifFetchNeeded(Boolean.parseBoolean(force));
-            System.out.println("is Fetch :" + isFetch);
             startAway(() -> {
                 try {
                     save();
@@ -87,7 +85,6 @@ public class ControllerOAuth2 {
                 return "ERROR IN LOGIN TO DISCORD";
 
             if (isAlreadyBind(builder.getIdUser())) {
-                System.out.println("Cet user est déjà link ! Destruction de ce lien !");
                 UserInfo userInfo = builders.get(getUserLink(builder.getIdUser()));
                 if (userInfo.getBuilder() == null) {
                     builder.enableAutoRefresh();

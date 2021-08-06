@@ -196,10 +196,8 @@ public class Edit extends LongCommand implements PermissionCommand {
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 try {
                     atModif = this.textChannel.getMessageById(Snowflake.of(event.getMessage().getContent())).block();
-                    if (atModif != null && atModif.getAuthor().get().getId().equals(Init.client.getSelfId())) {
-                        System.out.println("Message du bot !");
+                    if (atModif != null && atModif.getAuthor().get().getId().equals(Init.client.getSelfId()))
                         return callStape(0);
-                    }
                 } catch (Exception e) {
                 }
                 return super.onReceiveMessage(event);
