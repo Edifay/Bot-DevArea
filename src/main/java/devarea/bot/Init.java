@@ -153,7 +153,6 @@ public class Init {
             client.getEventDispatcher().on(ReactionRemoveEvent.class).subscribe(ReactionRemove::FunctionReactionRemoveEvent);
             client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(VoiceStateUpdate::VoiceStateUpdateFucntion);
 
-
         } catch (ParserConfigurationException | IOException e) {
             e.printStackTrace();
         }

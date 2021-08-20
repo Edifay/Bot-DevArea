@@ -8,6 +8,8 @@ import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 
+import static devarea.bot.event.FunctionEvent.startAway;
+
 public abstract class LongCommand extends Command {
 
     protected Message lastMessage;
@@ -61,19 +63,18 @@ public abstract class LongCommand extends Command {
         synchronized (this) {
             try {
                 if (!event.getMessage().getChannelId().equals(this.channel.getId())) {
-                    deletedEmbed((TextChannel) event.getMessage().getChannel().block(), embed -> {
+                    startAway(() -> deletedEmbed((TextChannel) event.getMessage().getChannel().block(), embed -> {
                         embed.setTitle("Error !");
                         embed.setDescription("Vous avez une commande en cour dans <#" + this.channel.getId().asString() + ">");
                         embed.setColor(ColorsUsed.wrong);
-                    });
+                    }));
                     delete(false, event.getMessage());
                     return;
                 }
                 if (event.getMessage().getContent().toLowerCase().startsWith("cancel") || event.getMessage().getContent().toLowerCase().startsWith("annuler"))
                     this.removeTrace();
-                else if (this.firstStape.receiveMessage(event)) {
+                else if (this.firstStape.receiveMessage(event))
                     this.endCommand();
-                }
                 delete(false, event.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -91,7 +92,11 @@ public abstract class LongCommand extends Command {
     protected Boolean endCommand() {
         if (this.isLocalChannel) {
             try {
-                this.channel.delete().subscribe();
+                this.channel.delete().subscribe(chanl ->{
+
+                }, error -> {
+                    System.err.println("ERROR: Le localChannel n'a pas pu être supprimé !");
+                });
             } catch (Exception e) {
             }
         }
@@ -100,13 +105,13 @@ public abstract class LongCommand extends Command {
 
     @Override
     protected boolean createLocalChannel(String name, Snowflake parentId) {
-        this.isLocalChannel = true;
-        return super.createLocalChannel(name, parentId);
+        this.isLocalChannel = super.createLocalChannel(name, parentId);
+        return this.isLocalChannel;
     }
 
     @Override
     protected boolean createLocalChannel(String name, Snowflake parentId, boolean canWrite) {
-        this.isLocalChannel = true;
-        return super.createLocalChannel(name, parentId, canWrite);
+        this.isLocalChannel = super.createLocalChannel(name, parentId, canWrite);
+        return this.isLocalChannel;
     }
 }

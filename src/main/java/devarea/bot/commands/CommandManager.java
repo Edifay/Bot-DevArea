@@ -142,10 +142,9 @@ public class CommandManager {
                 } catch (NoSuchMethodException e) {
                 }
                 if (permissionSet == null || containPerm(permissionSet, member.getBasePermissions().block())) {
-                    if (command.getCommand(false) instanceof LongCommand) {
-                        if (!actualCommands.containsKey(member.getId()))
+                    if (!actualCommands.containsKey(member.getId()))
+                        if (command.getCommand(false) instanceof LongCommand)
                             actualCommands.put(member.getId(), (LongCommand) command.getCommand(true));
-                    }
                     return true;
                 }
                 Command.sendError(command.channel, "Vous n'avez pas la permission d'éxécuter cette commande !");
@@ -156,10 +155,13 @@ public class CommandManager {
         }
     }
 
-    public static void react(ReactionAddEvent event) {
+    public static boolean react(ReactionAddEvent event) {
         synchronized (actualCommands) {
-            if (actualCommands.containsKey(event.getUserId()))
+            if (actualCommands.containsKey(event.getUserId())) {
                 actualCommands.get(event.getUserId()).nextStape(event);
+                return true;
+            }
+            return false;
         }
     }
 

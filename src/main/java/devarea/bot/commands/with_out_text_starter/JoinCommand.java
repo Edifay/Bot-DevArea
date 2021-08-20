@@ -66,7 +66,9 @@ public class JoinCommand extends LongCommand {
                         endCommand();
 
                         try {
-                            startAway(() -> member.getPrivateChannel().block().createEmbed(TextMessage.helpEmbed).subscribe());
+                            startAway(() -> member.getPrivateChannel().block().createEmbed(TextMessage.helpEmbed).subscribe(msg -> {
+                            }, error -> {
+                            }));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

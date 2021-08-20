@@ -144,6 +144,7 @@ public class CreateMission extends LongCommand {
                 return callStape(0);
             }
         };
+        this.lastMessage = this.firstStape.getMessage();
     }
 
 }

@@ -69,7 +69,7 @@ public class FreeLanceManager {
         message.addReaction(ReactionEmoji.custom(Init.idYes)).subscribe();
     }
 
-    public static void react(ReactionAddEvent event) {
+    public static boolean react(ReactionAddEvent event) {
         if (event.getMessageId().equals(message.getId())) {
             startAway(() -> event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).subscribe());
 
@@ -83,8 +83,9 @@ public class FreeLanceManager {
                     });
                 else
                     Command.sendError((TextChannel) event.getChannel().block(), "Vous avez déjà une page FreeLance utilisez la commande `//freelance` pour effectuer des modifications.");
-
+            return true;
         }
+        return false;
     }
 
     public static boolean hasFreelance(String id) {

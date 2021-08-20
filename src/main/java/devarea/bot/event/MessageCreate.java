@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import static devarea.bot.data.TextMessage.messageDisableInPrivate;
+import static devarea.bot.event.FunctionEvent.startAway;
 
 public class MessageCreate {
 
@@ -42,10 +43,9 @@ public class MessageCreate {
                 embed.setFooter(date.format(now) + " at " + hours.format(now) + ".", message.getMessage().getAuthor().get().getAvatarUrl());
             })).subscribe();
 
-            XpCount.onMessage(message);
-            if (!message.getMessage().getContent().toLowerCase(Locale.ROOT).startsWith("//admin"))
-                if (CommandManager.receiveMessage(message))
-                    return;
+            startAway(() -> XpCount.onMessage(message));
+            if (CommandManager.receiveMessage(message) && !message.getMessage().getContent().toLowerCase(Locale.ROOT).startsWith("//admin"))
+                return;
 
             if (message.getMessage().getContent().startsWith(Init.prefix))
                 CommandManager.exe(message.getMessage().getContent().substring(Init.prefix.length()).split(" ")[0], message);

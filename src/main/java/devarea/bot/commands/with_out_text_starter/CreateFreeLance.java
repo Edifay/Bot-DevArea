@@ -43,7 +43,7 @@ public class CreateFreeLance extends LongCommand {
                 });
                 messageAtEdit.edit(messageEditSpec -> {
                     messageEditSpec.setEmbed(freeLance.getEmbed());
-                }).block();
+                }).subscribe();
                 return false;
             }
 
@@ -106,7 +106,7 @@ public class CreateFreeLance extends LongCommand {
                     }
                     embed.addField(actualFied.getTitle(), actualFied.getValue(), actualFied.getInline());
                     embed.setColor(ColorsUsed.same);
-                })).block();
+                })).subscribe();
                 return false;
             }
 
@@ -370,7 +370,7 @@ public class CreateFreeLance extends LongCommand {
                         embed.addField("Les offres", "Vous pouvez ajouter le nombre d'offre que vous souhaitez", false);
                         embed.addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre...", false);
                         embed.setColor(ColorsUsed.same);
-                    })).block();
+                    })).subscribe();
                     return callStape(0);
                 }
 

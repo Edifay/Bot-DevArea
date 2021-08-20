@@ -56,7 +56,7 @@ public class MissionsManager {
         messsage.addReaction(ReactionEmoji.custom(Init.idYes)).subscribe();
     }
 
-    public static void react(ReactionAddEvent event) {
+    public static boolean react(ReactionAddEvent event) {
         if (event.getMessageId().equals(messsage.getId())) {
             startAway(() -> event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).subscribe());
 
@@ -67,8 +67,9 @@ public class MissionsManager {
                         return new CreateMission(event);
                     }
                 });
-
+            return true;
         }
+        return false;
     }
 
     public static void stop() {

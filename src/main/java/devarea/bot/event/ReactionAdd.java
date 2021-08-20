@@ -9,7 +9,6 @@ import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
 
 import static devarea.bot.data.TextMessage.messageDisableInPrivate;
-import static devarea.bot.event.FunctionEvent.startAway;
 
 public class ReactionAdd {
 
@@ -21,18 +20,12 @@ public class ReactionAdd {
                 return;
             }
 
-            if (event.getMember().get().isBot())
+            if (event.getMember().get().isBot() || RolesReacts.onReact(event))
                 return;
 
-            if (RolesReacts.onReact(event))
+            if (CommandManager.react(event) || MissionsManager.react(event) || FreeLanceManager.react(event) || MeetupManager.getEvent(event))
                 return;
 
-
-            startAway(() -> CommandManager.react(event));
-
-            MeetupManager.getEvent(event);
-            MissionsManager.react(event);
-            FreeLanceManager.react(event);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -96,7 +96,7 @@ public class MeetupManager {
         message.addReaction(ReactionEmoji.custom(Init.idYes)).subscribe();
     }
 
-    public static void getEvent(ReactionAddEvent event) {
+    public static boolean getEvent(ReactionAddEvent event) {
         for (Map.Entry<Message, MeetupStock> entry : messageBoundToMeetup.entrySet()) {
             Message message = entry.getKey();
             MeetupStock meetup = entry.getValue();
@@ -128,8 +128,10 @@ public class MeetupManager {
                     messageBoundToMeetup.remove(message);
                 }
                 Command.delete(false, message);
+                return true;
             }
         }
+        return false;
     }
 
     public static List<MeetupStock> getMeetupsFrom(Snowflake memberID) {
