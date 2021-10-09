@@ -138,16 +138,12 @@ public class Init {
             final Snowflake finalIdLogChannel = idLogChannel;
             final Snowflake finalIdJoinLogChannel = idJoinLogChannel;
             assert client != null;
+
             client.getEventDispatcher().on(ReadyEvent.class).subscribe(event -> Ready.readyEventFonction(finalIdDevArea, finalIdLogChannel));
-
             client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(MessageCreate::messageCreateFunction);
-
             client.getEventDispatcher().on(MessageUpdateEvent.class).subscribe(MessageUpdate::messageUpdateFunction);
-
             client.getEventDispatcher().on(MessageDeleteEvent.class).subscribe(MessageDelete::messageDeleteFunction);
-
             client.getEventDispatcher().on(MemberJoinEvent.class).subscribe(memberJoinEvent -> MemberJoin.memberJoinFunction(finalIdDevArea, finalIdJoinLogChannel, memberJoinEvent));
-
             client.getEventDispatcher().on(MemberLeaveEvent.class).subscribe(memberLeaveEvent -> MemberLeave.memberLeaveFunction(finalIdDevArea, finalIdJoinLogChannel, memberLeaveEvent));
             client.getEventDispatcher().on(ReactionAddEvent.class).subscribe(ReactionAdd::reactionAddFunction);
             client.getEventDispatcher().on(ReactionRemoveEvent.class).subscribe(ReactionRemove::FunctionReactionRemoveEvent);

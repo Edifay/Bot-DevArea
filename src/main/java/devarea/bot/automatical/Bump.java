@@ -65,7 +65,7 @@ public class Bump {
                 embed.setDescription("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes.");
                 embed.setColor(ColorsUsed.wrong);
             }));
-        } else if (event.getMessage().getEmbeds().get(0).getDescription().get().contains("effectué")) {
+        } else if (event.getMessage().getEmbeds().get(0).getDescription().get().contains("effectué") || event.getMessage().getEmbeds().get(0).getDescription().get().contains("done!")) {
             dateToBump = System.currentTimeMillis() + (120 * 60000L);
             replace(msg -> msg.setEmbed(embed -> {
                 embed.setDescription("Le bump est à nouveau disponible dans " + 120 + "minutes.");
