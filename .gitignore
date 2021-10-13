@@ -20,3 +20,7 @@ github.token
 *.jar
 xp.json
 auth.json
+BotDevArea/data/reseau.json
+BotDevArea/meetup.devarea
+BotDevArea/xpLeft.json
+BotDevArea/data/staff.json

@@ -29,18 +29,16 @@ public class GithubEvent {
             new Thread(() -> {
                 try {
                     while (true) {
-                        try {
-                            Thread.sleep(10000);
-                            int actualNumber = repo.listCommits().toList().size();
-                            if (actualNumber != number) {
-                                emit(repo.listCommits().toList().get(0));
-                                number = actualNumber;
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        int actualNumber = repo.listCommits().toList().size();
+                        if (actualNumber != number) {
+                            emit(repo.listCommits().toList().get(0));
+                            number = actualNumber;
                         }
+                        Thread.sleep(10000);
                     }
                 } catch (InterruptedException e) {
+                } catch (IOException e) {
+                    ((TextChannel) Init.devarea.getChannelById(Snowflake.of("777832756318044161")).block()).createMessage("L'update de github n'est plus en marche !").block();
                 }
             }).start();
         } catch (Exception e) {

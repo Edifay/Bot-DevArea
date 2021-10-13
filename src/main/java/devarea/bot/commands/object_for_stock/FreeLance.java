@@ -93,7 +93,7 @@ public class FreeLance {
             for (int i = 0; i < this.getFieldNumber(); i++) {
                 embed.addField(this.getField(i).getTitle(), this.getField(i).getValue(), this.getField(i).getInline());
             }
-            embed.addField("Contact", "Pour contacter le freelancer voici son tag : " + Init.devarea.getMemberById(Snowflake.of(this.memberId)).block().getTag() + ", utilisez directement ça mention : <@" + this.memberId + ">", false);
+            embed.addField("Contact", "Pour contacter le freelancer voici son tag : " + Init.devarea.getMemberById(Snowflake.of(this.memberId)).block().getTag() + ", utilisez directement sa mention : <@" + this.memberId + ">", false);
             embed.setColor(ColorsUsed.same);
         };
     }
