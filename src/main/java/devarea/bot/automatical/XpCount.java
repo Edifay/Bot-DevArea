@@ -8,6 +8,7 @@ import devarea.bot.commands.Command;
 import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.VoiceState;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.channel.TextChannel;
 
@@ -16,6 +17,8 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static devarea.bot.event.FunctionEvent.startAway;
 
 public class XpCount {
 
@@ -54,6 +57,20 @@ public class XpCount {
                     save();
                 }
             } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        new Thread(() -> {
+            try {
+                while (true) {
+                    Thread.sleep(60000);
+                    List<VoiceState> states = Init.devarea.getVoiceStates().buffer().blockLast();
+                    for (VoiceState voice : states)
+                        addMember(voice.getMember().block(), false);
+                }
+            } catch (Exception e) {
+
             }
         }).start();
     }
@@ -95,32 +112,46 @@ public class XpCount {
     }
 
     public synchronized static void onMessage(MessageCreateEvent event) {
-        Member member = event.getMember().get();
-        if (!already.contains(member.getId())) {
+        addMember(event.getMember().get());
+    }
+
+    public synchronized static void addMember(Member member) {
+        addMember(member, true);
+    }
+
+    public synchronized static void addMember(Member member, boolean withTimer) {
+        if (!withTimer || !already.contains(member.getId())) {
             if (xp.containsKey(member.getId())) {
                 if (XpCount.getLevelForXp(xp.get(member.getId())) < XpCount.getLevelForXp(xp.get(member.getId()) + 1)) {
-                    Command.send((TextChannel) Init.devarea.getChannelById(Init.idCommands).block(), messageCreateSpec -> {
-                        messageCreateSpec.setContent("<@" + member.getId().asString() + ">");
-                        messageCreateSpec.setEmbed(embedCreateSpec -> {
-                            embedCreateSpec.setDescription("Bien joué <@" + member.getId().asString() + ">, tu es passé niveau " + XpCount.getLevelForXp(xp.get(member.getId()) + 1) + " !");
-                            embedCreateSpec.setTimestamp(Instant.now());
-                            embedCreateSpec.setColor(ColorsUsed.same);
-                        });
-                    }, false);
+                    startAway(() -> {
+                        Command.send((TextChannel) Init.devarea.getChannelById(Init.idCommands).block(), messageCreateSpec -> {
+                            messageCreateSpec.setContent("<@" + member.getId().asString() + ">");
+                            messageCreateSpec.setEmbed(embedCreateSpec -> {
+                                embedCreateSpec.setDescription("Bien joué <@" + member.getId().asString() + ">, tu es passé niveau " + XpCount.getLevelForXp(xp.get(member.getId()) + 1) + " !");
+                                embedCreateSpec.setTimestamp(Instant.now());
+                                embedCreateSpec.setColor(ColorsUsed.same);
+                            });
+                        }, false);
+                    });
                 }
                 xp.put(member.getId(), xp.get(member.getId()) + 1);
                 xp = sortByValue(xp);
             } else {
                 xp.put(member.getId(), 1);
             }
-            already.add(member.getId());
-            new Thread(() -> {
-                try {
-                    Thread.sleep(6000);
-                } catch (InterruptedException e) {
-                }
-                already.remove(member.getId());
-            }).start();
+            if (withTimer) {
+                System.out.println("With timer !");
+                already.add(member.getId());
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(6000);
+                    } catch (InterruptedException e) {
+                    }
+                    removeSafely(member);
+                }).start();
+            } else {
+                System.out.println("No timer !");
+            }
         }
     }
 
@@ -233,6 +264,10 @@ public class XpCount {
 
     public static synchronized void stop() {
         save();
+    }
+
+    public static synchronized void removeSafely(Member member) {
+        already.remove(member.getId());
     }
 
 }
