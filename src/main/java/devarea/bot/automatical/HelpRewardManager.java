@@ -1,0 +1,102 @@
+package devarea.bot.automatical;
+
+import devarea.bot.Init;
+import devarea.bot.commands.Command;
+import devarea.bot.commands.CommandManager;
+import devarea.bot.commands.ConsumableCommand;
+import devarea.bot.commands.created.GiveHelpReward;
+import devarea.bot.commands.object_for_stock.HelpReward;
+import devarea.bot.utils.MemberUtil;
+import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.Embed;
+import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.reaction.ReactionEmoji;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
+import java.util.ArrayList;
+import java.util.List;
+
+public class HelpRewardManager {
+
+    private static final TemporalAmount limitTime = Duration.ofHours(2);
+    private static final ArrayList<HelpReward> helpRewards = new ArrayList<>();
+
+    public static boolean react(ReactionAddEvent event) {
+        final Message message = event.getMessage().block();
+
+        if(message == null || message.getEmbeds().isEmpty()) return false;
+
+        final Embed embed = message.getEmbeds().get(0);
+
+        if(embed.getDescription().isEmpty()) return false;
+
+        final String description = embed.getDescription().get();
+        final String pattern1 = " vous pourriez offrir une récompense à ";
+        final String pattern2 = " pour son aide.";
+
+        if(!description.contains(pattern1) || !description.contains(pattern2)) return false;
+
+        final String[] members = description
+                .replace(pattern1, "-")
+                .replace(pattern2, "")
+                .split("-");
+
+        System.out.println(members[0]);
+
+        final Member target = Init.devarea.getMemberById(MemberUtil.getSnowflakeByMentionText(members[0])).block();
+        final Member helper = Init.devarea.getMemberById(MemberUtil.getSnowflakeByMentionText(members[1])).block();
+
+        if(!event.getMember().get().equals(target)) {
+            message.removeReaction(event.getEmoji(), event.getUserId()).block();
+            return false;
+        }
+
+        if (!event.getEmoji().equals(ReactionEmoji.custom(Init.idYes))) return false;
+
+        CommandManager.addManualCommand(target, new ConsumableCommand((TextChannel) event.getChannel().block(), GiveHelpReward.class) {
+            @Override
+            protected Command command() {
+                return new GiveHelpReward(event, target, helper);
+            }
+        });
+
+        return true;
+    }
+
+    public static void addHelpReward(HelpReward helpReward) {
+        helpRewards.add(helpReward);
+    }
+
+    public static void removeHelpReward(HelpReward helpReward) {
+        helpRewards.remove(helpReward);
+    }
+
+    public static List<HelpReward> findHelpRewardsByMember(Member member) {
+        List<HelpReward> findRewards = new ArrayList<>();
+        List<HelpReward> deleteRewards = new ArrayList<>();
+        for(final HelpReward reward : helpRewards) {
+            if(reward.getDateTime().plus(limitTime).isBefore(LocalDateTime.now())) {
+                deleteRewards.add(reward);
+                continue;
+            }
+
+            if(reward.getMemberId().equals(member.getId().asString())
+                    || reward.getHelpersIds().contains(member.getId().asString())) {
+                findRewards.add(reward);
+            }
+        }
+
+        helpRewards.removeAll(deleteRewards);
+
+        return findRewards;
+    }
+
+    public static boolean canSendHelpRewardByMember(Member member) {
+        return findHelpRewardsByMember(member).isEmpty();
+    }
+
+}
