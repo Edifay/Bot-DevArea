@@ -14,8 +14,8 @@ import discord4j.core.object.reaction.ReactionEmoji;
 import java.util.Set;
 
 
-public class RequestHelpReward extends ShortCommand {
-    public RequestHelpReward(final MessageCreateEvent event) {
+public class AskReward extends ShortCommand {
+    public AskReward(final MessageCreateEvent event) {
         super(event);
 
         final Message message = event.getMessage();

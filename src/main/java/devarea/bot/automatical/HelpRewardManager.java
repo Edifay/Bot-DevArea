@@ -4,7 +4,7 @@ import devarea.bot.Init;
 import devarea.bot.commands.Command;
 import devarea.bot.commands.CommandManager;
 import devarea.bot.commands.ConsumableCommand;
-import devarea.bot.commands.created.GiveHelpReward;
+import devarea.bot.commands.created.GiveReward;
 import devarea.bot.commands.object_for_stock.HelpReward;
 import devarea.bot.utils.MemberUtil;
 import discord4j.core.event.domain.message.ReactionAddEvent;
@@ -57,10 +57,10 @@ public class HelpRewardManager {
 
         if (!event.getEmoji().equals(ReactionEmoji.custom(Init.idYes))) return false;
 
-        CommandManager.addManualCommand(target, new ConsumableCommand((TextChannel) event.getChannel().block(), GiveHelpReward.class) {
+        CommandManager.addManualCommand(target, new ConsumableCommand((TextChannel) event.getChannel().block(), GiveReward.class) {
             @Override
             protected Command command() {
-                return new GiveHelpReward(event, target, helper);
+                return new GiveReward(event, target, helper);
             }
         });
 

@@ -25,11 +25,11 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 //TODO Revoir tous les messages pour que ce soit clair
-public class GiveHelpReward extends LongCommand {
+public class GiveReward extends LongCommand {
 
     final List<Snowflake> helpers = new ArrayList<>();
 
-    public GiveHelpReward(MessageCreateEvent event) {
+    public GiveReward(MessageCreateEvent event) {
         super(event.getMessage().getAuthorAsMember().block());
 
         final Member author = event.getMember().get();
@@ -46,7 +46,7 @@ public class GiveHelpReward extends LongCommand {
         this.lastMessage = firstStape.getMessage();
     }
 
-    public GiveHelpReward(ReactionAddEvent event, Member target, Member helper) {
+    public GiveReward(ReactionAddEvent event, Member target, Member helper) {
         super(target);
         final EndStape endStape = getEndStape(target);
         final Stape selectionStage = getSelectionHelpersStape(helper, endStape);

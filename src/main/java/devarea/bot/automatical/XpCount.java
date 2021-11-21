@@ -162,8 +162,6 @@ public class XpCount {
         if(xp.containsKey(memberId)) {
            final Integer memberXp = getXpOf(memberId);
            xp.put(memberId, memberXp + value);
-           save();
-           saveLeft();
         }
     }
 
@@ -174,8 +172,6 @@ public class XpCount {
         if(xp.containsKey(memberId)) {
             final Integer memberXp = getXpOf(memberId);
             xp.replace(memberId, memberXp, memberXp - value);
-            save();
-            saveLeft();
         }
     }
 
