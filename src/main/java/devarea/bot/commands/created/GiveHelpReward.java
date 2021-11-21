@@ -2,6 +2,7 @@ package devarea.bot.commands.created;
 
 import devarea.bot.Init;
 import devarea.bot.automatical.HelpRewardManager;
+import devarea.bot.automatical.XpCount;
 import devarea.bot.commands.EndStape;
 import devarea.bot.commands.FirstStape;
 import devarea.bot.commands.LongCommand;
@@ -15,6 +16,7 @@ import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.MessageCreateSpec;
 
 import java.util.ArrayList;
@@ -53,7 +55,7 @@ public class GiveHelpReward extends LongCommand {
 
 
         event.getMessage().block().delete().block();
-        this.firstStape = getReactionAddEventFirstStape(event, endStape, selectionStage);
+        this.firstStape = getReactionAddEventFirstStape(event, helper, endStape, selectionStage);
         this.lastMessage = firstStape.getMessage();
     }
 
@@ -63,7 +65,8 @@ public class GiveHelpReward extends LongCommand {
             @Override
             public void onFirstCall(Consumer<? super MessageCreateSpec> spec) {
                 super.onFirstCall(msg -> msg.setEmbed(embed -> {
-                    embed.setTitle("Veuillez mentionner les personnes qui vous ont aidé.");
+                    embed.setTitle("Qui vous a aidé à résoudre votre problème ?");
+                    embed.setDescription("Veuillez mentionner les personnes dans votre prochain message.");
                     embed.setColor(ColorsUsed.same);
                 }));
             }
@@ -85,7 +88,6 @@ public class GiveHelpReward extends LongCommand {
                     return false;
                 }
 
-                //TODO pouvoir annuler la commande
                 for(final Snowflake mention : mentions) {
 
                     final Member mentionedMember = Init.devarea.getMemberById(mention).block();
@@ -113,13 +115,20 @@ public class GiveHelpReward extends LongCommand {
 
     }
 
-    private FirstStape getReactionAddEventFirstStape(ReactionAddEvent event, Stape... stapes) {
+    private FirstStape getReactionAddEventFirstStape(ReactionAddEvent event, Member helper, Stape... stapes) {
         return new FirstStape(channel, stapes) {
             @Override
             public void onFirstCall(Consumer<? super MessageCreateSpec> spec) {
                 super.onFirstCall(msg -> {
                     msg.setEmbed(embed -> {
-                        embed.setTitle("Souhaitez-vous ajouter des personnes qui vous ont aidé ?");
+
+                        final String descriptionText = "%s, mettez <:ayy:%s> si vous désirez uniquement récompenser %s.";
+                        final String authorText = MemberUtil.getMentionTextByMember(member);
+                        final String mentionText = MemberUtil.getMentionTextByMember(helper);
+                        embed.setTitle("Souhaitez-vous récompenser des personnes en plus ?");
+                        embed.setDescription("Veuillez mentionner les personnes dans votre prochain message.");
+                        embed.setDescription(String.format(descriptionText, authorText,ReactionEmoji.custom(Init.idNo).getId().asString(), mentionText));
+
                         embed.setColor(ColorsUsed.just);
                     });
                 });
@@ -140,6 +149,7 @@ public class GiveHelpReward extends LongCommand {
 
                 if(stapeIndex > -1) {
                     this.removeAllEmoji();
+                    helpers.add(helper.getId());
                     return callStape(stapeIndex);
                 }
 
@@ -154,22 +164,28 @@ public class GiveHelpReward extends LongCommand {
             protected boolean onCall(Message message) {
 
                 List<String> tmpList = new ArrayList<>();
+                String tmpStr = "";
 
                 for(final Snowflake helper : helpers) {
+                    XpCount.addXp(Init.devarea.getMemberById(helper).block(), 50);
                     tmpList.add(helper.asString());
+                    tmpStr += MemberUtil.getMentionTextBySnowflake(helper) + " ";
                 }
+
+                XpCount.removeXp(member, 10);
 
                 HelpRewardManager.addHelpReward(new HelpReward(member.getId().asString(), tmpList));
 
+                final String helpersText = tmpStr;
                 final String authorMentionText = MemberUtil.getMentionTextByMember(member);
                 final String description = helpers.size() > 1
-                        ? "%s a récompensé les personnes qui l'ont aidé."
-                        : "%s a récompensé la personne qui l'a aidé.";
+                        ? "%s a récompensé %s qui l'ont aidé."
+                        : "%s a récompensé %s qui l'a aidé.";
 
                 setMessage(spec -> {
                     spec.setEmbed(embed -> {
                         embed.setTitle("Dev'Area est heureux d'avoir pu servir à résoudre votre problème !");
-                        embed.setDescription(String.format(description, authorMentionText));
+                        embed.setDescription(String.format(description, authorMentionText, helpersText));
                         embed.setColor(ColorsUsed.just);
                     });
                 });
@@ -181,16 +197,17 @@ public class GiveHelpReward extends LongCommand {
 
     private Stape getSelectionHelpersStape(Member helper, Stape... stapes) {
 
-        final String mentionText = MemberUtil.getMentionTextByMember(helper);
-
         return new Stape(stapes) {
 
             @Override
             protected boolean onCall(Message message) {
                 this.setMessage(spec -> {
                     spec.setEmbed(embed -> {
+                        final String mentionText = MemberUtil.getMentionTextByMember(helper);
+                        final String authorText = MemberUtil.getMentionTextByMember(member);
+
                         embed.setTitle("Veuillez mentionner les personnes à ajouter");
-                        embed.setDescription("Inutile de selectionner à nouveau " + mentionText);
+                        embed.setDescription(authorText + ", inutile de selectionner à nouveau " + mentionText);
                         embed.setColor(ColorsUsed.same);
                     });
                 });
@@ -202,7 +219,7 @@ public class GiveHelpReward extends LongCommand {
             public boolean receiveMessage(MessageCreateEvent event) {
                 final Message message = event.getMessage();
                 final Set<Snowflake> mentions = message.getUserMentionIds();
-                if(mentions.isEmpty()) {
+                if(mentions.isEmpty() || mentions.contains(helper.getId())) {
                     return super.receiveMessage(event);
                 }
 
@@ -214,7 +231,6 @@ public class GiveHelpReward extends LongCommand {
                     return false;
                 }
 
-                //TODO pouvoir annuler la commande
                 for(final Snowflake mention : mentions) {
 
                     final Member mentionedMember = Init.devarea.getMemberById(mention).block();

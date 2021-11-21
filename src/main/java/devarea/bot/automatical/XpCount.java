@@ -155,6 +155,30 @@ public class XpCount {
         }
     }
 
+    public synchronized static void addXp(Member member, Integer value) {
+
+        final Snowflake memberId = member.getId();
+
+        if(xp.containsKey(memberId)) {
+           final Integer memberXp = getXpOf(memberId);
+           xp.put(memberId, memberXp + value);
+           save();
+           saveLeft();
+        }
+    }
+
+    public synchronized static void removeXp(Member member, Integer value) {
+
+        final Snowflake memberId = member.getId();
+
+        if(xp.containsKey(memberId)) {
+            final Integer memberXp = getXpOf(memberId);
+            xp.replace(memberId, memberXp, memberXp - value);
+            save();
+            saveLeft();
+        }
+    }
+
     public synchronized static Integer getXpOf(Snowflake id) {
         return xp.get(id);
     }
