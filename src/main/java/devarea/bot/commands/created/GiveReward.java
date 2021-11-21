@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-//TODO Revoir tous les messages pour que ce soit clair
 public class GiveReward extends LongCommand {
 
     final List<Snowflake> helpers = new ArrayList<>();
@@ -167,7 +166,7 @@ public class GiveReward extends LongCommand {
                 String tmpStr = "";
 
                 for(final Snowflake helper : helpers) {
-                    XpCount.addXp(Init.devarea.getMemberById(helper).block(), 50);
+                    XpCount.addXp(Init.devarea.getMemberById(helper).block(), 50 / helpers.size());
                     tmpList.add(helper.asString());
                     tmpStr += MemberUtil.getMentionTextBySnowflake(helper) + " ";
                 }
