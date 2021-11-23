@@ -35,7 +35,7 @@ public class GiveReward extends LongCommand {
         channel = (TextChannel) event.getMessage().getChannel().block();
         assert channel != null;
 
-        if(!channel.getName().contains("entraide")) {
+        if (!channel.getName().contains("entraide")) {
             this.sendError("Vous ne pouvez utiliser cette commande que dans les channels d'entraide");
             this.endCommand();
             return;
@@ -75,11 +75,11 @@ public class GiveReward extends LongCommand {
                 final Message message = event.getMessage();
                 final Set<Snowflake> mentions = message.getUserMentionIds();
 
-                if(mentions.isEmpty()) {
+                if (mentions.isEmpty()) {
                     return super.receiveMessage(event);
                 }
 
-                if(!HelpRewardManager.canSendHelpRewardByMember(member)) {
+                if (!HelpRewardManager.canSendHelpRewardByMember(member)) {
                     sendError(
                             "Vous avez déjà récompensé cette personne ou" +
                                     " il vous a déjà récompensé il y'a moins de deux heures"
@@ -87,7 +87,7 @@ public class GiveReward extends LongCommand {
                     return false;
                 }
 
-                for(final Snowflake mention : mentions) {
+                for (final Snowflake mention : mentions) {
 
                     final Member mentionedMember = Init.devarea.getMemberById(mention).block();
                     assert mentionedMember != null;
@@ -97,9 +97,9 @@ public class GiveReward extends LongCommand {
                         return false;
                     }
 
-                    if(!HelpRewardManager.canSendHelpRewardByMember(mentionedMember)) {
+                    if (!HelpRewardManager.canSendHelpRewardByMember(mentionedMember)) {
                         sendError(
-                                "Vous avez déjà récompensé cette personne ou" +
+                                "Vous avez déjà récompensé <@" + mentionedMember.getId().asString() + "> ou" +
                                         " il vous a déjà récompensé il y'a moins de deux heures"
                         );
                         return false;
@@ -126,7 +126,7 @@ public class GiveReward extends LongCommand {
                         final String mentionText = MemberUtil.getMentionTextByMember(helper);
                         embed.setTitle("Souhaitez-vous récompenser des personnes en plus ?");
                         embed.setDescription("Veuillez mentionner les personnes dans votre prochain message.");
-                        embed.setDescription(String.format(descriptionText, authorText,ReactionEmoji.custom(Init.idNo).getId().asString(), mentionText));
+                        embed.setDescription(String.format(descriptionText, authorText, ReactionEmoji.custom(Init.idNo).getId().asString(), mentionText));
 
                         embed.setColor(ColorsUsed.just);
                     });
@@ -139,14 +139,14 @@ public class GiveReward extends LongCommand {
             @Override
             public boolean receiveReact(ReactionAddEvent event) {
 
-                if(!event.getMember().get().equals(member))
+                if (!event.getMember().get().equals(member))
                     event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).block();
 
                 int stapeIndex = -1;
                 if (isYes(event)) stapeIndex = 1;
                 if (isNo(event)) stapeIndex = 0;
 
-                if(stapeIndex > -1) {
+                if (stapeIndex > -1) {
                     this.removeAllEmoji();
                     helpers.add(helper.getId());
                     return callStape(stapeIndex);
@@ -165,7 +165,7 @@ public class GiveReward extends LongCommand {
                 List<String> tmpList = new ArrayList<>();
                 String tmpStr = "";
 
-                for(final Snowflake helper : helpers) {
+                for (final Snowflake helper : helpers) {
                     XpCount.addXp(Init.devarea.getMemberById(helper).block(), 50 / helpers.size());
                     tmpList.add(helper.asString());
                     tmpStr += MemberUtil.getMentionTextBySnowflake(helper) + " ";
@@ -178,8 +178,8 @@ public class GiveReward extends LongCommand {
                 final String helpersText = tmpStr;
                 final String authorMentionText = MemberUtil.getMentionTextByMember(member);
                 final String description = helpers.size() > 1
-                        ? "%s a récompensé %s qui l'ont aidé."
-                        : "%s a récompensé %s qui l'a aidé.";
+                        ? "%s a récompensé %s qui l'ont aidé. Ils ont reçu " + (50 / helpers.size()) + " xp !"
+                        : "%s a récompensé %s qui l'a aidé. Il a reçu 50 xp !";
 
                 setMessage(spec -> {
                     spec.setEmbed(embed -> {
@@ -218,11 +218,11 @@ public class GiveReward extends LongCommand {
             public boolean receiveMessage(MessageCreateEvent event) {
                 final Message message = event.getMessage();
                 final Set<Snowflake> mentions = message.getUserMentionIds();
-                if(mentions.isEmpty() || mentions.contains(helper.getId())) {
+                if (mentions.isEmpty() || mentions.contains(helper.getId())) {
                     return super.receiveMessage(event);
                 }
 
-                if(!HelpRewardManager.canSendHelpRewardByMember(member)) {
+                if (!HelpRewardManager.canSendHelpRewardByMember(member)) {
                     sendError(
                             "Vous avez déjà récompensé cette personne ou" +
                                     " il vous a déjà récompensé il y'a moins de deux heures"
@@ -230,7 +230,7 @@ public class GiveReward extends LongCommand {
                     return false;
                 }
 
-                for(final Snowflake mention : mentions) {
+                for (final Snowflake mention : mentions) {
 
                     final Member mentionedMember = Init.devarea.getMemberById(mention).block();
                     assert mentionedMember != null;
@@ -240,7 +240,7 @@ public class GiveReward extends LongCommand {
                         return false;
                     }
 
-                    if(!HelpRewardManager.canSendHelpRewardByMember(mentionedMember)) {
+                    if (!HelpRewardManager.canSendHelpRewardByMember(mentionedMember)) {
                         sendError(
                                 "Vous avez déjà récompensé cette personne ou" +
                                         " il vous a déjà récompensé il y'a moins de deux heures"
