@@ -21,6 +21,13 @@ public class AskReward extends ShortCommand {
         final Message message = event.getMessage();
         final Set<Snowflake> mentions = message.getUserMentionIds();
 
+
+        if(!channel.getName().contains("entraide")) {
+            this.sendError("Vous ne pouvez utiliser cette commande que dans les channels d'entraide");
+            this.endCommand();
+            return;
+        }
+
         if(mentions.size() < 1) {
             this.sendError("Veuillez mentionner la personne que vous avez aidé");
             this.endCommand();
