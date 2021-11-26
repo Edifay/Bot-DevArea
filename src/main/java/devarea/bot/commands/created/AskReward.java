@@ -11,6 +11,8 @@ import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.reaction.ReactionEmoji;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 
@@ -45,11 +47,11 @@ public class AskReward extends ShortCommand {
             return;
         }
 
-        System.out.println(HelpRewardManager.canSendHelpRewardByMember(author));
-        System.out.println(HelpRewardManager.canSendHelpRewardByMember(target));
+        final List<Snowflake> tmpList = new ArrayList<>();
+        assert target != null;
 
-        if(!(HelpRewardManager.canSendHelpRewardByMember(author)
-                && HelpRewardManager.canSendHelpRewardByMember(target))) {
+        tmpList.add(target.getId());
+        if(!(HelpRewardManager.canSendReward(author, tmpList))) {
             this.sendError(
                 "Vous avez déjà récompensé cette personne ou il vous a déjà récompensé il y'a moins de deux heures"
             );

@@ -79,7 +79,8 @@ public class GiveReward extends LongCommand {
                     return super.receiveMessage(event);
                 }
 
-                if (!HelpRewardManager.canSendHelpRewardByMember(member)) {
+                if(!HelpRewardManager.canSendReward(member, mentions.stream().toList())) {
+
                     sendError(
                             "Vous avez déjà récompensé cette personne ou" +
                                     " il vous a déjà récompensé il y'a moins de deux heures"
@@ -96,14 +97,15 @@ public class GiveReward extends LongCommand {
                         sendError("Veuillez mentionner une autre personne que vous même");
                         return false;
                     }
+                }
 
-                    if (!HelpRewardManager.canSendHelpRewardByMember(mentionedMember)) {
-                        sendError(
-                                "Vous avez déjà récompensé <@" + mentionedMember.getId().asString() + "> ou" +
-                                        " il vous a déjà récompensé il y'a moins de deux heures"
-                        );
-                        return false;
-                    }
+                if(!HelpRewardManager.canSendReward(member, mentions.stream().toList())) {
+                    sendError(
+                            "Vous avez déjà récompensé cette personne ou" +
+                                    " il vous a déjà récompensé il y'a moins de deux heures"
+                    );
+                    return false;
+
                 }
 
                 helpers.addAll(mentions);
@@ -222,7 +224,9 @@ public class GiveReward extends LongCommand {
                     return super.receiveMessage(event);
                 }
 
-                if (!HelpRewardManager.canSendHelpRewardByMember(member)) {
+
+                if(!HelpRewardManager.canSendReward(member, mentions.stream().toList())) {
+
                     sendError(
                             "Vous avez déjà récompensé cette personne ou" +
                                     " il vous a déjà récompensé il y'a moins de deux heures"
@@ -240,14 +244,15 @@ public class GiveReward extends LongCommand {
                         return false;
                     }
 
-                    if (!HelpRewardManager.canSendHelpRewardByMember(mentionedMember)) {
-                        sendError(
-                                "Vous avez déjà récompensé cette personne ou" +
-                                        " il vous a déjà récompensé il y'a moins de deux heures"
-                        );
-                        return false;
-                    }
                 }
+                if(!HelpRewardManager.canSendReward(member, mentions.stream().toList())) {
+                    sendError(
+                            "Vous avez déjà récompensé cette personne ou" +
+                                    " il vous a déjà récompensé il y'a moins de deux heures"
+                    );
+                    return false;
+                }
+
                 helpers.addAll(mentions);
 
                 return callStape(0);

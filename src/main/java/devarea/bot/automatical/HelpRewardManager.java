@@ -7,6 +7,7 @@ import devarea.bot.commands.ConsumableCommand;
 import devarea.bot.commands.created.GiveReward;
 import devarea.bot.commands.object_for_stock.HelpReward;
 import devarea.bot.utils.MemberUtil;
+import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.Embed;
 import discord4j.core.object.entity.Member;
@@ -95,8 +96,26 @@ public class HelpRewardManager {
         return findRewards;
     }
 
-    public static boolean canSendHelpRewardByMember(Member member) {
-        return findHelpRewardsByMember(member).isEmpty();
+    public static boolean canSendReward(Member member, List<Snowflake> snowflakes) {
+        final List<HelpReward> rewards = findHelpRewardsByMember(member);
+        final List<String> helperIds = snowflakes.stream().map(Snowflake::asString).toList();
+        final String memberId = member.getId().asString();
+
+        if(rewards.isEmpty()) return true;
+
+        for(final HelpReward reward : rewards) {
+
+            final String rMemberId = reward.getMemberId();
+            final List<String> rHelperIds = reward.getHelpersIds();
+
+            for(final String helperId : helperIds) {
+                if(memberId.equals(rMemberId) && rHelperIds.contains(helperId)
+                || rHelperIds.contains(memberId) && rMemberId.equals(helperId)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 }
