@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HelpRewardManager {
 
@@ -98,7 +99,7 @@ public class HelpRewardManager {
 
     public static boolean canSendReward(Member member, List<Snowflake> snowflakes) {
         final List<HelpReward> rewards = findHelpRewardsByMember(member);
-        final List<String> helperIds = snowflakes.stream().map(Snowflake::asString).toList();
+        final List<String> helperIds = snowflakes.stream().map(Snowflake::asString).collect(Collectors.toList());
         final String memberId = member.getId().asString();
 
         if(rewards.isEmpty()) return true;

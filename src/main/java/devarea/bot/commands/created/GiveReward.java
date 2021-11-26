@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class GiveReward extends LongCommand {
 
@@ -79,7 +80,7 @@ public class GiveReward extends LongCommand {
                     return super.receiveMessage(event);
                 }
 
-                if(!HelpRewardManager.canSendReward(member, mentions.stream().toList())) {
+                if (!HelpRewardManager.canSendReward(member, new ArrayList<>(mentions))) {
 
                     sendError(
                             "Vous avez déjà récompensé cette personne ou" +
@@ -99,7 +100,7 @@ public class GiveReward extends LongCommand {
                     }
                 }
 
-                if(!HelpRewardManager.canSendReward(member, mentions.stream().toList())) {
+                if (!HelpRewardManager.canSendReward(member, new ArrayList<>(mentions))) {
                     sendError(
                             "Vous avez déjà récompensé cette personne ou" +
                                     " il vous a déjà récompensé il y'a moins de deux heures"
@@ -225,7 +226,7 @@ public class GiveReward extends LongCommand {
                 }
 
 
-                if(!HelpRewardManager.canSendReward(member, mentions.stream().toList())) {
+                if (!HelpRewardManager.canSendReward(member, new ArrayList<>(mentions))) {
 
                     sendError(
                             "Vous avez déjà récompensé cette personne ou" +
@@ -245,7 +246,7 @@ public class GiveReward extends LongCommand {
                     }
 
                 }
-                if(!HelpRewardManager.canSendReward(member, mentions.stream().toList())) {
+                if (!HelpRewardManager.canSendReward(member, new ArrayList<>(mentions))) {
                     sendError(
                             "Vous avez déjà récompensé cette personne ou" +
                                     " il vous a déjà récompensé il y'a moins de deux heures"
