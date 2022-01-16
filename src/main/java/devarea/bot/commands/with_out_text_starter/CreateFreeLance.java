@@ -383,7 +383,7 @@ public class CreateFreeLance extends LongCommand {
             protected boolean onCall(Message message) {
                 setText(embed -> {
                     embed.setTitle("Le fonctionnement.");
-                    embed.setDescription("Voici l'embed que vous allez modifier pour créer votre présentation");
+                    embed.setDescription("Voici l'embed que vous allez modifier pour créer votre présentation.\n\n**Cliquez sur : <:ayy:"+Init.idYes.getId().asString()+"> pour passer à la suite !**");
                     embed.setFooter("Vous pouvez annuler | cancel", null);
                     embed.setColor(ColorsUsed.just);
                 });
