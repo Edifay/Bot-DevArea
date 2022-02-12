@@ -1,0 +1,1306 @@
+[
+  {
+    "name": "Schotté Titouan",
+    "description": "Brevet/Bac",
+    "fields": [
+      {
+        "title": "Bot Discord Basique",
+        "description": "Commandes, reaction-role, gestion des évenements ainsi que toutes fonctionnalités basiques",
+        "prix": "8€/h -> 13€/h",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Bot Discord Avancé",
+        "description": "Utilisation d'une API, interface WEB, ainsi que toute fonctionnalité poussée",
+        "prix": "13€/h -> 20€/h",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Extension Chrome",
+        "description": "A vous de définir ce que fera l'extension !",
+        "prix": "15€/h",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Site Web Back&Front",
+        "description": "Site complet en HTML/JS/CSS/PHP (sans framework)",
+        "prix": "15€/h -> 20€/h (si base de données incluse)",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Application de Bureau",
+        "description": "A vous de définir ce que fera l'application ! Il n'y a pas de limite\nLe prix variera en fonction de ce que vous demandez !",
+        "prix": "20€/h -> 45€/h",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Mod Minecraft",
+        "description": "Mod complet avec l'API de Forge",
+        "prix": "10€/h -> 30€/h",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Script",
+        "description": "Tout sorte de script dans les langages suivants :\n<:python:853933009216077824> Python, <:js:853933026535145522> Javascript, <:html:853933857236844555> <:css:853933857657192478> HTML&CSS, NodeJS, C, <:java:853932985811075102> Java ou Scratch (mdr)",
+        "prix": "5€/h -> 30€/h",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Serveur Discord",
+        "description": "Serveur discord complet : \nReaction role, bannière de bienvenue, gestion des permissions et des bots, etc ...",
+        "prix": "15€",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "Github : https://github.com/Titouan-Schotte",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "885640054620430348",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "759486971377877022"
+  },
+  {
+    "name": "Amirault Axel",
+    "description": "Je suis actuellement en 2ème année de BTS en gestion PME. Je suis à coté en contrat d'apprentissage chez ASUS et je suis apprentie développeur.",
+    "fields": [
+      {
+        "title": "Bot Discord Privatiser",
+        "description": "Bot Discord disponible uniquement pour 1 serveur en particulier. Tout est possible",
+        "prix": "à partir de 5€",
+        "temps": "A partir d'un jour",
+        "inline": false
+      },
+      {
+        "title": "Bot Discord Public",
+        "description": "Bot Discord invitable sur tout vos serveurs. Bot avec très peu de configuration est assez complet",
+        "prix": "à partir de 10€",
+        "temps": "à partir d'un jour",
+        "inline": false
+      },
+      {
+        "title": "Création d'un Serveur Discord",
+        "description": "Création d'un serveur Discord. De la création des channel au paramétrages des bots sur le serveur.",
+        "prix": "à partir de 3€",
+        "temps": "Entre 1 et 2 jour max 1 semaine",
+        "inline": false
+      },
+      {
+        "title": "Informations",
+        "description": "Les offres de créations de bot sont cumulable avec la création d'un serveur Discord. A partir d'un certain montant je peux vous faire un prix.",
+        "prix": "empty",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "Voici mon site Web : https://www.trollfury.fr/",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "921023526444621865",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "377901846557097988"
+  },
+  {
+    "name": "Rantoz Timeo",
+    "description": "Je suis en 3 ème, je passe mon temps sur le codage etc ...",
+    "fields": [
+      {
+        "title": "Bot discord 5 commande",
+        "description": "Un bot discord avec 5 commandes et un mode anti-raid",
+        "prix": "0€",
+        "temps": "3 jours",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "859425138561908746",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "578191229758603274"
+  },
+  {
+    "name": "Léo",
+    "description": "Bonjour j'ai 14 ans et je suis auto didacte, je passe en seconde. Je sais ce n'est pas très vendeur mais mes prix vont intéresseront peut être",
+    "fields": [
+      {
+        "title": "Bot Discord JS avec database MySQL",
+        "description": "Je peux vous créer un bot Discord en JS avec une base de données MySQL. Je peux aussi gérer votre hébergement",
+        "prix": "Pour le bot ~ 5€/h ---- Pout l'hébergement ~ 3€/mois (premier mois gratuit)",
+        "temps": "Dépend de mes cours et du boulot, mais pour un bot de 10 commandes, je peux faire ça en 1 semaines et demi",
+        "inline": false
+      },
+      {
+        "title": "Sécurisation COMPLÈTE de votre site Web",
+        "description": "Je peux vous prendre un hébergement, lié les noms de domaine, installé des anti-bruteforce sur votre serveur et installer un certificat SSL.",
+        "prix": "Sécurisation du site ~ 20€ ---- Hébergement ~ 3€/mois (premier mois gratuit) ---- Nom de domaine ~ 2€/mois (premier mois gratuit)",
+        "temps": "2 heures si tout se passe bien",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "Mon github ~ https://github.com/Tsumi3000\nMon package ~ https://npmjs.org/package/anime-randomjs\nMon site (en cours) ~ https://lunaxnitbot.com",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "859680871861977108",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "454939105411858432"
+  },
+  {
+    "name": "WassLife",
+    "description": "Apres plusieurs année en apprenant le développement je me lance aujourd'hui dans le free-lance pour commencer tous vos projet, je suis développeur Lua (FiveM) et HTML, CSS, JS, PHP pour vos site web",
+    "fields": [],
+    "message": {
+      "idMessage": "861223076787781632",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "359434427022966784"
+  },
+  {
+    "name": "Valentin R",
+    "description": "J'ai 20 ans et je suis diplômé d'un Bac PRO SN en poursuite vers un BTS, j'ai acquis pas mal de compétences en autodidacte que ça soit dans le Web ou bien Administration de Système. Auto-entrepreneur dans la création de site web et  sys.admin.",
+    "fields": [
+      {
+        "title": "**Création de sites web**",
+        "description": "Je suis un développeur orienté Back-End, je travaille régulièrement avec les langages PHP, NODEJS.\nPHP\n     - Symfony\n     - Wordpress\nNODEJS\n     - ExpressJS pour les REST API et VueJS pour la mise en place du front-end.",
+        "prix": "15€/heure",
+        "temps": "Tout dépend de la demande et du projet",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "Site Web : https://valentinrgt.github.io/",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "864045305686130709",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "261986604816531457"
+  },
+  {
+    "name": "Théo BIET - ƊɑѵƊɑѵ#5517",
+    "description": "Actuellement Développeur Web Fullstack chez o'Clock. Cela fait maintenant presque 3 années que je me forme au monde de la programmation en Autodidacte. J'ai pu réaliser toutes sortes de projets perso durant ces années \uD83D\uDC49 https://theobiet.fr/",
+    "fields": [
+      {
+        "title": "Déploiement serveur FiveM",
+        "description": "Je peux déployer votre serveur FiveM sur le VPS Linux de votre choix. Je vous aiguillerai tous au long de la configuration afin que vous puissiez également apprendre et être susceptible de pouvoir le refaire seul. La mise en production correspond à la configuration complète d'un VPS, de la réception de ce dernier à la mise en ligne de votre serveur de jeu. (L'installation et la configuration de MariaDB et phpMyAdmin est bien évidemment comprise).",
+        "prix": "10€",
+        "temps": "Temps de réponse moyen : -1 journée\nTemps de travail moyen : de 20 minutes à 3 heures (selon la compréhension du client, et s'il souhaite, oui ou non que je lui explique les différentes étapes, afin qu'il puisse le refaire ultérieurement)",
+        "inline": false
+      },
+      {
+        "title": "Débug FiveM, et réalisation de scripts sur mesure",
+        "description": "Je peux aisément venir vous prêter main forte si vous rencontrez des problèmes avec votre serveur FiveM, que ce soit au niveau d'une erreur de script, ou d'une erreur de base de données, je ferai de mon mieux pour déployer un patch sur votre serveur dans les plus brefs délais. Je peux également réaliser des scripts FiveM sur mesure, peut-importe l'idée qui vous passe dans la tête, venez en discutez :)",
+        "prix": "Variable selon la demande. (Env 10€ pour du débug) (Min. 20€ pour un script sur mesure, selon la demande et le temps de travail)",
+        "temps": "Temps de retour: Temps de réponse moyen : -1 journée\nTemps de travail moyen : Variable",
+        "inline": false
+      },
+      {
+        "title": "Réalisation de BOT Discord sur mesure",
+        "description": "Je peux également vous créer un BOT Discord personnalisé à l'image de votre serveur. Que ce soit un BOT multifonctions pour administrer et interagir avec votre communauté, ou bien que ce soit une demande hors du commun. Je ferai de mon mieux pour vous satisfaire. Voici notamment l'un de mes bot Open-Source  \uD83D\uDC49 https://github.com/TheoBIET/Yumeko",
+        "prix": "Variable selon la demande. (Entre 5€ et 50€)",
+        "temps": "Temps de travail moyen : Variable",
+        "inline": false
+      },
+      {
+        "title": "Création de site web en tout genre",
+        "description": "Je peux également vous aider dans la création de votre site web quelque soit la compétence abordé, très à l'aise avec le front end et les frameworks du type React, Vue, je pourrai vous aider à intégrér une maquette et gérer efficacement l'état de l'application. Je suis également très à l'aise côté back-end avec la gestion de base de données telles que PostgresQL, MongoDB, ou encore la mise en place d'une API Rest..",
+        "prix": "Prix: Tarif à l'heure, suite à un accord avec le client",
+        "temps": "Variable",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "\uD83C\uDF10 https://theobiet.fr/\n\uD83D\uDC26 https://twitter.com/DavDav_js\n\uD83D\uDC08‍⬛ https://github.com/TheoBIET",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "865187287557472256",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "632611245295534083"
+  },
+  {
+    "name": "Valentin Branco",
+    "description": "Salut ! Je suis Valentin, jeune développeur de 16 ans, je fais du free-lance depuis une petite année, mais je développe à mon compte depuis 5 ans !\nPassionné d'informatique, et né avec un PC sous la main, je pense avoir de l'expérience \uD83D\uDE09",
+    "fields": [
+      {
+        "title": "Bot discord (Personnalisé et complet)",
+        "description": "Je vais vous développer un bot discord, personnalisé comme vous le voulez, et très complet !\nPas de limite de commande, de fonctionnalités, seulement votre imagination !\n\nComptez **au moins** 10€",
+        "prix": "10€",
+        "temps": "Au moins 1 journée, mais ça peut prendre beaucoup plus en fonction des commandes",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "878328901330407434",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "331436349142073357"
+  },
+  {
+    "name": "Weac (Nathan)",
+    "description": "Diplômé d'un DUT Réseaux & Télécoms et Apprenti DevOps SRE pour les trois prochaines années, j'ai déjà réalisé des développements (web, réseau, scraping...) dans beaucoup de domaines. Je suis une personne à l'écoute de la demande et je réponds avec une grande capacité d'adaptation à celle-ci.",
+    "fields": [],
+    "message": {
+      "idMessage": "865231598005387324",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "538762844758605825"
+  },
+  {
+    "name": "STACKY | UN VÉRITABLE ACCOMPAGNEMENT POUR RÉALISER VOTRE PROJET",
+    "description": "**Clément** - Développeur Full Stack\n**Céline** - Directrice Artistique\n\nAuto-entrepreneur de la société Stacky nous réalisons après 3ans d'expérience des sites, applications, identités visuels pour nos clients.",
+    "fields": [
+      {
+        "title": "CONCEPTION WEB ET MOBILE SUR MESURE A COUT REDUIT",
+        "description": "STACKY se diversifie dans la création de site web sur mesure, de conception graphique, d'application web et mobile, pour vous réaliser votre projet sous un model efficace et rentable. Nous pensons que notre expertise doit bénéficier à la qualité de vos outils.\n\nN’hésitez pas à me joindre pour tous vos projets web ou mobile.\nMes tarifs son très très bas.\n(Possibilité de rendez-vous dans toute l’île de France.)",
+        "prix": "SOUS DEVIS",
+        "temps": "SELON PROJET",
+        "inline": false
+      },
+      {
+        "title": "REDUCTION DEBUT D'ACTIVITÉE",
+        "description": "Nous recherchons surtout à créer un réseau et non à taxer sur les prix.\nNous nous adapterons à votre budget.",
+        "prix": "SOUS DEVIS",
+        "temps": "SELON PROJET",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "Le lien de ma société https://stacky.fr/\nLe lien de mon dernier projet pro https://stacky.fr/video/systeme_gestion.mp4\nLe lien de mon dernier client https://factorycucine.fr/",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "867449080937447434",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "227795995050639361"
+  },
+  {
+    "name": "Paul MILLET",
+    "description": "Développeur fullstack, Chef de projet, Architecte cloud, Directeur de la stratégie, CTO a la demande",
+    "fields": [
+      {
+        "title": "Développeur Fullstack Senior & CTO a la demande",
+        "description": "=> Développeur\n﻿\nJe développe en C, C++, C#, Python, Java, Nodejs, Html, php, CSS, Js, RUST, Elixir, Go, Ruby dans un niveau qui me permet de développer des projets de toutes les tailles",
+        "prix": "sur devis",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Chef de projet",
+        "description": "-> Actuellement je suis CEO / CTO de Galaxiat, une plateforme de streaming et communautaire. Le projet a une équipe de 4 développeur, et plusieurs dizaine de staff. \n-> Je suis actuellement consultant technique + Tech chez une dizaine de projet\n-> J'ai également cofondé le projet join4join\n-> J'ai également fondé/cofondé plusieurs hébergeurs",
+        "prix": "sur devis",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Architecte cloud",
+        "description": "Je suis capable de créer des architectures scalables, concurrentes, redondantes, conteneurisés, avec des intégrations CI/CD. \n Je connait les technologie, comme kubernetes, Proxmox, Ceph, Longhorn, Rancher, Cassandra DB, Rethinkdb, Hadoop, etc...",
+        "prix": "sur devis",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Directeur de la stratégie",
+        "description": "Je suis capable de faire sortir d'un marché votre projet et de faire qu'un projet devienne leader d'un marché, je suis capable d'apporter également des idées innovantes en cohérence avec une stratégie déjà existante. Je suis également capable de projeter une stratégie dans le temps.",
+        "prix": "sur devis",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Mes expériences",
+        "description": "=> Mes expériences : \n-> Développeur / CTO a la demande (2020-Now) Développeur / CTO\n--> Jeux vidéo (unity & unreal)\n--> Architecte cloud \n--> Application web / cloud\n--> IA\n--> Sysadmin\n-> Pulsar - Hosting (2020) CEO / CTO\n-> Aryk (2020) Consultant technique\n-> RyderHosting (2020) CTO\n-> Planutus (2020 - Now) CEO / CTO / Directeur de la stratégie\n-> Join4join (2020 - Now) CTO, Développeur \n-> Planutus - Hosting (2021) CEO / CTO\n-> Radeon (2021) CTO\n-> Pulsar (2021) CTO \n-> TeamUp (2021) Développeur, Consultant technique\n-> BigOpenWorld (2021 - Now) Développeur, Président (open-source)",
+        "prix": "empty",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "Mon github :\nhttps://github.com/warstrolo",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "881793133237637192",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "569815977924231168"
+  },
+  {
+    "name": "Théo",
+    "description": "J'ai 15 ans, je suis en bac pro commerce, je fais des logos, des emotes et des bannières sur demande pour pouvoir accomplir mon projet qui est d'ouvrir un serveur gta rp, ce qui coûte de l'argent, je ne fais pas des prix élevés.",
+    "fields": [
+      {
+        "title": "Logo : 10$   Emote : 7$/u  Bannière : 12$",
+        "description": ".",
+        "prix": "7-12$",
+        "temps": "empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "872864803494977586",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "427357506642247700"
+  },
+  {
+    "name": "Tim (Aspect)",
+    "description": "Actuellement diplomé d'un RNCP de niveau 3 (ce qui correspond à un bac+2 sur le marché actuel) que j'ai passer dans l'école ou j'ai fais mes études de Javascript (3wAcademy)",
+    "fields": [
+      {
+        "title": "API Rest",
+        "description": "Pour tout vos projets, vous aurez sûrement besoin d'une API afin de recevoir des données SQL et de les repartagées en JSON. Pour ce faire je vous propose mes compétences auprès du framework Express.js qui sera à la hauteur de vos attentes.",
+        "prix": "Le prix peut varié du nombre de données à traité, de la complexité et du temps à passer. Sachant que je ne propose pas de tarifications à l'heure les prix seront toujours faible par rapport à ce que vous pouvez retrouvez en entreprise.",
+        "temps": "Idem que les tarifs, le temps varie de la complexité et du nombre de données à traité, mais généralement cela reste généralement rapide pour une API Rest.",
+        "inline": false
+      },
+      {
+        "title": "FrontEnd",
+        "description": "Vous avez une API ? Ou seulement envie d'ajouter une touche graphique à votre site, je suis l'homme qu'il vous faut. Que ce soit une page vitrine ou un CMS complet je prendrais en charge vos demandes sous le framework React.js accompagné de Redux.js et forcément d'autres suivant vos besoins. Je peux également faire un pack pour toutes commandes d'API (BackEnd) et de FrontEnd en même temps.",
+        "prix": "Le prix peut varié du nombre de données à traité, de la complexité et du temps à passer. Sachant que je ne propose pas de tarifications à l'heure les prix seront toujours faible par rapport à ce que vous pouvez retrouvez en entreprise.",
+        "temps": "Idem que les tarifs, le temps varie de la complexité et du nombre de données à traité, mais généralement cela reste généralement plus ou moins long pour un FrontEnd agréable.",
+        "inline": false
+      },
+      {
+        "title": "Application Mobile",
+        "description": "Envie d'une application mobile ? Je prend en charge vos demandes avec le petit bébé de React (React-Native) comme pour React je peux éventuellement proposé un pack API (BackEnd) + l'application en React-Native.",
+        "prix": "Le prix peut varié du nombre de données à traité, de la complexité et du temps à passer. Sachant que je ne propose pas de tarifications à l'heure les prix seront toujours faible par rapport à ce que vous pouvez retrouvez en entreprise.",
+        "temps": "Idem que les tarifs, le temps varie de la complexité et du nombre de données à traité, mais généralement cela reste généralement plus ou moins long pour une application en react-native.",
+        "inline": false
+      },
+      {
+        "title": "Application de Bureau",
+        "description": "AHHH LA PUISSANCE DE REACT ! Electron permet de créer des applications de bureau sous le module React.js. Ce qui me donne la possibilité de proposer également mes services dans ce domaine. Cependant il est rare que j'accepte des demandes dans cet univers.",
+        "prix": "Le prix peut varié du nombre de données à traité, de la complexité et du temps à passer. Sachant que je ne propose pas de tarifications à l'heure les prix seront toujours faible par rapport à ce que vous pouvez retrouvez en entreprise.",
+        "temps": "Idem que les tarifs, le temps varie de la complexité et du nombre de données à traité, mais généralement cela reste généralement plus ou moins long pour une application de bureau avec Electron (et React).",
+        "inline": false
+      },
+      {
+        "title": "Bot Discord",
+        "description": "Discord.js n'a désormais plus de secrets pour moi, vous pouvez me demander vraiment beaucoup dans ce domaine. Lié à votre serveur de jeu, votre site, votre base de données, une api ... Peut importe, soyez créatif et gardez en tête que pour n'importe quel de mes services je demanderais un cahier des charges bien établi. Car ma compréhension de vos attentes est la satisfaction que vous ressentirez lorsque la livraison sera effectuée",
+        "prix": "Le prix peut varié du nombre de données à traité, de la complexité et du temps à passer. Sachant que je ne propose pas de tarifications à l'heure les prix seront toujours faible par rapport à ce que vous pouvez retrouvez en entreprise.",
+        "temps": "Idem que les tarifs, le temps varie de la complexité et du nombre de données à traité, mais je garantis une rapidité plus élevée que la moyenne.",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "878590646842196018",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "762328184557142096"
+  },
+  {
+    "name": "Nicolas",
+    "description": "Développeur web et discord.js",
+    "fields": [
+      {
+        "title": "Site web simple",
+        "description": "Contient autant de pages que vous voulez avec des éléments dynamiques en JavaScript",
+        "prix": "30€",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Site web Blazor.NET",
+        "description": "Un site avec un traitement en C#",
+        "prix": "55€",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Site web Node.js",
+        "description": "Un site web simple avec traitement en Node.js",
+        "prix": "45€",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Bot Discord simple",
+        "description": "Un bot Discord avec un module au choix :\n\n- Modération ;\n- Musique ;\n- Utilitaire",
+        "prix": "15€",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Bot Discord avancé",
+        "description": "Un bot Discord avec 3 modules au choix :\n\n- Modération ;\n- Musique ;\n- Utilitaire",
+        "prix": "45€",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Rédaction Markdown",
+        "description": "Rédaction de vos README.md pour GitHub ou d'autres plate-formes prennant en charge le Markdown",
+        "prix": "5€",
+        "temps": "1 jour",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "Mon GitHub :\nhttps://github.com/ItsMeSKKYZ3R\n\nMon site :\nhttps://www.skkyz3r.fr",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "882995027620536382",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "518113582110605326"
+  },
+  {
+    "name": "Sacha Perrin",
+    "description": "Je fais de la programmation depuis plus de 3 ans, principalement du front-end, le back-end, et je fais aussi des bots discord et logiciels. J'ai fais pas mal de projets à titre personnel.",
+    "fields": [
+      {
+        "title": "Développeur front-end, back-end avec mongoDB, Bots Discord",
+        "description": "Je peux vous faire des sites internets, des logiciels avec electron et des bots discord\nPrix : en fonction de ce que vous voulez\nTemps : en fonction de ce que vous voulez",
+        "prix": "empty",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Bots Discord",
+        "description": "Je vais faire vos bots discord (sauf pour du rp) pouvant utiliser une base de données",
+        "prix": "empty",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Front-End",
+        "description": "Je vais faire votre site internet sans accès à des bases de données.",
+        "prix": "empty",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Back-End",
+        "description": "Je vais faire l'accès à une base de données de votre site déjà existant.",
+        "prix": "empty",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Full-Stack ( Front + Back )",
+        "description": "Je vais faire votre site plus un accès à une base de données.",
+        "prix": "empty",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Logiciel",
+        "description": "Je vais vous faire un logiciel",
+        "prix": "empty",
+        "temps": "empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "927498903824248882",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "480013899891212289"
+  },
+  {
+    "name": "Johan Dusrad",
+    "description": "Hey, \nJe suis Johan, développeur web depuis 4 ans. Je suis freelance depuis un peu plus d'un an. Je suis actuellement en cpge.",
+    "fields": [
+      {
+        "title": "Création de site",
+        "description": "Je crée votre site web de a à z",
+        "prix": "empty",
+        "temps": "5 jours",
+        "inline": false
+      },
+      {
+        "title": "Création de bot discord",
+        "description": "Je crée votre bot discord complet personbalisé",
+        "prix": "Empty",
+        "temps": "4 jours",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "881857594489188352",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "750680906288594962"
+  },
+  {
+    "name": "Romain ~ Romy ~ Niamor",
+    "description": "Étudiant en classe préparatoire d'ingénieur du numérique\nTitulaire du baccalauréat général (mention BIEN)\nTitulaire du brevet des collèges (mention TRÈS BIEN)",
+    "fields": [
+      {
+        "title": "Vente Plugin PearlWars Mini-Jeu Minecraft",
+        "description": "Je vend un plugin de mini-jeu type PearlWars développé par mes soins il y a 2 mois. Vous avez la possibilité de l'essayer sur un serveur avec moi avant l'achat.",
+        "prix": "Environ 10 €",
+        "temps": "Immédiat",
+        "inline": false
+      },
+      {
+        "title": "Vente Plugin TheTowers Mini-Jeu Minecraft",
+        "description": "Je vend un plugin de mini-jeu type TheTowers développé par mes soins il y a 2 mois. Vous avez la possibilité de l'essayer sur un serveur avec moi avant l'achat.",
+        "prix": "Prix: Environ 10 €",
+        "temps": "Immédiat",
+        "inline": false
+      },
+      {
+        "title": "Vente Plugin PrivateMessage Minecraft",
+        "description": "Je vend un plugin de messages privés développé par mes soins il y a 6 mois. Vous avez la possibilité de l'essayer sur un serveur avec moi avant l'achat.",
+        "prix": "Environ 3 €",
+        "temps": "Immédiat",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "879302303776124959",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "299218560729874433"
+  },
+  {
+    "name": "Arthur B.",
+    "description": "J'ai découvert le milieu de freelance il y a pas longtemps",
+    "fields": [
+      {
+        "title": "Hébergement pas chère !",
+        "description": "Hébergement Minecraft à petit prix avec 99% d'uptime, un panel propre (ptero) et panel disponible 24h/24 et 7j/7. Il y à trois offres possible, 1- Hebergement avec 6g de ram,40g d'espace disque, pas de port avec 25565 et support dispo tous les jours. 2-Hebergement avec 12g de ram,40g d'espace disque, pas de port avec 25565 et support dispo tous les jours. 3- Hebergement avec 15g de ram,55g d'espace disque, pas de port avec 25565 et support dispo tous les jours.",
+        "prix": "6e - 9e - 13e",
+        "temps": "1 jour max - 1 jour max - 2 jour max",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "888721362288541716",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "659854859662655509"
+  },
+  {
+    "name": "Thomas Bonsignore",
+    "description": "Autodidacte",
+    "fields": [
+      {
+        "title": "Bot Discord",
+        "description": "Création d’un bot Discord avec commandes perso et tout ce que vous souhaitez",
+        "prix": "Tout semant de la demande",
+        "temps": "De 1 semaine à 1 mois en fonction de la demande",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "891636239130820638",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "699949615503376435"
+  },
+  {
+    "name": "Bourouih Mehdi",
+    "description": "Je suis dans le coding de site web Back End de puis un peu plus de deux ans et le FreeLancing depuis un an et demi.",
+    "fields": [
+      {
+        "title": "Développement Web - Back End",
+        "description": "En résumé, le Développement Web - Back End, c'est toute la partie que l'utilisateur ne voit pas, mais qui lui permet de réaliser des actions sur un site,",
+        "prix": "à partir de 15 €",
+        "temps": "empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "901503856805048341",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "441927869682286592"
+  },
+  {
+    "name": "Ilyes Hernandez",
+    "description": "Bonjour, je m'appelle Ilyes et j'ai 14 ans. J'ai commencer à 11 ans, lorsque j'ai découvert le site de awwward.  Je suis rester bouchever devant les sites web réaliser par les développeurs web. C'est là que j'ai commencer à apprendre HTML. Je l'est d'ailleurs appris grâce à OpenClassrooms et Graven. Puis, j'ai fait la découverte de CSS, c'est de là que j'ai commencer à apprendre a faire des sites moderne et propre. Et c'est à 13 ans que j'ai commencer à me diversifié en apprenant python, javascript, php, mysql, etc...\nAujourd'hui à 14 ans, je serait capable  de faire des site avec backend et frontend.",
+    "fields": [
+      {
+        "title": "Développeur Full-Stack.",
+        "description": "Je suis plus orienté frontend. En backend, je peux faire un portfolio, un espace client, ect...",
+        "prix": "0€",
+        "temps": "Le temp de retour est variable celons le projet.",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "904827683387605012",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "863427628957696030"
+  },
+  {
+    "name": "Yamato Saiku",
+    "description": "Je me lance dès maintenant en Freelance, j'ai un diplome de DUT Informatique mais aussi et surtout 2 ans d'expérience en Javascript, je n'ai pas d'entreprise mais je prends toutes mes demandes au sérieux et le plus professionnellement possible (je suis aussi chill et sympa si vous voulez).",
+    "fields": [
+      {
+        "title": "Bot modération",
+        "description": "Incluant Ban, Unban, Kick, Mute, Tempmute, unmute, Warn... (ajout possible en fonction de la demande et commandes personnalisables)",
+        "prix": "Variable en fonction de la demande mais aux alentours de : 5€",
+        "temps": "entre 5 et 15 jours (en fonction de mes disponibilités avec les études)",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "902676472920178728",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "581419256621826089"
+  },
+  {
+    "name": "Mathis.M",
+    "description": "Étudiant en dernière année de bac-pro système numérique,futur étude dans l'audiovisuel",
+    "fields": [
+      {
+        "title": "Flocage sur textile",
+        "description": "Bonjour, \nVous cherchez des tee-shirts, polos, sweat-shirt ou autre textile à l'image de votre entreprise ? \uD83D\uDC55\nJe suis là pour vous ! \nÉtant étudiant j'ai lancé à coter de mes études une petite activité de flocage sur textiles et de sublimation tout ça à des tarifs minim !\nPour avoir des preuves de mon travail je vous invites à regarder sur ma page instagram : helio.shopfr\nMerci bien !",
+        "prix": "empty",
+        "temps": "empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "905820801704525845",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "323883166135877633"
+  },
+  {
+    "name": "Max Aubert",
+    "description": "Études de 4 ème année nsi",
+    "fields": [
+      {
+        "title": "Web",
+        "description": "Site web static react",
+        "prix": "0.50",
+        "temps": "1 jour",
+        "inline": false
+      },
+      {
+        "title": "Web Complex",
+        "description": "Site web complexe avec plus de 5 pages/ système d'api et de front-end",
+        "prix": "5€",
+        "temps": "3 jours voir une semaine",
+        "inline": false
+      },
+      {
+        "title": "Bot discord < 5 commandes",
+        "description": "Un bot discord avec - de 5 commandes",
+        "prix": "0.05",
+        "temps": "1 heure",
+        "inline": false
+      },
+      {
+        "title": "Bot discord < 30 commandes",
+        "description": "Un bot discord avec - de 30 commandes",
+        "prix": "2€",
+        "temps": "3 a 5 heures",
+        "inline": false
+      },
+      {
+        "title": "Bot discord < 250 commandes",
+        "description": "Un bot discord  avec - de 250 commandes",
+        "prix": "de 15€ a 30€",
+        "temps": "1 semaine a 2 semaines",
+        "inline": false
+      },
+      {
+        "title": "Application Mobile intégrée web",
+        "description": "Une application mobile qui intègre un site web",
+        "prix": "2€",
+        "temps": "1 semaine",
+        "inline": false
+      },
+      {
+        "title": "Application Mobile dart vanilla",
+        "description": "Une application mobile en dart vanilla, pour un commerce, des petits jeux offline ou autres moyennes applications",
+        "prix": "entre 10 et 25 €",
+        "temps": "2 a 3 semaines",
+        "inline": false
+      },
+      {
+        "title": "Hébergement",
+        "description": "Hébergement d'une api, d'une app front end, d'un site ou d'un bot discord",
+        "prix": "Entre 1€ et 15€ par mois",
+        "temps": "(aucun car hébergé. Hébergement promis sans ou avec des downtimes prévus)",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "Portfolio ; https://speardev.xyz/\nSite de mon studio de dev ; https://impulsarstudios.xyz/",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "906858240787247174",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "602851424371736587"
+  },
+  {
+    "name": "RxITV",
+    "description": "Bonjour, bonsoir je suis RxITV, je suis actuellement en Bac Pro Système Numérique.",
+    "fields": [
+      {
+        "title": "Achat d'un discord complet.",
+        "description": "Je vous propose de créer un discord complet avec ce que vous souhaiter il faut juste un bloc note avec se que vous souhaitez.",
+        "prix": "5-10 Euro",
+        "temps": "Tous dépend de votre demande.",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "https://discord.gg/GU6QexYb6r",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "908744965222453258",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "384363441839931392"
+  },
+  {
+    "name": "Clowez Tristan",
+    "description": "Développeur Java - Python - Front depuis bientôt 2 ans. Je suis un lycéen de 16 ans ayant pris pour spécialisation entre autre NSI.",
+    "fields": [
+      {
+        "title": "Plugin Minecraft",
+        "description": "Je peux vous développer un plugin Minecraft complet en fonction de votre demande. Je vais suivre votre demande à la lettre.",
+        "prix": "Le prix est définie en fonction de la demande",
+        "temps": "En fonction de la demande",
+        "inline": false
+      },
+      {
+        "title": "Launcher Minecraft",
+        "description": "Je peux vous développer un launcher Minecraft (vanilla, modée...) en fonction de vous. __Ce service ne fourni pas les designs et vous devez donc les avoirs !__",
+        "prix": "Le prix est définie en fonction de la demande",
+        "temps": "En fonction de la demande",
+        "inline": false
+      },
+      {
+        "title": "Bot Discord",
+        "description": "Je peux vous développer un bot discord en fonction de votre demande. Le cahier des charges peut être écrit en vocal.",
+        "prix": "Le prix est définie en fonction de la demande",
+        "temps": "En fonction de la demande",
+        "inline": false
+      },
+      {
+        "title": "Site Internet (côté front uniquement)",
+        "description": "Je peux vous développer un site internet en fonction de votre demande. __Ce service ne fournis pas l'hébergement du site web à la fin de la commande !!__",
+        "prix": "Le prix est définie en fonction de la demande",
+        "temps": "En fonction de la demande",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "930598459185201152",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "495978417582505986"
+  },
+  {
+    "name": "Wagner néo",
+    "description": "Vous souhaitez réaliser un site e-commerce, un site vitrine, blog ou autre ?\n\nJe suis là pour vous aidez !\nJe suis Néo développeur web freelance,\njeune et passionné, j'aime le challenge.\n\nJe conçois en premier lieux une maquette précise de ce que vous voulez.\nPuis, je développe vos site internet à 100% avec php, JavaScript, symfony, react et d'autres technologies si besoins !\n\nJe peux vous apporter un travail efficace.\nEnsemble, nous pourrons sans aucun doute atteindre nos objectifs.",
+    "fields": [
+      {
+        "title": "Développement site internet full stacks",
+        "description": "Contrat de maintenance 200€/moi + conception du site internet gratuit ou Contrat de conception de site internet 400€/j",
+        "prix": "200€/mois",
+        "temps": "Le temps dépend du projet",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "Portfolio : https://eli-entreprise.fr/",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "913782587879751691",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "237965068132810752"
+  },
+  {
+    "name": "Doppel Ganger",
+    "description": "Je suis en Terminale. Je développe des bots discord depuis 2 ans.",
+    "fields": [
+      {
+        "title": "Création de bot discord",
+        "description": "Je crée votre bot discord avec tout ce que vous y voulez. Le prix varie mais je m'adapte aux budgets.",
+        "prix": "5€ / Variable.",
+        "temps": "1 semaine",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "920199337663950898",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "860777664931037236"
+  },
+  {
+    "name": "Labs & Code - Equipe de développers",
+    "description": "Nous sommes des étudiants passioné d'informatique",
+    "fields": [
+      {
+        "title": "Liens",
+        "description": "Site web : https://labscode.tk\nTrustpilot : https://fr.trustpilot.com/review/labscode.tk?languages=all\nPaypal: https://paypal.me/shoguntoto\nServeur discord : https://discord.gg/ZTD2gntqx2",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "924573925818634240",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "418384254712676354"
+  },
+  {
+    "name": "Nicoo",
+    "description": "Développeur Full Stack Junior - En formation Développeur Web et Web Mobile.\nWebdesigner Junior.",
+    "fields": [
+      {
+        "title": "Design d'un site web",
+        "description": "Réalisation d'une maquette pour votre site web. \nPrix variable & négociable.",
+        "prix": "~25e",
+        "temps": "1 semaine",
+        "inline": false
+      },
+      {
+        "title": "Création d'un thème Wordpress",
+        "description": "Réalisation d'une maquette pour votre site wordpress.",
+        "prix": "~25e",
+        "temps": "1 semaine",
+        "inline": false
+      },
+      {
+        "title": "Développement d'une landing page",
+        "description": "Développement en HTML/CSS de votre Landing Page.\nPrix variable & négociable.",
+        "prix": "~15e",
+        "temps": "3 jours",
+        "inline": false
+      },
+      {
+        "title": "Développement d'un thème Wordpress",
+        "description": "Développement d'un thème sur mesure pour wordpress.",
+        "prix": "~50e",
+        "temps": "~1 semaine",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "https://www.fiverr.com/nicobrl",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "928248133891264563",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "460035580622012425"
+  },
+  {
+    "name": "Ilhan Donmez",
+    "description": "Brevet mention très bien.",
+    "fields": [
+      {
+        "title": "Création de site internet",
+        "description": "Le site est personnalisable sur tous les niveaux. \nIl remplira toute vos attentes.\nJe ferais en sorte de le modifier si il ne vous convient pas.",
+        "prix": "Selon vos attentes mais n'ira pas au delà de 40€",
+        "temps": "Une semaine maximum",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "929350058070114334",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "756052590499856494"
+  },
+  {
+    "name": "Pierre - Louis",
+    "description": "Je suis développeur full stack spatialiser dans le back-end, je peux vous proposer plusieurs services à des prix abordables.\nJ'ai plus de 6ans d'expérience sur plusieurs langages dont le python, html, css, javascript\nJ'ai déjà participer à une dizaine de projets: Création de sites / Launcher Minecraft / Api / Blockchain ...",
+    "fields": [
+      {
+        "title": "Pour un Site classique ( vitrine )",
+        "description": "Html / Css",
+        "prix": "50€ à 200€",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Un Site complexe ( shop, panel admin ... )",
+        "description": "Html / Css / Javascript ou Php",
+        "prix": "150€ à 500€",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Une Application bureau ( outils ... )",
+        "description": "C# / Java / Python",
+        "prix": "50€ à 300€",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Plugins, mods, launcher Minecraft",
+        "description": "Java",
+        "prix": "50€ à 200€",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Bot discord",
+        "description": "Python",
+        "prix": "20€ à 80€",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "https://www.borane.me",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "929754950823739482",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "703700420316364901"
+  },
+  {
+    "name": "LE GENTIL Maxime",
+    "description": "LEGENTIL Maxime",
+    "fields": [
+      {
+        "title": "Création de site web personnalisé",
+        "description": "Intégration d'une maquette web grâce à HTML5/CSS3 et PHP/MySQL.\nLe prix en moyenne: 200€ NET TTC.",
+        "prix": "200€",
+        "temps": "3 jours",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "930124730013450250",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "927578589388496916"
+  },
+  {
+    "name": "Phibel jeeferson",
+    "description": "Pas fini mes études",
+    "fields": [
+      {
+        "title": "Bot",
+        "description": "Prix me contacter pv et on verra",
+        "prix": "Gratuit",
+        "temps": "Je sais pas vraiment sa dépend",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "930135204314611732",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "846022004918452225"
+  },
+  {
+    "name": "Div_YT",
+    "description": "9 années de python à mon actif",
+    "fields": [
+      {
+        "title": "Développement de bot discord en python",
+        "description": "+50euros",
+        "prix": "Empty",
+        "temps": "empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "930561456381001768",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "494183404150194224"
+  },
+  {
+    "name": "Shactrap",
+    "description": "Développeur par passion. Je code des bot discord en JavaScript. Que ce soit de petits programmes ou de grands programmes, je capable de faire tous types de bot discord.",
+    "fields": [
+      {
+        "title": "Bot Discord - BASIC",
+        "description": "Vous pourrez disposer d'une fonctionnalité simple pour vous\nexemple : questionnaire\n- commande simple\nexemple : !store => \"www.google.fr\"\n!ping => \"pong\n-ban\n-kick\n-Message de bienvenue\n-Tickets",
+        "prix": "25€",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Bot Discord - MEDIUM",
+        "description": "Bot Discord BASIC avec :\n-Vous pouvez avoir une grande fonctionnalité qui vous est propre :\nexemple : combats de cartes\n- économie\n- avertissement avec raisons\n- anti-raids avec captcha",
+        "prix": "35€",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Bot Discord - Premium",
+        "description": "Je ferai tout ce que vous souhaitez.",
+        "prix": "60€",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "https://www.fiverr.com/share/32lbvY",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "932332463454298152",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "289053984046448640"
+  },
+  {
+    "name": "Eliott | Babouino",
+    "description": "Je suis un développeur amateur - intermédiaire. Je suis en terminale spé Maths et NSI et je me dirige vers des études d’informatique. \nJe fais du développement pour le loisir et comme passion.",
+    "fields": [
+      {
+        "title": "Bot Discord",
+        "description": "Création de Bot Discord en Python avec hébergement possible.",
+        "prix": "empty",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "Github - https://github.com/Babouino-Developpement",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "934066760863318026",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "280393650100502529"
+  },
+  {
+    "name": "Clauin Angelo",
+    "description": "Je suis développeur web fullstack javascript depuis 4 ans",
+    "fields": [
+      {
+        "title": "Bot discord.js",
+        "description": "Je créerais votre bot discord en utilisant la librairie discord.js",
+        "prix": "10",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "934452211503726592",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "859737433675399180"
+  },
+  {
+    "name": "Jonathan I.",
+    "description": "Diplômé d'un Bachelor en développement web, 4ans de développement front-end avec 2ans de mentorat d'alternant",
+    "fields": [
+      {
+        "title": "Développeur front-end, Expert ReactJS/NextJS",
+        "description": "Je suis disponible pour développer vos interfaces, je suis aussi capable de parfaitement intéragir avec une équipe de designer si besoin. Je suis aussi capable de faire de la TMA sur vos projets actuel. Je peux aussi tout à faire des projets en vanilla",
+        "prix": "empty",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "Github - https://github.com/Kola-Kola",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "936339508507602954",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "239373518633041920"
+  },
+  {
+    "name": "Mylhow",
+    "description": "Voilà 11 ans que je suis autodidacte. J'ai pu pratiquer sur de nombreuses technologies couplé à deux ans approfondis d'école 42 qui m'ont appris la rigueur et la structure d'un code efficace.  Je développe principalement en Node.JS / javascript et plutôt applicatif, backend, ce qui inclut bien sûr des bots discords. Plus que des compétences, c'est une passion que j'applique dans une autoentreprise qui vous permettra d'avoir des facture pour mon travail.",
+    "fields": [
+      {
+        "title": "Liens",
+        "description": "Github - https://github.com/dgascon",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "939119273236901918",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "195566676064993280"
+  },
+  {
+    "name": "BOUCHON Stanyslas",
+    "description": "Cela fait 5 ans que je suis autodidacte en Web (fullstack) et dans le domaine de la création d'outil simplifiant des tâches longues, fastidieuses et/ou complexes.\nJe suis actuellement en fin de formation en baccalauréat professionnel Réseaux Informatiques et Systèmes Communicants (RISC) option Systèmes Numériques (SN).",
+    "fields": [
+      {
+        "title": "Création d'un outil",
+        "description": "Je créerais un ou plusieurs outils facilitant vos tâches dans le langage le plus approprié et de la manière la plus ergonomique.",
+        "prix": "variable",
+        "temps": "variable",
+        "inline": false
+      },
+      {
+        "title": "Création d'un site Internet",
+        "description": "Je créerais selon vos exigences un site répondant à une ergonomie liée et à un style graphique appropriée et je réfléchirais avec vous à d'outils/options supplémentaires.",
+        "prix": "2€/page + 0,50€/h",
+        "temps": "variable",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "Voici des liens pouvant vous êtres utiles à connaître mes compétences même si __ceux-ci ne sont pas prouvant de ma réelle expertise__.\n\nGithub : https://github.com/startpimp",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "942147310010396712",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "607291511087955972"
+  },
+  {
+    "name": "Dragos",
+    "description": "Bonjour/Bonsoir,\n\nJe me présente, je suis Dragos, j'ai 14 ans et je suis passionné par la programmation. Cela fait maintenant 7 mois que je code en Python et je vous propose aujourd'hui mes services.\nJe ne connais pas tout, en revanche, je me renseigne dès que je tombe sur un problème afin de le résoudre et de vous vendre un code des plus efficaces.\nJe suis \"spécialisé\" dans les bots Python, c'est sur ceux-ci que je travaille le plus en ce moment, mais vous pouvez également faire appel à moi pour des programmes plus simples/complexes, comme de l'aide ou la résolution (avec explications) de vos exercices...",
+    "fields": [
+      {
+        "title": "Services / Tarifs",
+        "description": "Comme expliquez ci-dessus, les prix et le temps varient en fonction des demandes. Je ne pourrais donc pas vous donner une moyenne.\nEn revanche, lorsque vous venez me contacter, je commencerai par une ébauche afin de voir si j'ai les compétences requises, et si c'est le cas, je vous annoncerai une tranche qui, s'il n'y a pas d'imprévus/fonctionnalités à rajouter, ne bougera pas.",
+        "prix": "empty",
+        "temps": "En général, pas plus de 2 semaines pour les bots; 2 heures pour des exercices. Mais cela dépend de la complexité, le temps vous sera annoncé avec la tranche de prix si vous le souhaitez.",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "942139166911782932",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "386614847019810836"
+  },
+  {
+    "name": "Lion",
+    "description": "Bonsoir,\n\nJe pratique le codage depuis environ 5 années et j'y suis profondément passioné.",
+    "fields": [
+      {
+        "title": "Application Windows en WPF:",
+        "description": "Je vous programme une Application graphique pour Windows avec une conception de votre choix.",
+        "prix": "En fonction du projet demandé. Min: 5 Euros",
+        "temps": "En fonction de projet demandé. Min: 1h",
+        "inline": false
+      },
+      {
+        "title": "Application Web pour Windows, Linux & Mac en Electron/Tauri",
+        "description": "Je code une Application Web compatible avec tous les systèmes d'exploitation.",
+        "prix": "En fonction du projet demandé. Min: 5 Euros",
+        "temps": "En fonction de projet demandé. Min: 1h",
+        "inline": false
+      },
+      {
+        "title": "Web Scraping:",
+        "description": "Je vous code un programme/sdk qui récupère des données spécifiques d'un site web.",
+        "prix": "En fonction de la complexité du projet",
+        "temps": "En fonction de la complexité du projet",
+        "inline": false
+      },
+      {
+        "title": "Bot pour Discord/Matrix (matrix.org)",
+        "description": "Je vous programme un bot discord en c# ou node.js",
+        "prix": "En fonction de la complexité du projet",
+        "temps": "En fonction de la complexité du projet",
+        "inline": false
+      },
+      {
+        "title": "Site-Web simple:",
+        "description": "je vous programme le backend et frontend d'un site-web . Language backend: Express ou c#",
+        "prix": "En fonction de la complexité du projet (min: 10 Euros)",
+        "temps": "En fonction de la complexité du projet",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "il y en a pas",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "942112562537955398",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "743498810969292892"
+  }
+]
