@@ -37,7 +37,7 @@ public class CreateFreeLance extends LongCommand {
                 addYesNoEmoji();
                 setText(embed -> {
                     embed.setTitle("Voulez vous poster votre présentation ?");
-                    embed.setDescription("La gestion par la suite de l'offre est en développement, si vous voulez la retirer par la suite demmandez à un membre du staff !");
+                    embed.setDescription("La gestion par la suite de l'offre est en développement, si vous voulez la retirer par la suite demandez à un membre du staff !");
                     embed.setColor(ColorsUsed.just);
                     embed.setFooter("Vous pouvez annuler | cancel", null);
                 });
