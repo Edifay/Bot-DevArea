@@ -11,6 +11,8 @@ import devarea.bot.automatical.XpCount;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 
+import static devarea.bot.Init.membersId;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserInfo {
 
@@ -130,22 +132,27 @@ public class UserInfo {
     @JsonIgnore
     private boolean fetch() {
         this.isMember = ControllerOAuth2.isMember(this.id);
-        if (this.isMember) {
+        if (this.isMember) { // Si c'est un membre du serveur
             Member member = Init.devarea.getMemberById(getAsSnowflake()).block();
-
             this.setId(member.getId().asString());
             this.setName(member.getUsername());
             this.setUrlAvatar(member.getAvatarUrl());
             if (this.urlAvatar == null)
                 this.setUrlAvatar(member.getDefaultAvatarUrl());
             this.lastTimeFetch = System.currentTimeMillis();
-            this.setRank(XpCount.getRankOf(getAsSnowflake()));
-            this.setXp(XpCount.getXpOf(getAsSnowflake()));
+
+            if (XpCount.haveBeenSet(getAsSnowflake())) {
+                this.setRank(XpCount.getRankOf(getAsSnowflake()));
+                this.setXp(XpCount.getXpOf(getAsSnowflake()));
+            } else {
+                this.setRank(XpCount.getRankOf(getAsSnowflake()));// may be set to last !
+                this.setXp(0);
+            }
 
             return true;
-        } else if (builder != null) {
-            User user = builder.getUser();
+        } else if (builder != null) { // SI ce n'est pas un membre du serveur
 
+            User user = builder.getUser();
             this.setId(user.getId());
             this.setName(user.getUsername());
             this.setUrlAvatar(user.getAvatar());

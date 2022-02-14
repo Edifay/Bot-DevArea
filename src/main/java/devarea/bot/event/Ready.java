@@ -40,12 +40,13 @@ public class Ready {
 
         try {
             Stats.init();
-            startAway(() -> {
-                synchronized (Init.membersId) {
-                    Init.membersId.removeAll(Init.membersId);
-                    Init.devarea.getMembers().buffer().blockLast().forEach(member -> Init.membersId.add(member.getId()));
-                }
-            });
+            System.out.println("Fetching members...");
+            long ms = System.currentTimeMillis();
+            synchronized (Init.membersId) {
+                Init.membersId.removeAll(Init.membersId);
+                Init.devarea.getMembers().buffer().blockLast().forEach(member -> Init.membersId.add(member.getId()));
+            }
+            System.out.println("Fetch took : " + (System.currentTimeMillis() - ms) + "ms");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -61,11 +62,11 @@ public class Ready {
             startAway(Stats::start);
             startAway(MeetupManager::init);
             startAway(XpCount::init);
-            if (!developing) {
+            if (!developing)
                 startAway(Bump::init);
-                startAway(MissionsManager::init);
-                startAway(FreeLanceManager::init);
-            }
+            startAway(MissionsManager::init);
+            startAway(FreeLanceManager::init);
+
             startAway(GithubEvent::init);
             startAway(ControllerOAuth2::init);
         } catch (Exception e) {

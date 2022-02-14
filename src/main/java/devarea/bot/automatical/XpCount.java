@@ -159,9 +159,9 @@ public class XpCount {
 
         final Snowflake memberId = member.getId();
 
-        if(xp.containsKey(memberId)) {
-           final Integer memberXp = getXpOf(memberId);
-           xp.put(memberId, memberXp + value);
+        if (xp.containsKey(memberId)) {
+            final Integer memberXp = getXpOf(memberId);
+            xp.put(memberId, memberXp + value);
         }
     }
 
@@ -169,7 +169,7 @@ public class XpCount {
 
         final Snowflake memberId = member.getId();
 
-        if(xp.containsKey(memberId)) {
+        if (xp.containsKey(memberId)) {
             final Integer memberXp = getXpOf(memberId);
             xp.replace(memberId, memberXp, memberXp - value);
         }

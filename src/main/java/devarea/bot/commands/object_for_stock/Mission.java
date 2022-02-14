@@ -3,6 +3,9 @@ package devarea.bot.commands.object_for_stock;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import devarea.backend.controllers.data.MissionForWeb;
+
+import java.util.Objects;
 
 public class Mission {
 
@@ -137,5 +140,15 @@ public class Mission {
                 ", message=" + message +
                 ", memberId='" + memberId + '\'' +
                 '}';
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof MissionForWeb) return o.equals(this);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Mission mission = (Mission) o;
+        return Objects.equals(title, mission.title) && Objects.equals(descriptionText, mission.descriptionText) && Objects.equals(prix, mission.prix) && Objects.equals(dateRetour, mission.dateRetour) && Objects.equals(langage, mission.langage) && Objects.equals(support, mission.support) && Objects.equals(niveau, mission.niveau) && Objects.equals(message, mission.message) && Objects.equals(memberId, mission.memberId);
     }
 }

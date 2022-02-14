@@ -93,7 +93,7 @@ public class ControllerOAuth2 {
                 } else {
                     builder.revoke();
                 }
-                return "<meta http-equiv=\"refresh\" content=\"0; url=http://193.26.14.69/?code=" + getUserLink(builder.getIdUser()) + "\" />";
+                return "<meta http-equiv=\"refresh\" content=\"0; url=http://localhost:4200/?code=" + getUserLink(builder.getIdUser()) + "\" />";
             }
 
             builder.enableAutoRefresh();

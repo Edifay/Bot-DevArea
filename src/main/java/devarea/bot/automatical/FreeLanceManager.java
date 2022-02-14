@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static devarea.Main.developing;
 import static devarea.bot.commands.Command.delete;
 import static devarea.bot.event.FunctionEvent.startAway;
 
@@ -38,7 +39,8 @@ public class FreeLanceManager {
     public static void init() {
         try {
             load();
-            sendLastMessage();
+            if (!developing)
+                sendLastMessage();
             new Thread(() -> {
                 try {
                     while (true) {

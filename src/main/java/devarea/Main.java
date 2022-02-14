@@ -9,9 +9,10 @@ import java.io.PrintStream;
 
 public class Main {
 
-    public static final boolean developing = false;
+    public static final boolean developing = true;
 
     public static void main(String[] args) {
+
         if (!developing)
             try {
                 PrintStream out = new PrintStream("out.txt");

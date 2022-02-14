@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static devarea.Main.developing;
 import static devarea.bot.commands.Command.delete;
 import static devarea.bot.event.FunctionEvent.startAway;
 
@@ -29,13 +30,14 @@ public class MissionsManager {
 
     public static void init() {
         load();
-        sendLastMessage();
+        if (!developing)
+            sendLastMessage();
         new Thread(() -> {
             try {
                 while (true) {
                     if (verif())
                         save();
-                    Thread.sleep(86400000L);
+                    Thread.sleep(3600000);
                 }
             } catch (InterruptedException e) {
             }
@@ -102,17 +104,20 @@ public class MissionsManager {
 
     public static boolean verif() {
         ArrayList<Mission> atRemove = new ArrayList<>();
-        for (Mission mission : missions)
+        TextChannel channel = (TextChannel) Init.devarea.getChannelById(Init.idMeetupVerif).block();
+        for (Mission mission : missions) {
             if (!Init.membersId.contains(Snowflake.of(mission.getMemberId()))) {
-                /*((TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block()).createMessage(messageCreateSpec -> {
-                    messageCreateSpec.setContent("Le membre : <@" + mission.getMemberId() + "> est concidéré comme \"left\" ça missions devrait être supprimer !");
-                }).block();*/
-                /*atRemove.add(mission);
-                try {
-                    delete(false, mission.getMessage().getMessage());
-                } catch (Exception e) {
-                }*/
+                atRemove.add(mission);
+                startAway(()->{
+                    try {
+                        delete(false, mission.getMessage().getMessage());
+                    } catch (Exception e) {
+                    }
+                });
             }
+        }
+
+        System.out.println("Il y a en tout : " + atRemove.size() + " missions à supprimer !");
 
         if (atRemove.size() == 0)
             return false;
