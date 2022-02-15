@@ -31,6 +31,8 @@ public class MissionForWeb {
     protected String member_url;
     @JsonProperty("member_tag")
     protected String member_tag;
+    @JsonProperty("message_id")
+    protected String message_id;
     @JsonIgnore
     protected Mission mission;
     @JsonIgnore
@@ -46,6 +48,7 @@ public class MissionForWeb {
         this.langage = mission_base.getLangage();
         this.support = mission_base.getSupport();
         this.niveau = mission_base.getNiveau();
+        this.message_id = mission_base.getMessage().getMessageID().asString();
 
         Member member = Init.devarea.getMemberById(Snowflake.of(mission_base.getMemberId())).block();
 

@@ -46,7 +46,6 @@ public abstract class Command {
         this.channel = channel;
     }
 
-
     protected Boolean endCommand() {
         CommandManager.removeCommand(this.member.getId(), this);
         return true;

@@ -88,6 +88,18 @@ public class MissionsManager {
         save();
     }
 
+    public static void clearThisMission(Mission mission) {
+        missions.remove(mission);
+        startAway(()->{
+            try {
+                delete(true, mission.getMessage().getMessage());
+            } catch (Exception e) {
+
+            }
+        });
+        save();
+    }
+
     private static void load() {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("./mission.json");
@@ -108,7 +120,7 @@ public class MissionsManager {
         for (Mission mission : missions) {
             if (!Init.membersId.contains(Snowflake.of(mission.getMemberId()))) {
                 atRemove.add(mission);
-                startAway(()->{
+                startAway(() -> {
                     try {
                         delete(false, mission.getMessage().getMessage());
                     } catch (Exception e) {

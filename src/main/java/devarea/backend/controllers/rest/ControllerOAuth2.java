@@ -30,7 +30,7 @@ public class ControllerOAuth2 {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    private static HashMap<String, UserInfo> builders = new HashMap<>();
+    private static HashMap<String, UserInfo> userInfo_cache = new HashMap<>();
 
     public static void init() {
         try {
@@ -42,27 +42,21 @@ public class ControllerOAuth2 {
 
     @GetMapping("/auth/get")
     public UserInfo get(@RequestParam(value = "code") final String code, @RequestParam(value = "force", required = false, defaultValue = "false") final String force) throws IOException {
-        if (builders.containsKey(code)) {
-            boolean isFetch = builders.get(code).verifFetchNeeded(Boolean.parseBoolean(force));
-            startAway(() -> {
-                try {
-                    save();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        } else {
-            return new UserInfo();
-        }
-        return builders.get(code);
+        System.out.println("Get !");
+        if (userInfo_cache.containsKey(code))
+            userInfo_cache.get(code).verifFetchNeeded(Boolean.parseBoolean(force));
+        else
+            return null;
+
+        return userInfo_cache.get(code);
     }
 
     @GetMapping("/auth/remove")
     public boolean remove(@RequestParam(value = "code") final String code) throws IOException {
-        if (builders.containsKey(code)) {
-            if (builders.get(code).getBuilder() != null)
-                builders.get(code).getBuilder().revoke();
-            builders.remove(code);
+        if (userInfo_cache.containsKey(code)) {
+            if (userInfo_cache.get(code).getBuilder() != null)
+                userInfo_cache.get(code).getBuilder().revoke();
+            userInfo_cache.remove(code);
             startAway(() -> {
                 try {
                     save();
@@ -77,7 +71,7 @@ public class ControllerOAuth2 {
 
     @GetMapping("/auth")
     public String auth(@RequestParam(value = "code") final String code) {
-        if (!builders.containsKey(code)) {
+        if (!userInfo_cache.containsKey(code)) {
 
             OAuthBuilder builder = new OAuthBuilder(client_id, client_secret).setScopes(new String[]{"identify"}).setRedirectURI(redirect_url);
 
@@ -85,7 +79,7 @@ public class ControllerOAuth2 {
                 return "ERROR IN LOGIN TO DISCORD";
 
             if (isAlreadyBind(builder.getIdUser())) {
-                UserInfo userInfo = builders.get(getUserLink(builder.getIdUser()));
+                UserInfo userInfo = userInfo_cache.get(getUserLink(builder.getIdUser()));
                 if (userInfo.getBuilder() == null) {
                     builder.enableAutoRefresh();
                     userInfo.setBuilder(builder);
@@ -101,7 +95,7 @@ public class ControllerOAuth2 {
             UserInfo userInfo = new UserInfo(builder);
             userInfo.verifFetchNeeded(false);
 
-            builders.put(code, userInfo);
+            userInfo_cache.put(code, userInfo);
 
             startAway(() -> {
                 try {
@@ -113,19 +107,25 @@ public class ControllerOAuth2 {
 
         }
 
-        return "<meta http-equiv=\"refresh\" content=\"0; url=http://193.26.14.69/?code=" + code + "\" />";
+        return "<meta http-equiv=\"refresh\" content=\"0; url=http://localhost:4200/?code=" + code + "\" />";
     }
 
     public static void save() throws IOException {
-        mapper.writeValue(new File("auth.json"), builders);
+        HashMap<String, String> code_link_id = new HashMap<>();
+        for (Map.Entry<String, UserInfo> random : userInfo_cache.entrySet())
+            code_link_id.put(random.getKey(), random.getValue().getId());
+        mapper.writeValue(new File("auth.json"), code_link_id);
     }
 
     public static void load() throws IOException {
         File file = new File("auth.json");
         if (!file.exists())
             save();
-        builders = mapper.readValue(file, new TypeReference<>() {
+        HashMap<String, String> code_link_id = new HashMap<>();
+        code_link_id = mapper.readValue(file, new TypeReference<>() {
         });
+        for (Map.Entry<String, String> random : code_link_id.entrySet())
+            userInfo_cache.put(random.getKey(), new UserInfo(random.getValue()));
     }
 
     public static boolean isMember(String id) {
@@ -133,17 +133,21 @@ public class ControllerOAuth2 {
     }
 
     public static boolean isAlreadyBind(String id) {
-        for (Map.Entry<String, UserInfo> random : builders.entrySet())
+        for (Map.Entry<String, UserInfo> random : userInfo_cache.entrySet())
             if (random.getValue().getId().equals(id))
                 return true;
         return false;
     }
 
     public static String getUserLink(String id) {
-        for (Map.Entry<String, UserInfo> random : builders.entrySet())
+        for (Map.Entry<String, UserInfo> random : userInfo_cache.entrySet())
             if (random.getValue().getId().equals(id))
                 return random.getKey();
         return null;
+    }
+
+    public static UserInfo getInfoFor(String code) {
+        return userInfo_cache.get(code);
     }
 
 }
