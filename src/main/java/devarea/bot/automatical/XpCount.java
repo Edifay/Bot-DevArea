@@ -11,6 +11,8 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.VoiceState;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.MessageCreateSpec;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,17 +31,13 @@ public class XpCount {
     private static final ArrayList<Snowflake> already = new ArrayList<>();
 
     public static LinkedHashMap<Snowflake, Integer> sortByValue(final Map<Snowflake, Integer> wordCounts) {
-        return wordCounts.entrySet()
-                .stream()
-                .sorted((Map.Entry.<Snowflake, Integer>comparingByValue().reversed()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+        return wordCounts.entrySet().stream().sorted((Map.Entry.<Snowflake, Integer>comparingByValue().reversed())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
     public static void init() {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("./xp.json");
-        if (!file.exists())
-            save();
+        if (!file.exists()) save();
         try {
             LinkedHashMap<String, Integer> obj = mapper.readValue(file, new TypeReference<>() {
             });
@@ -100,8 +98,7 @@ public class XpCount {
     public static void loadLeft() {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("./xpLeft.json");
-        if (!file.exists())
-            saveLeft();
+        if (!file.exists()) saveLeft();
         try {
             HashMap<String, Integer> obj = mapper.readValue(file, new TypeReference<>() {
             });
@@ -122,25 +119,16 @@ public class XpCount {
     public synchronized static void addMember(Member member, boolean withTimer) {
         if (!withTimer || !already.contains(member.getId())) {
             if (xp.containsKey(member.getId())) {
-                if (XpCount.getLevelForXp(xp.get(member.getId())) < XpCount.getLevelForXp(xp.get(member.getId()) + 1)) {
+                if (XpCount.getLevelForXp(xp.get(member.getId())) < XpCount.getLevelForXp(xp.get(member.getId()) + 1))
                     startAway(() -> {
-                        Command.send((TextChannel) Init.devarea.getChannelById(Init.idCommands).block(), messageCreateSpec -> {
-                            messageCreateSpec.setContent("<@" + member.getId().asString() + ">");
-                            messageCreateSpec.setEmbed(embedCreateSpec -> {
-                                embedCreateSpec.setDescription("Bien joué <@" + member.getId().asString() + ">, tu es passé niveau " + XpCount.getLevelForXp(xp.get(member.getId()) + 1) + " !");
-                                embedCreateSpec.setTimestamp(Instant.now());
-                                embedCreateSpec.setColor(ColorsUsed.same);
-                            });
-                        }, false);
+                        Command.send((TextChannel) Init.devarea.getChannelById(Init.idCommands).block(), MessageCreateSpec.builder().content("<@" + member.getId().asString() + ">").addEmbed(EmbedCreateSpec.builder().description("Bien joué <@" + member.getId().asString() + ">, tu es passé niveau " + XpCount.getLevelForXp(xp.get(member.getId()) + 1) + " !").timestamp(Instant.now()).color(ColorsUsed.same).build()).build(), false);
                     });
-                }
                 xp.put(member.getId(), xp.get(member.getId()) + 1);
                 xp = sortByValue(xp);
-            } else {
+            } else
                 xp.put(member.getId(), 1);
-            }
+
             if (withTimer) {
-                System.out.println("With timer !");
                 already.add(member.getId());
                 new Thread(() -> {
                     try {
@@ -149,8 +137,6 @@ public class XpCount {
                     }
                     removeSafely(member);
                 }).start();
-            } else {
-                System.out.println("No timer !");
             }
         }
     }
@@ -182,10 +168,8 @@ public class XpCount {
     public synchronized static Integer getRankOf(Snowflake id) {
         int i = 0;
         for (Snowflake randomId : xp.keySet())
-            if (randomId.equals(id))
-                return ++i;
-            else
-                i++;
+            if (randomId.equals(id)) return ++i;
+            else i++;
         return i;
     }
 
@@ -207,10 +191,8 @@ public class XpCount {
     }
 
     public synchronized static XpMember[] getListOfIndex(final int start, int end) {
-        if (start > xp.size())
-            return new XpMember[0];
-        if (end > xp.size())
-            end = xp.size();
+        if (start > xp.size()) return new XpMember[0];
+        if (end > xp.size()) end = xp.size();
 
         XpMember[] atReturn = new XpMember[end - start];
         int setted = 0;
@@ -227,8 +209,7 @@ public class XpCount {
 
     public synchronized static int getLevelForXp(int xp) {
         int level = 0;
-        while (xp >= getAmountForLevel(level))
-            level++;
+        while (xp >= getAmountForLevel(level)) level++;
         return --level;
     }
 
@@ -241,9 +222,7 @@ public class XpCount {
     }
 
     public synchronized static void verifLeft() {
-        List<Member> members =
-                Init.devarea
-                        .getMembers().buffer().blockLast();
+        List<Member> members = Init.devarea.getMembers().buffer().blockLast();
         ArrayList<Snowflake> memberIds = new ArrayList<>();
         for (Member member : members)
             memberIds.add(member.getId());
@@ -276,8 +255,7 @@ public class XpCount {
 
 
     public static synchronized void remove(Snowflake id) {
-        if (xp.containsKey(id))
-            xpLeft.put(id.asString(), xp.get(id));
+        if (xp.containsKey(id)) xpLeft.put(id.asString(), xp.get(id));
         saveLeft();
         xp.remove(id);
     }

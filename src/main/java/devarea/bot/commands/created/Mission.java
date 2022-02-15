@@ -8,6 +8,7 @@ import devarea.bot.commands.Stape;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 
 import java.util.ArrayList;
@@ -23,21 +24,19 @@ public class Mission extends LongCommand {
             @Override
             protected boolean onCall(Message message) {
                 ofMember = MissionsManager.getOf(member.getId());
-                if (ofMember.size() != 0)
-                    setText(embed -> {
-                        embed.setColor(ColorsUsed.same);
-                        embed.setTitle("Vous possédez : " + ofMember.size());
-                        String msg = "";
-                        for (int i = 0; i < ofMember.size(); i++)
-                            msg += "`" + i + "`: **" + ofMember.get(i).getTitle() + "**\n";
-                        embed.setDescription(msg);
-                        embed.setFooter("Vous pouvez annuler | cancel", null);
-                    });
-                else {
-                    setText(embed -> {
-                        embed.setColor(ColorsUsed.same);
-                        embed.setTitle("Vous n'avez acutellement acune mission !");
-                    });
+                if (ofMember.size() != 0) {
+                    String msg = "";
+                    for (int i = 0; i < ofMember.size(); i++)
+                        msg += "`" + i + "`: **" + ofMember.get(i).getTitle() + "**\n";
+                    setText(EmbedCreateSpec.builder()
+                            .color(ColorsUsed.same)
+                            .title("Vous possédez : " + ofMember.size())
+                            .description(msg)
+                            .footer("Vous pouvez annuler | cancel", null).build());
+                } else {
+                    setText(EmbedCreateSpec.builder()
+                            .color(ColorsUsed.same)
+                            .title("Vous n'avez acutellement acune mission !").build());
                     return end;
                 }
                 return next;
@@ -54,10 +53,9 @@ public class Mission extends LongCommand {
                             ofMember.get(number).getMessage().getMessage().delete().subscribe();
                         } catch (Exception e) {
                         }
-                        setText(embed -> {
-                            embed.setColor(ColorsUsed.just);
-                            embed.setTitle("Votre mission a bien été supprimé !");
-                        });
+                        setText(EmbedCreateSpec.builder()
+                                .color(ColorsUsed.just)
+                                .title("Votre mission a bien été supprimé !").build());
                         return end;
                     }
                 } catch (Exception e) {
@@ -68,16 +66,13 @@ public class Mission extends LongCommand {
 
         this.firstStape = new FirstStape(this.channel, deleteList) {
             @Override
-            public void onFirstCall(Consumer<? super MessageCreateSpec> deleteThisVariableAndSetYourOwnMessage) {
-                super.onFirstCall(msg -> {
-                    msg.setEmbed(embed -> {
-                        embed.setColor(ColorsUsed.same);
-                        embed.setTitle("Missions");
-                        embed.setDescription("`delete` -> supprimer une mission");
-                        embed.addField("Créer une mission", "Pour créer une mission il suffit de réagir dans le channel <#" + Init.idMissionsPayantes.asString() + ">.", false);
-                        embed.setFooter("Vous pouvez annuler | cancel", null);
-                    });
-                });
+            public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
+                super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
+                        .color(ColorsUsed.same)
+                        .title("Missions")
+                        .description("`delete` -> supprimer une mission")
+                        .addField("Créer une mission", "Pour créer une mission il suffit de réagir dans le channel <#" + Init.idMissionsPayantes.asString() + ">.", false)
+                        .footer("Vous pouvez annuler | cancel", null).build()).build());
             }
 
             @Override
@@ -88,6 +83,8 @@ public class Mission extends LongCommand {
                 }
                 return super.onReceiveMessage(event);
             }
-        };
+        }
+
+        ;
     }
 }

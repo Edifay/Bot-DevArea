@@ -6,6 +6,8 @@ import devarea.bot.commands.ShortCommand;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.MessageCreateSpec;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -22,7 +24,7 @@ public class Rank extends ShortCommand {
         super(message);
         Member pinged = message.getMember().get();
         try {
-            pinged = Init.devarea.getMemberById(message.getMessage().getUserMentions().blockFirst().getId()).block();
+            pinged = Init.devarea.getMemberById(message.getMessage().getUserMentions().get(0).getId()).block();
         } catch (Exception e) {
         } finally {
 
@@ -68,14 +70,13 @@ public class Rank extends ShortCommand {
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     ImageIO.write(img, "png", outputStream);
                     Member finalPinged = pinged;
-                    this.send(messageCreateSpec -> {
-                        messageCreateSpec.addFile("xp.png", new ByteArrayInputStream(outputStream.toByteArray()));
-                        messageCreateSpec.setEmbed(embedCreateSpec -> {
-                            embedCreateSpec.setColor(ColorsUsed.just);
-                            embedCreateSpec.setTitle("Voici l'xp de " + finalPinged.getDisplayName());
-                            embedCreateSpec.setImage("attachment://xp.png");
-                        });
-                    }, false);
+                    this.send(MessageCreateSpec.builder()
+                            .addFile("xp.png", new ByteArrayInputStream(outputStream.toByteArray()))
+                            .addEmbed(EmbedCreateSpec.builder()
+                                    .color(ColorsUsed.just)
+                                    .title("Voici l'xp de " + finalPinged.getDisplayName())
+                                    .image("attachment://xp.png").build()
+                            ).build(), false);
                 } catch (IOException | FontFormatException e) {
                     e.printStackTrace();
                 }

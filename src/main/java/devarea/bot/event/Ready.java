@@ -7,8 +7,7 @@ import devarea.bot.data.ColorsUsed;
 import devarea.bot.github.GithubEvent;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.channel.TextChannel;
-import discord4j.core.object.presence.Activity;
-import discord4j.core.object.presence.Presence;
+import discord4j.core.object.presence.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,8 +20,7 @@ public class Ready {
     private static boolean already = false;
 
     public static void readyEventFonction(final Snowflake idDevArea, final Snowflake idLogChannel) {
-
-        Init.client.updatePresence(Presence.online(Activity.playing("//help | Dev'Area Server !"))).subscribe();
+        Init.client.updatePresence(ClientPresence.of(Status.ONLINE, ClientActivity.playing("//help | Dev'Area Server !"))).subscribe();
         Init.devarea = Init.client.getGuildById(idDevArea).block();
         assert Init.devarea != null;
         startAway(() -> {
@@ -44,6 +42,7 @@ public class Ready {
             long ms = System.currentTimeMillis();
             synchronized (Init.membersId) {
                 Init.membersId.removeAll(Init.membersId);
+                System.out.println("Member size : " + Init.devarea.getData().members().size());
                 Init.devarea.getMembers().buffer().blockLast().forEach(member -> Init.membersId.add(member.getId()));
             }
             System.out.println("Fetch took : " + (System.currentTimeMillis() - ms) + "ms");

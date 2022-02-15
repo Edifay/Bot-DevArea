@@ -10,7 +10,9 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.core.spec.MessageEditSpec;
 
 import java.util.function.Consumer;
 
@@ -35,15 +37,9 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onCall(Message message) {
                 addYesNoEmoji();
-                setText(embed -> {
-                    embed.setTitle("Voulez vous poster votre présentation ?");
-                    embed.setDescription("La gestion par la suite de l'offre est en développement, si vous voulez la retirer par la suite demandez à un membre du staff !");
-                    embed.setColor(ColorsUsed.just);
-                    embed.setFooter("Vous pouvez annuler | cancel", null);
-                });
-                messageAtEdit.edit(messageEditSpec -> {
-                    messageEditSpec.setEmbed(freeLance.getEmbed());
-                }).subscribe();
+                setText(EmbedCreateSpec.builder().title("Voulez vous poster votre présentation ?").description("La gestion par la suite de l'offre est en développement, si vous voulez la retirer par la suite demandez à un membre du staff !").color(ColorsUsed.just).footer("Vous pouvez annuler | cancel", null).build());
+
+                messageAtEdit.edit(MessageEditSpec.builder().addEmbed(freeLance.getEmbed()).build()).subscribe();
                 return false;
             }
 
@@ -65,12 +61,7 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onCall(Message message) {
                 addYesNoEmoji();
-                setText(embed -> {
-                    embed.setTitle("Liens");
-                    embed.setDescription("Voulez vous conserver ces liens. Si vous voulez les refaires choississez non !");
-                    embed.setColor(ColorsUsed.same);
-                    embed.setFooter("Vous pouvez annuler | cancel", null);
-                });
+                setText(EmbedCreateSpec.builder().title("Liens").description("Voulez vous conserver ces liens. Si vous voulez les refaires choississez non !").color(ColorsUsed.same).footer("Vous pouvez annuler | cancel", null).build());
                 return false;
             }
 
@@ -92,21 +83,16 @@ public class CreateFreeLance extends LongCommand {
                 removeAllEmoji();
                 actualFied = new FreeLance.FieldSeria();
                 actualFied.setTitle("Liens");
-                setText(embed -> {
-                    embed.setTitle("Liens");
-                    embed.setDescription("Donnez moi la description des liens que vous voulez joindre");
-                    embed.setFooter("Vous pouvez annuler | cancel", null);
-                    embed.setColor(ColorsUsed.same);
-                });
-                messageAtEdit.edit(msg -> msg.setEmbed(embed -> {
-                    embed.setTitle(freeLance.getFreeLanceName());
-                    embed.setDescription(freeLance.getDescription());
-                    for (int i = 0; i < freeLance.getFieldNumber(); i++) {
-                        embed.addField(freeLance.getField(i).getTitle(), freeLance.getField(i).getValue(), freeLance.getField(i).getInline());
-                    }
-                    embed.addField(actualFied.getTitle(), actualFied.getValue(), actualFied.getInline());
-                    embed.setColor(ColorsUsed.same);
-                })).subscribe();
+                setText(EmbedCreateSpec.builder().title("Liens").description("Donnez moi la description des liens que vous voulez joindre").footer("Vous pouvez annuler | cancel", null).color(ColorsUsed.same).build());
+
+                EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder().title(freeLance.getFreeLanceName()).description(freeLance.getDescription()).color(ColorsUsed.same);
+
+                for (int i = 0; i < freeLance.getFieldNumber(); i++) {
+                    builder.addField(freeLance.getField(i).getTitle(), freeLance.getField(i).getValue(), freeLance.getField(i).getInline());
+                }
+                builder.addField(actualFied.getTitle(), actualFied.getValue(), actualFied.getInline());
+
+                messageAtEdit.edit(MessageEditSpec.builder().addEmbed(builder.build()).build()).subscribe();
                 return false;
             }
 
@@ -130,40 +116,34 @@ public class CreateFreeLance extends LongCommand {
             }
         };
 
-        link = new Stape(linkGetInfo, validateAll) {
-            @Override
-            protected boolean onCall(Message message) {
-                setText(embed -> {
-                    embed.setTitle("Voulez-vous ajouter l'onglet liens ?");
-                    embed.setDescription("Cet onglet permet de partager un portfolio ou autre lien de documentation sur vous.");
-                    embed.setFooter("Vous pouvez annuler | cancel", null);
-                    embed.setColor(ColorsUsed.just);
-                });
-                addYesNoEmoji();
-                return false;
-            }
+        link = new
 
-            @Override
-            protected boolean onReceiveReact(ReactionAddEvent event) {
-                if (isYes(event)) {
-                    return callStape(0);
-                } else if (isNo(event)) {
-                    return callStape(1);
+                Stape(linkGetInfo, validateAll) {
+                    @Override
+                    protected boolean onCall(Message message) {
+                        setText(EmbedCreateSpec.builder().title("Voulez-vous ajouter l'onglet liens ?").description("Cet onglet permet de partager un portfolio ou autre lien de documentation sur vous.").footer("Vous pouvez annuler | cancel", null).color(ColorsUsed.just).build());
+                        addYesNoEmoji();
+                        return false;
+                    }
+
+                    @Override
+                    protected boolean onReceiveReact(ReactionAddEvent event) {
+                        if (isYes(event)) {
+                            return callStape(0);
+                        } else if (isNo(event)) {
+                            return callStape(1);
+                        }
+                        return super.onReceiveReact(event);
+                    }
                 }
-                return super.onReceiveReact(event);
-            }
-        };
+
+        ;
 
         Stape keepField = new Stape() {
             @Override
             protected boolean onCall(Message message) {
                 addYesNoEmoji();
-                setText(embed -> {
-                    embed.setTitle("Voulez-vous concerver cette offre ?");
-                    embed.setDescription("Vous pouvez mettre le nombre d'offres que vous voulez, ne vous limitez pas ! Mais si votre offre ne vous convient pas ne la concervez pas !");
-                    embed.setColor(ColorsUsed.just);
-                    embed.setFooter("Vous pouvez annuler | cancel", null);
-                });
+                setText(EmbedCreateSpec.builder().title("Voulez-vous concerver cette offre ?").description("Vous pouvez mettre le nombre d'offres que vous voulez, ne vous limitez pas ! Mais si votre offre ne vous convient pas ne la concervez pas !").color(ColorsUsed.just).footer("Vous pouvez annuler | cancel", null).build());
                 return false;
             }
 
@@ -182,12 +162,7 @@ public class CreateFreeLance extends LongCommand {
         Stape getTemps = new Stape(keepField) {
             @Override
             protected boolean onCall(Message message) {
-                setText(embed -> {
-                    embed.setTitle("Temps de retour");
-                    embed.setDescription("Proposez un temps de retour viable. Si vous n'avez pas de temps de retour précis tapez `empty`.");
-                    embed.setColor(ColorsUsed.same);
-                    embed.setFooter("Vous pouvez annuler | cancel", null);
-                });
+                setText(EmbedCreateSpec.builder().title("Temps de retour").description("Proposez un temps de retour viable. Si vous n'avez pas de temps de retour précis tapez `empty`.").color(ColorsUsed.same).footer("Vous pouvez annuler | cancel", null).build());
                 return false;
             }
 
@@ -206,12 +181,7 @@ public class CreateFreeLance extends LongCommand {
         Stape getPrice = new Stape(getTemps) {
             @Override
             protected boolean onCall(Message message) {
-                setText(embed -> {
-                    embed.setTitle("Prix");
-                    embed.setDescription("Proposez un prix que vous pensez juste, vous pouvez préciser que cela est variable. Si vous n'avez pas de prix tapez `empty`.");
-                    embed.setColor(ColorsUsed.same);
-                    embed.setFooter("Vous pouvez annuler | cancel", null);
-                });
+                setText(EmbedCreateSpec.builder().title("Prix").description("Proposez un prix que vous pensez juste, vous pouvez préciser que cela est variable. Si vous n'avez pas de prix tapez `empty`.").color(ColorsUsed.same).footer("Vous pouvez annuler | cancel", null).build());
                 return false;
             }
 
@@ -230,12 +200,7 @@ public class CreateFreeLance extends LongCommand {
         Stape getDescriptionField = new Stape(getPrice) {
             @Override
             protected boolean onCall(Message message) {
-                setText(embed -> {
-                    embed.setTitle("L'offre");
-                    embed.setDescription("Description de l'offre, essayez de donner de nombreux détails, attention le Prix, et le Temps de retour de l'offre vous seront demmandé après.");
-                    embed.setFooter("Vous pouvez annuler | cancel", null);
-                    embed.setColor(ColorsUsed.same);
-                });
+                setText(EmbedCreateSpec.builder().title("L'offre").description("Description de l'offre, essayez de donner de nombreux détails, attention le Prix, et le Temps de retour de l'offre vous seront demmandé après.").color(ColorsUsed.same).footer("Vous pouvez annuler | cancel", null).build());
                 return false;
             }
 
@@ -256,12 +221,7 @@ public class CreateFreeLance extends LongCommand {
             protected boolean onCall(Message message) {
                 actualFied = new FreeLance.FieldSeria();
                 removeAllEmoji();
-                setText(embed -> {
-                    embed.setTitle("Donnez moi le titre de la compétence/offre.");
-                    embed.setDescription("Titre rapide, vous pourrez faire une présentation plus en détails par la suite");
-                    embed.setFooter("Vous pouvez annuler | cancel", null);
-                    embed.setColor(ColorsUsed.same);
-                });
+                setText(EmbedCreateSpec.builder().title("Donnez moi le titre de la compétence/offre.").description("Titre rapide, vous pourrez faire une présentation plus en détails par la suite").color(ColorsUsed.same).footer("Vous pouvez annuler | cancel", null).build());
                 return false;
             }
 
@@ -277,52 +237,44 @@ public class CreateFreeLance extends LongCommand {
             }
         };
 
-        stapeAskForField = new Stape(createNewField, link) {
-            @Override
-            protected boolean onCall(Message message) {
-                messageAtEdit.edit(msg -> msg.setEmbed(embed -> {
-                    embed.setTitle(freeLance.getFreeLanceName());
-                    embed.setDescription(freeLance.getDescription());
-                    if (freeLance.getFieldNumber() == 0)
-                        embed.addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 commandes personnalisées", "Les informations sur votre offre globale,\n\n(toutes les informations ci-dessous vous seront demandé)\n prix : le prix approximatif de l'offre\n temps de réalisation: le temps de rendu de l'offre", false);
-                    else
-                        for (int i = 0; i < freeLance.getFieldNumber(); i++) {
-                            embed.addField(freeLance.getField(i).getTitle(), freeLance.getField(i).getValue(), freeLance.getField(i).getInline());
-                        }
-                    embed.addField("Les offres", "Vous pouvez ajouter le nombre d'offre que vous souhaitez", false);
-                    embed.addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre...", false);
-                    embed.setColor(ColorsUsed.same);
-                })).subscribe();
-                addYesNoEmoji();
-                setText(embed -> {
-                    embed.setTitle("Voulez vous ajouter une compétence/offre ?");
-                    embed.setDescription("Vous pouvez ajouter une offre/compétence avec un titre, description, prix, date de retour.");
-                    embed.setFooter("Vous pouvez annuler | cancel", null);
-                    embed.setColor(ColorsUsed.same);
-                });
-                return false;
-            }
+        stapeAskForField = new
 
-            @Override
-            protected boolean onReceiveReact(ReactionAddEvent event) {
-                if (isYes(event)) {
-                    return callStape(0);
-                } else if (isNo(event)) {
-                    return callStape(1);
+                Stape(createNewField, link) {
+                    @Override
+                    protected boolean onCall(Message message) {
+                        EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder().title(freeLance.getFreeLanceName()).description(freeLance.getDescription()).color(ColorsUsed.same);
+
+                        if (freeLance.getFieldNumber() == 0)
+                            builder.addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 commandes personnalisées", "Les informations sur votre offre globale,\n\n(toutes les informations ci-dessous vous seront demandé)\n prix : le prix approximatif de l'offre\n temps de réalisation: le temps de rendu de l'offre", false);
+                        else for (int i = 0; i < freeLance.getFieldNumber(); i++) {
+                            builder.addField(freeLance.getField(i).getTitle(), freeLance.getField(i).getValue(), freeLance.getField(i).getInline());
+                        }
+                        builder.addField("Les offres", "Vous pouvez ajouter le nombre d'offre que vous souhaitez", false);
+                        builder.addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre...", false);
+
+                        messageAtEdit.edit(MessageEditSpec.builder().addEmbed(builder.build()).build()).subscribe();
+                        addYesNoEmoji();
+                        setText(EmbedCreateSpec.builder().title("Voulez vous ajouter une compétence/offre ?").description("Vous pouvez ajouter une offre/compétence avec un titre, description, prix, date de retour.").color(ColorsUsed.same).footer("Vous pouvez annuler | cancel", null).build());
+                        return false;
+                    }
+
+                    @Override
+                    protected boolean onReceiveReact(ReactionAddEvent event) {
+                        if (isYes(event)) {
+                            return callStape(0);
+                        } else if (isNo(event)) {
+                            return callStape(1);
+                        }
+                        return super.onReceiveReact(event);
+                    }
                 }
-                return super.onReceiveReact(event);
-            }
-        };
+
+        ;
 
         Stape getDescription = new Stape(stapeAskForField) {
             @Override
             protected boolean onCall(Message message) {
-                setText(embed -> {
-                    embed.setTitle("Description");
-                    embed.setDescription("Donnez votre expérience dans le milieu / diplôme (Brevet, Bac, études supérieures) etc...");
-                    embed.setColor(ColorsUsed.same);
-                    embed.setFooter("Vous pouvez annuler | cancel", null);
-                });
+                setText(EmbedCreateSpec.builder().title("Description").description("Donnez votre expérience dans le milieu / diplôme (Brevet, Bac, études supérieures) etc...").color(ColorsUsed.same).footer("Vous pouvez annuler | cancel", null).build());
                 return false;
             }
 
@@ -331,14 +283,16 @@ public class CreateFreeLance extends LongCommand {
                 String content = event.getMessage().getContent();
                 if (!content.isEmpty() && !content.isBlank()) {
                     freeLance.setDescription(content);
-                    messageAtEdit.edit(msg -> msg.setEmbed(embed -> {
-                        embed.setTitle(freeLance.getFreeLanceName());
-                        embed.setDescription(freeLance.getDescription());
-                        embed.addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 commandes personnalisées", "Les informations sur votre offre globale,\n\n(toutes les informations ci-dessous vous seront demandé)\n prix : le prix approximatif de l'offre\n temps de réalisation: le temps de rendu de l'offre", false);
-                        embed.addField("Les offres", "Vous pouvez ajouter le nombre d'offre que vous souhaitez", false);
-                        embed.addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre...", false);
-                        embed.setColor(ColorsUsed.same);
-                    })).subscribe();
+                    messageAtEdit.edit(
+                                    MessageEditSpec.builder().addEmbed(
+                                            EmbedCreateSpec.builder()
+                                                    .title(freeLance.getFreeLanceName())
+                                                    .description(freeLance.getDescription())
+                                                    .addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 commandes personnalisées", "Les informations sur votre offre globale,\n\n(toutes les informations ci-dessous vous seront demandé)\n prix : le prix approximatif de l'offre\n temps de réalisation: le temps de rendu de l'offre", false)
+                                                    .addField("Les offres", "Vous pouvez ajouter le nombre d'offre que vous souhaitez", false)
+                                                    .addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre...", false)
+                                                    .color(ColorsUsed.same).build()).build())
+                            .subscribe();
                     return callStape(0);
                 }
                 return super.onReceiveMessage(event);
@@ -349,12 +303,11 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onCall(Message message) {
                 removeAllEmoji();
-                setText(embed -> {
-                    embed.setTitle("Nom Prenom");
-                    embed.setDescription("Donnez moi le `Nom Prenom` que vous voulez afficher sur la présentation. (Il est conseiller de ne pas donner de pseudo)");
-                    embed.setColor(ColorsUsed.just);
-                    embed.setFooter("Vous pouvez annuler | cancel", null);
-                });
+                setText(EmbedCreateSpec.builder()
+                        .title("Nom Prenom")
+                        .description("Donnez moi le `Nom Prenom` que vous voulez afficher sur la présentation. (Il est conseiller de ne pas donner de pseudo)")
+                        .color(ColorsUsed.same)
+                        .footer("Vous pouvez annuler | cancel", null).build());
                 return false;
             }
 
@@ -363,14 +316,13 @@ public class CreateFreeLance extends LongCommand {
                 String content = event.getMessage().getContent();
                 if (!content.isEmpty() && !content.isBlank()) {
                     freeLance.setFreeLanceName(content);
-                    messageAtEdit.edit(msg -> msg.setEmbed(embed -> {
-                        embed.setTitle(freeLance.getFreeLanceName());
-                        embed.setDescription("Depuis comment de temps etes vous en FreeLance, vos dîplomes, etes vous en auto-entreprise sous contract ? Et toutes informations générales importantes...");
-                        embed.addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 commandes personnalisées", "Les informations sur votre offre globale,\n\n(toutes les informations ci-dessous vous seront demandé)\n prix : le prix approximatif de l'offre\n temps de réalisation: le temps de rendu de l'offre", false);
-                        embed.addField("Les offres", "Vous pouvez ajouter le nombre d'offre que vous souhaitez", false);
-                        embed.addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre...", false);
-                        embed.setColor(ColorsUsed.same);
-                    })).subscribe();
+                    messageAtEdit.edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
+                            .title(freeLance.getFreeLanceName())
+                            .description("Depuis comment de temps etes vous en FreeLance, vos dîplomes, etes vous en auto-entreprise sous contract ? Et toutes informations générales importantes...")
+                            .addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 commandes personnalisées", "Les informations sur votre offre globale,\n\n(toutes les informations ci-dessous vous seront demandé)\n prix : le prix approximatif de l'offre\n temps de réalisation: le temps de rendu de l'offre", false)
+                            .addField("Les offres", "Vous pouvez ajouter le nombre d'offre que vous souhaitez", false)
+                            .addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre...", false)
+                            .color(ColorsUsed.same).build()).build()).subscribe();
                     return callStape(0);
                 }
 
@@ -381,45 +333,37 @@ public class CreateFreeLance extends LongCommand {
         Stape showEmbed = new Stape(getName) {
             @Override
             protected boolean onCall(Message message) {
-                setText(embed -> {
-                    embed.setTitle("Le fonctionnement.");
-                    embed.setDescription("Voici l'embed que vous allez modifier pour créer votre présentation.\n\n**Cliquez sur : <:ayy:"+Init.idYes.getId().asString()+"> pour passer à la suite !**");
-                    embed.setFooter("Vous pouvez annuler | cancel", null);
-                    embed.setColor(ColorsUsed.just);
-                });
-                messageAtEdit = channel.createMessage(msg -> {
-                    msg.setEmbed(embed -> {
-                        embed.setTitle("Nom Prénom");
-                        embed.setDescription("Depuis comment de temps etes vous en FreeLance, vos dîplomes, etes vous en auto-entreprise sous contract ? Et toutes informations générales importantes...");
-                        embed.addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 commandes personnalisées", "Les informations sur votre offre globale,\n\n(toutes les informations ci-dessous vous seront demandé)\n prix : le prix approximatif de l'offre\n temps de réalisation: le temps de rendu de l'offre", false);
-                        embed.addField("Les offres", "Vous pouvez ajouter le nombre d'offre que vous souhaitez", false);
-                        embed.addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre...", false);
-                        embed.setColor(ColorsUsed.same);
-                    });
-                }).block();
+                setText(EmbedCreateSpec.builder()
+                        .title("Le fonctionnement.")
+                        .description("Voici l'embed que vous allez modifier pour créer votre présentation.\n\n**Cliquez sur : <:ayy:" + Init.idYes.getId().asString() + "> pour passer à la suite !**")
+                        .color(ColorsUsed.same)
+                        .footer("Vous pouvez annuler | cancel", null).build());
+                messageAtEdit = channel.createMessage(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
+                        .title("Nom Prénom")
+                        .description("Depuis comment de temps etes vous en FreeLance, vos dîplomes, etes vous en auto-entreprise sous contract ? Et toutes informations générales importantes...")
+                        .addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 commandes personnalisées", "Les informations sur votre offre globale,\n\n(toutes les informations ci-dessous vous seront demandé)\n prix : le prix approximatif de l'offre\n temps de réalisation: le temps de rendu de l'offre", false)
+                        .addField("Les offres", "Vous pouvez ajouter le nombre d'offre que vous souhaitez", false)
+                        .addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre...", false)
+                        .color(ColorsUsed.same).build()).build()).block();
                 return false;
             }
 
             @Override
             protected boolean onReceiveReact(ReactionAddEvent event) {
-                if (isYes(event))
-                    return callStape(0);
+                if (isYes(event)) return callStape(0);
                 return super.onReceiveReact(event);
             }
         };
 
         this.firstStape = new FirstStape(this.channel, showEmbed) {
             @Override
-            public void onFirstCall(Consumer<? super MessageCreateSpec> deleteThisVariableAndSetYourOwnMessage) {
-                super.onFirstCall(msg -> {
-                    msg.setEmbed(embed -> {
-                        embed.setTitle("Présentation !");
-                        embed.setDescription("Vous allez vous même construire votre embed de présentation, je vais essayer de vous aiguiller tout le long de la création !");
-                        embed.setFooter("Vous pouvez annuler | cancel", null);
-                        embed.setColor(ColorsUsed.same);
-                    });
-                });
-                addYesEmoji();
+            public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
+                super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
+                        .title("Présentation !")
+                        .description("Vous allez vous même construire votre embed de présentation, je vais essayer de vous aiguiller tout le long de la création !")
+                        .color(ColorsUsed.same)
+                        .footer("Vous pouvez annuler | cancel", null).build()).build());
+                this.addYesEmoji();
             }
 
             @Override

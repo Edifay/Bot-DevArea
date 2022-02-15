@@ -7,6 +7,7 @@ import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.legacy.LegacyEmbedCreateSpec;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -87,17 +88,16 @@ public class FreeLance {
     }
 
     @JsonIgnore
-    public Consumer<? super EmbedCreateSpec> getEmbed() {
+    public EmbedCreateSpec getEmbed() {
         Member member = Init.devarea.getMemberById(Snowflake.of(this.memberId)).block();
-        return embed -> {
-            embed.setAuthor(this.freeLanceName, null, member.getAvatarUrl());
-            embed.setDescription(this.getDescription());
-            for (int i = 0; i < this.getFieldNumber(); i++) {
-                embed.addField(this.getField(i).getTitle(), this.getField(i).getValue(), this.getField(i).getInline());
-            }
-            embed.addField("Contact", "Pour contacter le freelancer voici son tag : " + member.getTag() + ", utilisez directement sa mention : <@" + this.memberId + ">", false);
-            embed.setColor(ColorsUsed.same);
-        };
+        EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
+                .author(this.freeLanceName, null, member.getAvatarUrl())
+                .description(this.getDescription())
+                .color(ColorsUsed.same);
+        for (int i = 0; i < this.getFieldNumber(); i++)
+            builder.addField(this.getField(i).getTitle(), this.getField(i).getValue(), this.getField(i).getInline());
+        builder.addField("Contact", "Pour contacter le freelancer voici son tag : " + member.getTag() + ", utilisez directement sa mention : <@" + this.memberId + ">", false);
+        return builder.build();
     }
 
     public static class FieldSeria {

@@ -14,6 +14,7 @@ import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
+import discord4j.core.spec.EmbedCreateSpec;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,11 +51,10 @@ public class MissionsManager {
     }
 
     private static void sendLastMessage() {
-        messsage = Command.sendEmbed((TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block(), embedCreateSpec -> {
-            embedCreateSpec.setColor(ColorsUsed.same);
-            embedCreateSpec.setTitle("Créer une mission.");
-            embedCreateSpec.setDescription("Cliquez sur <:ayy:" + Init.idYes.getId().asString() + "> pour créer une mission !");
-        }, true);
+        messsage = Command.sendEmbed((TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block(), EmbedCreateSpec.builder()
+                .color(ColorsUsed.same)
+                .title("Créer une mission.")
+                .description("Cliquez sur <:ayy:" + Init.idYes.getId().asString() + "> pour créer une mission !").build(), true);
         messsage.addReaction(ReactionEmoji.custom(Init.idYes)).subscribe();
     }
 
@@ -90,7 +90,7 @@ public class MissionsManager {
 
     public static void clearThisMission(Mission mission) {
         missions.remove(mission);
-        startAway(()->{
+        startAway(() -> {
             try {
                 delete(true, mission.getMessage().getMessage());
             } catch (Exception e) {

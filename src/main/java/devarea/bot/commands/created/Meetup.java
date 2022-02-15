@@ -14,6 +14,7 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Attachment;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 
 import java.text.ParseException;
@@ -50,8 +51,7 @@ public class Meetup extends LongCommand {
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                if (event.getMessage().getContent().startsWith("yes"))
-                    return callStape(0);
+                if (event.getMessage().getContent().startsWith("yes")) return callStape(0);
                 sendErrorEntry();
                 return next;
             }
@@ -119,12 +119,7 @@ public class Meetup extends LongCommand {
         Stape channel = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setText(embedCreateSpec -> {
-                    embedCreateSpec.setTitle("Meetups !");
-                    embedCreateSpec.setColor(ColorsUsed.just);
-                    embedCreateSpec.setTimestamp(Instant.now());
-                    embedCreateSpec.setDescription("Voici le channel des meetups : <#" + Init.idMeetupAnnonce.asString() + ">.");
-                });
+                setText(EmbedCreateSpec.builder().title("Meetups !").color(ColorsUsed.just).timestamp(Instant.now()).description("Voici le channel des meetups : <#" + Init.idMeetupAnnonce.asString() + ">.").build());
                 return end;
             }
         };
@@ -132,11 +127,7 @@ public class Meetup extends LongCommand {
         Stape endDelete = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setText(embedCreateSpec -> {
-                    embedCreateSpec.setTitle("Le meetup a bien été supprimé !");
-                    embedCreateSpec.setColor(ColorsUsed.just);
-                    embedCreateSpec.setTimestamp(Instant.now());
-                });
+                setText(EmbedCreateSpec.builder().title("Le meetup a bien été supprimé !").color(ColorsUsed.just).timestamp(Instant.now()).build());
                 return end;
             }
         };
@@ -147,18 +138,11 @@ public class Meetup extends LongCommand {
                 canDelete = MeetupManager.getMeetupsFrom(member.getId());
                 AtomicInteger a = new AtomicInteger();
                 canDelete.forEach(meetupStock -> {
-                    Command.deletedMessage((TextChannel) test.getChannel().block(), messageCreateSpec -> {
-                        messageCreateSpec.setContent("**" + a.get() + ":**");
-                        messageCreateSpec.setEmbed(meetupStock.getEmbed());
-                    });
+                    Command.deletedMessage((TextChannel) test.getChannel().block(), MessageCreateSpec.builder().content("**" + a.get() + ":**").addEmbed(meetupStock.getEmbed()).build());
                     a.getAndIncrement();
                 });
-                setText(spec -> {
-                    spec.setTitle("Meetup à delete...");
-                    spec.setDescription("Vous allez voir la liste de tout vos meetup s'afficher. Envoyer son numéro attribué pour le supprimer.");
-                    spec.setFooter("Vous pouvez annuler | cancel", null);
-                    spec.setColor(ColorsUsed.just);
-                });
+
+                setText(EmbedCreateSpec.builder().title("Meetup à delete...").description("Vous allez voir la liste de tout vos meetup s'afficher. Envoyer son numéro attribué pour le supprimer.").footer("Vous pouvez annuler | cancel", null).color(ColorsUsed.just).build());
                 return next;
             }
 
@@ -180,26 +164,30 @@ public class Meetup extends LongCommand {
             }
         };
 
-        this.firstStape = new FirstStape(this.channel, create, delete, channel) {
-            @Override
-            public void onFirstCall(Consumer<? super MessageCreateSpec> spec) {
-                super.onFirstCall(messageCreateSpec -> messageCreateSpec.setEmbed(TextMessage.meetupCommandExplain));
-            }
+        this.firstStape = new
 
-            @Override
-            protected boolean onReceiveMessage(MessageCreateEvent event) {
-                if (event.getMessage().getContent().startsWith("create")) {
-                    return callStape(0);
-                } else if (event.getMessage().getContent().startsWith("delete")) {
-                    return callStape(1);
-                } else if (event.getMessage().getContent().startsWith("channel")) {
-                    return callStape(2);
-                } else {
-                    sendErrorEntry();
+                FirstStape(this.channel, create, delete, channel) {
+                    @Override
+                    public void onFirstCall(MessageCreateSpec spec) {
+                        super.onFirstCall(MessageCreateSpec.builder().addEmbed(TextMessage.meetupCommandExplain).build());
+                    }
+
+                    @Override
+                    protected boolean onReceiveMessage(MessageCreateEvent event) {
+                        if (event.getMessage().getContent().startsWith("create")) {
+                            return callStape(0);
+                        } else if (event.getMessage().getContent().startsWith("delete")) {
+                            return callStape(1);
+                        } else if (event.getMessage().getContent().startsWith("channel")) {
+                            return callStape(2);
+                        } else {
+                            sendErrorEntry();
+                        }
+                        return next;
+                    }
                 }
-                return next;
-            }
-        };
+
+        ;
         this.lastMessage = this.firstStape.getMessage();
     }
 

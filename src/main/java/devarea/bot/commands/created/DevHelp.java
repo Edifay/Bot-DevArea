@@ -5,6 +5,7 @@ import devarea.bot.commands.ShortCommand;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.MessageCreateSpec;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ public class DevHelp extends ShortCommand {
         super(message);
         if (((TextChannel) message.getMessage().getChannel().block()).getName().equalsIgnoreCase("entraide")) {
             if (!timer.contains(this.channel.getId())) {
-                send(messageCreateSpec -> messageCreateSpec.setContent("<@" + this.member.getId().asString() + ">, a demandé de l'aide ! <@&" + Init.idDevHelper.asString() + ">."), false);
+                send(MessageCreateSpec.builder().content("<@" + this.member.getId().asString() + ">, a demandé de l'aide ! <@&" + Init.idDevHelper.asString() + ">.").build(), false);
                 timer.add(this.channel.getId());
                 new Thread(() -> {
                     try {

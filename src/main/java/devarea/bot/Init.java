@@ -3,6 +3,7 @@ package devarea.bot;
 import devarea.bot.commands.CommandManager;
 import devarea.bot.event.*;
 import discord4j.common.util.Snowflake;
+import discord4j.core.DiscordClient;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
@@ -13,6 +14,7 @@ import discord4j.core.event.domain.message.*;
 import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.GuildEmoji;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.gateway.intent.IntentSet;
 import org.w3c.dom.Document;
 
 import javax.imageio.ImageIO;
@@ -129,8 +131,9 @@ public class Init {
                 }
             }
 
-            client = DiscordClientBuilder.create(token)
-                    .build()
+            client = DiscordClient.create(token)
+                    .gateway()
+                    .setEnabledIntents(IntentSet.all())
                     .login()
                     .block();
 

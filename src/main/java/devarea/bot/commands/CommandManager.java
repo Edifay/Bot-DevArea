@@ -7,6 +7,7 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.PermissionSet;
 
 import java.io.File;
@@ -120,11 +121,10 @@ public class CommandManager {
                     e.printStackTrace();
                 }
             } else
-                Command.deletedEmbed((TextChannel) message.getMessage().getChannel().block(), embed -> {
-                    embed.setTitle("Erreur !");
-                    embed.setDescription(commandNotFound);
-                    embed.setColor(ColorsUsed.wrong);
-                });
+                Command.deletedEmbed((TextChannel) message.getMessage().getChannel().block(), EmbedCreateSpec.builder()
+                        .title("Erreur !")
+                        .description(commandNotFound)
+                        .color(ColorsUsed.wrong).build());
 
             if (Init.vanish)
                 delete(false, message.getMessage());

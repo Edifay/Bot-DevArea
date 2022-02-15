@@ -8,6 +8,7 @@ import devarea.bot.commands.LongCommand;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 
 import java.util.function.Consumer;
@@ -20,24 +21,20 @@ public class FreeLance extends LongCommand {
             protected boolean onCall(Message message) {
                 if (FreeLanceManager.hasFreelance(FreeLance.this.member)) {
                     if (FreeLanceManager.bumpFreeLance(FreeLance.this.member.getId().asString())) {
-                        setText(embed -> {
-                            embed.setTitle("Bump !");
-                            embed.setTitle("Le bump a effectué !");
-                            embed.setColor(ColorsUsed.just);
-                        });
+                        setText(EmbedCreateSpec.builder()
+                                .title("Le bump a effectué !")
+                                .color(ColorsUsed.just).build());
                     } else {
-                        setText(embed -> {
-                            embed.setTitle("Error");
-                            embed.setDescription("Vous devez attendre 24 heures entre chaque bump !");
-                            embed.setColor(ColorsUsed.wrong);
-                        });
+                        setText(EmbedCreateSpec.builder()
+                                .title("Error")
+                                .description("Vous devez attendre 24 heures entre chaque bump !")
+                                .color(ColorsUsed.wrong).build());
                     }
                 } else {
-                    setText(embed -> {
-                        embed.setTitle("Error");
-                        embed.setDescription("Vous ne possédez pas de freelance !");
-                        embed.setColor(ColorsUsed.wrong);
-                    });
+                    setText(EmbedCreateSpec.builder()
+                            .title("Error")
+                            .description("Vous ne possédez pas de freelance !")
+                            .color(ColorsUsed.wrong).build());
                 }
                 return true;
             }
@@ -53,30 +50,28 @@ public class FreeLance extends LongCommand {
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
-                    setText(embed -> {
-                        embed.setTitle("Suppression");
-                        embed.setDescription("Votre mission a bien été supprimé !");
-                        embed.setColor(ColorsUsed.just);
-                    });
+                    setText(EmbedCreateSpec.builder()
+                            .title("Suppression")
+                            .description("Votre mission a bien été supprimé !")
+                            .color(ColorsUsed.just).build());
                 } else {
-                    setText(embed -> {
-                        embed.setTitle("Error");
-                        embed.setDescription("Vous n'avez pas de freelance !");
-                        embed.setColor(ColorsUsed.wrong);
-                    });
+                    setText(EmbedCreateSpec.builder()
+                            .title("Error")
+                            .description("Vous n'avez pas de freelance !")
+                            .color(ColorsUsed.wrong)
+                            .build());
                 }
                 return true;
             }
         };
         this.firstStape = new FirstStape(this.channel, bumpStape, deleteStape) {
             public void onFirstCall(Consumer<? super MessageCreateSpec> deleteThisVariableAndSetYourOwnMessage) {
-                super.onFirstCall(msg -> msg.setEmbed(embed -> {
-                    embed.setTitle("FreeLance");
-                    embed.setColor(ColorsUsed.same);
-                    embed.setDescription("Vous pouvez ici effectuer des modifications sur votre freelance !\n`bump` -> cette commande va bump votre message freelance !\n" +
-                            "`delete` -> supprimer votre freelance !");
-                    embed.setFooter("cancel | annuler pour quitter.", null);
-                }));
+                super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
+                        .title("FreeLance")
+                        .description("Vous pouvez ici effectuer des modifications sur votre freelance !\n`bump` -> cette commande va bump votre message freelance !\n" +
+                                "`delete` -> supprimer votre freelance !")
+                        .color(ColorsUsed.same)
+                        .footer("cancel | annuler pour quitter.", null).build()).build());
             }
 
             protected boolean onReceiveMessage(MessageCreateEvent event) {

@@ -5,6 +5,7 @@ import devarea.bot.commands.PermissionCommand;
 import devarea.bot.commands.ShortCommand;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 
@@ -18,11 +19,10 @@ public class Update extends ShortCommand implements PermissionCommand {
         super(message);
         final long ms = System.currentTimeMillis();
         Stats.update();
-        sendEmbed(embed -> {
-            embed.setTitle("Update !");
-            embed.setDescription("Les stats ont été update en " + (System.currentTimeMillis() - ms) + "ms.");
-            embed.setColor(ColorsUsed.just);
-        }, false);
+        sendEmbed(EmbedCreateSpec.builder()
+                .title("Update !")
+                .description("Les stats ont été update en " + (System.currentTimeMillis() - ms) + "ms.")
+                .color(ColorsUsed.just).build(), false);
         this.endCommand();
     }
 

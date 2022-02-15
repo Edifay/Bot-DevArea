@@ -6,6 +6,7 @@ import devarea.bot.commands.ConsumableCommand;
 import devarea.bot.commands.ShortCommand;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.spec.EmbedCreateSpec;
 
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -22,13 +23,13 @@ public class Admin extends ShortCommand {
     public Admin(final MessageCreateEvent message) {
         super(message);
         if (message.getMessage().getContent().split(" ").length == 1) {
-            Command.sendEmbed(this.channel, embed -> {
-                embed.setTitle("Voici les commandes disponibles :");
-                embed.setColor(ColorsUsed.same);
-                AtomicReference<String> allCommands = new AtomicReference<>("");
-                commands.forEach((str, com) -> allCommands.set(allCommands.get() + "- `" + str + "`\n"));
-                embed.setDescription(allCommands.get());
-            }, false);
+            EmbedCreateSpec.Builder builer = EmbedCreateSpec.builder()
+                    .title("Voici les commandes disponibles :")
+                    .color(ColorsUsed.same);
+            AtomicReference<String> allCommands = new AtomicReference<>("");
+            commands.forEach((str, com) -> allCommands.set(allCommands.get() + "- `" + str + "`\n"));
+            builer.description(allCommands.get());
+            Command.sendEmbed(this.channel, builer.build(), false);
         } else {
             String firstArg = message.getMessage().getContent().split(" ")[1];
             commands.forEach((str, com) -> {

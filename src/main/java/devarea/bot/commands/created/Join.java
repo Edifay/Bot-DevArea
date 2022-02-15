@@ -7,6 +7,7 @@ import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 
@@ -18,8 +19,8 @@ public class Join extends ShortCommand implements PermissionCommand {
 
     public Join(MessageCreateEvent message) {
         super(message);
-        if (message.getMessage().getUserMentions().buffer().count().block() > 0) {
-            Member memberPinged = message.getMessage().getUserMentions().blockFirst().asMember(Init.devarea.getId()).block();
+        if (message.getMessage().getUserMentions().size() > 0) {
+            Member memberPinged = message.getMessage().getUserMentions().get(0).asMember(Init.devarea.getId()).block();
             assert memberPinged != null;
             CommandManager.addManualCommand(memberPinged, new ConsumableCommand((TextChannel) message.getMessage().getChannel().block(), JoinCommand.class) {
                 @Override
@@ -27,10 +28,9 @@ public class Join extends ShortCommand implements PermissionCommand {
                     return new JoinCommand(memberPinged);
                 }
             });
-            sendEmbed(embed -> {
-                embed.setTitle("Vous avez fait join " + memberPinged.getDisplayName() + " !");
-                embed.setColor(ColorsUsed.just);
-            }, false);
+            sendEmbed(EmbedCreateSpec.builder()
+                    .title("Vous avez fait join " + memberPinged.getDisplayName() + " !")
+                    .color(ColorsUsed.just).build(), false);
         }
     }
 

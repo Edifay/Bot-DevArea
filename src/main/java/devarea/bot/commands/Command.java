@@ -11,12 +11,12 @@ import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.core.spec.MessageEditSpec;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 
 public abstract class Command {
 
@@ -51,12 +51,12 @@ public abstract class Command {
         return true;
     }
 
-    protected Message deletedMessage(final Consumer<? super MessageCreateSpec> spec) {
+    protected Message deletedMessage(final MessageCreateSpec spec) {
         return deletedMessage(this.channel, spec);
     }
 
-    protected Message deletedEmbed(final Consumer<? super EmbedCreateSpec> spec) {
-        return deletedMessage(msg -> msg.setEmbed(spec));
+    protected Message deletedEmbed(final EmbedCreateSpec spec) {
+        return deletedMessage(MessageCreateSpec.builder().addEmbed(spec).build());
     }
 
     protected boolean createLocalChannel(final String name, final Snowflake parentId, final boolean canWrite) {
@@ -83,20 +83,19 @@ public abstract class Command {
         return this.createLocalChannel(name, parentId, true);
     }
 
-    protected Message send(final Consumer<? super MessageCreateSpec> spec, boolean block) {
+    protected Message send(final MessageCreateSpec spec, boolean block) {
         return send(this.channel, spec, block);
     }
 
-    protected Message sendEmbed(final Consumer<? super EmbedCreateSpec> spec, boolean block) {
-        return send(msg -> msg.setEmbed(spec), block);
+    protected Message sendEmbed(final EmbedCreateSpec spec, boolean block) {
+        return send(MessageCreateSpec.builder().addEmbed(spec).build(), block);
     }
 
     protected Message sendError(final String error) {
-        return deletedEmbed(embed -> {
-            embed.setTitle("Error !");
-            embed.setDescription(error);
-            embed.setColor(ColorsUsed.wrong);
-        });
+        return deletedEmbed(EmbedCreateSpec.builder()
+                .title("Error !")
+                .description(error)
+                .color(ColorsUsed.wrong).build());
     }
 
     protected void deletedCommand(final long millis, final Runnable runnable) {
@@ -116,7 +115,7 @@ public abstract class Command {
         });
     }
 
-    public static Message send(final TextChannel channel, final Consumer<? super MessageCreateSpec> spec, boolean block) {
+    public static Message send(final TextChannel channel, final MessageCreateSpec spec, boolean block) {
         try {
             try {
                 if (block)
@@ -136,14 +135,13 @@ public abstract class Command {
     }
 
     public static Message sendError(final TextChannel channel, final String error) {
-        return deletedEmbed(channel, embed -> {
-            embed.setTitle("Error !");
-            embed.setDescription(error);
-            embed.setColor(ColorsUsed.wrong);
-        });
+        return deletedEmbed(channel, EmbedCreateSpec.builder()
+                .title("Error !")
+                .description(error)
+                .color(ColorsUsed.wrong).build());
     }
 
-    public static Message deletedMessage(final TextChannel channel, final Consumer<? super MessageCreateSpec> spec) {
+    public static Message deletedMessage(final TextChannel channel, final MessageCreateSpec spec) {
         final Message atDelete = send(channel, spec, true);
         new Thread(() -> {
             try {
@@ -172,12 +170,12 @@ public abstract class Command {
         return bool;
     }
 
-    public static Message deletedEmbed(final TextChannel channel, final Consumer<? super EmbedCreateSpec> spec) {
-        return deletedMessage(channel, msg -> msg.setEmbed(spec));
+    public static Message deletedEmbed(final TextChannel channel, final EmbedCreateSpec spec) {
+        return deletedMessage(channel, MessageCreateSpec.builder().addEmbed(spec).build());
     }
 
-    public static Message sendEmbed(final TextChannel channel, final Consumer<? super EmbedCreateSpec> spec, boolean block) {
-        return send(channel, msg -> msg.setEmbed(spec), block);
+    public static Message sendEmbed(final TextChannel channel, final EmbedCreateSpec spec, boolean block) {
+        return send(channel, MessageCreateSpec.builder().addEmbed(spec).build(), block);
     }
 
     public static Snowflake getMention(final MessageCreateEvent event) {

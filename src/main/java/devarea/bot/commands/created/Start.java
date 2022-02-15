@@ -48,8 +48,8 @@ public class Start extends LongCommand {
 
         this.firstStape = new FirstStape(this.channel, java, python, CSharp, HtmlCss) {
             @Override
-            public void onFirstCall(Consumer<? super MessageCreateSpec> spec) {
-                super.onFirstCall(msg -> msg.setEmbed(TextMessage.startCommandExplain));
+            public void onFirstCall(MessageCreateSpec spec) {
+                super.onFirstCall(MessageCreateSpec.builder().addEmbed(TextMessage.startCommandExplain).build());
             }
 
             @Override

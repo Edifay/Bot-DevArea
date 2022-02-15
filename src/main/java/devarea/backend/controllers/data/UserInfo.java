@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dependencies.auth.domain.User;
 import dependencies.auth.main.OAuthBuilder;
+import devarea.backend.controllers.data.badges.Badges;
 import devarea.backend.controllers.rest.ControllerMissions;
 import devarea.backend.controllers.rest.ControllerOAuth2;
 import devarea.bot.Init;
@@ -13,7 +14,9 @@ import devarea.bot.automatical.XpCount;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static devarea.bot.Init.membersId;
 
@@ -42,6 +45,8 @@ public class UserInfo {
     protected MissionForWeb[] missions_list;
     @JsonProperty
     protected String tag;
+    @JsonProperty
+    Badges[] badges;
 
     @JsonIgnore
     private OAuthBuilder builder;
@@ -163,6 +168,8 @@ public class UserInfo {
             if (this.urlAvatar == null)
                 this.setUrlAvatar(member.getDefaultAvatarUrl());
             this.lastTimeFetch = System.currentTimeMillis();
+
+            this.badges = Badges.getBadgesOf(this, member).toArray(new Badges[0]);
 
             return true;
         } else if (builder != null) { // SI ce n'est pas un membre du serveur

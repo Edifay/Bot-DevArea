@@ -8,6 +8,7 @@ import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
+import discord4j.core.spec.legacy.LegacyEmbedCreateSpec;
 
 import java.util.function.Consumer;
 
@@ -65,11 +66,11 @@ public abstract class Stape implements Cloneable {
         return stapes[nb];
     }
 
-    protected void setText(Consumer<? super EmbedCreateSpec> spec) {
-        this.message.edit(msg -> msg.setEmbed(spec)).subscribe();
+    protected void setText(EmbedCreateSpec spec) {
+        this.message.edit(MessageEditSpec.builder().addEmbed(spec).build()).subscribe();
     }
 
-    protected void setMessage(Consumer<? super MessageEditSpec> spec) {
+    protected void setMessage(MessageEditSpec spec) {
         this.message.edit(spec).subscribe();
     }
 

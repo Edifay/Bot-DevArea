@@ -7,6 +7,7 @@ import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.EmbedCreateSpec;
 
 import static devarea.bot.event.FunctionEvent.startAway;
 
@@ -39,11 +40,10 @@ public abstract class LongCommand extends Command {
             try {
                 Message message = event.getMessage().block();
                 if (!message.getId().equals(this.lastMessage.getId())) {
-                    deletedEmbed((TextChannel) message.getChannel().block(), embed -> {
-                        embed.setTitle("Error !");
-                        embed.setDescription("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">");
-                        embed.setColor(ColorsUsed.wrong);
-                    });
+                    deletedEmbed((TextChannel) message.getChannel().block(), EmbedCreateSpec.builder()
+                            .title("Error !")
+                            .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
+                            .color(ColorsUsed.wrong).build());
                     return;
                 }
                 if (this.firstStape.receiveReact(event)) {
@@ -63,11 +63,11 @@ public abstract class LongCommand extends Command {
         synchronized (this) {
             try {
                 if (!event.getMessage().getChannelId().equals(this.channel.getId())) {
-                    startAway(() -> deletedEmbed((TextChannel) event.getMessage().getChannel().block(), embed -> {
-                        embed.setTitle("Error !");
-                        embed.setDescription("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">");
-                        embed.setColor(ColorsUsed.wrong);
-                    }));
+                    startAway(() -> deletedEmbed((TextChannel) event.getMessage().getChannel().block(), EmbedCreateSpec.builder()
+                            .title("Error !")
+                            .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
+                            .color(ColorsUsed.wrong).build()
+                    ));
                     delete(false, event.getMessage());
                     return;
                 }
@@ -92,7 +92,7 @@ public abstract class LongCommand extends Command {
     protected Boolean endCommand() {
         if (this.isLocalChannel) {
             try {
-                this.channel.delete().subscribe(chanl ->{
+                this.channel.delete().subscribe(chanl -> {
 
                 }, error -> {
                     System.err.println("ERROR: Le localChannel n'a pas pu être supprimé !");

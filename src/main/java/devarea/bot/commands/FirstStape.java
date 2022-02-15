@@ -22,7 +22,7 @@ public abstract class FirstStape extends Stape {
         return next;
     }
 
-    public void onFirstCall(Consumer<? super MessageCreateSpec> deleteThisVariableAndSetYourOwnMessage) {
+    public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
         this.message = this.textChannel.createMessage(deleteThisVariableAndSetYourOwnMessage).block();
     }
 

@@ -16,6 +16,7 @@ import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
+import discord4j.core.spec.EmbedCreateSpec;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,12 +63,12 @@ public class FreeLanceManager {
     }
 
     private static void sendLastMessage() {
-        message = Command.sendEmbed((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block(), embedCreateSpec -> {
-            embedCreateSpec.setColor(ColorsUsed.same);
-            embedCreateSpec.setTitle("Proposez vos services !");
-            embedCreateSpec.setDescription("Cliquez sur <:ayy:" + Init.idYes.getId().asString() + "> pour créer une page de compétances !");
-            embedCreateSpec.setFooter("Cette fonctionnalité est en avant première, si vous voyez le moindre bug, veuillez nous alerter !", null);
-        }, true);
+        message = Command.sendEmbed((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block(),
+                EmbedCreateSpec.builder()
+                        .description("Cliquez sur <:ayy:" + Init.idYes.getId().asString() + "> pour créer une page de compétances !")
+                        .color(ColorsUsed.same)
+                        .title("Proposez vos services !")
+                        .footer("Cette fonctionnalité est en avant première, si vous voyez le moindre bug, veuillez nous alerter !", null).build(), true);
         message.addReaction(ReactionEmoji.custom(Init.idYes)).subscribe();
     }
 

@@ -6,8 +6,11 @@ import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
+import discord4j.core.spec.legacy.LegacyMessageCreateSpec;
+import discord4j.core.spec.legacy.LegacyMessageEditSpec;
 
 import java.util.function.Consumer;
 
@@ -19,10 +22,9 @@ public class Bump {
 
     public static void init() {
         channel = (TextChannel) Init.devarea.getChannelById(Init.idBump).block();
-        message = Command.sendEmbed(channel, embedCreateSpec -> {
-            embedCreateSpec.setColor(ColorsUsed.wrong);
-            embedCreateSpec.setDescription("Le bot vien de s'initialisé utilisez la commande `!d bump`, pour lancer le compte à rebours.");
-        }, true);
+        message = Command.sendEmbed(channel, EmbedCreateSpec.builder()
+                .color(ColorsUsed.wrong)
+                .description("Le bot vien de s'initialisé utilisez la commande `!d bump`, pour lancer le compte à rebours.").build(), true);
         new Thread(() -> {
             try {
                 while (true) {
@@ -31,15 +33,15 @@ public class Bump {
                         restartIfNotTheLast();
                         if (dateToBump - System.currentTimeMillis() > 0) {
                             if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes."))
-                                edit(msg -> msg.setEmbed(embed -> {
-                                    embed.setDescription("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes.");
-                                    embed.setColor(ColorsUsed.wrong);
-                                }));
+                                edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
+                                                .description("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes.")
+                                                .color(ColorsUsed.wrong).build())
+                                        .build());
                         } else if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est disponible avec la commande `!d bump`.") && !message.getEmbeds().get(0).getDescription().get().equals("Le bot vien de s'initialisé utilisez la commande `!d bump`, pour lancer le compte à rebours."))
-                            replace(msg -> msg.setEmbed(embed -> {
-                                embed.setDescription("Le bump est disponible avec la commande `!d bump`.");
-                                embed.setColor(ColorsUsed.same);
-                            }));
+                            replace(MessageCreateSpec.builder()
+                                    .addEmbed(EmbedCreateSpec.builder()
+                                            .description("Le bump est disponible avec la commande `!d bump`.")
+                                            .color(ColorsUsed.same).build()).build());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -47,7 +49,6 @@ public class Bump {
             } catch (InterruptedException ignored) {
             }
         }).start();
-
     }
 
     public synchronized static void getDisboardMessage(MessageCreateEvent event) {
@@ -61,26 +62,26 @@ public class Bump {
 
         if (coupes[1].equalsIgnoreCase("attendez")) {
             dateToBump = System.currentTimeMillis() + (Integer.parseInt(coupes[3]) * 60000L);
-            replace(msg -> msg.setEmbed(embed -> {
-                embed.setDescription("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes.");
-                embed.setColor(ColorsUsed.wrong);
-            }));
+            replace(MessageCreateSpec.builder()
+                    .addEmbed(EmbedCreateSpec.builder()
+                            .description("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes.")
+                            .color(ColorsUsed.wrong).build()).build());
         } else if (event.getMessage().getEmbeds().get(0).getDescription().get().contains("effectué") || event.getMessage().getEmbeds().get(0).getDescription().get().contains("done!")) {
             dateToBump = System.currentTimeMillis() + (120 * 60000L);
-            replace(msg -> msg.setEmbed(embed -> {
-                embed.setDescription("Le bump est à nouveau disponible dans " + 120 + "minutes.");
-                embed.setColor(ColorsUsed.wrong);
-            }));
+            replace(MessageCreateSpec.builder()
+                    .addEmbed(EmbedCreateSpec.builder()
+                            .description("Le bump est à nouveau disponible dans " + 120 + "minutes.")
+                            .color(ColorsUsed.wrong).build()).build());
         }
     }
 
-    private synchronized static void replace(final Consumer<? super MessageCreateSpec> spec) {
+    private synchronized static void replace(final MessageCreateSpec spec) {
         Command.delete(false, message);
         message = Command.send(channel, spec, true);
     }
 
-    private synchronized static void edit(final Consumer<? super MessageEditSpec> spec) {
-        message = message.edit(spec).block();
+    private synchronized static void edit(final MessageEditSpec spec) {
+        message = message.getReferencedMessage().get().edit(spec).block();
     }
 
     public static void messageInChannel(MessageCreateEvent event) {
@@ -91,10 +92,10 @@ public class Bump {
     private static void restartIfNotTheLast() {
         channel = ((TextChannel) Init.devarea.getChannelById(Init.idBump).block());
         if (!channel.getLastMessageId().get().equals(message.getId())) {
-            replace(msg -> msg.setEmbed(embedCreateSpec -> {
-                embedCreateSpec.setColor(message.getEmbeds().get(0).getColor().get());
-                embedCreateSpec.setDescription(message.getEmbeds().get(0).getDescription().get());
-            }));
+            replace(MessageCreateSpec.builder()
+                    .addEmbed(EmbedCreateSpec.builder()
+                            .description(message.getEmbeds().get(0).getDescription().get())
+                            .color(message.getEmbeds().get(0).getColor().get()).build()).build());
         }
     }
 }

@@ -4,6 +4,7 @@ import devarea.backend.controllers.data.UserInfo;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.object.entity.Member;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.core.spec.legacy.LegacyMessageCreateSpec;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,11 +56,11 @@ public class ControllerGlobal {
 
     }
 
-    public static Consumer<? super MessageCreateSpec> getMessageForId(int id, String message) {
+    public static Consumer<? super LegacyMessageCreateSpec> getMessageForId(int id, String message) {
         switch (id) {
             case 455:
                 return msg -> {
-                    msg.setEmbed(embed -> {
+                    msg.addEmbed(embed -> {
                         embed.setTitle("Comment créer une mission ?");
                         embed.setColor(ColorsUsed.same);
                         embed.setDescription("Rien de plus simple ! Il faut se rendre sur le channel Missions-Payantes de Dev'Area (<#768855632224190496>)." +
