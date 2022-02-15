@@ -42,7 +42,6 @@ public class Ready {
             long ms = System.currentTimeMillis();
             synchronized (Init.membersId) {
                 Init.membersId.removeAll(Init.membersId);
-                System.out.println("Member size : " + Init.devarea.getData().members().size());
                 Init.devarea.getMembers().buffer().blockLast().forEach(member -> Init.membersId.add(member.getId()));
             }
             System.out.println("Fetch took : " + (System.currentTimeMillis() - ms) + "ms");
