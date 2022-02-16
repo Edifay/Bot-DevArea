@@ -3,15 +3,18 @@ package devarea.bot.commands.created;
 import devarea.bot.data.ColorsUsed;
 import devarea.bot.commands.ShortCommand;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 
 public class Ping extends ShortCommand {
 
-    public Ping(final MessageCreateEvent message) {
-        super(message);
+    public Ping(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
         this.sendEmbed(EmbedCreateSpec.builder()
                 .title("Pong !")
-                .description("La latence avec le bot est de `" + (System.currentTimeMillis() - message.getMessage().getTimestamp().toEpochMilli()) + "`ms.")
+                .description("La latence avec le bot est de `" + (System.currentTimeMillis() - message.getTimestamp().toEpochMilli()) + "`ms.")
                 .color(ColorsUsed.same).build(), false);
         this.endCommand();
     }

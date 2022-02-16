@@ -11,6 +11,7 @@ import devarea.bot.commands.with_out_text_starter.CreateMission;
 import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
@@ -63,10 +64,10 @@ public class MissionsManager {
             startAway(() -> event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).subscribe());
 
             if (event.getEmoji().equals(ReactionEmoji.custom(Init.idYes)))
-                CommandManager.addManualCommand(event.getMember().get(), new ConsumableCommand((TextChannel) event.getChannel().block(), CreateMission.class) {
+                CommandManager.addManualCommand(event.getMember().get(), new ConsumableCommand(CreateMission.class) {
                     @Override
                     protected Command command() {
-                        return new CreateMission(event);
+                        return new CreateMission(this.member);
                     }
                 });
             return true;

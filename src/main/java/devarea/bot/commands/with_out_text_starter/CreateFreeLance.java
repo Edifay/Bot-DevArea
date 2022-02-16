@@ -8,6 +8,7 @@ import devarea.bot.commands.object_for_stock.FreeLance;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -25,10 +26,10 @@ public class CreateFreeLance extends LongCommand {
     private Stape link;
 
 
-    public CreateFreeLance(ReactionAddEvent event) {
-        super(event);
+    public CreateFreeLance(final Member member) {
+        super(member);
         this.freeLance = new FreeLance();
-        this.freeLance.setMemberId(event.getMember().get().getId().asString());
+        this.freeLance.setMemberId(member.getId().asString());
         this.deletedCommand(21600000L);
 
         this.createLocalChannel("creation de freelance", Init.idMissionsCategory);

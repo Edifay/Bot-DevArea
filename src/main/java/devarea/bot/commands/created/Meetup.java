@@ -12,6 +12,7 @@ import devarea.bot.commands.Stape;
 import devarea.bot.commands.EndStape;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Attachment;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -29,8 +30,8 @@ public class Meetup extends LongCommand {
     private MeetupStock meetup;
     private List<MeetupStock> canDelete;
 
-    public Meetup(MessageCreateEvent message) {
-        super(message);
+    public Meetup(final Member member, final TextChannel channel_param, final Message message) {
+        super(member, channel_param);
 
 
         Stape lastStape = new EndStape() {

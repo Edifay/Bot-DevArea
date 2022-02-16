@@ -12,6 +12,7 @@ import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
+import discord4j.core.spec.TextChannelCreateSpec;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 
@@ -23,18 +24,8 @@ public abstract class Command {
     protected final Member member;
     protected TextChannel channel;
 
-    protected boolean hasBeenMultiplied = false;
-
     public Command() {
         this.member = null;
-    }
-
-    public Command(final MessageCreateEvent event) {
-        this(event.getMember().get(), (TextChannel) event.getMessage().getChannel().block());
-    }
-
-    public Command(final ReactionAddEvent event) {
-        this(event.getMember().get(), (TextChannel) event.getChannel().block());
     }
 
     public Command(final Member member) {
@@ -60,21 +51,20 @@ public abstract class Command {
     }
 
     protected boolean createLocalChannel(final String name, final Snowflake parentId, final boolean canWrite) {
-        this.channel = Init.devarea.createTextChannel(textChannelCreateSpec -> {
-            textChannelCreateSpec.setName(name);
-            textChannelCreateSpec.setParentId(parentId);
-            Set<PermissionOverwrite> set = new HashSet<>();
-            set.add(PermissionOverwrite.forRole(Init.idRoleRulesAccepted,
-                    PermissionSet.of(),
-                    PermissionSet.of(Permission.VIEW_CHANNEL)));
-            set.add(PermissionOverwrite.forMember(this.member.getId(),
-                    canWrite ?
-                            PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES)
-                            :
-                            PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY),
-                    PermissionSet.of(Permission.ADD_REACTIONS)));
-            textChannelCreateSpec.setPermissionOverwrites(set);
-        }).block();
+        Set<PermissionOverwrite> set = new HashSet<>();
+        set.add(PermissionOverwrite.forRole(Init.idRoleRulesAccepted,
+                PermissionSet.of(),
+                PermissionSet.of(Permission.VIEW_CHANNEL)));
+        set.add(PermissionOverwrite.forMember(this.member.getId(),
+                canWrite ?
+                        PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES)
+                        :
+                        PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY),
+                PermissionSet.of(Permission.ADD_REACTIONS)));
+        this.channel = Init.devarea.createTextChannel(TextChannelCreateSpec.builder()
+                .name(name)
+                .parentId(parentId)
+                .permissionOverwrites(set).build()).block();
         assert this.channel != null;
         return true;
     }
@@ -180,14 +170,6 @@ public abstract class Command {
 
     public static Snowflake getMention(final MessageCreateEvent event) {
         return event.getMessage().getUserMentionIds().toArray(new Snowflake[0])[0];
-    }
-
-    public void setHasBeenMultiplied(boolean hasBeenMultiplied) {
-        this.hasBeenMultiplied = hasBeenMultiplied;
-    }
-
-    public boolean hasBeenMultiplied() {
-        return hasBeenMultiplied;
     }
 
     public Member getMember() {

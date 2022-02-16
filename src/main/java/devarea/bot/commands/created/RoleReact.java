@@ -7,7 +7,9 @@ import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.rest.util.Permission;
@@ -30,8 +32,8 @@ public class RoleReact extends LongCommand implements PermissionCommand {
         super();
     }
 
-    public RoleReact(MessageCreateEvent message) {
-        super(message);
+    public RoleReact(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
 
 
         Stape getRole = new EndStape() {

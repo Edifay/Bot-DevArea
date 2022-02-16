@@ -6,6 +6,7 @@ import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.PermissionSet;
@@ -32,6 +33,8 @@ public class CommandManager {
 
     private static final Map<Snowflake, LongCommand> actualCommands = new HashMap<>();
 
+    private static final Map<Snowflake, Snowflake> logged_as = new HashMap<>();
+
     public static void init() {
         try {
 
@@ -46,8 +49,12 @@ public class CommandManager {
                     final String newName = className.startsWith("/") ? className.substring(1) : className;
                     System.out.println(className + "->" + newName);
                     if (Arrays.stream(Class.forName("devarea.bot.commands.created." + newName).getConstructors())
-                            .anyMatch(constructor -> constructor.getGenericParameterTypes().length == 1 && constructor.getGenericParameterTypes()[0].equals(MessageCreateEvent.class)))
-                        classBound.put(newName.toLowerCase(Locale.ROOT), Class.forName("devarea.bot.commands.created." + newName).getConstructor(MessageCreateEvent.class));
+                            .anyMatch(constructor -> constructor.getGenericParameterTypes().length == 3
+                                    && constructor.getGenericParameterTypes()[0].equals(Member.class)
+                                    && constructor.getGenericParameterTypes()[1].equals(TextChannel.class)
+                                    && constructor.getGenericParameterTypes()[2].equals(Message.class)))
+                        classBound.put(newName.toLowerCase(Locale.ROOT), Class.forName("devarea.bot.commands.created." + newName)
+                                .getConstructor(Member.class, TextChannel.class, Message.class));
                     else
                         System.err.println("Impossibilité de charger la commande : " + "devarea.bot.commands.created." + newName);
 
@@ -102,6 +109,8 @@ public class CommandManager {
             command = command.toLowerCase(Locale.ROOT);
             if (classBound.containsKey(command)) {
                 try {
+                    Member member_command = message.getMember().get();
+                    Member member_replaced = logged_as.get(member_command.getId()) == null ? member_command : Init.devarea.getMemberById(logged_as.get(member_command.getId())).block();
                     System.out.println("The command " + command + " is executed !");
                     PermissionSet permissionSet = null;
                     try {
@@ -110,10 +119,10 @@ public class CommandManager {
                     } catch (NoSuchMethodException ignored) {
                     }
 
-                    if (permissionSet == null || containPerm(permissionSet, message.getMember().get().getBasePermissions().block())) {
-                        Command actualCommand = (Command) classBound.get(command).newInstance(message);
+                    if (permissionSet == null || containPerm(permissionSet, member_command.getBasePermissions().block())) {
+                        Command actualCommand = (Command) classBound.get(command).newInstance(member_replaced, message.getMessage().getChannel().block(), message.getMessage());
                         if (actualCommand instanceof LongCommand)
-                            actualCommands.put(message.getMember().get().getId(), (LongCommand) actualCommand);
+                            actualCommands.put(member_replaced.getId(), (LongCommand) actualCommand);
                     } else
                         Command.sendError((TextChannel) message.getMessage().getChannel().block(), "Vous n'avez pas la permission d'éxécuter cette commande !");
 
@@ -133,18 +142,26 @@ public class CommandManager {
     }
 
     public static boolean addManualCommand(Member member, ConsumableCommand command) {
+        return addManualCommand(member, command, false);
+    }
+
+    public static boolean addManualCommand(Member member, ConsumableCommand command, final boolean force_join) {
         synchronized (actualCommands) {
             try {
+                Member member_command = member;
+                Member member_replaced = logged_as.containsKey(member_command.getId()) ? Init.devarea.getMemberById(logged_as.get(member_command.getId())).block() : member_command;
                 PermissionSet permissionSet = null;
                 try {
                     PermissionCommand defaultCommand = (PermissionCommand) command.commadClass.getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
                     permissionSet = defaultCommand.getPermissions();
                 } catch (NoSuchMethodException e) {
                 }
-                if (permissionSet == null || containPerm(permissionSet, member.getBasePermissions().block())) {
-                    if (!actualCommands.containsKey(member.getId()))
+                if (permissionSet == null || containPerm(permissionSet, member_command.getBasePermissions().block())) {
+                    if (!actualCommands.containsKey(member_replaced.getId()) || force_join) {
+                        command.setMember(member_replaced);
                         if (command.getCommand(false) instanceof LongCommand)
-                            actualCommands.put(member.getId(), (LongCommand) command.getCommand(true));
+                            actualCommands.put(member_replaced.getId(), (LongCommand) command.getCommand(true));
+                    }
                     return true;
                 }
                 Command.sendError(command.channel, "Vous n'avez pas la permission d'éxécuter cette commande !");
@@ -157,8 +174,9 @@ public class CommandManager {
 
     public static boolean react(ReactionAddEvent event) {
         synchronized (actualCommands) {
-            if (actualCommands.containsKey(event.getUserId())) {
-                actualCommands.get(event.getUserId()).nextStape(event);
+            Member member_replaced = logged_as.get(event.getUserId()) == null ? event.getMember().get() : Init.devarea.getMemberById(logged_as.get(event.getUserId())).block();
+            if (actualCommands.containsKey(member_replaced.getId())) {
+                actualCommands.get(member_replaced.getId()).nextStape(event);
                 return true;
             }
             return false;
@@ -167,8 +185,9 @@ public class CommandManager {
 
     public static boolean receiveMessage(MessageCreateEvent event) {
         synchronized (actualCommands) {
-            if (actualCommands.containsKey(event.getMember().get().getId())) {
-                actualCommands.get(event.getMember().get().getId()).nextStape(event);
+            Member member_replaced = logged_as.get(event.getMessage().getAuthor().get().getId()) == null ? event.getMember().get() : Init.devarea.getMemberById(logged_as.get(event.getMessage().getAuthor().get().getId())).block();
+            if (actualCommands.containsKey(member_replaced.getId())) {
+                actualCommands.get(member_replaced.getId()).nextStape(event);
                 return true;
             }
             return false;
@@ -197,8 +216,6 @@ public class CommandManager {
         synchronized (actualCommands) {
             if (actualCommands.containsValue(command))
                 actualCommands.remove(memberId);
-            if (command.hasBeenMultiplied())
-                actualCommands.values().removeIf(e -> e.equals(command));
         }
     }
 
@@ -230,18 +247,6 @@ public class CommandManager {
         return actualCommands.get(id);
     }
 
-    public static void bindMemberToMember(final Snowflake idOut, final Snowflake idIn) {
-        actualCommands.put(idOut, getCommandOf(idIn));
-        getCommandOf(idIn).setHasBeenMultiplied(true);
-    }
-
-    public static void unbindMemberToMember(final Snowflake idOut) {
-        if (!getCommandOf(idOut).member.getId().equals(idOut))
-            actualCommands.remove(idOut);
-        else
-            getCommandOf(idOut).sendError("Vous ne pouvez pas quitter cette mission !");
-    }
-
     public static boolean containPerm(PermissionSet permissionToBeIn, PermissionSet PermissionsContainers) {
         AtomicBoolean atReturn = new AtomicBoolean(true);
         permissionToBeIn.stream().iterator().forEachRemaining(permission -> {
@@ -254,6 +259,29 @@ public class CommandManager {
                 atReturn.set(false);
         });
         return atReturn.get();
+    }
+
+    public static void logAs(Snowflake memberToLog, Snowflake memberDestinationLog) {
+        synchronized (logged_as) {
+            logged_as.put(memberToLog, memberDestinationLog);
+        }
+    }
+
+    public static void unLog(Snowflake memberToUnLog) {
+        synchronized (logged_as) {
+            logged_as.remove(memberToUnLog);
+        }
+    }
+
+    public static Snowflake getLoggedAs(Snowflake member) {
+        return logged_as.get(member);
+    }
+
+    public static Member getMemberLogged(Member member) {
+        if (logged_as.containsKey(member))
+            return Init.devarea.getMemberById(logged_as.get(member.getId())).block();
+        else
+            return member;
     }
 
 }

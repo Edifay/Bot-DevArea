@@ -21,18 +21,14 @@ public abstract class LongCommand extends Command {
         super();
     }
 
-    public LongCommand(final MessageCreateEvent message) {
-        super(message);
-        this.isLocalChannel = false;
-    }
-
-    public LongCommand(final ReactionAddEvent event) {
-        super(event);
-        this.isLocalChannel = false;
-    }
-
     public LongCommand(final Member member) {
         super(member);
+        this.isLocalChannel = false;
+    }
+
+    public LongCommand(final Member member, final TextChannel channel) {
+        super(member, channel);
+        this.isLocalChannel = false;
     }
 
     public void nextStape(final ReactionAddEvent event) {

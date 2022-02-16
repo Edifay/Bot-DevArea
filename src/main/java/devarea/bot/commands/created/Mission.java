@@ -7,7 +7,9 @@ import devarea.bot.commands.LongCommand;
 import devarea.bot.commands.Stape;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 
@@ -17,8 +19,8 @@ import java.util.function.Consumer;
 public class Mission extends LongCommand {
     ArrayList<devarea.bot.commands.object_for_stock.Mission> ofMember;
 
-    public Mission(MessageCreateEvent message) {
-        super(message);
+    public Mission(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
 
         Stape deleteList = new Stape() {
             @Override

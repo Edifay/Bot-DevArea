@@ -81,7 +81,7 @@ public class Bump {
     }
 
     private synchronized static void edit(final MessageEditSpec spec) {
-        message = message.getReferencedMessage().get().edit(spec).block();
+        message = message.edit(spec).block();
     }
 
     public static void messageInChannel(MessageCreateEvent event) {

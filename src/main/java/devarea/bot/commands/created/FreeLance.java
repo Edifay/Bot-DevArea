@@ -7,7 +7,9 @@ import devarea.bot.commands.FirstStape;
 import devarea.bot.commands.LongCommand;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 
@@ -15,8 +17,8 @@ import java.util.function.Consumer;
 
 public class FreeLance extends LongCommand {
 
-    public FreeLance(MessageCreateEvent message) {
-        super(message);
+    public FreeLance(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
         EndStape bumpStape = new EndStape() {
             protected boolean onCall(Message message) {
                 if (FreeLanceManager.hasFreelance(FreeLance.this.member)) {
@@ -65,7 +67,8 @@ public class FreeLance extends LongCommand {
             }
         };
         this.firstStape = new FirstStape(this.channel, bumpStape, deleteStape) {
-            public void onFirstCall(Consumer<? super MessageCreateSpec> deleteThisVariableAndSetYourOwnMessage) {
+            @Override
+            public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
                         .title("FreeLance")
                         .description("Vous pouvez ici effectuer des modifications sur votre freelance !\n`bump` -> cette commande va bump votre message freelance !\n" +

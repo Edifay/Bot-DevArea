@@ -6,7 +6,9 @@ import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
@@ -27,8 +29,8 @@ public class Edit extends LongCommand implements PermissionCommand {
     }
 
 
-    public Edit(MessageCreateEvent message) {
-        super(message);
+    public Edit(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
 
         Stape endStape = new EndStape() {
             @Override
@@ -179,32 +181,28 @@ public class Edit extends LongCommand implements PermissionCommand {
             }
         };
 
-        this.firstStape = new
+        this.firstStape = new FirstStape(this.channel, isEmbedOrText) {
+            @Override
+            public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
+                super.onFirstCall(MessageCreateSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Quel message voulez-vous modifier ?")
+                                .description("Donnez-moi l'id du message a modifier, ATTENTION ce message doit être dans le channel de cette commande !")
+                                .color(ColorsUsed.same).build()
+                        ).build());
+            }
 
-                FirstStape(this.channel, isEmbedOrText) {
-                    @Override
-                    public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
-                        super.onFirstCall(MessageCreateSpec.builder()
-                                .addEmbed(EmbedCreateSpec.builder()
-                                        .title("Quel message voulez-vous modifier ?")
-                                        .description("Donnez-moi l'id du message a modifier, ATTENTION ce message doit être dans le channel de cette commande !")
-                                        .color(ColorsUsed.same).build()
-                                ).build());
-                    }
-
-                    @Override
-                    protected boolean onReceiveMessage(MessageCreateEvent event) {
-                        try {
-                            atModif = this.textChannel.getMessageById(Snowflake.of(event.getMessage().getContent())).block();
-                            if (atModif != null && atModif.getAuthor().get().getId().equals(Init.client.getSelfId()))
-                                return callStape(0);
-                        } catch (Exception e) {
-                        }
-                        return super.onReceiveMessage(event);
-                    }
+            @Override
+            protected boolean onReceiveMessage(MessageCreateEvent event) {
+                try {
+                    atModif = this.textChannel.getMessageById(Snowflake.of(event.getMessage().getContent())).block();
+                    if (atModif != null && atModif.getAuthor().get().getId().equals(Init.client.getSelfId()))
+                        return callStape(0);
+                } catch (Exception e) {
                 }
-
-        ;
+                return super.onReceiveMessage(event);
+            }
+        };
         this.lastMessage = this.firstStape.getMessage();
     }
 

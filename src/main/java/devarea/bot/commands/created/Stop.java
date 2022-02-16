@@ -8,6 +8,9 @@ import devarea.bot.commands.PermissionCommand;
 import devarea.bot.commands.ShortCommand;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
@@ -22,8 +25,8 @@ public class Stop extends ShortCommand implements PermissionCommand {
         super();
     }
 
-    public Stop(final MessageCreateEvent message) {
-        super(message);
+    public Stop(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
         MissionsManager.stop();
         FreeLanceManager.stop();
         XpCount.stop();

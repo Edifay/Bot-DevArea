@@ -7,14 +7,17 @@ import devarea.bot.commands.ShortCommand;
 import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 
 import java.time.Instant;
 import java.util.Map;
 
 public class InCommand extends ShortCommand {
-    public InCommand(MessageCreateEvent message) {
-        super(message);
+    public InCommand(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
         String text = "";
         if (CommandManager.size() > 0) {
             text += "Il y a actuellement " + CommandManager.size() + " commandes en cour :\n";

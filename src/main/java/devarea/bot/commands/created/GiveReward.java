@@ -31,12 +31,8 @@ public class GiveReward extends LongCommand {
 
     final List<Snowflake> helpers = new ArrayList<>();
 
-    public GiveReward(MessageCreateEvent event) {
-        super(event.getMessage().getAuthorAsMember().block());
-
-        final Member author = event.getMember().get();
-        channel = (TextChannel) event.getMessage().getChannel().block();
-        assert channel != null;
+    public GiveReward(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
 
         if (!channel.getName().contains("entraide")) {
             this.sendError("Vous ne pouvez utiliser cette commande que dans les channels d'entraide");
@@ -44,7 +40,7 @@ public class GiveReward extends LongCommand {
             return;
         }
 
-        this.firstStape = getMessageCreateEventFirstStape(event, getEndStape(author));
+        this.firstStape = getMessageCreateEventFirstStape(getEndStape(member));
         this.lastMessage = firstStape.getMessage();
     }
 
@@ -55,14 +51,12 @@ public class GiveReward extends LongCommand {
         channel = (TextChannel) event.getChannel().block();
         assert channel != null;
 
-
-        event.getMessage().block().delete().block();
+        delete(false, event.getMessage().block());
         this.firstStape = getReactionAddEventFirstStape(event, helper, endStape, selectionStage);
         this.lastMessage = firstStape.getMessage();
     }
 
-    private FirstStape getMessageCreateEventFirstStape(MessageCreateEvent event, Stape... stapes) {
-
+    private FirstStape getMessageCreateEventFirstStape(Stape... stapes) {
         return new FirstStape(channel, stapes) {
             @Override
             public void onFirstCall(MessageCreateSpec spec) {
@@ -107,11 +101,8 @@ public class GiveReward extends LongCommand {
                                     " il vous a déjà récompensé il y'a moins de deux heures"
                     );
                     return false;
-
                 }
-
                 helpers.addAll(mentions);
-
                 return callStape(0);
             }
         };
@@ -148,9 +139,7 @@ public class GiveReward extends LongCommand {
 
                 return super.receiveReact(event);
             }
-        }
-
-                ;
+        };
     }
 
     private EndStape getEndStape(Member member) {

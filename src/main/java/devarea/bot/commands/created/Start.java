@@ -6,15 +6,17 @@ import devarea.bot.commands.LongCommand;
 import devarea.bot.commands.Stape;
 import devarea.bot.data.TextMessage;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.MessageCreateSpec;
 
 import java.util.function.Consumer;
 
 public class Start extends LongCommand {
 
-    public Start(final MessageCreateEvent message) {
-        super(message);
+    public Start(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
 
         Stape java = new EndStape() {
             @Override

@@ -6,6 +6,8 @@ import devarea.bot.commands.ShortCommand;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 
@@ -20,14 +22,13 @@ import java.io.IOException;
 import java.net.URL;
 
 public class Rank extends ShortCommand {
-    public Rank(MessageCreateEvent message) {
-        super(message);
-        Member pinged = message.getMember().get();
+    public Rank(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
+        Member pinged = member;
         try {
-            pinged = Init.devarea.getMemberById(message.getMessage().getUserMentions().get(0).getId()).block();
+            pinged = Init.devarea.getMemberById(message.getUserMentions().get(0).getId()).block();
         } catch (Exception e) {
         } finally {
-
             if (!XpCount.haveBeenSet(pinged.getId())) {
                 sendError("Ce membre n'a pas encore parlé !");
                 this.endCommand();

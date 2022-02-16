@@ -12,6 +12,7 @@ import devarea.bot.data.ColorsUsed;
 import devarea.bot.data.TextMessage;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -25,8 +26,8 @@ public class CreateMission extends LongCommand {
 
     protected Mission mission;
 
-    public CreateMission(ReactionAddEvent event) {
-        super(event);
+    public CreateMission(final Member member) {
+        super(member);
         this.mission = new Mission();
         this.deletedCommand(10800000L);
 

@@ -76,12 +76,14 @@ public class FreeLanceManager {
         if (event.getMessageId().equals(message.getId())) {
             startAway(() -> event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).subscribe());
 
+            Member member = CommandManager.getMemberLogged(event.getMember().get());
+
             if (event.getEmoji().equals(ReactionEmoji.custom(Init.idYes)))
-                if (!FreeLanceManager.hasFreelance(event.getMember().get()))
-                    CommandManager.addManualCommand(event.getMember().get(), new ConsumableCommand((TextChannel) event.getChannel().block(), CreateFreeLance.class) {
+                if (!FreeLanceManager.hasFreelance(member))
+                    CommandManager.addManualCommand(event.getMember().get(), new ConsumableCommand(CreateFreeLance.class) {
                         @Override
                         protected Command command() {
-                            return new CreateFreeLance(event);
+                            return new CreateFreeLance(this.member);
                         }
                     });
                 else

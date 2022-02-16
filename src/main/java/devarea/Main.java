@@ -9,7 +9,7 @@ import java.io.PrintStream;
 
 public class Main {
 
-    public static final boolean developing = true;
+    public static final boolean developing = false;
 
     public static void main(String[] args) {
 
