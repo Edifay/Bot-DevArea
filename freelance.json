@@ -838,7 +838,7 @@
       }
     ],
     "message": {
-      "idMessage": "930598459185201152",
+      "idMessage": "942344585278021635",
       "idChannel": "856081355309842452"
     },
     "membre": "495978417582505986"
@@ -1227,28 +1227,10 @@
       }
     ],
     "message": {
-      "idMessage": "942147310010396712",
+      "idMessage": "942564647939227739",
       "idChannel": "856081355309842452"
     },
     "membre": "607291511087955972"
-  },
-  {
-    "name": "Dragos",
-    "description": "Bonjour/Bonsoir,\n\nJe me présente, je suis Dragos, j'ai 14 ans et je suis passionné par la programmation. Cela fait maintenant 7 mois que je code en Python et je vous propose aujourd'hui mes services.\nJe ne connais pas tout, en revanche, je me renseigne dès que je tombe sur un problème afin de le résoudre et de vous vendre un code des plus efficaces.\nJe suis \"spécialisé\" dans les bots Python, c'est sur ceux-ci que je travaille le plus en ce moment, mais vous pouvez également faire appel à moi pour des programmes plus simples/complexes, comme de l'aide ou la résolution (avec explications) de vos exercices...",
-    "fields": [
-      {
-        "title": "Services / Tarifs",
-        "description": "Comme expliquez ci-dessus, les prix et le temps varient en fonction des demandes. Je ne pourrais donc pas vous donner une moyenne.\nEn revanche, lorsque vous venez me contacter, je commencerai par une ébauche afin de voir si j'ai les compétences requises, et si c'est le cas, je vous annoncerai une tranche qui, s'il n'y a pas d'imprévus/fonctionnalités à rajouter, ne bougera pas.",
-        "prix": "empty",
-        "temps": "En général, pas plus de 2 semaines pour les bots; 2 heures pour des exercices. Mais cela dépend de la complexité, le temps vous sera annoncé avec la tranche de prix si vous le souhaitez.",
-        "inline": false
-      }
-    ],
-    "message": {
-      "idMessage": "942139166911782932",
-      "idChannel": "856081355309842452"
-    },
-    "membre": "386614847019810836"
   },
   {
     "name": "Lion",
@@ -1302,5 +1284,73 @@
       "idChannel": "856081355309842452"
     },
     "membre": "743498810969292892"
+  },
+  {
+    "name": "Dragos",
+    "description": "Bonjour/Bonsoir,\n\nJe me présente, je suis Dragos, j'ai 14 ans et je suis passionné par la programmation. Cela fait maintenant 7 mois que je code en Python et je vous propose aujourd'hui mes services.\nJe ne connais pas tout, en revanche, je me renseigne dès que je tombe sur un problème afin de le résoudre et de vous vendre un code des plus efficaces.\nJe suis \"spécialisé\" dans les bots Python, c'est sur ceux-ci que je travaille le plus en ce moment, mais vous pouvez également faire appel à moi pour des programmes plus simples/complexes, comme de l'aide ou la résolution (avec explications) de vos exercices...",
+    "fields": [
+      {
+        "title": "Tarifs / Retours",
+        "description": "Comme expliquez ci-dessus, les prix et le temps varient en fonction des demandes. Je ne pourrais donc pas vous donner une moyenne.\nEn revanche, lorsque vous venez me contacter, je commencerai par une ébauche afin de voir si j'ai les compétences requises, et si c'est le cas, je vous annoncerai une tranche qui, s'il n'y a pas d'imprévus/fonctionnalités à rajouter, ne bougera pas.\nDe même pour le temps de retour, en général, je ne mets pas plus de 2 semaines pour des bots et pas plus d'un jour pour des exercices. En moyenne, si vous êtes disponible, je fais ça en 1h, explications incluses, je prends plus de ce temps si j'ai besoin de me renseigner pour faire l'exercice ou que vous n'êtes pas disponible pour les explications.",
+        "prix": "empty",
+        "temps": "empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "942685899542659072",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "386614847019810836"
+  },
+  {
+    "name": "pepperoni21",
+    "description": "Je suis actuellement en 1e générale. Je développe depuis plusieurs années et j'ai acquis beaucoup d'expériences dans le domaine de la programmation à travers la création de plusieurs projets et la prestation de services. Je ne demande aucun contrat, les échanges sont faits à l'amiable. Un cahier des charges plutôt détaillé m'est requis puis je commencerai le développement, je garantis un suivi constant de la commande jusqu'à son aboutissement où j'enverrai un rendu complet de l'œuvre finalisée puis livrerai la commande après réception du paiement, de ce fait je n'ai aucune raison de ne pas l'envoyer.",
+    "fields": [
+      {
+        "title": "Application de bureau (Windows et Linux)",
+        "description": "Je peux vous développer une application/logiciel de bureau pour Windows. Cette application sera faite à partir d'un design donné au préalable (je ne suis pas graphiste). Cette application pourra intéragir avec l'OS mais également avec un serveur Web distant ou une API. À savoir que je ne fais pas de launcher Minecraft. L'application sera compilée en .exe. Des screens seront régulièrement envoyés afin d'avoir un suivi du développement et votre avis sera également sollicité concernant telle ou telle décision.",
+        "prix": "Selon l'application demandée",
+        "temps": "Selon l'application demandée",
+        "inline": false
+      },
+      {
+        "title": "Bot discord en Python",
+        "description": "Je peux vous faire un bot discord via Python. L'hébergement sera à vos frais. Des screens/vidéos seront envoyés régulièrement afin d'avoir un suivi du bot. Le bot pourra intéragir avec des APIs/serveurs Web distant et pourra être configurable. Les données pourront être stockées sur une base de données de votre choix ou directement sur un fichier YML/JSON/CSV, etc.",
+        "prix": "Selon le bot demandé",
+        "temps": "Selon le bot demandé",
+        "inline": false
+      },
+      {
+        "title": "Application mobile (Android ou IOS)",
+        "description": "Je peux vous développer une application Android ou IOS. La publication sur le Play Store ou l'App Store sera cependant de votre ressort. L'application se basera sur un design fourni préalablement (je ne suis pas graphiste) et un suivi régulier sera donné. Les données pourront être stockées en local et le backend pourra être fait par moi via Firebase ou par vous. L'application pourra intéragir avec des APIs Web.",
+        "prix": "Selon la demande",
+        "temps": "Selon la demande",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "942491384894619738",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "814152965945950240"
+  },
+  {
+    "name": "Marichez Jérôme",
+    "description": "Je travaille depuis 5 ans en tant que Développeur Web. J'ai mener à bien des missions et réaliser les sites de https://truffle.com/, récemment j'ai travailler pour une boutique de bijouterie (le site https://verhoeven-joaillier.com/) pour le back & le front en tant que salarié pendant 3 ans. (création pour la boutique de A a Z)\n\nJe suis compétent sur les langages PHP/JavaScript principalement. (framework Laravel ou PHP sans FM) (JavaScript sans FM ou ReactJS)\nJ'ai également quelques expériences sur des langages différents comme le PureBasic, le C et le C#.",
+    "fields": [
+      {
+        "title": "Liens",
+        "description": "https://www.linkedin.com/in/j%C3%A9r%C3%B4me-marichez-31948712b/",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "943979555847295047",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "194572206179745803"
   }
 ]

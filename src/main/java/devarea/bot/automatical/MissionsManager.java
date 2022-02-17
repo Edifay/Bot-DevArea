@@ -16,6 +16,7 @@ import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.MessageCreateSpec;
 
 import java.io.File;
 import java.io.IOException;
@@ -120,13 +121,15 @@ public class MissionsManager {
         TextChannel channel = (TextChannel) Init.devarea.getChannelById(Init.idMeetupVerif).block();
         for (Mission mission : missions) {
             if (!Init.membersId.contains(Snowflake.of(mission.getMemberId()))) {
-                atRemove.add(mission);
+                channel.createMessage(MessageCreateSpec.builder()
+                        .content("La mission de : <@" + mission.getMemberId() + "> doit être supprimé !").build()).subscribe();
+                /*atRemove.add(mission);
                 startAway(() -> {
                     try {
                         delete(false, mission.getMessage().getMessage());
                     } catch (Exception e) {
                     }
-                });
+                });*/
             }
         }
 

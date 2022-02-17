@@ -35,16 +35,16 @@ public class Ready {
             })).subscribe();
         });
 
+        System.out.println("Fetching members...");
+        long ms = System.currentTimeMillis();
+        Init.membersId.removeAll(Init.membersId);
+        Init.devarea.getMembers().buffer().blockLast().forEach(member -> Init.membersId.add(member.getId()));
+        System.out.println("Fetch took : " + (System.currentTimeMillis() - ms) + "ms, " + Init.membersId.size() + " members fetch !");
+        if (Init.membersId.size() == 0)
+            System.exit(0);
 
         try {
             Stats.init();
-            System.out.println("Fetching members...");
-            long ms = System.currentTimeMillis();
-            synchronized (Init.membersId) {
-                Init.membersId.removeAll(Init.membersId);
-                Init.devarea.getMembers().buffer().blockLast().forEach(member -> Init.membersId.add(member.getId()));
-            }
-            System.out.println("Fetch took : " + (System.currentTimeMillis() - ms) + "ms");
         } catch (Exception e) {
             e.printStackTrace();
         }

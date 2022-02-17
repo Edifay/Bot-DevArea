@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @CrossOrigin()
@@ -31,7 +32,9 @@ public class ControllerMissions {
         if (start > MissionsManager.getMissions().size())
             start = MissionsManager.getMissions().size();
 
-        List<Mission> list = MissionsManager.getMissions().subList(start, end);
+        ArrayList<Mission> list_at_reverse = (ArrayList<Mission>) MissionsManager.getMissions().clone();
+        Collections.reverse(list_at_reverse);
+        List<Mission> list = list_at_reverse.subList(start, end);
         ArrayList<MissionForWeb> list_transformed = transformMissionListToMissionForWebList(list);
 
         return list_transformed.toArray(new MissionForWeb[0]);

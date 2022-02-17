@@ -21,6 +21,7 @@ public class LeaderBoard extends ShortCommand {
         }
         text += "\n---------------------------------------------------------------\n\n";
         text += "`#" + XpCount.getRankOf(this.member.getId()) + ":` <@" + this.member.getId().asString() + ">: " + XpCount.getXpOf(this.member.getId()) + "xp.";
+        text += "\n\nVous pouvez retrouver le leaderboard en entier sur le site web : https://devarea.fr/.";
         sendEmbed(EmbedCreateSpec.builder()
                 .title("LeaderBoard !")
                 .color(ColorsUsed.same)

@@ -1,22 +1,22 @@
 [
   {
     "name": "Edifay",
-    "bio": "Je développe depuis plus de 5 ans, j'ai créé ce serveur et développe le bot depuis Juillet 2020, j'espère que vous trouverez votre bonheur sur le serveur ! Je développe principalement en Java qui est mon langage starter,  mais je développe aussi en C++, Dart/Flutter, JavaScript, TypeScript, Html/Css. Si vous avez de propositions n'hésitez pas à venir me contacter !",
+    "bio": "Je développe depuis plus de 6 ans, fondateur de Dev'Area. Mes langages principaux sont le Java, C++, html/css, JS/TS. N'hésitez pas si vous avez des questions ou des propositions !",
     "id":"321673326105985025"
   },
   {
     "name": "Stramis",
-    "bio": "Je suis en train de faire le front !",
+    "bio": "Etudiant en prépa, et passioné par l'informatique, je pratique de nombreux langages, tel que le C, Html/css, TypeScript/JavaScript, et bien d'autres.",
     "id": "561583871183814666"
   },
   {
     "name": "Gatean",
-    "bio": "J'aime go",
+    "bio": "Je m'appelle Gaëtan, je suis un développeur full stack français et un ingénieur passionné \"Devops\". Utilise actuellement les outils Jetbrains. Travailler sur le double démarrage Manjaro x Windows.",
     "id": "816406495239208971"
   },
   {
     "name": "Chloé",
-    "bio": "J'aime pas le mot meuf !",
+    "bio": "Graphiste pour Dev'Area ! Je travaille sur un nouveau logo ;).",
     "id": "797593094195249222"
   },
   {
@@ -26,12 +26,12 @@
   },
   {
     "name":"Dari-ustensile",
-    "bio": "BlaBla",
+    "bio": "Admin depuis le jour 1. Moi développeur ? Pas un jour depuis sa création :). Les relations ça aide !",
     "id":"378597371380105216"
   },
   {
     "name":"LueurSombre",
-    "bio": "BlaBla",
+    "bio": "Fait partit du Staff de Dev'Area. Débutant en programmation, fondateur de plusieurs serveurs discord !",
     "id":"514138344410841089"
   }
 ]

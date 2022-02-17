@@ -87,7 +87,7 @@ public class ControllerOAuth2 {
                 } else {
                     builder.revoke();
                 }
-                return "<meta http-equiv=\"refresh\" content=\"0; url=http://localhost:4200/?code=" + getUserLink(builder.getIdUser()) + "\" />";
+                return "<meta http-equiv=\"refresh\" content=\"0; url=https://devarea.fr/?code=" + getUserLink(builder.getIdUser()) + "\" />";
             }
 
             builder.enableAutoRefresh();
@@ -104,10 +104,8 @@ public class ControllerOAuth2 {
                     e.printStackTrace();
                 }
             });
-
         }
-
-        return "<meta http-equiv=\"refresh\" content=\"0; url=http://localhost:4200/?code=" + code + "\" />";
+        return "<meta http-equiv=\"refresh\" content=\"0; url=https://devarea.fr/?code=" + code + "\" />";
     }
 
     public static void save() throws IOException {

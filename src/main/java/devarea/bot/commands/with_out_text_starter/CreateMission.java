@@ -22,6 +22,8 @@ import discord4j.core.spec.MessageEditSpec;
 import java.time.Instant;
 import java.util.function.Consumer;
 
+import static devarea.bot.event.FunctionEvent.startAway;
+
 public class CreateMission extends LongCommand {
 
     protected Mission mission;
@@ -55,6 +57,16 @@ public class CreateMission extends LongCommand {
                 );
                 MissionsManager.add(mission);
                 MissionsManager.update();
+                try {
+                    startAway(() -> {
+                        member.getPrivateChannel().block().createMessage(MessageCreateSpec.builder()
+                                .addEmbed(EmbedCreateSpec.builder()
+                                        .title("Suivis d'une mission")
+                                        .description("La commande `//mission` permet de gérer sa mission, pour par exemple la supprimer.")
+                                        .color(ColorsUsed.same).build()).build()).block();
+                    });
+                } catch (Exception e) {
+                }
                 return end;
             }
         };

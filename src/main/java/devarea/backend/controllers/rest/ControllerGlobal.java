@@ -1,6 +1,7 @@
 package devarea.backend.controllers.rest;
 
 import devarea.backend.controllers.data.UserInfo;
+import devarea.bot.Init;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.object.entity.Member;
 import discord4j.core.spec.MessageCreateSpec;
@@ -63,7 +64,7 @@ public class ControllerGlobal {
                     msg.addEmbed(embed -> {
                         embed.setTitle("Comment créer une mission ?");
                         embed.setColor(ColorsUsed.same);
-                        embed.setDescription("Rien de plus simple ! Il faut se rendre sur le channel Missions-Payantes de Dev'Area (<#768855632224190496>)." +
+                        embed.setDescription("Rien de plus simple ! Il faut se rendre sur le channel Missions-Payantes de Dev'Area (<#" + Init.idMissionsPayantes.asString() + ">)." +
                                 "\n\nPuis réagir au message proposant de créer sa mission, et suivre les étapes de créations.\n\nEn espérant t'aider !");
                     });
                 };
