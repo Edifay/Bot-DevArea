@@ -4,11 +4,11 @@ import devarea.bot.commands.CommandManager;
 import devarea.bot.event.*;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
-import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.core.event.domain.guild.MemberLeaveEvent;
+import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.*;
 import discord4j.core.object.entity.Guild;
@@ -151,6 +151,7 @@ public class Init {
             client.getEventDispatcher().on(ReactionAddEvent.class).subscribe(ReactionAdd::reactionAddFunction);
             client.getEventDispatcher().on(ReactionRemoveEvent.class).subscribe(ReactionRemove::FunctionReactionRemoveEvent);
             client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(VoiceStateUpdate::VoiceStateUpdateFucntion);
+            client.getEventDispatcher().on(ButtonInteractionEvent.class).subscribe(ButtonInteract::ButtonInteractFunction);
 
         } catch (ParserConfigurationException | IOException e) {
             e.printStackTrace();

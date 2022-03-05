@@ -8,6 +8,7 @@ import devarea.bot.commands.Stape;
 import devarea.bot.data.ColorsUsed;
 import devarea.bot.data.TextMessage;
 import discord4j.common.util.Snowflake;
+import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.PermissionOverwrite;
 import discord4j.core.object.entity.Member;
@@ -15,6 +16,7 @@ import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.core.spec.MessageEditSpec;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 
@@ -46,13 +48,15 @@ public class JoinCommand extends LongCommand {
         Stape roles = new Stape() {
             @Override
             protected boolean onCall(Message message) {
-                removeAllEmoji();
                 final PermissionOverwrite over = PermissionOverwrite.forMember(member.getId(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY), PermissionSet.of());
                 startAway(() -> Init.devarea.getChannelById(Init.idRolesChannel).block().addMemberOverwrite(member.getId(), over).subscribe());
-                setText(EmbedCreateSpec.builder()
-                        .title("Et le plus important...")
-                        .description(TextMessage.roles)
-                        .color(ColorsUsed.just).build());
+                setMessage(MessageEditSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Et le plus important...")
+                                .description(TextMessage.roles)
+                                .color(ColorsUsed.just).build())
+                        .components(getEmptyButton())
+                        .build());
 
                 new Thread(() -> {
                     try {
@@ -104,10 +108,10 @@ public class JoinCommand extends LongCommand {
             }
 
             @Override
-            protected boolean onReceiveReact(ReactionAddEvent event) {
+            protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
                     return callStape(0);
-                return super.onReceiveReact(event);
+                return super.onReceiveInteract(event);
             }
         };
 
@@ -122,74 +126,80 @@ public class JoinCommand extends LongCommand {
             }
 
             @Override
-            protected boolean onReceiveReact(ReactionAddEvent event) {
+            protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
                     return callStape(0);
-                return super.onReceiveReact(event);
+                return super.onReceiveInteract(event);
             }
         };
 
         Stape needDevInfo = new Stape(rules) {
             @Override
             protected boolean onCall(Message message) {
-                removeNoEmoji();
                 final PermissionOverwrite over = PermissionOverwrite.forMember(member.getId(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY), PermissionSet.of());
                 startAway(() -> Init.devarea.getChannelById(Init.idMissionsGratuites).block().addMemberOverwrite(member.getId(), over).subscribe());
                 startAway(() -> Init.devarea.getChannelById(Init.idMissionsPayantes).block().addMemberOverwrite(member.getId(), over).subscribe());
                 startAway(() -> Init.devarea.getChannelById(Snowflake.of("856081355309842452")).block().addMemberOverwrite(member.getId(), over).subscribe());
-                setText(EmbedCreateSpec.builder()
-                        .title("Conseils pour demander du code (missions)")
-                        .description(TextMessage.rulesForAskCode)
-                        .color(ColorsUsed.just).build());
+                setMessage(MessageEditSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Conseils pour demander du code (missions)")
+                                .description(TextMessage.rulesForAskCode)
+                                .color(ColorsUsed.just).build())
+                        .addComponent(getYesButton())
+                        .build());
                 return false;
             }
 
             @Override
-            protected boolean onReceiveReact(ReactionAddEvent event) {
+            protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
                     return callStape(0);
-                return super.onReceiveReact(event);
+                return super.onReceiveInteract(event);
             }
         };
 
         Stape devInfo = new Stape(rules) {
             @Override
             protected boolean onCall(Message message) {
-                removeNoEmoji();
-                setText(EmbedCreateSpec.builder()
-                        .title("Conseils de communications du code")
-                        .description(TextMessage.rulesForSpeakCode)
-                        .color(ColorsUsed.just).build());
+                setMessage(MessageEditSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Conseils de communications du code")
+                                .description(TextMessage.rulesForSpeakCode)
+                                .color(ColorsUsed.just).build())
+                        .addComponent(getYesButton())
+                        .build());
                 return false;
             }
 
             @Override
-            protected boolean onReceiveReact(ReactionAddEvent event) {
+            protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
                     return callStape(0);
-                return super.onReceiveReact(event);
+                return super.onReceiveInteract(event);
             }
         };
 
         Stape DevOrNeedDev = new Stape(devInfo, needDevInfo) {
             @Override
             protected boolean onCall(Message message) {
-                setText(EmbedCreateSpec.builder()
-                        .title("Pour quoi es-tu là ?")
-                        .description("    - Tu es développeur ou tu es ici pour apprendre à développer -> <:ayy:" + Init.idYes.getId().asString() + ">\n    - Tu es là car tu as besoin de développeurs, tu as une mission à donner -> <:ayy:" + Init.idNo.getId().asString() + ">")
-                        .color(ColorsUsed.just).build());
-                addNoEmoji();
+                setMessage(MessageEditSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Pour quoi es-tu là ?")
+                                .description("    - Tu es développeur ou tu es ici pour apprendre à développer -> <:ayy:" + Init.idYes.getId().asString() + ">\n    - Tu es là car tu as besoin de développeurs, tu as une mission à donner -> <:ayy:" + Init.idNo.getId().asString() + ">")
+                                .color(ColorsUsed.just).build())
+                        .addComponent(getYesNoButton())
+                        .build());
                 return next;
             }
 
             @Override
-            protected boolean onReceiveReact(ReactionAddEvent event) {
+            protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event)) {
                     return callStape(0);
                 } else if (isNo(event)) {
                     return callStape(1);
                 }
-                return super.onReceiveReact(event);
+                return super.onReceiveInteract(event);
             }
         };
 
@@ -198,17 +208,18 @@ public class JoinCommand extends LongCommand {
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 startAway(() -> Init.devarea.getChannelById(Snowflake.of("843823896222629888")).block().addMemberOverwrite(member.getId(), PermissionOverwrite.forMember(member.getId(), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL))).subscribe());
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                        .title("Bienvenue " + member.getDisplayName() + " sur Dev'Area !")
-                        .description(TextMessage.firstText)
-                        .color(ColorsUsed.just).build()).build());
-                addYesEmoji();
+                                .title("Bienvenue " + member.getDisplayName() + " sur Dev'Area !")
+                                .description(TextMessage.firstText)
+                                .color(ColorsUsed.just).build())
+                        .addComponent(getYesButton())
+                        .build());
             }
 
             @Override
-            protected boolean onReceiveReact(ReactionAddEvent event) {
+            protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
                     return callStape(0);
-                return super.onReceiveReact(event);
+                return super.onReceiveInteract(event);
             }
         };
         this.lastMessage = this.firstStape.getMessage();

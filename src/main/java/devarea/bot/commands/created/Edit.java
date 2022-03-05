@@ -4,8 +4,8 @@ import devarea.bot.Init;
 import devarea.bot.commands.*;
 import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
+import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -15,8 +15,6 @@ import discord4j.core.spec.MessageEditSpec;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
-
-import java.util.function.Consumer;
 
 public class Edit extends LongCommand implements PermissionCommand {
     Message atModif = null;
@@ -52,7 +50,9 @@ public class Edit extends LongCommand implements PermissionCommand {
                                 .title("Message !")
                                 .description("Donnez moi le contenu du message a remplacé !")
                                 .color(ColorsUsed.same).build()
-                        ).build());
+                        )
+                        .components(getEmptyButton())
+                        .build());
                 return next;
             }
 
@@ -60,7 +60,7 @@ public class Edit extends LongCommand implements PermissionCommand {
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 String content = event.getMessage().getContent();
                 if (!content.equals("")) {
-                    atModif.edit(messageEditSpec -> messageEditSpec.setContent(content)).subscribe();
+                    atModif.edit(MessageEditSpec.builder().contentOrNull(content).build()).subscribe();
                     return callStape(0);
                 }
                 sendErrorEntry();
@@ -95,11 +95,13 @@ public class Edit extends LongCommand implements PermissionCommand {
                         find = true;
                     }
                     if (find) {
-                        atModif.edit(messageEditSpec -> messageEditSpec.setEmbed(embed -> {
-                            embed.setTitle(title);
-                            embed.setDescription(description);
-                            embed.setColor(color);
-                        })).subscribe();
+                        atModif.edit(MessageEditSpec.builder()
+                                .addEmbed(EmbedCreateSpec.builder()
+                                        .title(title)
+                                        .description(description)
+                                        .color(color)
+                                        .build())
+                                .build()).subscribe();
                         return callStape(0);
                     }
                 }
@@ -122,10 +124,10 @@ public class Edit extends LongCommand implements PermissionCommand {
                 String content = event.getMessage().getContent();
                 if (!content.equals("")) {
                     description = content;
-                    atModif.edit(messageEditSpec -> messageEditSpec.setEmbed(embed -> {
-                        embed.setTitle(title);
-                        embed.setDescription(title);
-                    }));
+                    atModif.edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
+                            .title(title)
+                            .description(description)
+                            .build()).build()).subscribe();
                     return callStape(0);
                 }
                 sendErrorEntry();
@@ -136,10 +138,13 @@ public class Edit extends LongCommand implements PermissionCommand {
         Stape getEmbedTitle = new Stape(getDescriptionTitle) {
             @Override
             protected boolean onCall(Message message) {
-                setText(EmbedCreateSpec.builder()
-                        .title("Titre")
-                        .description("Donnez moi le titre de votre embed")
-                        .color(ColorsUsed.same).build());
+                setMessage(MessageEditSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Titre")
+                                .description("Donnez moi le titre de votre embed")
+                                .color(ColorsUsed.same).build())
+                        .components(getEmptyButton())
+                        .build());
                 return next;
             }
 
@@ -163,22 +168,22 @@ public class Edit extends LongCommand implements PermissionCommand {
                                 .title("Type du message ?")
                                 .description("Votre message est-il un embed ?")
                                 .color(ColorsUsed.same).build()
-                        ).build());
-                addYesNoEmoji();
+                        )
+                        .addComponent(getYesNoButton())
+                        .build());
                 return next;
             }
 
             @Override
-            protected boolean onReceiveReact(ReactionAddEvent event) {
-                if (isYes(event)) {
-                    removeAllEmoji();
+            protected boolean onReceiveInteract(ButtonInteractionEvent event) {
+                if (event.getCustomId().equals("yes")) {
                     return callStape(1);
-                } else if (isNo(event)) {
-                    removeAllEmoji();
+                } else if (event.getCustomId().equals("no")) {
                     return callStape(0);
                 }
-                return super.onReceiveReact(event);
+                return super.onReceiveInteract(event);
             }
+
         };
 
         this.firstStape = new FirstStape(this.channel, isEmbedOrText) {

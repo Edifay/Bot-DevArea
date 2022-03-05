@@ -21,6 +21,9 @@ public class MessageCreate {
 
     public static void messageCreateFunction(final MessageCreateEvent message) {
         try {
+            if (message.getMessage().getAuthor().isEmpty())
+                return;
+
             if (message.getMessage().getAuthor().get().getId().equals(Snowflake.of("302050872383242240")))
                 Bump.getDisboardMessage(message);
 
@@ -35,7 +38,7 @@ public class MessageCreate {
             if (message.getMessage().getChannelId().equals(Init.idBump) && !message.getMessage().getAuthor().get().getId().equals(Snowflake.of("302050872383242240")))
                 Bump.messageInChannel(message);
 
-            Init.logChannel.createMessage(msg -> msg.setEmbed(embed -> {
+            Init.logChannel.createMessage(msg -> msg.addEmbed(embed -> {
                 final DateTimeFormatter hours = DateTimeFormatter.ofPattern("HH:mm");
                 final DateTimeFormatter date = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 final LocalDateTime now = LocalDateTime.now();

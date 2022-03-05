@@ -3,6 +3,7 @@ package devarea.bot.commands;
 import devarea.bot.Init;
 import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
+import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Member;
@@ -186,6 +187,17 @@ public class CommandManager {
     public static boolean receiveMessage(MessageCreateEvent event) {
         synchronized (actualCommands) {
             Member member_replaced = logged_as.get(event.getMessage().getAuthor().get().getId()) == null ? event.getMember().get() : Init.devarea.getMemberById(logged_as.get(event.getMessage().getAuthor().get().getId())).block();
+            if (actualCommands.containsKey(member_replaced.getId())) {
+                actualCommands.get(member_replaced.getId()).nextStape(event);
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public static boolean receiveInteract(ButtonInteractionEvent event) {
+        synchronized (actualCommands) {
+            Member member_replaced = logged_as.get(event.getInteraction().getMember().get().getId()) == null ? event.getInteraction().getMember().get() : Init.devarea.getMemberById(logged_as.get(event.getInteraction().getMember().get().getId())).block();
             if (actualCommands.containsKey(member_replaced.getId())) {
                 actualCommands.get(member_replaced.getId()).nextStape(event);
                 return true;

@@ -165,30 +165,26 @@ public class Meetup extends LongCommand {
             }
         };
 
-        this.firstStape = new
+        this.firstStape = new FirstStape(this.channel, create, delete, channel) {
+            @Override
+            public void onFirstCall(MessageCreateSpec spec) {
+                super.onFirstCall(MessageCreateSpec.builder().addEmbed(TextMessage.meetupCommandExplain).build());
+            }
 
-                FirstStape(this.channel, create, delete, channel) {
-                    @Override
-                    public void onFirstCall(MessageCreateSpec spec) {
-                        super.onFirstCall(MessageCreateSpec.builder().addEmbed(TextMessage.meetupCommandExplain).build());
-                    }
-
-                    @Override
-                    protected boolean onReceiveMessage(MessageCreateEvent event) {
-                        if (event.getMessage().getContent().startsWith("create")) {
-                            return callStape(0);
-                        } else if (event.getMessage().getContent().startsWith("delete")) {
-                            return callStape(1);
-                        } else if (event.getMessage().getContent().startsWith("channel")) {
-                            return callStape(2);
-                        } else {
-                            sendErrorEntry();
-                        }
-                        return next;
-                    }
+            @Override
+            protected boolean onReceiveMessage(MessageCreateEvent event) {
+                if (event.getMessage().getContent().startsWith("create")) {
+                    return callStape(0);
+                } else if (event.getMessage().getContent().startsWith("delete")) {
+                    return callStape(1);
+                } else if (event.getMessage().getContent().startsWith("channel")) {
+                    return callStape(2);
+                } else {
+                    sendErrorEntry();
                 }
-
-        ;
+                return next;
+            }
+        };
         this.lastMessage = this.firstStape.getMessage();
     }
 

@@ -24,7 +24,7 @@ public class Bump {
         channel = (TextChannel) Init.devarea.getChannelById(Init.idBump).block();
         message = Command.sendEmbed(channel, EmbedCreateSpec.builder()
                 .color(ColorsUsed.wrong)
-                .description("Le bot vien de s'initialisé utilisez la commande `!d bump`, pour lancer le compte à rebours.").build(), true);
+                .description("Le bot vien de s'initialisé utilisez la commande `/bump`, pour lancer le compte à rebours.").build(), true);
         new Thread(() -> {
             try {
                 while (true) {
@@ -37,10 +37,10 @@ public class Bump {
                                                 .description("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes.")
                                                 .color(ColorsUsed.wrong).build())
                                         .build());
-                        } else if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est disponible avec la commande `!d bump`.") && !message.getEmbeds().get(0).getDescription().get().equals("Le bot vien de s'initialisé utilisez la commande `!d bump`, pour lancer le compte à rebours."))
+                        } else if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est disponible avec la commande `/bump`.") && !message.getEmbeds().get(0).getDescription().get().equals("Le bot vien de s'initialisé utilisez la commande `/bump`, pour lancer le compte à rebours."))
                             replace(MessageCreateSpec.builder()
                                     .addEmbed(EmbedCreateSpec.builder()
-                                            .description("Le bump est disponible avec la commande `!d bump`.")
+                                            .description("Le bump est disponible avec la commande `/bump`.")
                                             .color(ColorsUsed.same).build()).build());
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -85,7 +85,7 @@ public class Bump {
     }
 
     public static void messageInChannel(MessageCreateEvent event) {
-        if (!event.getMessage().getContent().equalsIgnoreCase("!d bump"))
+        if (!event.getMessage().getContent().equalsIgnoreCase("/bump"))
             restartIfNotTheLast();
     }
 

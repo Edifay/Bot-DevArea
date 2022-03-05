@@ -6,8 +6,12 @@ import devarea.bot.automatical.*;
 import devarea.bot.data.ColorsUsed;
 import devarea.bot.github.GithubEvent;
 import discord4j.common.util.Snowflake;
+import discord4j.core.object.component.ActionRow;
+import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.presence.*;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.MessageCreateSpec;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,13 +30,16 @@ public class Ready {
         startAway(() -> {
             Init.logChannel = (TextChannel) Init.devarea.getChannelById(idLogChannel).block();
 
-            Init.logChannel.createMessage(msg -> msg.setEmbed(embed -> {
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss  dd/MM/yyyy");
-                LocalDateTime now = LocalDateTime.now();
-                embed.setColor(ColorsUsed.same);
-                embed.setTitle("Bot Online !");
-                embed.setDescription("Le bot a été allumé le " + dtf.format(now) + ".");
-            })).subscribe();
+            Button button = Button.primary("id_1", "Le button");
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss  dd/MM/yyyy");
+            LocalDateTime now = LocalDateTime.now();
+            Init.logChannel.createMessage(MessageCreateSpec.builder()
+                    .addEmbed(EmbedCreateSpec.builder().color(ColorsUsed.same)
+                            .title("Bot Online !")
+                            .description("Le bot a été allumé le " + dtf.format(now) + ".")
+                            .build()).addComponent(ActionRow.of(button)).build()
+            ).subscribe();
         });
 
         System.out.println("Fetching members...");

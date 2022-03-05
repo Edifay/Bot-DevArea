@@ -21,7 +21,7 @@ public class ReactionAdd {
             if (event.getMember().get().isBot() || RolesReacts.onReact(event))
                 return;
 
-            if (CommandManager.react(event) || MissionsManager.react(event) || FreeLanceManager.react(event) || MeetupManager.getEvent(event) || HelpRewardManager.react(event))
+            if (CommandManager.react(event) || MeetupManager.getEvent(event) || HelpRewardManager.react(event))
                 return;
 
         } catch (Exception e) {

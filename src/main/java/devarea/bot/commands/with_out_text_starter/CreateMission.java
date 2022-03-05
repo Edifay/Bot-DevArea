@@ -31,6 +31,7 @@ public class CreateMission extends LongCommand {
     public CreateMission(final Member member) {
         super(member);
         this.mission = new Mission();
+        this.mission.setMemberId(member.getId().asString());
         this.deletedCommand(10800000L);
 
         this.createLocalChannel("creation de mission", Init.idMissionsCategory);
@@ -152,7 +153,6 @@ public class CreateMission extends LongCommand {
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 mission.setTitle(event.getMessage().getContent());
-                mission.setMemberId(event.getMember().get().getId().asString());
                 return callStape(0);
             }
         };

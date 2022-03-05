@@ -11,6 +11,7 @@ import devarea.bot.commands.object_for_stock.HelpReward;
 import devarea.bot.data.ColorsUsed;
 import devarea.bot.utils.MemberUtil;
 import discord4j.common.util.Snowflake;
+import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Member;
@@ -23,9 +24,6 @@ import discord4j.core.spec.MessageEditSpec;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class GiveReward extends LongCommand {
 
@@ -113,31 +111,28 @@ public class GiveReward extends LongCommand {
         return new FirstStape(channel, stapes) {
             @Override
             public void onFirstCall(MessageCreateSpec spec) {
-                super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                        .title("Souhaitez-vous récompenser des personnes en plus ?")
-                        .description(MemberUtil.getMentionTextByMember(member) + ", mettez <:ayy:" + ReactionEmoji.custom(Init.idNo).getId().asString() + "> si vous désirez uniquement récompenser " + MemberUtil.getMentionTextByMember(helper) + ".")
-                        .color(ColorsUsed.just).build()
-                ).build());
-                this.addYesNoEmoji();
+                super.onFirstCall(MessageCreateSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Souhaitez-vous récompenser des personnes en plus ?")
+                                .description(MemberUtil.getMentionTextByMember(member) + ", mettez <:ayy:" + ReactionEmoji.custom(Init.idNo).getId().asString() + "> si vous désirez uniquement récompenser " + MemberUtil.getMentionTextByMember(helper) + ".")
+                                .color(ColorsUsed.just).build())
+                        .addComponent(getYesNoButton())
+                        .build());
             }
 
             @Override
-            public boolean receiveReact(ReactionAddEvent event) {
-
-                if (!event.getMember().get().equals(member))
-                    event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).block();
+            protected boolean onReceiveInteract(ButtonInteractionEvent event) {
 
                 int stapeIndex = -1;
-                if (isYes(event)) stapeIndex = 1;
-                if (isNo(event)) stapeIndex = 0;
+                if (event.getCustomId().equals("yes")) stapeIndex = 1;
+                if (event.getCustomId().equals("no")) stapeIndex = 0;
 
                 if (stapeIndex > -1) {
-                    this.removeAllEmoji();
                     helpers.add(helper.getId());
                     return callStape(stapeIndex);
                 }
 
-                return super.receiveReact(event);
+                return super.onReceiveInteract(event);
             }
         };
     }
@@ -172,7 +167,9 @@ public class GiveReward extends LongCommand {
                                 .title("Dev'Area est heureux d'avoir pu servir à résoudre votre problème !")
                                 .description(descript)
                                 .color(ColorsUsed.just).build()
-                        ).build());
+                        )
+                        .components(getEmptyButton())
+                        .build());
                 return end;
             }
         };
@@ -184,16 +181,18 @@ public class GiveReward extends LongCommand {
 
             @Override
             protected boolean onCall(Message message) {
-                this.setMessage(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                        .title("Veuillez mentionner les personnes à ajouter")
-                        .description(MemberUtil.getMentionTextByMember(member) + ", inutile de selectionner à nouveau " + MemberUtil.getMentionTextByMember(helper))
-                        .color(ColorsUsed.same).build()
-                ).build());
+                this.setMessage(MessageEditSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Veuillez mentionner les personnes à ajouter")
+                                .description(MemberUtil.getMentionTextByMember(member) + ", inutile de selectionner à nouveau " + MemberUtil.getMentionTextByMember(helper))
+                                .color(ColorsUsed.same).build())
+                        .components(getEmptyButton())
+                        .build());
                 return next;
             }
 
             @Override
-            public boolean receiveMessage(MessageCreateEvent event) {
+            public boolean onReceiveMessage(MessageCreateEvent event) {
                 final Message message = event.getMessage();
                 final List<Snowflake> mentions = message.getUserMentionIds();
                 if (mentions.isEmpty() || mentions.contains(helper.getId())) {
