@@ -14,12 +14,6 @@ import devarea.bot.automatical.XpCount;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import static devarea.bot.Init.membersId;
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserInfo {
 
@@ -193,9 +187,7 @@ public class UserInfo {
     private void short_fetch() {
         this.isMember = ControllerOAuth2.isMember(this.id);
         if (this.isMember) { // Si c'est un membre du serveur
-            this.missions_list =
-                    ControllerMissions.transformMissionListToMissionForWebList(MissionsManager.getOf(Snowflake.of(this.id)))
-                            .toArray(new MissionForWeb[0]);
+            this.missions_list = ControllerMissions.transformMissionListToMissionWebList(MissionsManager.getOf(Snowflake.of(this.id))).toArray(new MissionForWeb[0]);
 
             if (XpCount.haveBeenSet(getAsSnowflake())) {
                 this.setRank(XpCount.getRankOf(getAsSnowflake()));

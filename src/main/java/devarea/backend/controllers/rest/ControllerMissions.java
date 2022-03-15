@@ -35,7 +35,7 @@ public class ControllerMissions {
         ArrayList<Mission> list_at_reverse = (ArrayList<Mission>) MissionsManager.getMissions().clone();
         Collections.reverse(list_at_reverse);
         List<Mission> list = list_at_reverse.subList(start, end);
-        ArrayList<MissionForWeb> list_transformed = transformMissionListToMissionForWebList(list);
+        ArrayList<MissionForWeb> list_transformed = transformMissionListToMissionWebList(list);
 
         return list_transformed.toArray(new MissionForWeb[0]);
     }
@@ -57,7 +57,7 @@ public class ControllerMissions {
             return new String[]{"wrong_code"};
     }
 
-    public static ArrayList<MissionForWeb> transformMissionListToMissionForWebList(List<Mission> list) {
+    public static ArrayList<MissionForWeb> transformMissionListToMissionWebList(List<Mission> list) {
         ArrayList<MissionForWeb> list_transformed = new ArrayList<>();
         for (Mission miss : list)
             if (Init.membersId.contains(Snowflake.of(miss.getMemberId())))

@@ -54,8 +54,7 @@ public class CommandManager {
                                     && constructor.getGenericParameterTypes()[0].equals(Member.class)
                                     && constructor.getGenericParameterTypes()[1].equals(TextChannel.class)
                                     && constructor.getGenericParameterTypes()[2].equals(Message.class)))
-                        classBound.put(newName.toLowerCase(Locale.ROOT), Class.forName("devarea.bot.commands.created." + newName)
-                                .getConstructor(Member.class, TextChannel.class, Message.class));
+                        classBound.put(newName.toLowerCase(Locale.ROOT), Class.forName("devarea.bot.commands.created." + newName).getConstructor(Member.class, TextChannel.class, Message.class));
                     else
                         System.err.println("Impossibilité de charger la commande : " + "devarea.bot.commands.created." + newName);
 
