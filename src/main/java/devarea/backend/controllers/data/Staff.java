@@ -64,6 +64,10 @@ public class Staff {
         this.idCss = idCss;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getIdCss() {
         return this.idCss;
     }

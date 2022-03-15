@@ -2,18 +2,20 @@ package devarea.bot.commands;
 
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
+import org.w3c.dom.Text;
 
 public abstract class ConsumableCommand {
     protected Command command;
     public Class commadClass;
     public TextChannel channel;
     public Member member;
-    public MessageCreateEvent messageEvent;
+    public Message message;
 
-    public ConsumableCommand(final TextChannel channel, final Class commandClass) {
-        this.channel = channel;
+    public ConsumableCommand(final Class commandClass, final TextChannel channel) {
         this.commadClass = commandClass;
+        this.channel = channel;
     }
 
     public ConsumableCommand(final Class commandClass) {
@@ -45,9 +47,9 @@ public abstract class ConsumableCommand {
         this.member = member;
     }
 
-    public void setMessageEvent(MessageCreateEvent messageEvent) {
-        this.messageEvent = messageEvent;
-        this.channel = (TextChannel) messageEvent.getMessage().getChannel().block();
-        this.member = messageEvent.getMember().get();
+    public void setMessageEvent(Message message, Member member) {
+        this.message = message;
+        this.channel = (TextChannel) message.getChannel().block();
+        this.member = member;
     }
 }

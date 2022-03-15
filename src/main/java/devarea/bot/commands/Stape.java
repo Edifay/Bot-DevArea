@@ -1,15 +1,21 @@
 package devarea.bot.commands;
 
 import devarea.bot.Init;
+import devarea.bot.data.ColorsUsed;
+import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.component.ActionRow;
+import discord4j.core.object.component.Button;
+import discord4j.core.object.component.LayoutComponent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
 import discord4j.core.spec.MessageEditSpec;
 
-import java.util.function.Consumer;
+import java.util.ArrayList;
 
 public abstract class Stape implements Cloneable {
 
@@ -37,6 +43,15 @@ public abstract class Stape implements Cloneable {
         return next;
     }
 
+    protected boolean onReceiveInteract(ButtonInteractionEvent event) {
+        event.reply(InteractionApplicationCommandCallbackSpec.builder().addEmbed(EmbedCreateSpec.builder()
+                .title("Error !")
+                .description("Votre entrée n'est pas valide !")
+                .color(ColorsUsed.wrong)
+                .build()).ephemeral(true).build()).subscribe();
+        return next;
+    }
+
     public boolean call(Message message) {
         this.message = message;
         return onCall(message);
@@ -57,6 +72,12 @@ public abstract class Stape implements Cloneable {
             return this.called.receiveReact(event);
     }
 
+    public boolean receiveInteract(ButtonInteractionEvent event) {
+        if (this.called == null)
+            return onReceiveInteract(event);
+        else
+            return this.called.receiveInteract(event);
+    }
 
     protected Stape stape(int nb) throws Exception {
         if (nb < 0 || nb >= stapes.length) {
@@ -65,11 +86,11 @@ public abstract class Stape implements Cloneable {
         return stapes[nb];
     }
 
-    protected void setText(Consumer<? super EmbedCreateSpec> spec) {
-        this.message.edit(msg -> msg.setEmbed(spec)).subscribe();
+    protected void setText(EmbedCreateSpec spec) {
+        this.message.edit(MessageEditSpec.builder().addEmbed(spec).build()).subscribe();
     }
 
-    protected void setMessage(Consumer<? super MessageEditSpec> spec) {
+    protected void setMessage(MessageEditSpec spec) {
         this.message.edit(spec).subscribe();
     }
 
@@ -100,6 +121,22 @@ public abstract class Stape implements Cloneable {
         this.message.addReaction(ReactionEmoji.custom(Init.idYes)).subscribe();
     }
 
+    protected ActionRow getYesButton() {
+        return ActionRow.of(Button.primary("yes", ReactionEmoji.custom(Init.idYes)));
+    }
+
+    protected ActionRow getNoButton() {
+        return ActionRow.of(Button.primary("no", ReactionEmoji.custom(Init.idNo)));
+    }
+
+    protected ActionRow getYesNoButton() {
+        return ActionRow.of(Button.primary("yes", ReactionEmoji.custom(Init.idYes)), Button.primary("no", ReactionEmoji.custom(Init.idNo)));
+    }
+
+    protected ArrayList<LayoutComponent> getEmptyButton() {
+        return new ArrayList<>();
+    }
+
     protected void addNoEmoji() {
         this.message.addReaction(ReactionEmoji.custom(Init.idNo)).subscribe();
     }
@@ -125,8 +162,16 @@ public abstract class Stape implements Cloneable {
         return ReactionEmoji.custom(Init.idYes).equals(event.getEmoji());
     }
 
+    protected boolean isYes(ButtonInteractionEvent event) {
+        return event.getCustomId().equals("yes");
+    }
+
     protected boolean isNo(ReactionAddEvent event) {
         return ReactionEmoji.custom(Init.idNo).equals(event.getEmoji());
+    }
+
+    protected boolean isNo(ButtonInteractionEvent event) {
+        return event.getCustomId().equals("no");
     }
 
     protected String getContent(MessageCreateEvent event) {

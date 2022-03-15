@@ -12,20 +12,26 @@ import devarea.bot.data.ColorsUsed;
 import devarea.bot.data.TextMessage;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.core.spec.MessageEditSpec;
 
 import java.time.Instant;
 import java.util.function.Consumer;
+
+import static devarea.bot.event.FunctionEvent.startAway;
 
 public class CreateMission extends LongCommand {
 
     protected Mission mission;
 
-    public CreateMission(ReactionAddEvent event) {
-        super(event);
+    public CreateMission(final Member member) {
+        super(member);
         this.mission = new Mission();
+        this.mission.setMemberId(member.getId().asString());
         this.deletedCommand(10800000L);
 
         this.createLocalChannel("creation de mission", Init.idMissionsCategory);
@@ -33,7 +39,7 @@ public class CreateMission extends LongCommand {
         Stape niveauStape = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setMessage(messageEditSpec -> messageEditSpec.setEmbed(TextMessage.missionNiveau));
+                setMessage(MessageEditSpec.builder().addEmbed(TextMessage.missionNiveau).build());
                 return next;
             }
 
@@ -42,18 +48,26 @@ public class CreateMission extends LongCommand {
                 mission.setNiveau(event.getMessage().getContent());
                 mission.setMessage(
                         new MessageSeria(
-                                sendEmbed((TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block(), embedCreateSpec -> {
-                                    embedCreateSpec.setTitle(mission.getTitle());
-                                    embedCreateSpec.setDescription(mission.getDescriptionText() +
-                                            "\n\nPrix: " + mission.getPrix() + "\nDate de retour: " + mission.getDateRetour() + "\nType de support: " + mission.getSupport() + "\nLangage: " + mission.getLangage() + "\nNiveau estimé: " + mission.getNiveau() + "\n\nCette mission est posté par : " + "<@" + member.getId().asString() + ">.");
-                                    embedCreateSpec.setColor(ColorsUsed.just);
-                                    embedCreateSpec.setAuthor(event.getMember().get().getDisplayName(), event.getMember().get().getAvatarUrl(), event.getMember().get().getAvatarUrl());
-                                    embedCreateSpec.setTimestamp(Instant.now());
-                                }, true)
+                                sendEmbed((TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block(), EmbedCreateSpec.builder()
+                                        .title(mission.getTitle())
+                                        .description(mission.getDescriptionText() + "\n\nPrix: " + mission.getPrix() + "\nDate de retour: " + mission.getDateRetour() + "\nType de support: " + mission.getSupport() + "\nLangage: " + mission.getLangage() + "\nNiveau estimé: " + mission.getNiveau() + "\n\nCette mission est posté par : " + "<@" + member.getId().asString() + ">.")
+                                        .color(ColorsUsed.just)
+                                        .author(event.getMember().get().getDisplayName(), event.getMember().get().getAvatarUrl(), event.getMember().get().getAvatarUrl())
+                                        .timestamp(Instant.now()).build(), true)
                         )
                 );
                 MissionsManager.add(mission);
                 MissionsManager.update();
+                try {
+                    startAway(() -> {
+                        member.getPrivateChannel().block().createMessage(MessageCreateSpec.builder()
+                                .addEmbed(EmbedCreateSpec.builder()
+                                        .title("Suivis d'une mission")
+                                        .description("La commande `//mission` permet de gérer sa mission, pour par exemple la supprimer.\n\n**Le site web** permet aussi de gérer ces missions dans l'onglet options : https://devarea.fr.")
+                                        .color(ColorsUsed.same).build()).build()).block();
+                    });
+                } catch (Exception e) {
+                }
                 return end;
             }
         };
@@ -61,7 +75,7 @@ public class CreateMission extends LongCommand {
         Stape supportStape = new Stape(niveauStape) {
             @Override
             protected boolean onCall(Message message) {
-                setMessage(messageEditSpec -> messageEditSpec.setEmbed(TextMessage.missionSupport));
+                setMessage(MessageEditSpec.builder().addEmbed(TextMessage.missionSupport).build());
                 return next;
             }
 
@@ -75,7 +89,7 @@ public class CreateMission extends LongCommand {
         Stape langageStape = new Stape(supportStape) {
             @Override
             protected boolean onCall(Message message) {
-                setMessage(messageEditSpec -> messageEditSpec.setEmbed(TextMessage.missionLangage));
+                setMessage(MessageEditSpec.builder().addEmbed(TextMessage.missionLangage).build());
                 return next;
             }
 
@@ -89,7 +103,7 @@ public class CreateMission extends LongCommand {
         Stape dateRetourStape = new Stape(langageStape) {
             @Override
             protected boolean onCall(Message message) {
-                setMessage(messageEditSpec -> messageEditSpec.setEmbed(TextMessage.missionDate));
+                setMessage(MessageEditSpec.builder().addEmbed(TextMessage.missionDate).build());
                 return next;
             }
 
@@ -103,7 +117,7 @@ public class CreateMission extends LongCommand {
         Stape prixStage = new Stape(dateRetourStape) {
             @Override
             protected boolean onCall(Message message) {
-                setMessage(messageEditSpec -> messageEditSpec.setEmbed(TextMessage.missionPrix));
+                setMessage(MessageEditSpec.builder().addEmbed(TextMessage.missionPrix).build());
                 return next;
             }
 
@@ -117,7 +131,7 @@ public class CreateMission extends LongCommand {
         Stape description = new Stape(prixStage) {
             @Override
             protected boolean onCall(Message message) {
-                setMessage(messageEditSpec -> messageEditSpec.setEmbed(TextMessage.missionDescription));
+                setMessage(MessageEditSpec.builder().addEmbed(TextMessage.missionDescription).build());
                 return next;
             }
 
@@ -130,17 +144,15 @@ public class CreateMission extends LongCommand {
 
         this.firstStape = new FirstStape(this.channel, description) {
             @Override
-            public void onFirstCall(Consumer<? super MessageCreateSpec> spec) {
-                super.onFirstCall(messageCreateSpec -> {
-                    messageCreateSpec.setEmbed(TextMessage.missionTitle);
-                    messageCreateSpec.setContent("<@" + member.getId().asString() + ">,");
-                });
+            public void onFirstCall(MessageCreateSpec spec) {
+                super.onFirstCall(MessageCreateSpec.builder()
+                        .content("<@" + member.getId().asString() + ">,")
+                        .addEmbed(TextMessage.missionTitle).build());
             }
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 mission.setTitle(event.getMessage().getContent());
-                mission.setMemberId(event.getMember().get().getId().asString());
                 return callStape(0);
             }
         };

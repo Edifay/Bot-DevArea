@@ -4,15 +4,17 @@ import devarea.bot.Init;
 import devarea.bot.commands.*;
 import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
+import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.core.spec.MessageEditSpec;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
-
-import java.util.function.Consumer;
 
 public class Edit extends LongCommand implements PermissionCommand {
     Message atModif = null;
@@ -25,16 +27,16 @@ public class Edit extends LongCommand implements PermissionCommand {
     }
 
 
-    public Edit(MessageCreateEvent message) {
-        super(message);
+    public Edit(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
 
         Stape endStape = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setText(embedCreateSpec -> {
-                    embedCreateSpec.setTitle("Votre message a été modifé !");
-                    embedCreateSpec.setColor(ColorsUsed.just);
-                });
+                setText(EmbedCreateSpec.builder()
+                        .title("Votre message a été modifé !")
+                        .color(ColorsUsed.just).build()
+                );
                 return end;
             }
         };
@@ -43,13 +45,14 @@ public class Edit extends LongCommand implements PermissionCommand {
         Stape getMessageEnd = new Stape(endStape) {
             @Override
             protected boolean onCall(Message message) {
-                setMessage(msg -> {
-                    msg.setEmbed(embed -> {
-                        embed.setTitle("Message !");
-                        embed.setDescription("Donnez moi le contenu du message a remplacé !");
-                        embed.setColor(ColorsUsed.same);
-                    });
-                });
+                setMessage(MessageEditSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Message !")
+                                .description("Donnez moi le contenu du message a remplacé !")
+                                .color(ColorsUsed.same).build()
+                        )
+                        .components(getEmptyButton())
+                        .build());
                 return next;
             }
 
@@ -57,7 +60,7 @@ public class Edit extends LongCommand implements PermissionCommand {
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 String content = event.getMessage().getContent();
                 if (!content.equals("")) {
-                    atModif.edit(messageEditSpec -> messageEditSpec.setContent(content)).subscribe();
+                    atModif.edit(MessageEditSpec.builder().contentOrNull(content).build()).subscribe();
                     return callStape(0);
                 }
                 sendErrorEntry();
@@ -69,11 +72,10 @@ public class Edit extends LongCommand implements PermissionCommand {
         Stape getEmbedColor = new Stape(endStape) {
             @Override
             protected boolean onCall(Message message) {
-                setText(embed -> {
-                    embed.setTitle("Couleur");
-                    embed.setDescription("Donnez moi la couleur que vous voulez, il y en a 3 disponible : `just`, `same`, `wrong`");
-                    embed.setColor(color);
-                });
+                setText(EmbedCreateSpec.builder()
+                        .title("Couleur")
+                        .description("Donnez moi la couleur que vous voulez, il y en a 3 disponible : `just`, `same`, `wrong`")
+                        .color(color).build());
                 return next;
             }
 
@@ -93,11 +95,13 @@ public class Edit extends LongCommand implements PermissionCommand {
                         find = true;
                     }
                     if (find) {
-                        atModif.edit(messageEditSpec -> messageEditSpec.setEmbed(embed -> {
-                            embed.setTitle(title);
-                            embed.setDescription(description);
-                            embed.setColor(color);
-                        })).subscribe();
+                        atModif.edit(MessageEditSpec.builder()
+                                .addEmbed(EmbedCreateSpec.builder()
+                                        .title(title)
+                                        .description(description)
+                                        .color(color)
+                                        .build())
+                                .build()).subscribe();
                         return callStape(0);
                     }
                 }
@@ -108,11 +112,10 @@ public class Edit extends LongCommand implements PermissionCommand {
         Stape getDescriptionTitle = new Stape(getEmbedColor) {
             @Override
             protected boolean onCall(Message message) {
-                setText(embed -> {
-                    embed.setTitle("Description");
-                    embed.setDescription("Donnez moi la description de votre embed");
-                    embed.setColor(ColorsUsed.same);
-                });
+                setText(EmbedCreateSpec.builder()
+                        .title("Description")
+                        .description("Donnez moi la description de votre embed")
+                        .color(ColorsUsed.same).build());
                 return next;
             }
 
@@ -121,10 +124,10 @@ public class Edit extends LongCommand implements PermissionCommand {
                 String content = event.getMessage().getContent();
                 if (!content.equals("")) {
                     description = content;
-                    atModif.edit(messageEditSpec -> messageEditSpec.setEmbed(embed -> {
-                        embed.setTitle(title);
-                        embed.setDescription(title);
-                    }));
+                    atModif.edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
+                            .title(title)
+                            .description(description)
+                            .build()).build()).subscribe();
                     return callStape(0);
                 }
                 sendErrorEntry();
@@ -135,11 +138,13 @@ public class Edit extends LongCommand implements PermissionCommand {
         Stape getEmbedTitle = new Stape(getDescriptionTitle) {
             @Override
             protected boolean onCall(Message message) {
-                setText(embed -> {
-                    embed.setTitle("Titre");
-                    embed.setDescription("Donnez moi le titre de votre embed");
-                    embed.setColor(ColorsUsed.same);
-                });
+                setMessage(MessageEditSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Titre")
+                                .description("Donnez moi le titre de votre embed")
+                                .color(ColorsUsed.same).build())
+                        .components(getEmptyButton())
+                        .build());
                 return next;
             }
 
@@ -158,38 +163,38 @@ public class Edit extends LongCommand implements PermissionCommand {
         Stape isEmbedOrText = new Stape(getMessageEnd, getEmbedTitle) {
             @Override
             protected boolean onCall(Message message) {
-                setMessage(msg -> {
-                    msg.setEmbed(embed -> {
-                        embed.setTitle("Type du message ?");
-                        embed.setDescription("Votre message est-il un embed ?");
-                        embed.setColor(ColorsUsed.same);
-                    });
-                });
-                addYesNoEmoji();
+                setMessage(MessageEditSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Type du message ?")
+                                .description("Votre message est-il un embed ?")
+                                .color(ColorsUsed.same).build()
+                        )
+                        .addComponent(getYesNoButton())
+                        .build());
                 return next;
             }
 
             @Override
-            protected boolean onReceiveReact(ReactionAddEvent event) {
-                if (isYes(event)) {
-                    removeAllEmoji();
+            protected boolean onReceiveInteract(ButtonInteractionEvent event) {
+                if (event.getCustomId().equals("yes")) {
                     return callStape(1);
-                } else if (isNo(event)) {
-                    removeAllEmoji();
+                } else if (event.getCustomId().equals("no")) {
                     return callStape(0);
                 }
-                return super.onReceiveReact(event);
+                return super.onReceiveInteract(event);
             }
+
         };
 
         this.firstStape = new FirstStape(this.channel, isEmbedOrText) {
             @Override
-            public void onFirstCall(Consumer<? super MessageCreateSpec> deleteThisVariableAndSetYourOwnMessage) {
-                super.onFirstCall(msg -> msg.setEmbed(embed -> {
-                    embed.setTitle("Quel message voulez-vous modifier ?");
-                    embed.setDescription("Donnez-moi l'id du message a modifier, ATTENTION ce message doit être dans le channel de cette commande !");
-                    embed.setColor(ColorsUsed.same);
-                }));
+            public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
+                super.onFirstCall(MessageCreateSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Quel message voulez-vous modifier ?")
+                                .description("Donnez-moi l'id du message a modifier, ATTENTION ce message doit être dans le channel de cette commande !")
+                                .color(ColorsUsed.same).build()
+                        ).build());
             }
 
             @Override

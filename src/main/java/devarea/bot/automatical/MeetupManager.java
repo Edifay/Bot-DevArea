@@ -10,6 +10,7 @@ import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
+import discord4j.core.spec.MessageCreateSpec;
 
 import java.io.*;
 import java.time.Instant;
@@ -45,9 +46,10 @@ public class MeetupManager {
                     messageSended.forEach((meetupStock, message) -> {
                         if (!meetupStock.getAlreayMake()) {
                             if (meetupStock.getDate().after(date)) {
-                                Command.send((TextChannel) message.getChannel().block(), msg -> {
-                                    msg.setContent("Un meetup a commencer avec sujet : " + meetupStock.getDescription() + ".\n<@&" + Init.idPingMeetup + ">");
-                                }, false);
+                                Command.send((TextChannel) message.getChannel().block(),
+                                        MessageCreateSpec.builder()
+                                                .content("Un meetup a commencer avec sujet : " + meetupStock.getDescription() + ".\n<@&" + Init.idPingMeetup + ">").build()
+                                        , false);
                                 Init.devarea.createVoiceChannel(voiceChannelCreateSpec -> {
                                     voiceChannelCreateSpec.setParentId(Init.idCategoryGeneral);
                                     voiceChannelCreateSpec.setName("Meetup by " + Init.devarea.getMemberById(meetupStock.getAuthor()).block().getDisplayName());

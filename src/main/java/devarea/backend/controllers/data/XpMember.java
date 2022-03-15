@@ -2,6 +2,7 @@ package devarea.backend.controllers.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import devarea.bot.automatical.XpCount;
 
 import java.util.Objects;
 
@@ -15,6 +16,8 @@ public class XpMember {
     protected int xp;
     @JsonProperty("rank")
     protected int rank;
+    @JsonProperty("level")
+    protected int level;
     @JsonProperty("urlAvatar")
     protected String urlAvatar;
     @JsonIgnore
@@ -24,6 +27,7 @@ public class XpMember {
         this.id = id;
         this.xp = xp;
         this.rank = rank;
+        this.level = XpCount.getLevelForXp(xp);
     }
 
     @JsonIgnore
@@ -86,6 +90,16 @@ public class XpMember {
         return urlAvatar;
     }
 
+    @JsonIgnore
+    public int getLevel() {
+        return level;
+    }
+
+    @JsonIgnore
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,4 +112,5 @@ public class XpMember {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

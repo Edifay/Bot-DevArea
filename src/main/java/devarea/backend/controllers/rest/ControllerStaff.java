@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import devarea.backend.controllers.data.Staff;
 import devarea.bot.Init;
 import discord4j.common.util.Snowflake;
+import discord4j.core.object.entity.Member;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ import static devarea.backend.controllers.rest.ControllerFonction.getObjectsFrom
 @RestController
 public class ControllerStaff {
 
-    private final static HashMap<String, String> idToUrl = new HashMap<>();
+    private final static HashMap<String, String[]> idToUrl = new HashMap<>();
 
     @GetMapping(value = "staff/staff_list", produces = MediaType.APPLICATION_JSON_VALUE)
     public Staff[] staff_list() {
@@ -32,10 +33,14 @@ public class ControllerStaff {
             });
             for (Staff staff : staffs) { // load url with id !
                 if (!idToUrl.containsKey(staff.getId())) {
-                    staff.setUrlAvatar(Init.devarea.getMemberById(Snowflake.of(staff.getId())).block().getAvatarUrl());
-                    idToUrl.put(staff.getId(), staff.getUrlAvatar());
-                } else
-                    staff.setUrlAvatar(idToUrl.get(staff.getId()));
+                    Member member = Init.devarea.getMemberById(Snowflake.of(staff.getId())).block();
+                    staff.setUrlAvatar(member.getAvatarUrl());
+                    staff.setName(member.getDisplayName());
+                    idToUrl.put(staff.getId(), new String[]{member.getDisplayName(), member.getAvatarUrl()});
+                } else {
+                    staff.setName(idToUrl.get(staff.getId())[0]);
+                    staff.setUrlAvatar(idToUrl.get(staff.getId())[1]);
+                }
                 staff.resetId();
             }
             for (int i = 0; i < staffs.length; i++)

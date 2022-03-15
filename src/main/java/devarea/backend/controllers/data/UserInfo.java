@@ -5,8 +5,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dependencies.auth.domain.User;
 import dependencies.auth.main.OAuthBuilder;
+import devarea.backend.controllers.data.badges.Badges;
+import devarea.backend.controllers.rest.ControllerMissions;
 import devarea.backend.controllers.rest.ControllerOAuth2;
 import devarea.bot.Init;
+import devarea.bot.automatical.MissionsManager;
 import devarea.bot.automatical.XpCount;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
@@ -26,6 +29,18 @@ public class UserInfo {
     private int rank;
     @JsonProperty
     private int xp;
+    @JsonProperty
+    protected int previous_xp_level;
+    @JsonProperty
+    protected int next_xp_level;
+    @JsonProperty
+    protected int level;
+    @JsonProperty
+    protected MissionForWeb[] missions_list;
+    @JsonProperty
+    protected String tag;
+    @JsonProperty
+    Badges[] badges;
 
     @JsonIgnore
     private OAuthBuilder builder;
@@ -35,6 +50,11 @@ public class UserInfo {
 
     public UserInfo() {
         this.lastTimeFetch = 0;
+    }
+
+    public UserInfo(String id) {
+        this.lastTimeFetch = 0;
+        this.id = id;
     }
 
     public UserInfo(OAuthBuilder builder) {
@@ -101,6 +121,9 @@ public class UserInfo {
     @JsonIgnore
     public void setXp(int xp) {
         this.xp = xp;
+        this.setLevel(XpCount.getLevelForXp(this.xp));
+        this.setPrevious_xp_level(XpCount.getAmountForLevel(this.level));
+        this.setNext_xp_level(XpCount.getAmountForLevel(this.level + 1));
     }
 
     @JsonIgnore
@@ -130,22 +153,22 @@ public class UserInfo {
     @JsonIgnore
     private boolean fetch() {
         this.isMember = ControllerOAuth2.isMember(this.id);
-        if (this.isMember) {
+        if (this.isMember) { // Si c'est un membre du serveur
             Member member = Init.devarea.getMemberById(getAsSnowflake()).block();
-
             this.setId(member.getId().asString());
             this.setName(member.getUsername());
+            this.tag = member.getTag();
             this.setUrlAvatar(member.getAvatarUrl());
             if (this.urlAvatar == null)
                 this.setUrlAvatar(member.getDefaultAvatarUrl());
             this.lastTimeFetch = System.currentTimeMillis();
-            this.setRank(XpCount.getRankOf(getAsSnowflake()));
-            this.setXp(XpCount.getXpOf(getAsSnowflake()));
+
+            this.badges = Badges.getBadgesOf(this, member).toArray(new Badges[0]);
 
             return true;
-        } else if (builder != null) {
-            User user = builder.getUser();
+        } else if (builder != null) { // SI ce n'est pas un membre du serveur
 
+            User user = builder.getUser();
             this.setId(user.getId());
             this.setName(user.getUsername());
             this.setUrlAvatar(user.getAvatar());
@@ -159,6 +182,23 @@ public class UserInfo {
         return false;
     }
 
+
+    @JsonIgnore
+    private void short_fetch() {
+        this.isMember = ControllerOAuth2.isMember(this.id);
+        if (this.isMember) { // Si c'est un membre du serveur
+            this.missions_list = ControllerMissions.transformMissionListToMissionWebList(MissionsManager.getOf(Snowflake.of(this.id))).toArray(new MissionForWeb[0]);
+
+            if (XpCount.haveBeenSet(getAsSnowflake())) {
+                this.setRank(XpCount.getRankOf(getAsSnowflake()));
+                this.setXp(XpCount.getXpOf(getAsSnowflake()));
+            } else {
+                this.setRank(XpCount.getRankOf(getAsSnowflake()));// may be set to last !
+                this.setXp(0);
+            }
+        }
+    }
+
     public boolean canBeFetch() {
         this.isMember = ControllerOAuth2.isMember(this.id);
         return this.isMember || builder != null;
@@ -169,10 +209,40 @@ public class UserInfo {
             fetch();
             return true;
         }
+        short_fetch();
         return false;
     }
 
     public void setBuilder(OAuthBuilder builder) {
         this.builder = builder;
+    }
+
+    @JsonIgnore
+    public Member getMember() {
+        return Init.devarea.getMemberById(this.getAsSnowflake()).block();
+    }
+
+    public void setNext_xp_level(int next_xp_level) {
+        this.next_xp_level = next_xp_level;
+    }
+
+    public int getNext_xp_level() {
+        return next_xp_level;
+    }
+
+    public void setPrevious_xp_level(int previous_xp_level) {
+        this.previous_xp_level = previous_xp_level;
+    }
+
+    public int getPrevious_xp_level() {
+        return previous_xp_level;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

@@ -14,10 +14,6 @@ public abstract class ShortCommand extends Command {
         super(member, channel);
     }
 
-    public ShortCommand(final MessageCreateEvent message) {
-        super(message);
-    }
-
     @Override
     protected Boolean endCommand() {
         return super.endCommand();

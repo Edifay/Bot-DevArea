@@ -5,6 +5,10 @@ import devarea.bot.commands.PermissionCommand;
 import devarea.bot.commands.ShortCommand;
 import devarea.bot.data.TextMessage;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.MessageCreateSpec;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 
@@ -14,15 +18,11 @@ public class Send extends ShortCommand implements PermissionCommand {
         super();
     }
 
-    public Send(final MessageCreateEvent message) {
-        super(message);
-        final String strMessage = message.getMessage().getContent().substring(Init.prefix.length() + "ping".length());
+    public Send(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
+        final String strMessage = message.getContent().substring(Init.prefix.length() + "ping".length());
         if (!strMessage.isEmpty())
-            send(msg -> {
-                msg.setContent(strMessage);
-                if (!message.getMember().get().getBasePermissions().block().contains(Permission.ADMINISTRATOR))
-                    msg.setAllowedMentions(null);
-            }, false);
+            send(MessageCreateSpec.builder().content(strMessage).build(), false);
         else
             sendError(TextMessage.errorNeedArguments);
         this.endCommand();

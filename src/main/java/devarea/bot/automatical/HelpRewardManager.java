@@ -47,8 +47,6 @@ public class HelpRewardManager {
                 .replace(pattern2, "")
                 .split("-");
 
-        System.out.println(members[0]);
-
         final Member target = Init.devarea.getMemberById(MemberUtil.getSnowflakeByMentionText(members[0])).block();
         final Member helper = Init.devarea.getMemberById(MemberUtil.getSnowflakeByMentionText(members[1])).block();
 
@@ -58,11 +56,10 @@ public class HelpRewardManager {
         }
 
         if (!event.getEmoji().equals(ReactionEmoji.custom(Init.idYes))) return false;
-
-        CommandManager.addManualCommand(target, new ConsumableCommand((TextChannel) event.getChannel().block(), GiveReward.class) {
+        CommandManager.addManualCommand(target, new ConsumableCommand(GiveReward.class) {
             @Override
             protected Command command() {
-                return new GiveReward(event, target, helper);
+                return new GiveReward(event, this.member, helper);
             }
         });
 

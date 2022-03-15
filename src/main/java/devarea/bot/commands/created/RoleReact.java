@@ -7,7 +7,10 @@ import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
@@ -29,18 +32,17 @@ public class RoleReact extends LongCommand implements PermissionCommand {
         super();
     }
 
-    public RoleReact(MessageCreateEvent message) {
-        super(message);
+    public RoleReact(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
 
 
         Stape getRole = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setText(embed -> {
-                    embed.setTitle("Le Role");
-                    embed.setDescription("Mentionnez le role que vous voulez ajouter.");
-                    embed.setColor(ColorsUsed.same);
-                });
+                setText(EmbedCreateSpec.builder()
+                        .title("Le Role")
+                        .description("Mentionnez le role que vous voulez ajouter.")
+                        .color(ColorsUsed.same).build());
                 return next;
             }
 
@@ -53,11 +55,10 @@ public class RoleReact extends LongCommand implements PermissionCommand {
                         RolesReacts.rolesReacts.put(react, roleID);
                         RolesReacts.save();
                         atModif.addReaction(react.getEmoji()).subscribe();
-                        this.setText(embed -> {
-                            embed.setTitle("Création du RoleReact réussi !");
-                            embed.setColor(ColorsUsed.just);
-                            embed.setDescription("Vous avez bien créé un lien entre " + (react.getStringEmoji()) + " -> <@&" + roleID.asString() + "> !");
-                        });
+                        this.setText(EmbedCreateSpec.builder()
+                                .title("Création du RoleReact réussi !")
+                                .color(ColorsUsed.just)
+                                .description("Vous avez bien créé un lien entre " + (react.getStringEmoji()) + " -> <@&" + roleID.asString() + "> !").build());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -69,11 +70,10 @@ public class RoleReact extends LongCommand implements PermissionCommand {
         Stape getEmoji = new Stape(getRole) {
             @Override
             protected boolean onCall(Message message) {
-                setText(embed -> {
-                    embed.setTitle("Emoji");
-                    embed.setDescription("Réagis a se message avec l'emoji que tu souhaite !");
-                    embed.setColor(ColorsUsed.just);
-                });
+                setText(EmbedCreateSpec.builder()
+                        .title("Emoji")
+                        .description("Réagis a se message avec l'emoji que tu souhaite !")
+                        .color(ColorsUsed.just).build());
                 return next;
             }
 
@@ -95,11 +95,10 @@ public class RoleReact extends LongCommand implements PermissionCommand {
         Stape firstStapeCreate = new Stape(getEmoji) {
             @Override
             protected boolean onCall(Message message) {
-                setText(embed -> {
-                    embed.setTitle("Le message.");
-                    embed.setDescription("Donnez-moi l'ID du message sur le quel vous voulez ajouter un roleReaction, ATTENTION vous devez vous trouver dans le channel du message !");
-                    embed.setColor(ColorsUsed.same);
-                });
+                setText(EmbedCreateSpec.builder()
+                        .title("Le message.")
+                        .description("Donnez-moi l'ID du message sur le quel vous voulez ajouter un roleReaction, ATTENTION vous devez vous trouver dans le channel du message !")
+                        .color(ColorsUsed.same).build());
                 return next;
             }
 
@@ -151,11 +150,10 @@ public class RoleReact extends LongCommand implements PermissionCommand {
                 }
                 str += "Donnez le numéro que vous souhaitez supprimer !";
                 String finalStr = str;
-                this.setText(embed -> {
-                    embed.setTitle("Remove !");
-                    embed.setColor(ColorsUsed.just);
-                    embed.setDescription(finalStr);
-                });
+                this.setText(EmbedCreateSpec.builder()
+                        .title("Remove !")
+                        .color(ColorsUsed.just)
+                        .description(finalStr).build());
                 return next;
             }
 
@@ -167,11 +165,10 @@ public class RoleReact extends LongCommand implements PermissionCommand {
                         RolesReacts.rolesReacts.remove(removeTable[number]);
                         RolesReacts.save();
                         removeTable[number].delete();
-                        setText(embed -> {
-                            embed.setTitle("Remove effectué !");
-                            embed.setDescription("Vous avez bien supprimer le rolereact !");
-                            embed.setColor(ColorsUsed.just);
-                        });
+                        setText(EmbedCreateSpec.builder()
+                                .title("Remove effectué !")
+                                .description("Vous avez bien supprimer le rolereact !")
+                                .color(ColorsUsed.just).build());
                         return end;
                     }
                 } catch (Exception e) {
@@ -184,14 +181,14 @@ public class RoleReact extends LongCommand implements PermissionCommand {
 
         this.firstStape = new FirstStape(this.channel, firstStapeCreate, firstStapeRemove) {
             @Override
-            public void onFirstCall(Consumer<? super MessageCreateSpec> deleteThisVariableAndSetYourOwnMessage) {
-                super.onFirstCall(msg -> {
-                    msg.setEmbed(embed -> {
-                        embed.setTitle("Que voulez-vous faire ?");
-                        embed.setDescription("`create` -> créer un nouveau rolereact !\n`remove` -> supprimer tout les rolereact !");
-                        embed.setColor(ColorsUsed.same);
-                    });
-                });
+            public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
+                super.onFirstCall(MessageCreateSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Que voulez-vous faire ?")
+                                .description("`create` -> créer un nouveau rolereact !\n`remove` -> supprimer tout les rolereact !")
+                                .color(ColorsUsed.same).build()
+
+                        ).build());
             }
 
             @Override

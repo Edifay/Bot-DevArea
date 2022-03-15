@@ -6,7 +6,9 @@ import devarea.bot.commands.with_out_text_starter.JoinCommand;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 
@@ -16,21 +18,20 @@ public class Join extends ShortCommand implements PermissionCommand {
         super();
     }
 
-    public Join(MessageCreateEvent message) {
-        super(message);
-        if (message.getMessage().getUserMentions().buffer().count().block() > 0) {
-            Member memberPinged = message.getMessage().getUserMentions().blockFirst().asMember(Init.devarea.getId()).block();
+    public Join(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
+        if (message.getUserMentions().size() > 0) {
+            Member memberPinged = message.getUserMentions().get(0).asMember(Init.devarea.getId()).block();
             assert memberPinged != null;
-            CommandManager.addManualCommand(memberPinged, new ConsumableCommand((TextChannel) message.getMessage().getChannel().block(), JoinCommand.class) {
+            CommandManager.addManualCommand(memberPinged, new ConsumableCommand(JoinCommand.class) {
                 @Override
                 protected Command command() {
-                    return new JoinCommand(memberPinged);
+                    return new JoinCommand(this.member);
                 }
             });
-            sendEmbed(embed -> {
-                embed.setTitle("Vous avez fait join " + memberPinged.getDisplayName() + " !");
-                embed.setColor(ColorsUsed.just);
-            }, false);
+            sendEmbed(EmbedCreateSpec.builder()
+                    .title("Vous avez fait join " + memberPinged.getDisplayName() + " !")
+                    .color(ColorsUsed.just).build(), false);
         }
     }
 

@@ -7,6 +7,8 @@ import devarea.bot.commands.CommandManager;
 import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.MessageCreateSpec;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,6 +21,9 @@ public class MessageCreate {
 
     public static void messageCreateFunction(final MessageCreateEvent message) {
         try {
+            if (message.getMessage().getAuthor().isEmpty())
+                return;
+
             if (message.getMessage().getAuthor().get().getId().equals(Snowflake.of("302050872383242240")))
                 Bump.getDisboardMessage(message);
 
@@ -26,14 +31,14 @@ public class MessageCreate {
                 return;
 
             if (!message.getMember().isPresent()) {
-                message.getMessage().getChannel().block().createMessage(messageCreateSpec -> messageCreateSpec.setContent(messageDisableInPrivate)).subscribe();
+                message.getMessage().getChannel().block().createMessage(MessageCreateSpec.builder().content(messageDisableInPrivate).build()).subscribe();
                 return;
             }
 
             if (message.getMessage().getChannelId().equals(Init.idBump) && !message.getMessage().getAuthor().get().getId().equals(Snowflake.of("302050872383242240")))
                 Bump.messageInChannel(message);
 
-            Init.logChannel.createMessage(msg -> msg.setEmbed(embed -> {
+            Init.logChannel.createMessage(msg -> msg.addEmbed(embed -> {
                 final DateTimeFormatter hours = DateTimeFormatter.ofPattern("HH:mm");
                 final DateTimeFormatter date = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 final LocalDateTime now = LocalDateTime.now();
@@ -44,14 +49,13 @@ public class MessageCreate {
             })).subscribe();
 
             startAway(() -> XpCount.onMessage(message));
-            if (CommandManager.receiveMessage(message) && !message.getMessage().getContent().toLowerCase(Locale.ROOT).startsWith("//admin"))
+            if (!message.getMessage().getContent().toLowerCase(Locale.ROOT).startsWith("//admin") && CommandManager.receiveMessage(message))
                 return;
 
             if (message.getMessage().getContent().startsWith(Init.prefix))
                 CommandManager.exe(message.getMessage().getContent().substring(Init.prefix.length()).split(" ")[0], message);
         } catch (
                 Exception e) {
-            System.out.println("can't crash");
             e.printStackTrace();
         }
     }

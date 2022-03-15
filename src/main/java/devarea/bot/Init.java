@@ -3,16 +3,18 @@ package devarea.bot;
 import devarea.bot.commands.CommandManager;
 import devarea.bot.event.*;
 import discord4j.common.util.Snowflake;
-import discord4j.core.DiscordClientBuilder;
+import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.core.event.domain.guild.MemberLeaveEvent;
+import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.*;
 import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.GuildEmoji;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.gateway.intent.IntentSet;
 import org.w3c.dom.Document;
 
 import javax.imageio.ImageIO;
@@ -129,8 +131,9 @@ public class Init {
                 }
             }
 
-            client = DiscordClientBuilder.create(token)
-                    .build()
+            client = DiscordClient.create(token)
+                    .gateway()
+                    .setEnabledIntents(IntentSet.all())
                     .login()
                     .block();
 
@@ -148,6 +151,7 @@ public class Init {
             client.getEventDispatcher().on(ReactionAddEvent.class).subscribe(ReactionAdd::reactionAddFunction);
             client.getEventDispatcher().on(ReactionRemoveEvent.class).subscribe(ReactionRemove::FunctionReactionRemoveEvent);
             client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(VoiceStateUpdate::VoiceStateUpdateFucntion);
+            client.getEventDispatcher().on(ButtonInteractionEvent.class).subscribe(ButtonInteract::ButtonInteractFunction);
 
         } catch (ParserConfigurationException | IOException e) {
             e.printStackTrace();

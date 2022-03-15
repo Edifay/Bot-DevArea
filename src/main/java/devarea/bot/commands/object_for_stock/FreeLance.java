@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import devarea.bot.Init;
 import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
+import discord4j.core.object.entity.Member;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.legacy.LegacyEmbedCreateSpec;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -86,16 +88,16 @@ public class FreeLance {
     }
 
     @JsonIgnore
-    public Consumer<? super EmbedCreateSpec> getEmbed() {
-        return embed -> {
-            embed.setTitle(this.getFreeLanceName());
-            embed.setDescription(this.getDescription());
-            for (int i = 0; i < this.getFieldNumber(); i++) {
-                embed.addField(this.getField(i).getTitle(), this.getField(i).getValue(), this.getField(i).getInline());
-            }
-            embed.addField("Contact", "Pour contacter le freelancer voici son tag : " + Init.devarea.getMemberById(Snowflake.of(this.memberId)).block().getTag() + ", utilisez directement sa mention : <@" + this.memberId + ">", false);
-            embed.setColor(ColorsUsed.same);
-        };
+    public EmbedCreateSpec getEmbed() {
+        Member member = Init.devarea.getMemberById(Snowflake.of(this.memberId)).block();
+        EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder()
+                .author(this.freeLanceName, null, member.getAvatarUrl())
+                .description(this.getDescription())
+                .color(ColorsUsed.same);
+        for (int i = 0; i < this.getFieldNumber(); i++)
+            builder.addField(this.getField(i).getTitle(), this.getField(i).getValue(), this.getField(i).getInline());
+        builder.addField("Contact", "Pour contacter le freelancer voici son tag : " + member.getTag() + ", utilisez directement sa mention : <@" + this.memberId + ">", false);
+        return builder.build();
     }
 
     public static class FieldSeria {
@@ -172,7 +174,10 @@ public class FreeLance {
 
         @JsonIgnore
         public String getValue() {
-            return this.description + ((!this.prix.equalsIgnoreCase("empty") || !this.temps.equalsIgnoreCase("empty")) ? "\n" : "") + (this.prix.equalsIgnoreCase("empty") ? "" : ("\nPrix: " + this.prix) + (this.temps.equalsIgnoreCase("empty") ? "" : ("\nTemps de retour: " + this.temps)));
+            return this.description +
+                    ((!this.prix.equalsIgnoreCase("empty") || !this.temps.equalsIgnoreCase("empty")) ? "\n" : "")
+                    + (this.prix.equalsIgnoreCase("empty") ? "" : ("\nPrix: " + this.prix))
+                    + (this.temps.equalsIgnoreCase("empty") ? "" : ("\nTemps de retour: " + this.temps));
         }
 
     }

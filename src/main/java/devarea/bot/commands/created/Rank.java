@@ -6,6 +6,10 @@ import devarea.bot.commands.ShortCommand;
 import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.MessageCreateSpec;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -18,14 +22,13 @@ import java.io.IOException;
 import java.net.URL;
 
 public class Rank extends ShortCommand {
-    public Rank(MessageCreateEvent message) {
-        super(message);
-        Member pinged = message.getMember().get();
+    public Rank(final Member member, final TextChannel channel, final Message message) {
+        super(member, channel);
+        Member pinged = member;
         try {
-            pinged = Init.devarea.getMemberById(message.getMessage().getUserMentions().blockFirst().getId()).block();
+            pinged = Init.devarea.getMemberById(message.getUserMentions().get(0).getId()).block();
         } catch (Exception e) {
         } finally {
-
             if (!XpCount.haveBeenSet(pinged.getId())) {
                 sendError("Ce membre n'a pas encore parlé !");
                 this.endCommand();
@@ -68,14 +71,13 @@ public class Rank extends ShortCommand {
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     ImageIO.write(img, "png", outputStream);
                     Member finalPinged = pinged;
-                    this.send(messageCreateSpec -> {
-                        messageCreateSpec.addFile("xp.png", new ByteArrayInputStream(outputStream.toByteArray()));
-                        messageCreateSpec.setEmbed(embedCreateSpec -> {
-                            embedCreateSpec.setColor(ColorsUsed.just);
-                            embedCreateSpec.setTitle("Voici l'xp de " + finalPinged.getDisplayName());
-                            embedCreateSpec.setImage("attachment://xp.png");
-                        });
-                    }, false);
+                    this.send(MessageCreateSpec.builder()
+                            .addFile("xp.png", new ByteArrayInputStream(outputStream.toByteArray()))
+                            .addEmbed(EmbedCreateSpec.builder()
+                                    .color(ColorsUsed.just)
+                                    .title("Voici l'xp de " + finalPinged.getDisplayName())
+                                    .image("attachment://xp.png").build()
+                            ).build(), false);
                 } catch (IOException | FontFormatException e) {
                     e.printStackTrace();
                 }

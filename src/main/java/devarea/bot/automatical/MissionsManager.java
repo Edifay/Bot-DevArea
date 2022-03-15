@@ -10,15 +10,22 @@ import devarea.bot.commands.object_for_stock.Mission;
 import devarea.bot.commands.with_out_text_starter.CreateMission;
 import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
+import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.component.ActionRow;
+import discord4j.core.object.component.Button;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.MessageCreateSpec;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static devarea.Main.developing;
 import static devarea.bot.commands.Command.delete;
 import static devarea.bot.event.FunctionEvent.startAway;
 
@@ -26,16 +33,23 @@ public class MissionsManager {
 
     public static Message messsage;
     private static ArrayList<Mission> missions = new ArrayList<>();
+    private static TextChannel channel;
 
     public static void init() {
         load();
-        sendLastMessage();
+        channel = (TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block();
+        //if (!developing)
+        Message msg = channel.getLastMessage().block();
+        if (msg.getEmbeds().size() == 0 || msg.getEmbeds().get(0).getTitle().equals("Créer une mission."))
+            sendLastMessage();
+        else
+            messsage = msg;
         new Thread(() -> {
             try {
                 while (true) {
                     if (verif())
                         save();
-                    Thread.sleep(86400000L);
+                    Thread.sleep(3600000);
                 }
             } catch (InterruptedException e) {
             }
@@ -48,25 +62,23 @@ public class MissionsManager {
     }
 
     private static void sendLastMessage() {
-        messsage = Command.sendEmbed((TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block(), embedCreateSpec -> {
-            embedCreateSpec.setColor(ColorsUsed.same);
-            embedCreateSpec.setTitle("Créer une mission.");
-            embedCreateSpec.setDescription("Cliquez sur <:ayy:" + Init.idYes.getId().asString() + "> pour créer une mission !");
-        }, true);
-        messsage.addReaction(ReactionEmoji.custom(Init.idYes)).subscribe();
+        messsage = Command.send(channel, MessageCreateSpec.builder()
+                .addEmbed(EmbedCreateSpec.builder()
+                        .color(ColorsUsed.same)
+                        .title("Créer une mission.")
+                        .description("Cliquez sur le bouton ci-dessous pour créer une mission !").build())
+                .addComponent(ActionRow.of(Button.primary("createMission", "Créer une Mission")))
+                .build(), true);
     }
 
-    public static boolean react(ReactionAddEvent event) {
-        if (event.getMessageId().equals(messsage.getId())) {
-            startAway(() -> event.getMessage().block().removeReaction(event.getEmoji(), event.getUserId()).subscribe());
-
-            if (event.getEmoji().equals(ReactionEmoji.custom(Init.idYes)))
-                CommandManager.addManualCommand(event.getMember().get(), new ConsumableCommand((TextChannel) event.getChannel().block(), CreateMission.class) {
-                    @Override
-                    protected Command command() {
-                        return new CreateMission(event);
-                    }
-                });
+    public static boolean interact(ButtonInteractionEvent event) {
+        if (event.getCustomId().equals("createMission")) {
+            CommandManager.addManualCommand(event.getInteraction().getMember().get(), new ConsumableCommand(CreateMission.class) {
+                @Override
+                protected Command command() {
+                    return new CreateMission(this.member);
+                }
+            });
             return true;
         }
         return false;
@@ -86,6 +98,18 @@ public class MissionsManager {
         save();
     }
 
+    public static void clearThisMission(Mission mission) {
+        missions.remove(mission);
+        startAway(() -> {
+            try {
+                delete(true, mission.getMessage().getMessage());
+            } catch (Exception e) {
+
+            }
+        });
+        save();
+    }
+
     private static void load() {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("./mission.json");
@@ -102,17 +126,22 @@ public class MissionsManager {
 
     public static boolean verif() {
         ArrayList<Mission> atRemove = new ArrayList<>();
-        for (Mission mission : missions)
+        TextChannel channel = (TextChannel) Init.devarea.getChannelById(Init.idMeetupVerif).block();
+        for (Mission mission : missions) {
             if (!Init.membersId.contains(Snowflake.of(mission.getMemberId()))) {
-                /*((TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block()).createMessage(messageCreateSpec -> {
-                    messageCreateSpec.setContent("Le membre : <@" + mission.getMemberId() + "> est concidéré comme \"left\" ça missions devrait être supprimer !");
-                }).block();*/
-                /*atRemove.add(mission);
-                try {
-                    delete(false, mission.getMessage().getMessage());
-                } catch (Exception e) {
-                }*/
+                channel.createMessage(MessageCreateSpec.builder()
+                        .content("La mission de : <@" + mission.getMemberId() + "> a été supprimé !").build()).subscribe();
+                atRemove.add(mission);
+                startAway(() -> {
+                    try {
+                        delete(false, mission.getMessage().getMessage());
+                    } catch (Exception e) {
+                    }
+                });
             }
+        }
+
+        System.out.println("Il y a en tout : " + atRemove.size() + " missions à supprimer !");
 
         if (atRemove.size() == 0)
             return false;

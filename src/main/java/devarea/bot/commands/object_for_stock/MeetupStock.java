@@ -5,6 +5,7 @@ import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.legacy.LegacyEmbedCreateSpec;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -66,47 +67,45 @@ public class MeetupStock implements Serializable {
         return this.attachment;
     }
 
-    public Consumer<? super EmbedCreateSpec> getEmbed() {
-        return (Consumer<EmbedCreateSpec>) embedCreateSpec -> {
-            if (this.name != null) {
-                embedCreateSpec.setTitle(this.name);
-            }
-            if (this.author != null) {
-                Member member = Init.devarea.getMemberById(this.author).block();
-                embedCreateSpec.setAuthor(member.getDisplayName(), member.getAvatarUrl(), member.getAvatarUrl());
-            }
-            if (this.attachment != null) {
-                embedCreateSpec.setImage(this.attachment);
-            }
-            if (this.date != null) {
-                embedCreateSpec.setDescription("Le meetup aura lieu le " +
-                        new SimpleDateFormat("dd/MM/yyyy").format(this.date) + " à " +
-                        new SimpleDateFormat("HH").format(this.date) + "h" + new SimpleDateFormat("mm").format(this.date) + ".");
-            }
-            embedCreateSpec.setColor(ColorsUsed.just);
-        };
+    public EmbedCreateSpec getEmbed() {
+        EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder();
+        if (this.name != null)
+            builder.title(this.name);
+        if (this.author != null) {
+            Member member = Init.devarea.getMemberById(this.author).block();
+            builder.author(member.getDisplayName(), member.getAvatarUrl(), member.getAvatarUrl());
+        }
+        if (this.attachment != null)
+            builder.image(this.attachment);
+        if (this.date != null) {
+            builder.description("Le meetup aura lieu le " +
+                    new SimpleDateFormat("dd/MM/yyyy").format(this.date) + " à " +
+                    new SimpleDateFormat("HH").format(this.date) + "h" + new SimpleDateFormat("mm").format(this.date) + ".");
+        }
+        builder.color(ColorsUsed.just);
+        return builder.build();
     }
 
-    public Consumer<? super EmbedCreateSpec> getEmbedVerif() {
-        return (Consumer<EmbedCreateSpec>) embedCreateSpec -> {
-            embedCreateSpec.setAuthor("Voici comment sera afficher le meetup ! Vous pouvez comfirmer yes ou annuler cancel le meetup.", Init.client.getSelf().block().getAvatarUrl(), Init.client.getSelf().block().getAvatarUrl());
-            if (this.name != null) {
-                embedCreateSpec.setTitle(this.name);
-            }
-            if (this.author != null) {
-                Member member = Init.devarea.getMemberById(this.author).block();
-                embedCreateSpec.setFooter(member.getDisplayName(), member.getAvatarUrl());
-            }
-            if (this.attachment != null) {
-                embedCreateSpec.setImage(this.attachment);
-            }
-            if (this.date != null) {
-                embedCreateSpec.setDescription("Le meetup aura lieu le " +
-                        new SimpleDateFormat("dd/MM/yyyy").format(this.date) + " à " +
-                        new SimpleDateFormat("HH").format(this.date) + "h" + new SimpleDateFormat("mm").format(this.date) + ".");
-            }
-            embedCreateSpec.setColor(ColorsUsed.just);
-        };
+    public EmbedCreateSpec getEmbedVerif() {
+        EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder();
+
+        builder.author("Voici comment sera afficher le meetup ! Vous pouvez comfirmer yes ou annuler cancel le meetup.", Init.client.getSelf().block().getAvatarUrl(), Init.client.getSelf().block().getAvatarUrl());
+        if (this.name != null)
+            builder.title(this.name);
+        if (this.author != null) {
+            Member member = Init.devarea.getMemberById(this.author).block();
+            builder.footer(member.getDisplayName(), member.getAvatarUrl());
+        }
+        if (this.attachment != null)
+            builder.image(this.attachment);
+        if (this.date != null)
+            builder.description("Le meetup aura lieu le " +
+                    new SimpleDateFormat("dd/MM/yyyy").format(this.date) + " à " +
+                    new SimpleDateFormat("HH").format(this.date) + "h" + new SimpleDateFormat("mm").format(this.date) + ".");
+
+        builder.color(ColorsUsed.just);
+
+        return builder.build();
     }
 
     public MeetupStock getForWrite() {
@@ -115,11 +114,11 @@ public class MeetupStock implements Serializable {
         return this;
     }
 
-    public Boolean getAlreayMake(){
+    public Boolean getAlreayMake() {
         return this.alreayMake;
     }
 
-    public void setAlreadyMake(final boolean bool){
+    public void setAlreadyMake(final boolean bool) {
         this.alreayMake = bool;
     }
 
