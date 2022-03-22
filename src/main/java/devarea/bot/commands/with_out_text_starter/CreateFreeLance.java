@@ -17,6 +17,7 @@ import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.*;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class CreateFreeLance extends LongCommand {
@@ -55,7 +56,10 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event)) {
-                    freeLance.setMessage(new MessageSeria(Command.sendEmbed((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block(), freeLance.getEmbed(), true)));
+                    freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block(), MessageCreateSpec.builder()
+                            .content("**Freelance de <@" + freeLance.getMemberId() + "> :**")
+                            .addEmbed(freeLance.getEmbed())
+                            .build(), true))));
                     FreeLanceManager.add(freeLance);
                     FreeLanceManager.update();
                     return super.onReceiveInteract(event);

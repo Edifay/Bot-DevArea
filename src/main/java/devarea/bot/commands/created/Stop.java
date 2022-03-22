@@ -27,8 +27,6 @@ public class Stop extends ShortCommand implements PermissionCommand {
 
     public Stop(final Member member, final TextChannel channel, final Message message) {
         super(member, channel);
-        MissionsManager.stop();
-        FreeLanceManager.stop();
         XpCount.stop();
         sendEmbed(EmbedCreateSpec.builder()
                 .title(stopCommand)

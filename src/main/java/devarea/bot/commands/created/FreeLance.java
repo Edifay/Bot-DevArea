@@ -22,22 +22,22 @@ public class FreeLance extends LongCommand {
         EndStape bumpStape = new EndStape() {
             protected boolean onCall(Message message) {
                 if (FreeLanceManager.hasFreelance(FreeLance.this.member)) {
-                    if (FreeLanceManager.bumpFreeLance(FreeLance.this.member.getId().asString())) {
+                    if (FreeLanceManager.bumpFreeLance(FreeLance.this.member.getId().asString()))
                         setText(EmbedCreateSpec.builder()
                                 .title("Le bump a effectué !")
                                 .color(ColorsUsed.just).build());
-                    } else {
+                    else
                         setText(EmbedCreateSpec.builder()
                                 .title("Error")
                                 .description("Vous devez attendre 24 heures entre chaque bump !")
                                 .color(ColorsUsed.wrong).build());
-                    }
-                } else {
+
+                } else
                     setText(EmbedCreateSpec.builder()
                             .title("Error")
                             .description("Vous ne possédez pas de freelance !")
                             .color(ColorsUsed.wrong).build());
-                }
+
                 return true;
             }
         };

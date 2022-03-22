@@ -20,6 +20,7 @@ import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import static devarea.bot.event.FunctionEvent.startAway;
@@ -48,12 +49,15 @@ public class CreateMission extends LongCommand {
                 mission.setNiveau(event.getMessage().getContent());
                 mission.setMessage(
                         new MessageSeria(
-                                sendEmbed((TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block(), EmbedCreateSpec.builder()
-                                        .title(mission.getTitle())
-                                        .description(mission.getDescriptionText() + "\n\nPrix: " + mission.getPrix() + "\nDate de retour: " + mission.getDateRetour() + "\nType de support: " + mission.getSupport() + "\nLangage: " + mission.getLangage() + "\nNiveau estimé: " + mission.getNiveau() + "\n\nCette mission est posté par : " + "<@" + member.getId().asString() + ">.")
-                                        .color(ColorsUsed.just)
-                                        .author(event.getMember().get().getDisplayName(), event.getMember().get().getAvatarUrl(), event.getMember().get().getAvatarUrl())
-                                        .timestamp(Instant.now()).build(), true)
+                                Objects.requireNonNull(send((TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block(), MessageCreateSpec.builder()
+                                        .content("**Mission proposée par <@" + mission.getMemberId() + "> :**")
+                                        .addEmbed(EmbedCreateSpec.builder()
+                                                .title(mission.getTitle())
+                                                .description(mission.getDescriptionText() + "\n\nPrix: " + mission.getPrix() + "\nDate de retour: " + mission.getDateRetour() + "\nType de support: " + mission.getSupport() + "\nLangage: " + mission.getLangage() + "\nNiveau estimé: " + mission.getNiveau() + "\n\nCette mission est posté par : " + "<@" + member.getId().asString() + ">.")
+                                                .color(ColorsUsed.just)
+                                                .author(event.getMember().get().getDisplayName(), event.getMember().get().getAvatarUrl(), event.getMember().get().getAvatarUrl())
+                                                .timestamp(Instant.now()).build())
+                                        .build(), true))
                         )
                 );
                 MissionsManager.add(mission);

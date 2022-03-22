@@ -26,6 +26,7 @@ import discord4j.core.spec.MessageCreateSpec;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static devarea.bot.commands.Command.delete;
 import static devarea.bot.event.FunctionEvent.startAway;
@@ -147,7 +148,10 @@ public class FreeLanceManager {
                         delete(false, freeLance.getMessage().getMessage());
                     } catch (Exception e) {
                     }
-                    freeLance.setMessage(new MessageSeria(Command.sendEmbed((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block(), freeLance.getEmbed(), true)));
+                    freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block(), MessageCreateSpec.builder()
+                            .content("**Freelance de <@" + freeLance.getMemberId() + "> :**")
+                            .addEmbed(freeLance.getEmbed())
+                            .build(), true))));
                     update();
                     save();
                     bumpedFreeLance.add(freeLance);
@@ -169,10 +173,6 @@ public class FreeLanceManager {
         return false;
     }
 
-
-    public static void stop() {
-        delete(true, message);
-    }
 
     public static void add(FreeLance mission) {
         synchronized (freeLances) {

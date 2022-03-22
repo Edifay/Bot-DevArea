@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import static devarea.bot.event.FunctionEvent.startAway;
 
@@ -24,9 +26,18 @@ import static devarea.bot.event.FunctionEvent.startAway;
 public class ControllerOAuth2 {
 
     private static final String
-            client_id = "579257697048985601",
-            client_secret = "wsFl0_7BHDJ4gdE1x7t31rGWyba3VvvG",
-            redirect_url = "https://devarea.fr/data/auth";
+            client_id = "579257697048985601";
+    private static String client_secret;
+
+    static {
+        try {
+            client_secret = new Scanner(new File("./OAuth2_secret.secret")).nextLine();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static final String redirect_url = "https://devarea.fr/data/auth";
 
     private static final ObjectMapper mapper = new ObjectMapper();
 

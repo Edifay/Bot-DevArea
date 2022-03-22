@@ -4,8 +4,10 @@ import devarea.backend.SpringBackend;
 import devarea.bot.Init;
 import org.springframework.boot.SpringApplication;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.Scanner;
 
 public class Main {
 

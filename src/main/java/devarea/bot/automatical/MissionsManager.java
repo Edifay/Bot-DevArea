@@ -84,10 +84,6 @@ public class MissionsManager {
         return false;
     }
 
-    public static void stop() {
-        delete(true, messsage);
-    }
-
     public static void add(Mission mission) {
         missions.add(mission);
         save();
