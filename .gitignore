@@ -15,3 +15,4 @@ stats.xml
 github.token
 *.jar
 auth.json
+OAuth2_secret.secret

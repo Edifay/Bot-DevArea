@@ -52,6 +52,7 @@ public class XpCount {
             try {
                 while (true) {
                     Thread.sleep(60000);
+                    verifLeft();
                     save();
                 }
             } catch (Exception e) {
@@ -222,18 +223,15 @@ public class XpCount {
     }
 
     public synchronized static void verifLeft() {
-        List<Member> members = Init.devarea.getMembers().buffer().blockLast();
-        ArrayList<Snowflake> memberIds = new ArrayList<>();
-        for (Member member : members)
-            memberIds.add(member.getId());
+        ArrayList<Snowflake> memberIds = Init.membersId;
 
         synchronized (XpCount.class) {
             ArrayList<Map.Entry<Snowflake, Integer>> atRemove = new ArrayList<>();
-            for (Map.Entry<Snowflake, Integer> random : xp.entrySet()) {
-                if (!memberIds.contains(random.getKey())) {
+
+            for (Map.Entry<Snowflake, Integer> random : xp.entrySet())
+                if (!memberIds.contains(random.getKey()))
                     atRemove.add(random);
-                }
-            }
+
             for (Map.Entry<Snowflake, Integer> random : atRemove) {
                 xp.remove(random.getKey());
                 xpLeft.put(random.getKey().asString(), random.getValue());

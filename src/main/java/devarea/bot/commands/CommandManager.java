@@ -196,6 +196,7 @@ public class CommandManager {
 
     public static boolean receiveInteract(ButtonInteractionEvent event) {
         synchronized (actualCommands) {
+            if (event.getInteraction().getMember().isEmpty()) return false;
             Member member_replaced = logged_as.get(event.getInteraction().getMember().get().getId()) == null ? event.getInteraction().getMember().get() : Init.devarea.getMemberById(logged_as.get(event.getInteraction().getMember().get().getId())).block();
             if (actualCommands.containsKey(member_replaced.getId())) {
                 actualCommands.get(member_replaced.getId()).nextStape(event);

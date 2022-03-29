@@ -14,20 +14,6 @@
     "membre": "935383593654575204"
   },
   {
-    "title": "Modélisation 3D",
-    "description": "J’ai lancé un projet et j’aurais besoin d’un peu d’aide au niveau des models 3D sur fusion 360 pour plus d’info me mp",
-    "prix": "*Rémunération possible*",
-    "dateRetour": "non définie",
-    "langage": "aucune",
-    "support": "Fusion 360",
-    "niveau": "4/10",
-    "message": {
-      "idMessage": "943973015513866292",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "703700420316364901"
-  },
-  {
     "title": "réaliser un model d’animal !",
     "description": "Bonsoir à tous, \nJe suis à la recherche d’un graphiste 3D blender afin de réaliser un model d’animal ! \nIl a un style cartoon, avec un exemple ! Il faut savoir gérer les poils",
     "prix": "À discuter (~20-45€)",
@@ -42,48 +28,6 @@
     "membre": "281213143701520384"
   },
   {
-    "title": "Maquette Site Web",
-    "description": "Bonjour je suis entrain de coder un shop mais mes talents en thermes de design sont très limité c’est pourquoi je voulais demandé à un graphiste de m’aider pour plus d’infos me mp",
-    "prix": "*A voir*",
-    "dateRetour": "Le plus rapide possible",
-    "langage": "aucune",
-    "support": "Web",
-    "niveau": "4",
-    "message": {
-      "idMessage": "944703981790298142",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "703700420316364901"
-  },
-  {
-    "title": "Développeur JS | Bot Discord",
-    "description": "Je suis actuellement entrain de travailler avec mon équipes sur un bot, multi outils, qui à pour ambition d'égaler les plus grands (Mee6, Dyno).\nPour cela nous avons besoin de plusieurs développeurs NodeJS pour développer des modules pour le robot.\n\nVous devez savoir utiliser MariaDB, Pensez pratique, et UX. Et savoir vous adapté à une documentation technique précise.",
-    "prix": "A convenir plus tard (€)",
-    "dateRetour": ".",
-    "langage": "Js (Lib D.JS)",
-    "support": "Discord.js",
-    "niveau": "Moyen",
-    "message": {
-      "idMessage": "944929936089677854",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "375933463255056384"
-  },
-  {
-    "title": "Intégration d'un web design Figma (React JS)",
-    "description": "Je suis actuellement à la recherche d'un dev React JS pour l'intégration d'un design d'environ 5/6 pages pour mon site web. (<https://latavernedudesign.fr/>)\n\nMission :\n\n- Intégrer un design figma à la perfection *(front)*\n- Compétences à l'appui\n- Travail 100% confidentiel sur le travail fourni\n- __Délai de rendu__ : Avril, si possible\n- Travaillera en lien avec notre dev principal\n- Besoin d'une personne assez disponible pour le traitement de la demande et avoir un échange qui soit des plus fluide",
-    "prix": "100/250€, ouvert à toutes discussions, propositions",
-    "dateRetour": "Début Avril dans l'idéal --> Courant Avril max",
-    "langage": "React JS",
-    "support": "Web",
-    "niveau": "Niveau de difficulté basique",
-    "message": {
-      "idMessage": "945692809980162099",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "341229787001520129"
-  },
-  {
     "title": "Création d'un bot discord utilisant de l'iA",
     "description": "Alors ça risque d'être assez long... Dans le cadre d'un serveur discord dans l'univers d'un jeu MMO, je recherche un bot afin de comptabiliser et attribuer des points aux personnes présente dans le combat à partir d'un screen... En gros il faudrait qu'il fasse de la détection de pseudo ( Qui seront enregistrés au préalable via une commande, dans une base de données? ) , et qu'il détecte aussi si c'est une victoire ou une défaite ( C'est écrit sur le screen de fin de combat ) Le type de screen sera toujours du même format.",
     "prix": "Env. 100E de budget",
@@ -96,62 +40,6 @@
       "idChannel": "943817647060025354"
     },
     "membre": "443108195741859841"
-  },
-  {
-    "title": "Résolution de problème",
-    "description": "Bonjour je suis à la recherche de quelqu’un disponible samedi à 15h pour me résoudre 5 exercices pythons de niveau débutants en une durée de 2/3h maximum à partir de 15h \nLanguage : Python \nNiveau : débutant \nPrix : À négocier en mp",
-    "prix": "À voir en message privé mais je pensais à 30€ pour résoudre 5 exercices de niveau débutants",
-    "dateRetour": "Samedi 15h, en 2/3h grand maximum",
-    "langage": "Python",
-    "support": "Windows",
-    "niveau": "Débutant",
-    "message": {
-      "idMessage": "946702264662384690",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "946699455128797214"
-  },
-  {
-    "title": "Dev algorithme python",
-    "description": "Bonjour je suis à la recherche d’un dev pour me développer l’algorithme de 2 petit jeux en python et si possible capable de m’expliquer clairement ce qu’il a fait.\n\nJeu 1 : À partir d’une phrase collé   Doit trouver toutes les manière de la découper\n\nJeu 2 : À partir d’une grille de lettre  trouver tout les mots possible de créer\n\n——>(Plus de précision en pv)",
-    "prix": "Prix : Négociation pv",
-    "dateRetour": "7/8 mars max",
-    "langage": "Python",
-    "support": "MacOs",
-    "niveau": "Moyen",
-    "message": {
-      "idMessage": "947124567644708934",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "833727349555593297"
-  },
-  {
-    "title": "Intégration Stripe",
-    "description": "Nous sommes un organisme reconnu d'intérêt général ayant pour but d'apporter une aide médico-psycho-sociale aux 13-25 ans ainsi qu'un support à leurs parents. Dans le cadre de nos missions et de notre évolution, nous avons besoin d'intégrer une solution de paiement en ligne.\n\nVous devez intégrer Stripe sur notre site temporaire afin de permettre aux généreux d'effectuer leurs dons et aux adherants de régler leurs cotisations durant notre phase de maintenance qui durera plusieurs mois. Vous pourrez donc utiliser l'API de Stripe et la documentation associée pour parvenir à implémenter cette solution de paiement.\n\nVous pouvez faire le choix de vous investir à titre bénévole ou de faire fonctionner le mécénat d'entreprise pour obtenir une rémunération.",
-    "prix": "0-200€",
-    "dateRetour": "14/03/21",
-    "langage": "PHP ou NodeJS",
-    "support": "Web",
-    "niveau": "Intermédiaire",
-    "message": {
-      "idMessage": "947502690127204394",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "282202998271377408"
-  },
-  {
-    "title": "Intégration design Front",
-    "description": "Dans le cadre d'une mise à jour de mon site web  (https://latavernedudesign.fr/)  Nous recherchons un développeur front pour intégrer un web design Figma réalisé",
-    "prix": "150-200€, ou différents, négociable",
-    "dateRetour": "Mois d'avril (debut, milieu, fin, à voir selon vos disponibilités)",
-    "langage": "React JS",
-    "support": "Web",
-    "niveau": "Compétences de base",
-    "message": {
-      "idMessage": "948128873114112010",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "341229787001520129"
   },
   {
     "title": "Bot Instagram Python",
@@ -180,34 +68,6 @@
       "idChannel": "943817647060025354"
     },
     "membre": "205052390259294210"
-  },
-  {
-    "title": "Jeu de societe",
-    "description": "Bonjour, j'ai un projet de jeu de societe (trivial poursuite) que je dois faire en java fx et j'aurai besoin d'un enorme coup de boost de quelqu'un qui s'y connait d'ici demain minuit je proposerai un prix en adequation avec le delai",
-    "prix": "70 euros a negocier",
-    "dateRetour": "mardi minuit, mercredi 6AM",
-    "langage": "Java fx",
-    "support": "windows",
-    "niveau": "moyenne",
-    "message": {
-      "idMessage": "952913707506212894",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "230086706341085184"
-  },
-  {
-    "title": "VBA projet",
-    "description": "Je dois creer un logiciel en vba (excel)\nL’objectif général du projet est de créer une application, utilisant le logiciel Excel, qui permettra de\ngérer le suivi des étudiants positifs au covid ou en quarantaine inscrits dans un Département",
-    "prix": "100",
-    "dateRetour": "moyenne",
-    "langage": "vba",
-    "support": "windows",
-    "niveau": "moyen",
-    "message": {
-      "idMessage": "952915151013687296",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "230086706341085184"
   },
   {
     "title": "Bot discord",
@@ -280,45 +140,59 @@
     "membre": "342589782205136896"
   },
   {
-    "title": "Création automatique de Graphique pour un bot Discord (ChartJS ou alternative)",
-    "description": "Yop ! \nJe cherche un dev maitrisant le NodeJS pour que celui ci me fasse un code permettant la génération de graphique avec chartJS ou un framework équivalent.\nCe graphique se basera sur le prix d'une cryptomonnaie. Toute les valeurs serons fournis.",
-    "prix": "0-8€",
-    "dateRetour": "Le plus rapide possible ^^",
-    "langage": "NodeJS",
-    "support": "Discord.js",
-    "niveau": "3/10",
+    "title": "Recherche dev web expérimenté, motivé et disponible pour renforcer un projet déjà avancé.",
+    "description": "Bonjour,\n\nNous sommes une société d'une vingtaine de personnes (devs,graphistes,game designers,musiciens etc) avec l'appui\nde nombreux gros influenceurs français (plusieurs à 600k abonnés,les 2 cofondateurs étant d'anciens joueurs pros de LoL) et des levées de fonds confirmées.\n\nLe jeu est un site d'échecs (version mobile prévue aussi) avec un board plus grand, diverses nouvelles règles, pièces, pouvoirs activables en fonction des factions.\n\n\nIl manque ces taches à développer pour que le jeu passe en béta (en duo avec un dev confirmé) :\n\n- Relier une bdd utilisateur : profil, email, factions + terrains achetés et préférés.\n- Régler un ladder avec l'architecture de websocket.\n- Fignoler le design (HTML + CSS + Svelte).\n\nPlusieurs parties sont déjà très avancées,voir finies (graphismes, game design, plans marketing etc)\n\nVous pourrez choisir votre rémunération entre :\n\n- Cachet en fonction du travail prévu/fourni.\n- Royalties permanentes sur les revenus générés par le jeu.\n- Un mix des deux.\n\nN'hésitez pas à me contacter si vous voulez en savoir plus.",
+    "prix": "3000 euros et/ou Royalties permanentes",
+    "dateRetour": "Dès que possible, pas de deadline brut",
+    "langage": "Javascript",
+    "support": "Web pour commencer (plus tard version mobile)",
+    "niveau": "Facile/moyen",
     "message": {
-      "idMessage": "954435698214199357",
+      "idMessage": "956594527555166269",
       "idChannel": "943817647060025354"
     },
-    "membre": "835399990267609129"
+    "membre": "300692461959905280"
   },
   {
-    "title": "Projet scolaire",
-    "description": "C’est un projet à rendre le plus vite possible (grand max vendredi). Le but est de coder un mini jeu, en codant quelques fonctions que je vous envoie déjà avec toutes les instructions. Vous aurez juste à les compléter sur Vs Code ou la plateforme de votre choix ! \nLe language est Python",
-    "prix": "Aux alentours de 30€",
-    "dateRetour": "Vendredi grand max, mais le plus rapidement possible serait le mieux",
+    "title": "Dev d'un jeu NFT",
+    "description": "Description : un jeu mobile ressemblant à la Subway surfers, c'est un jeu pour mon projet NFT donc il faut pouvoir affilié le jeu avec la blockchain (Elrond) le but, un canard qui avance avec des obstacles, des choses qui cherche à le tuer/manger, ces obstacles reviennent de plus en plus vite au fur et à mesure de la partie. 3 décors différents avec chacun leurs obstacles. Les parties sont payantes et les joueurs doivent Link leur Wallet (Elrond web Wallet et Maiar) il faut aussi un leaderboard des Wallet qui jouent le plus afin d'établir un classement.",
+    "prix": "3000€",
+    "dateRetour": "non définie",
+    "langage": "aucune préférence",
+    "support": "Web",
+    "niveau": "Sur une échelle de 1-10 : 6",
+    "message": {
+      "idMessage": "957587711106105435",
+      "idChannel": "943817647060025354"
+    },
+    "membre": "935973143565201448"
+  },
+  {
+    "title": "Jeu python",
+    "description": "Bonjour à tous recherche un dev python pour me développer un petit jeu  je suis bloqué dessus car manque d’xp et je dois le réaliser pour débloquer d’autre d’exercices.Détail en pv",
+    "prix": "30€",
+    "dateRetour": "2 avril",
     "langage": "Python",
-    "support": "Vs code, windows (meme si vous pouvez choisir la plateforme de codage que vous préférez si vous n’aimez pas Vs code)",
-    "niveau": "Intermédiaire",
+    "support": "Windows",
+    "niveau": "Moyen",
     "message": {
-      "idMessage": "955108161990303865",
+      "idMessage": "958081160750174248",
       "idChannel": "943817647060025354"
     },
-    "membre": "953240302775312384"
+    "membre": "958075998606356610"
   },
   {
-    "title": "\uD83E\uDD16 Bot discord Communautaire \uD83E\uDD16",
-    "description": "Bonjour, j'aurais besoin d'un développeur spécifié dans les bots discord afin de créer un bot communautaire complet et qui contient un système de modération totalement personnalisable, pareil pour l'économie et les lèvres qu'il possède une super panoplie de jeux et un système de RPG unique touts sa spécialement pour 1 seul serveur, il faudrait aussi que le bot soit totalement connecté au serveur ( ex. Le bot affiche le nombre de boost sur un message et si quelqu'un boost le serveur le bot va automatiquement update le message pareil si on enlève un boost ) et tous sa avec les utilisateurs sur le serveur ect...",
-    "prix": "À discuter ( € )",
-    "dateRetour": "Le plus vite possible",
-    "langage": "discord.js",
-    "support": "discord.js",
-    "niveau": "Professionnel",
+    "title": "Recherche développeur LUA / HTML  pour création script GTARP",
+    "description": "Salut à tous je recherche une personne pouvant me créer un script pour lillegal de mon serveur FiveM, Le script serait en LUA, il consiste à allez voir un pnj et 3 options ce propose à nous , 1ere option une mission ou il faut aller planter 3 pnj pour gagner une somme d'argent, donc il t'envoie un SMS sur ton téléphone avec la position GPS et quand tu arrive 3 pnj t'attende avec des battes de baseball et tu dois les tuer pour avoir l'argent, et les 2 autres script je l'ai est déjà donc il me faudrait juste ce script a créer, plus implanter les 2 autres",
+    "prix": "70",
+    "dateRetour": "non definie",
+    "langage": "lua",
+    "support": "Fivem",
+    "niveau": "Moyen",
     "message": {
-      "idMessage": "955769799160496229",
+      "idMessage": "958307032279162890",
       "idChannel": "943817647060025354"
     },
-    "membre": "638895361150418944"
+    "membre": "327542556487319552"
   }
 ]

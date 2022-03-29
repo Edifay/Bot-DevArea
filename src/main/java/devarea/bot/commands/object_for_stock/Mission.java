@@ -2,6 +2,7 @@ package devarea.bot.commands.object_for_stock;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import devarea.backend.controllers.data.MissionForWeb;
 
@@ -28,6 +29,12 @@ public class Mission {
     protected MessageSeria message;
     @JsonProperty("membre")
     protected String memberId;
+    @JsonProperty("last_update")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    protected long last_update;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("message_verification")
+    protected MessageSeria message_verification;
 
     public Mission() {
 
@@ -43,6 +50,7 @@ public class Mission {
         this.niveau = niveau;
         this.message = message;
         this.memberId = memberId;
+        this.last_update = System.currentTimeMillis();
     }
 
     public void setTitle(String title) {
@@ -127,6 +135,30 @@ public class Mission {
     }
 
     @JsonIgnore
+    public long getLast_update() {
+        return this.last_update;
+    }
+
+    public void setLast_update(long last_update) {
+        this.last_update = last_update;
+    }
+
+    @JsonIgnore
+    public MessageSeria getMessage_verification() {
+        return message_verification;
+    }
+
+    @JsonIgnore
+    public void setMessage_verification(MessageSeria message_verification) {
+        this.message_verification = message_verification;
+    }
+
+    @JsonIgnore
+    public void update() {
+        this.last_update = System.currentTimeMillis();
+    }
+
+    @JsonIgnore
     @Override
     public String toString() {
         return "Mission{" +
@@ -139,6 +171,8 @@ public class Mission {
                 ", niveau='" + niveau + '\'' +
                 ", message=" + message +
                 ", memberId='" + memberId + '\'' +
+                ", last_update=" + last_update +
+                ", message_verification=" + message_verification +
                 '}';
     }
 
