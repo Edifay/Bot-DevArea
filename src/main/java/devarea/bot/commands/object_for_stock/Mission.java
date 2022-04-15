@@ -37,7 +37,7 @@ public class Mission {
     protected MessageSeria message_verification;
 
     public Mission() {
-
+        this.last_update = System.currentTimeMillis();
     }
 
     public Mission(final String title, final String descriptionText, final String prix, final String dateRetour, final String langage, final String support, final String niveau, final String memberId, final MessageSeria message) {

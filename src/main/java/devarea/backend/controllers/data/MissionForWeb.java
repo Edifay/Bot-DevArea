@@ -33,6 +33,8 @@ public class MissionForWeb {
     protected String member_tag;
     @JsonProperty("message_id")
     protected String message_id;
+    @JsonProperty("last_update")
+    protected String last_update;
     @JsonIgnore
     protected Mission mission;
     @JsonIgnore
@@ -55,6 +57,10 @@ public class MissionForWeb {
         this.member_name = member.getDisplayName();
         this.member_url = member.getAvatarUrl();
         this.member_tag = member.getTag();
+
+        this.last_update = "" + ((System.currentTimeMillis() - mission_base.getLast_update()) / 86400000);
+        if (this.last_update.equals("0"))
+            this.last_update = "1";
 
         this.lastTimeFetched = System.currentTimeMillis();
     }

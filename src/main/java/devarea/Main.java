@@ -4,17 +4,17 @@ import devarea.backend.SpringBackend;
 import devarea.bot.Init;
 import org.springframework.boot.SpringApplication;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.Scanner;
+import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 
 public class Main {
 
     public static final boolean developing = false;
 
     public static void main(String[] args) {
-/*
+
         if (!developing)
             try {
                 PrintStream out = new PrintStream("out.txt");
@@ -23,7 +23,7 @@ public class Main {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-*/
+
         SpringApplication.run(SpringBackend.class, args);
         devarea.bot.Init.initBot();
 

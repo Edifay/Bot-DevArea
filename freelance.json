@@ -535,7 +535,7 @@
       }
     ],
     "message": {
-      "idMessage": "927498903824248882",
+      "idMessage": "963507113064300544",
       "idChannel": "856081355309842452"
     },
     "membre": "480013899891212289"
@@ -614,24 +614,6 @@
       "idChannel": "856081355309842452"
     },
     "membre": "659854859662655509"
-  },
-  {
-    "name": "Thomas Bonsignore",
-    "description": "Autodidacte",
-    "fields": [
-      {
-        "title": "Bot Discord",
-        "description": "Création d’un bot Discord avec commandes perso et tout ce que vous souhaitez",
-        "prix": "Tout semant de la demande",
-        "temps": "De 1 semaine à 1 mois en fonction de la demande",
-        "inline": false
-      }
-    ],
-    "message": {
-      "idMessage": "891636239130820638",
-      "idChannel": "856081355309842452"
-    },
-    "membre": "699949615503376435"
   },
   {
     "name": "Bourouih Mehdi",
@@ -1286,24 +1268,6 @@
     "membre": "743498810969292892"
   },
   {
-    "name": "Dragos",
-    "description": "Bonjour/Bonsoir,\n\nJe me présente, je suis Dragos, j'ai 14 ans et je suis passionné par la programmation. Cela fait maintenant 7 mois que je code en Python et je vous propose aujourd'hui mes services.\nJe ne connais pas tout, en revanche, je me renseigne dès que je tombe sur un problème afin de le résoudre et de vous vendre un code des plus efficaces.\nJe suis \"spécialisé\" dans les bots Python, c'est sur ceux-ci que je travaille le plus en ce moment, mais vous pouvez également faire appel à moi pour des programmes plus simples/complexes, comme de l'aide ou la résolution (avec explications) de vos exercices...",
-    "fields": [
-      {
-        "title": "Tarifs / Retours",
-        "description": "Comme expliquez ci-dessus, les prix et le temps varient en fonction des demandes. Je ne pourrais donc pas vous donner une moyenne.\nEn revanche, lorsque vous venez me contacter, je commencerai par une ébauche afin de voir si j'ai les compétences requises, et si c'est le cas, je vous annoncerai une tranche qui, s'il n'y a pas d'imprévus/fonctionnalités à rajouter, ne bougera pas.\nDe même pour le temps de retour, en général, je ne mets pas plus de 2 semaines pour des bots et pas plus d'un jour pour des exercices. En moyenne, si vous êtes disponible, je fais ça en 1h, explications incluses, je prends plus de ce temps si j'ai besoin de me renseigner pour faire l'exercice ou que vous n'êtes pas disponible pour les explications.",
-        "prix": "empty",
-        "temps": "empty",
-        "inline": false
-      }
-    ],
-    "message": {
-      "idMessage": "953684507582660649",
-      "idChannel": "856081355309842452"
-    },
-    "membre": "386614847019810836"
-  },
-  {
     "name": "pepperoni21",
     "description": "Je suis actuellement en 1e générale. Je développe depuis plusieurs années et j'ai acquis beaucoup d'expériences dans le domaine de la programmation à travers la création de plusieurs projets et la prestation de services. Je ne demande aucun contrat, les échanges sont faits à l'amiable. Un cahier des charges plutôt détaillé m'est requis puis je commencerai le développement, je garantis un suivi constant de la commande jusqu'à son aboutissement où j'enverrai un rendu complet de l'œuvre finalisée puis livrerai la commande après réception du paiement, de ce fait je n'ai aucune raison de ne pas l'envoyer.",
     "fields": [
@@ -1384,5 +1348,41 @@
       "idChannel": "856081355309842452"
     },
     "membre": "247771223243751425"
+  },
+  {
+    "name": "Remi Open",
+    "description": "Bonjour je débute un DUT en informatiques.",
+    "fields": [
+      {
+        "title": "LOGOS DESIGN AFFICHES AVEC 3D",
+        "description": "Je propose mes services pour le design de logos et d'affiches ou même de cartes de visites.\nJe peux aussi rajouter des effets 3D sur votre logos selon votre demande.",
+        "prix": "Le prix et le délai dépende de la demande.\nJe vous souhaite une bonne journée.",
+        "temps": "empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "957398934186246195",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "502951503112437760"
+  },
+  {
+    "name": "Dragos",
+    "description": "Bonjour/Bonsoir,\n\nJe me présente, je suis Dragos, je suis né en 2007 (15 ans cette année) et je suis passionné par la programmation. Je développe en Python depuis septembre 2021 et je vous propose aujourd'hui mes services.\nJe ne connais pas tout, en revanche, je me renseigne dès que je tombe sur un problème afin de le résoudre et de vous vendre un code des plus efficaces.\nJe suis spécialisé dans les bots Python, c'est sur ceux-ci que je travaille le plus en ce moment, mais vous pouvez également faire appel à moi pour des programmes plus simples/complexes, comme de l'aide ou la résolution (avec explications) de vos exercices...",
+    "fields": [
+      {
+        "title": "Tarifs / Retours",
+        "description": "Le prix varie en fonction de la complexité de la commande.\nLe temps de retour également, mais en général, le bot est fini après 2 week-end (Je bosse essentiellement le week-end).\nSi vous me contactez, je commencerais par une ébauche afin de voir si j'ai les compétences requises, et si c'est le cas, je vous annoncerais une tranche de prix qui, s'il n'y a pas d'imprévus/fonctionnalités à rajouter, ne bougera pas.\nN'hésitez pas à me MP pour toute question ou lors d'une commande, à me demander une estimation de la date de retour...",
+        "prix": "empty",
+        "temps": "empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "963507224167219300",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "386614847019810836"
   }
 ]

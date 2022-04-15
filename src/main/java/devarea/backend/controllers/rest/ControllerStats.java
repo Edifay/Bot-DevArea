@@ -107,7 +107,7 @@ public class ControllerStats {
     private static final HashMap<String, XpMember> xpMembers = new HashMap<>();
 
     @GetMapping(value = "/stats/xp_list")
-    public XpMember[] xp_list(@RequestParam(value = "start", defaultValue = "0") final int start, @RequestParam(value = "end", defaultValue = "50") final int end) {
+    public static XpMember[] xp_list(@RequestParam(value = "start", defaultValue = "0") final int start, @RequestParam(value = "end", defaultValue = "50") final int end) {
         synchronized (xpMembers) {
             XpMember[] members = XpCount.getListOfIndex(start, end);
             long actual_time = System.currentTimeMillis();
@@ -132,6 +132,14 @@ public class ControllerStats {
             }
             return members;
         }
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------
+
+    @GetMapping(value = "/stats/member_count")
+    public int getMemberCount() {
+        return Init.membersId.size();
     }
 
 }

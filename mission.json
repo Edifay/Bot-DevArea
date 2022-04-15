@@ -1,61 +1,5 @@
 [
   {
-    "title": "Exporter les donnés d'une page",
-    "description": "J'ai un tableau ici https://polygonscan.com/token/generic-tokenholder-inventory?contractAddress=0x0eB41cEEDBa58A6b429bB134504676D936e7AFcF&a=&m=normal\n Il ne faudrai un ficher csv ou un excel avec la liste des 1573 adresse et leurs token ID respectif.",
-    "prix": "10-30e",
-    "dateRetour": "le plus rapidement possible",
-    "langage": "js",
-    "support": "web",
-    "niveau": "facile",
-    "message": {
-      "idMessage": "943878957122605136",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "935383593654575204"
-  },
-  {
-    "title": "réaliser un model d’animal !",
-    "description": "Bonsoir à tous, \nJe suis à la recherche d’un graphiste 3D blender afin de réaliser un model d’animal ! \nIl a un style cartoon, avec un exemple ! Il faut savoir gérer les poils",
-    "prix": "À discuter (~20-45€)",
-    "dateRetour": "1 semaine environ",
-    "langage": "Aucune préférence",
-    "support": "Blender",
-    "niveau": "4/10",
-    "message": {
-      "idMessage": "943976219068747876",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "281213143701520384"
-  },
-  {
-    "title": "Création d'un bot discord utilisant de l'iA",
-    "description": "Alors ça risque d'être assez long... Dans le cadre d'un serveur discord dans l'univers d'un jeu MMO, je recherche un bot afin de comptabiliser et attribuer des points aux personnes présente dans le combat à partir d'un screen... En gros il faudrait qu'il fasse de la détection de pseudo ( Qui seront enregistrés au préalable via une commande, dans une base de données? ) , et qu'il détecte aussi si c'est une victoire ou une défaite ( C'est écrit sur le screen de fin de combat ) Le type de screen sera toujours du même format.",
-    "prix": "Env. 100E de budget",
-    "dateRetour": "Dès que possible",
-    "langage": "Aucune préférence",
-    "support": "Pour discord",
-    "niveau": "Aucune idée",
-    "message": {
-      "idMessage": "946327161411866634",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "443108195741859841"
-  },
-  {
-    "title": "Bot Instagram Python",
-    "description": "J'ai besoin de quelqu'un pour me développer un bot Instagram en Python qui recupère les images d'un compte et les re-publie sur un autre. J'ai besoin de re-upload les photos, les reels, les IGTV ainsi que les stories lorsque ses derniers sont publiés. Pas besoin de gérer cette partie là, il me faut juste un programme que je peux trigger manuellement.",
-    "prix": "50-100€",
-    "dateRetour": "non définie",
-    "langage": "Python",
-    "support": "Mac",
-    "niveau": "4/10",
-    "message": {
-      "idMessage": "951913498458329208",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "481509597522427905"
-  },
-  {
     "title": "Création d'un thème WHMCS",
     "description": "Je recherche une personne capable de créer un thème pour le service WHMCS complet, à partir d'un cahier des charges et d'exemples précis, en français et compatible avec la dernière version (8.4 à ce jour).",
     "prix": "5€ - 20€",
@@ -67,132 +11,127 @@
       "idMessage": "952629048952119376",
       "idChannel": "943817647060025354"
     },
-    "membre": "205052390259294210"
+    "membre": "205052390259294210",
+    "last_update": 1649786315064
   },
   {
-    "title": "Bot discord",
-    "description": "Bonsoir, je suis à la recherche d'un développeur de bot capable de créer un bot rôle play gta rp. Pour cela je sais absolument ce que je veux, j'ai même des photos/vidéos des ce que je veux. Mon seul problème c'est que je ne sais pas coder alors je fais appel à vous. \n\nVous serez alors récompensez d'un rôle vous séparant des autres utilisateurs, je suis prêt à vous rémunérer \n\nBien cordialement, Saleo",
-    "prix": "20€ grand max",
+    "title": "developpeur minecraft java",
+    "description": "bonjour je recherche un développeur java minecraft pour faire un mod forge en 1.16.5 qui permet que quand on shift clique droit sur de la glace carbonique de powah on obtiens des pebble de glace carbonique de powah qui permet en les mettant dans les case de craft de inventaire de crée cette glace",
+    "prix": "si possible pas plus de 3/5€",
     "dateRetour": "non définie",
+    "langage": "java",
+    "support": "minecraft",
+    "niveau": "5/10",
+    "message": {
+      "idMessage": "961297462067335218",
+      "idChannel": "943817647060025354"
+    },
+    "membre": "439122826742464514",
+    "last_update": 1649869387835
+  },
+  {
+    "title": "WorldSms project",
+    "description": "WorldSms est/seras Une solution d'envoi de SMS en Bulk dans le monde entier sans aucune restriction.",
+    "prix": "1200-2000e MAX",
+    "dateRetour": "Lundi 11 avril 2022",
     "langage": "aucune préférence",
-    "support": "discord",
-    "niveau": "moyen",
+    "support": "linux",
+    "niveau": "7/10",
     "message": {
-      "idMessage": "952984357868539964",
+      "idMessage": "961696629424021535",
       "idChannel": "943817647060025354"
     },
-    "membre": "593897508942381086"
+    "membre": "954064371464691712",
+    "last_update": 1649970013159
   },
   {
-    "title": "Développement plugin Minecraft",
-    "description": "Je cherche quelqu'un aillant les capacités de creer des Nations/Clan avec dedans des rôles  spécifiques qui permettront d'avoir des avantages ou/et des inconvénients dans la nations, le but du serveur est que chaque joueur créer sa nation, defini son territoire et recrute des personnes, ensuite les personne font leurs villages médiéval et claim avec le plugins, les claims coûte un certain prix par jours, et la ou sa devient intéressant c'est que l'Empereur de la nation peux louer si il le souhaite des emplacement des claims de sa nations a d'autres joueurs au prix voulue, c'est ensuites aux joueurs de voir si ils veulent etre en guerre avec d'autres nations, faire la paie etc...",
-    "prix": "\uD83D\uDCB8• À définir avec le vendeur",
-    "dateRetour": "Pas de deadline",
-    "langage": "Java",
-    "support": "Minecraft Spigot 1.18.2",
-    "niveau": "Difficulté: 8/10",
-    "message": {
-      "idMessage": "953600191368421386",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "650825287537393664"
-  },
-  {
-    "title": "Mod minecraft",
-    "description": "Je recherche des dévelopeurs de mod miencraft type épee et armure ultra badass avec détails la rémunérations ce fera aprés le commencement du serveur si il devient \"connu\"",
-    "prix": "15% des achats fais sur la boutique aprés le lancement du serveur",
-    "dateRetour": "non définie",
-    "langage": "aucune préférence",
-    "support": "windows",
-    "niveau": "8/10",
-    "message": {
-      "idMessage": "953691521100710019",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "698067593486925834"
-  },
-  {
-    "title": "Recherche d'un développeur FiveM",
-    "description": "Bonjour, je m'appelle Roan j'ai 16 ans et je recherche un développeur intermédiaire ou pro pour un serveur FiveM. je paye mais il ne faut pas abusé non plus, je veux dire pars la que il ne faut pas me faire payer juste pour ajouter un script qui et sur internet par exemple. Je recherche un développeur pour qu'il puisse faire des scripts pour mon serveur, mon serveur et un serveur français avec des vehicule français et une map fr. Merci",
-    "prix": "je peux mettre jusqu'a 50 euro, mais cela va dépendre de ce que je demande, donc ces le développeur qui me donnera un prix.",
-    "dateRetour": "non définie",
-    "langage": "aucune préférence",
-    "support": "hébergeur fiveM",
-    "niveau": "Cela va dépendre du script que je demanderais",
-    "message": {
-      "idMessage": "953718162996727819",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "529283033203867648"
-  },
-  {
-    "title": "Bot discord vinted",
-    "description": "Bonjour, je recherche un développer capable de coder un bot discord \"vinted\" : c'est à dire un bot capable d'envoyer un message dans un channel lorsque certains articles sont publier sur vinted (par exemple, publier un message dès qu'un sweat nike et publier sur le site). Il faudrais une commande pour pouvoir mettre en place des filtres (si certains ne comprennent pas, je peux expliquer en mp). J'aurais également besoin d'aide pour héberger le bot !",
-    "prix": "15-30 négociable",
-    "dateRetour": "non définie",
-    "langage": "aucune préférenec",
-    "support": "discord.js",
-    "niveau": "moyen",
-    "message": {
-      "idMessage": "953749066821546064",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "342589782205136896"
-  },
-  {
-    "title": "Recherche dev web expérimenté, motivé et disponible pour renforcer un projet déjà avancé.",
-    "description": "Bonjour,\n\nNous sommes une société d'une vingtaine de personnes (devs,graphistes,game designers,musiciens etc) avec l'appui\nde nombreux gros influenceurs français (plusieurs à 600k abonnés,les 2 cofondateurs étant d'anciens joueurs pros de LoL) et des levées de fonds confirmées.\n\nLe jeu est un site d'échecs (version mobile prévue aussi) avec un board plus grand, diverses nouvelles règles, pièces, pouvoirs activables en fonction des factions.\n\n\nIl manque ces taches à développer pour que le jeu passe en béta (en duo avec un dev confirmé) :\n\n- Relier une bdd utilisateur : profil, email, factions + terrains achetés et préférés.\n- Régler un ladder avec l'architecture de websocket.\n- Fignoler le design (HTML + CSS + Svelte).\n\nPlusieurs parties sont déjà très avancées,voir finies (graphismes, game design, plans marketing etc)\n\nVous pourrez choisir votre rémunération entre :\n\n- Cachet en fonction du travail prévu/fourni.\n- Royalties permanentes sur les revenus générés par le jeu.\n- Un mix des deux.\n\nN'hésitez pas à me contacter si vous voulez en savoir plus.",
-    "prix": "3000 euros et/ou Royalties permanentes",
-    "dateRetour": "Dès que possible, pas de deadline brut",
-    "langage": "Javascript",
-    "support": "Web pour commencer (plus tard version mobile)",
-    "niveau": "Facile/moyen",
-    "message": {
-      "idMessage": "956594527555166269",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "300692461959905280"
-  },
-  {
-    "title": "Dev d'un jeu NFT",
-    "description": "Description : un jeu mobile ressemblant à la Subway surfers, c'est un jeu pour mon projet NFT donc il faut pouvoir affilié le jeu avec la blockchain (Elrond) le but, un canard qui avance avec des obstacles, des choses qui cherche à le tuer/manger, ces obstacles reviennent de plus en plus vite au fur et à mesure de la partie. 3 décors différents avec chacun leurs obstacles. Les parties sont payantes et les joueurs doivent Link leur Wallet (Elrond web Wallet et Maiar) il faut aussi un leaderboard des Wallet qui jouent le plus afin d'établir un classement.",
-    "prix": "3000€",
-    "dateRetour": "non définie",
-    "langage": "aucune préférence",
-    "support": "Web",
-    "niveau": "Sur une échelle de 1-10 : 6",
-    "message": {
-      "idMessage": "957587711106105435",
-      "idChannel": "943817647060025354"
-    },
-    "membre": "935973143565201448"
-  },
-  {
-    "title": "Jeu python",
-    "description": "Bonjour à tous recherche un dev python pour me développer un petit jeu  je suis bloqué dessus car manque d’xp et je dois le réaliser pour débloquer d’autre d’exercices.Détail en pv",
-    "prix": "30€",
-    "dateRetour": "2 avril",
+    "title": "Jeu de dames projet python orienté objet",
+    "description": "J'ai besoin de quelqu'un qui pourrait m'aider à faire un display fonctionnel avec PyQt5 sans utiliser PyQt5 Designer et qui pourrait rendre le jeu fonctionnel (J'ai déjà une partie du code)",
+    "prix": "Prix à discuter ensemble",
+    "dateRetour": "10/04",
     "langage": "Python",
-    "support": "Windows",
-    "niveau": "Moyen",
+    "support": "Sur n'importe quel IDE",
+    "niveau": "5-6/10",
     "message": {
-      "idMessage": "958081160750174248",
+      "idMessage": "962263187984621638",
       "idChannel": "943817647060025354"
     },
-    "membre": "958075998606356610"
+    "membre": "258904086760521740",
+    "last_update": 1649491615626
   },
   {
-    "title": "Recherche développeur LUA / HTML  pour création script GTARP",
-    "description": "Salut à tous je recherche une personne pouvant me créer un script pour lillegal de mon serveur FiveM, Le script serait en LUA, il consiste à allez voir un pnj et 3 options ce propose à nous , 1ere option une mission ou il faut aller planter 3 pnj pour gagner une somme d'argent, donc il t'envoie un SMS sur ton téléphone avec la position GPS et quand tu arrive 3 pnj t'attende avec des battes de baseball et tu dois les tuer pour avoir l'argent, et les 2 autres script je l'ai est déjà donc il me faudrait juste ce script a créer, plus implanter les 2 autres",
-    "prix": "70",
-    "dateRetour": "non definie",
-    "langage": "lua",
-    "support": "Fivem",
-    "niveau": "Moyen",
+    "title": "Plugin Minecraft",
+    "description": "Bonjour, je suis à la recherche d'un développeur Java spécialisé dans la conception de plugins Minecraft afin de pouvoir modifier un plugin et le remettre au goût du jour. Pour plus d'infos venez MP !",
+    "prix": "5-10€",
+    "dateRetour": "01.05.2022",
+    "langage": "Java",
+    "support": "Windows",
+    "niveau": "intermédiaire",
     "message": {
-      "idMessage": "958307032279162890",
+      "idMessage": "962413183581184070",
       "idChannel": "943817647060025354"
     },
-    "membre": "327542556487319552"
+    "membre": "952651823817318400",
+    "last_update": 1649527487641
+  },
+  {
+    "title": "C++ algorithme Ford Fulkerson",
+    "description": "développer un algorithme de Ford Fulkerson je n'ai pas le temps de le faire étant donné que je suis en partiel",
+    "prix": "40 euros",
+    "dateRetour": "15/04",
+    "langage": "C++",
+    "support": "windows",
+    "niveau": "débutant",
+    "message": {
+      "idMessage": "963079510935339098",
+      "idChannel": "943817647060025354"
+    },
+    "membre": "187285968988930048",
+    "last_update": 1649686185838
+  },
+  {
+    "title": "Script de scrap de petites annonces",
+    "description": "Je gère un site de petites annonces et j’ai besoin d’un script pour récupérer des petites annonces. J’ai fait un script moi-même en Python qui marchait bien mais je devais le run manuellement + pas forcément très optimisé.\n\nJ’ai besoin de récupérer divers éléments (présent dans ma base de données) ainsi que le lien de l’annonce pour pouvoir rediriger les gens pour contacter le vendeur.\n\nLe script devra tourner automatiquement sur mon VPS.\n\nIl faudra scraper 7 sites de petites annonces + 1 site d’actu en fonction des catégories présentes sur le site.",
+    "prix": "200-250€",
+    "dateRetour": "non définie",
+    "langage": "aucune préférence",
+    "support": "mon VPS",
+    "niveau": "Facile",
+    "message": {
+      "idMessage": "963347198421106688",
+      "idChannel": "943817647060025354"
+    },
+    "membre": "481509597522427905",
+    "last_update": 1649750219670
+  },
+  {
+    "title": "Bots discord en masse",
+    "description": "Bonjour, je vous propose de me créer pleins de bots discord (pour du scrapping ) => vous pouvez prendre du code github vous serez payer pareil !",
+    "prix": "10 à 25€",
+    "dateRetour": "infini",
+    "langage": "python/js/perl mais vous pouvez proposer",
+    "support": "un terminal/server etc",
+    "niveau": "de 1 à 7 sur 10",
+    "message": {
+      "idMessage": "963842957381869618",
+      "idChannel": "943817647060025354"
+    },
+    "membre": "372407198753751041",
+    "last_update": 1649868281112
+  },
+  {
+    "title": "Optimisation de BOT Discord",
+    "description": "J'aimerai optimiser mon BOT Discord en lui rajoutant une expansion modération",
+    "prix": "10-20 euros",
+    "dateRetour": "non définie",
+    "langage": "Langage : Python",
+    "support": "Sur mon VPS Windows",
+    "niveau": "3/10",
+    "message": {
+      "idMessage": "963889610147131472",
+      "idChannel": "943817647060025354"
+    },
+    "membre": "281800369498226690",
+    "last_update": 1649879443009
   }
 ]
