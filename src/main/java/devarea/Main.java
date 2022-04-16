@@ -13,6 +13,8 @@ public class Main {
 
     public static final boolean developing = false;
 
+    public static final String domainName = "https://devarea.fr/";
+
     public static void main(String[] args) {
 
         if (!developing)

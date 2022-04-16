@@ -306,9 +306,9 @@ public class MissionsManager {
                             .title("Suivis de Mission !")
                             .description("Bienvenue dans ce channel !\n\n" +
                                     "Ce channel a été créé car <@" + member_react_id.asString() + "> est intéressé par la mission de <@" + mission.getMemberId() + ">." +
-                                    "\n\nCe channel est dédié pour vous, pour la mise en place de la mission et nous vous demandons de passer exclusivement par ce channel pour toute discussion à propos de celle-ci." +
-                                    "\n\nCeci est à but de pouvoir augmenter la fiabilité des clients et des développeurs pour qu'une mission puisse se passer de la meilleure des manière.\nRèglementation des missions : <#768435208906735656>." +
-                                    "\n\nVous pouvez cloturer ce channel à tout moment !")
+                                    "\n\nCe channel est dédié pour vous, ainsi qu'à la mise en place de la mission et nous vous demandons de passer exclusivement par ce channel pour toute discussion à propos de celle-ci." +
+                                    "\n\nCeci a pour but d'augmenter la fiabilité des clients et des développeurs pour qu'une mission puisse se passer de la meilleure des manières.\nRèglementation des missions : <#768435208906735656>." +
+                                    "\n\nVous pouvez clôturer ce channel à tout moment !")
                             .color(ColorsUsed.same)
                             .build())
                     .addComponent(ActionRow.of(Button.secondary("followMission_close", "Cloturer le channel")))

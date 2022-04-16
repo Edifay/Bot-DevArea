@@ -28,10 +28,17 @@ public class ControllerOAuth2 {
     private static final String
             client_id = "579257697048985601";
     private static String client_secret;
+    private static ControllerFonction.PasswordGenerator passwordGenerator;
 
     static {
         try {
             client_secret = new Scanner(new File("./OAuth2_secret.secret")).nextLine();
+            passwordGenerator = new ControllerFonction.PasswordGenerator(new ControllerFonction.PasswordGenerator.PasswordGeneratorBuilder()
+                    .useDigits(true)
+                    .useLower(true)
+                    .useUpper(true)
+                    .usePunctuation(false)
+            );
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -157,6 +164,24 @@ public class ControllerOAuth2 {
 
     public static UserInfo getInfoFor(String code) {
         return userInfo_cache.get(code);
+    }
+
+    public static String getAuth(String memberID) {
+        if (isAlreadyBind(memberID))
+            return getUserLink(memberID);
+        return addNewAuthForUser(memberID);
+    }
+
+    public static String addNewAuthForUser(String memberID) {
+        String code = passwordGenerator.generate(30);
+        System.out.println("Code generated : " + code);
+        userInfo_cache.put(code, new UserInfo(memberID));
+        try {
+            save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return code;
     }
 
 }
