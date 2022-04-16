@@ -3,6 +3,7 @@ package devarea.bot.automatical;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.bot.Init;
+import devarea.bot.automatical.objectSaves.MissionManagerData;
 import devarea.bot.commands.Command;
 import devarea.bot.commands.CommandManager;
 import devarea.bot.commands.ConsumableCommand;
@@ -12,19 +13,24 @@ import devarea.bot.commands.with_out_text_starter.CreateMission;
 import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
+import discord4j.core.object.PermissionOverwrite;
 import discord4j.core.object.component.ActionRow;
 import discord4j.core.object.component.Button;
+import discord4j.core.object.component.LayoutComponent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
-import discord4j.core.spec.EmbedCreateSpec;
-import discord4j.core.spec.MessageCreateSpec;
-import discord4j.core.spec.MessageEditSpec;
+import discord4j.core.spec.*;
+import discord4j.rest.util.Permission;
+import discord4j.rest.util.PermissionSet;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static devarea.bot.commands.Command.delete;
 import static devarea.bot.event.FunctionEvent.startAway;
@@ -33,7 +39,9 @@ public class MissionsManager {
 
     public static Message messsage;
     private static ArrayList<Mission> missions = new ArrayList<>();
+    private static ArrayList<MissionManagerData.MissionFollow> missionsFollow = new ArrayList<>();
     private static TextChannel channel;
+    private static int missionFollowId = 0;
 
     public static void init() {
         load();
@@ -77,7 +85,13 @@ public class MissionsManager {
                 }
             });
             return true;
-        } else if (event.getCustomId().startsWith("mission")) if (actionToUpdateMessage(event)) return true;
+        } else if (event.getCustomId().startsWith("mission")) {
+            return actionToUpdateMessage(event);
+        } else if (event.getCustomId().equals("took_mission")) {
+            return actionToTookMission(event);
+        } else if (event.getCustomId().equals("followMission_close")) {
+            return actionToCloseFollowedMission(event);
+        }
 
         return false;
     }
@@ -109,9 +123,13 @@ public class MissionsManager {
         File file = new File("./mission.json");
         if (!file.exists()) save();
         try {
-            missions = mapper.readValue(file, new TypeReference<ArrayList<Mission>>() {
+            MissionManagerData missionData = mapper.readValue(file, new TypeReference<>() {
             });
+            missions = missionData.missions;
+            missionFollowId = missionData.missionFollowId;
+            missionsFollow = missionData.missionsFollow;
             System.out.println("Missions loaded : " + missions.size() + " detected !");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -143,7 +161,8 @@ public class MissionsManager {
     public static void save() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            mapper.writeValue(new File("./mission.json"), missions);
+            MissionManagerData missionData = new MissionManagerData(missions, missionFollowId, missionsFollow);
+            mapper.writeValue(new File("./mission.json"), missionData);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -205,11 +224,10 @@ public class MissionsManager {
                         .components(new ArrayList<>())
                         .build()).block();
                 clearThisMission(current_mission);
-                System.out.println(event.getInteraction().getUser().getUsername()+" a supprimé sa mission !");
+                System.out.println(event.getInteraction().getUser().getUsername() + " a supprimé sa mission !");
             }
             return true;
         }
-
         return false;
     }
 
@@ -242,4 +260,111 @@ public class MissionsManager {
         clearThisMission(mission);
     }
 
+
+    public static boolean actionToTookMission(final ButtonInteractionEvent event) {
+        Mission mission = getMissionOfMessage(event.getMessageId());
+        Snowflake member_react_id = event.getInteraction().getMember().get().getId();
+        if (mission != null) {
+            if (mission.getMemberId().equals(member_react_id.asString())) {
+                event.reply(InteractionApplicationCommandCallbackSpec.builder()
+                        .ephemeral(true)
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Error !")
+                                .description("Vous ne pouvez pas prendre votre propre mission !")
+                                .color(ColorsUsed.wrong)
+                                .build())
+                        .build()).block();
+                return true;
+            }
+            if (alreadyHaveAChannel(mission.getMemberId(), member_react_id.asString())) {
+                event.reply(InteractionApplicationCommandCallbackSpec.builder()
+                        .ephemeral(true)
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Error !")
+                                .description("Vous suivez déjà cette mission !")
+                                .color(ColorsUsed.wrong)
+                                .build())
+                        .build()).block();
+                return true;
+            }
+            Set<PermissionOverwrite> set = new HashSet<>();
+            set.add(PermissionOverwrite.forRole(Init.idRoleRulesAccepted, PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL)));
+            set.add(PermissionOverwrite.forRole(Init.devarea.getEveryoneRole().block().getId(), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL)));
+            set.add(PermissionOverwrite.forMember(member_react_id, PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES), PermissionSet.of()));
+            set.add(PermissionOverwrite.forMember(Snowflake.of(mission.getMemberId()), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES), PermissionSet.of()));
+            set.add(PermissionOverwrite.forRole(Snowflake.of("868441850971824149"), PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
+
+            TextChannel channel = Init.devarea.createTextChannel(TextChannelCreateSpec.builder()
+                    .parentId(Snowflake.of("964757205184299028"))
+                    .name("Suivis de mission n°" + ++missionFollowId)
+                    .permissionOverwrites(set)
+                    .build()).block();
+            int id = missionFollowId;
+            Message message = channel.createMessage(MessageCreateSpec.builder()
+                    .content("<@" + member_react_id.asString() + "> -> <@" + mission.getMemberId() + ">")
+                    .addEmbed(EmbedCreateSpec.builder()
+                            .title("Suivis de Mission !")
+                            .description("Bienvenue dans ce channel !\n\n" +
+                                    "Ce channel a été créé car <@" + member_react_id.asString() + "> est intéressé par la mission de <@" + mission.getMemberId() + ">." +
+                                    "\n\nCe channel est dédié pour vous, pour la mise en place de la mission et nous vous demandons de passer exclusivement par ce channel pour toute discussion à propos de celle-ci." +
+                                    "\n\nCeci est à but de pouvoir augmenter la fiabilité des clients et des développeurs pour qu'une mission puisse se passer de la meilleure des manière.\nRèglementation des missions : <#768435208906735656>." +
+                                    "\n\nVous pouvez cloturer ce channel à tout moment !")
+                            .color(ColorsUsed.same)
+                            .build())
+                    .addComponent(ActionRow.of(Button.secondary("followMission_close", "Cloturer le channel")))
+                    .build()).block();
+
+            missionsFollow.add(new MissionManagerData.MissionFollow(id, new MessageSeria(message), mission.getMemberId(), member_react_id.asString()));
+
+            save();
+            return true;
+        }
+        return false;
+    }
+
+    public static Mission getMissionOfMessage(final Snowflake message_id) {
+        for (Mission mission : missions)
+            if (mission.getMessage().getMessageID().equals(message_id))
+                return mission;
+        return null;
+    }
+
+    public static boolean alreadyHaveAChannel(final String clientID, final String devID) {
+        for (MissionManagerData.MissionFollow mission : missionsFollow)
+            if (mission.clientID.equals(clientID) && mission.devID.equals(devID))
+                return true;
+        return false;
+    }
+
+    public static boolean actionToCloseFollowedMission(final ButtonInteractionEvent event) {
+        MissionManagerData.MissionFollow mission = getByMessageID(event.getMessageId());
+        if (mission != null) {
+            missionsFollow.remove(mission);
+
+            Set<PermissionOverwrite> set = new HashSet<>();
+            set.add(PermissionOverwrite.forRole(Init.idRoleRulesAccepted, PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL)));
+            set.add(PermissionOverwrite.forRole(Init.devarea.getEveryoneRole().block().getId(), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL)));
+            set.add(PermissionOverwrite.forMember(Snowflake.of(mission.clientID), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES)));
+            set.add(PermissionOverwrite.forMember(Snowflake.of(mission.devID), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES)));
+            set.add(PermissionOverwrite.forRole(Snowflake.of("868441850971824149"), PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
+
+            ((TextChannel) event.getInteraction().getChannel().block()).edit(TextChannelEditSpec.builder()
+                    .name("Closed n°" + mission.missionID)
+                    .permissionOverwrites(set)
+                    .build()).subscribe();
+            mission.messageSeria.getMessage().edit(MessageEditSpec.builder()
+                    .components(new ArrayList<>())
+                    .build()).subscribe();
+
+            save();
+        }
+        return false;
+    }
+
+    public static MissionManagerData.MissionFollow getByMessageID(final Snowflake messageID) {
+        for (MissionManagerData.MissionFollow mission : missionsFollow)
+            if (mission.messageSeria.getMessageID().equals(messageID))
+                return mission;
+        return null;
+    }
 }

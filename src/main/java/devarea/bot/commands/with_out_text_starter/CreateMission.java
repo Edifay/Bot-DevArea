@@ -12,9 +12,12 @@ import devarea.bot.data.ColorsUsed;
 import devarea.bot.data.TextMessage;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.component.ActionRow;
+import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
@@ -56,20 +59,20 @@ public class CreateMission extends LongCommand {
                                                 .description(mission.getDescriptionText() + "\n\nPrix: " + mission.getPrix() + "\nDate de retour: " + mission.getDateRetour() + "\nType de support: " + mission.getSupport() + "\nLangage: " + mission.getLangage() + "\nNiveau estimé: " + mission.getNiveau() + "\n\nCette mission est posté par : " + "<@" + member.getId().asString() + ">.")
                                                 .color(ColorsUsed.just)
                                                 .author(event.getMember().get().getDisplayName(), event.getMember().get().getAvatarUrl(), event.getMember().get().getAvatarUrl())
-                                                .timestamp(Instant.now()).build())
+                                                .timestamp(Instant.now())
+                                                .build())
+                                        .addComponent(ActionRow.of(Button.secondary("took_mission", "Prendre la mission")))
                                         .build(), true))
                         )
                 );
                 MissionsManager.add(mission);
                 MissionsManager.update();
                 try {
-                    startAway(() -> {
-                        member.getPrivateChannel().block().createMessage(MessageCreateSpec.builder()
-                                .addEmbed(EmbedCreateSpec.builder()
-                                        .title("Suivis d'une mission")
-                                        .description("La commande `//mission` permet de gérer sa mission, pour par exemple la supprimer.\n\n**Le site web** permet aussi de gérer ces missions dans l'onglet options : https://devarea.fr.")
-                                        .color(ColorsUsed.same).build()).build()).block();
-                    });
+                    startAway(() -> member.getPrivateChannel().block().createMessage(MessageCreateSpec.builder()
+                            .addEmbed(EmbedCreateSpec.builder()
+                                    .title("Suivis d'une mission")
+                                    .description("La commande `//mission` permet de gérer sa mission, pour par exemple la supprimer.\n\n**Le site web** permet aussi de gérer ces missions dans l'onglet options : https://devarea.fr.")
+                                    .color(ColorsUsed.same).build()).build()).block());
                 } catch (Exception e) {
                 }
                 return end;
