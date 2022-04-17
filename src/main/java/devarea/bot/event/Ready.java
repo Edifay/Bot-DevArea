@@ -38,7 +38,8 @@ public class Ready {
                     .addEmbed(EmbedCreateSpec.builder().color(ColorsUsed.same)
                             .title("Bot Online !")
                             .description("Le bot a été allumé le " + dtf.format(now) + ".")
-                            .build()).addComponent(ActionRow.of(button)).build()
+                            .build())
+                    .build()
             ).subscribe();
         });
 

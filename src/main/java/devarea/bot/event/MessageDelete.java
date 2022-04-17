@@ -17,7 +17,7 @@ public class MessageDelete {
             final Message message = messageDeleted.getMessage().get();
             if (message.getAuthor().get().isBot() || messageDeleted.getGuild().block() == null)
                 return;
-
+/*
             Init.logChannel.createMessage(msg -> msg.setEmbed(embed -> {
                 final DateTimeFormatter hours = DateTimeFormatter.ofPattern("HH:mm");
                 final DateTimeFormatter date = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -26,7 +26,7 @@ public class MessageDelete {
                 embed.setTitle("Le message de " + message.getAuthor().get().getTag() + " a été supprimé :");
                 embed.setDescription(message.getContent());
                 embed.setFooter(date.format(now) + " at " + hours.format(now) + ".", message.getAuthor().get().getAvatarUrl());
-            })).subscribe();
+            })).subscribe();*/
         } catch (Exception e) {
             e.printStackTrace();
         }

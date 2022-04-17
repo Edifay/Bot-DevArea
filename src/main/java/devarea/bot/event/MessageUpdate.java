@@ -15,7 +15,7 @@ public class MessageUpdate {
 
             if (message.getAuthor().get().isBot() || messageUpdateEvent.getGuildId().isEmpty())
                 return;
-
+/*
             Init.logChannel.createMessage(msg -> msg.setEmbed(embed -> {
                 final DateTimeFormatter hours = DateTimeFormatter.ofPattern("HH:mm");
                 final DateTimeFormatter date = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -24,7 +24,7 @@ public class MessageUpdate {
                 embed.setTitle(message.getAuthor().get().getTag() + " a éditer un message :");
                 embed.setDescription(message.getContent());
                 embed.setFooter(date.format(now) + " at " + hours.format(now) + ".", message.getAuthor().get().getAvatarUrl());
-            })).subscribe();
+            })).subscribe();*/
         }catch (Exception e){
             e.printStackTrace();
         }

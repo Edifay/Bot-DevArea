@@ -1,5 +1,6 @@
 package devarea.bot.event;
 
+import devarea.backend.controllers.rest.ControllerOAuth2;
 import devarea.bot.Init;
 import devarea.bot.automatical.XpCount;
 import devarea.bot.commands.CommandManager;
@@ -21,6 +22,7 @@ public class MemberLeave {
         }
 
         CommandManager.left(memberLeaveEvent.getUser().getId());
+        ControllerOAuth2.left(memberLeaveEvent.getUser().getId().asString());
         if (channel == null)
             channel = (TextChannel) Init.client.getGuildById(finalIdDevArea).block().getChannelById(finalIdJoinLogChannel).block();
         channel.createMessage(msg -> msg.setContent(memberLeaveEvent.getMember().get().getDisplayName() + " a quitter le serveur !")).subscribe();

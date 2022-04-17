@@ -3,11 +3,8 @@ package devarea.backend.controllers.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dependencies.auth.domain.User;
-import dependencies.auth.main.OAuthBuilder;
 import devarea.backend.controllers.data.badges.Badges;
 import devarea.backend.controllers.rest.ControllerMissions;
-import devarea.backend.controllers.rest.ControllerOAuth2;
 import devarea.bot.Init;
 import devarea.bot.automatical.MissionsManager;
 import devarea.bot.automatical.XpCount;
@@ -17,8 +14,6 @@ import discord4j.core.object.entity.Member;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserInfo {
 
-    @JsonProperty
-    private boolean isMember;
     @JsonProperty
     private String id;
     @JsonProperty
@@ -43,9 +38,6 @@ public class UserInfo {
     Badges[] badges;
 
     @JsonIgnore
-    private OAuthBuilder builder;
-
-    @JsonIgnore
     private long lastTimeFetch;
 
     public UserInfo() {
@@ -55,12 +47,6 @@ public class UserInfo {
     public UserInfo(String id) {
         this.lastTimeFetch = 0;
         this.id = id;
-    }
-
-    public UserInfo(OAuthBuilder builder) {
-        this.builder = builder;
-        this.lastTimeFetch = 0;
-        this.id = this.builder.getIdUser();
     }
 
     @JsonIgnore
@@ -104,16 +90,6 @@ public class UserInfo {
     }
 
     @JsonIgnore
-    public void setMember(boolean member) {
-        isMember = member;
-    }
-
-    @JsonIgnore
-    public boolean isMember() {
-        return this.isMember;
-    }
-
-    @JsonIgnore
     public void setRank(int rank) {
         this.rank = rank;
     }
@@ -137,11 +113,6 @@ public class UserInfo {
     }
 
     @JsonIgnore
-    public OAuthBuilder getBuilder() {
-        return builder;
-    }
-
-    @JsonIgnore
     public Snowflake getAsSnowflake() {
         return Snowflake.of(this.id);
     }
@@ -151,57 +122,32 @@ public class UserInfo {
     }
 
     @JsonIgnore
-    private boolean fetch() {
-        this.isMember = ControllerOAuth2.isMember(this.id);
-        if (this.isMember) { // Si c'est un membre du serveur
-            Member member = Init.devarea.getMemberById(getAsSnowflake()).block();
-            this.setId(member.getId().asString());
-            this.setName(member.getUsername());
-            this.tag = member.getTag();
-            this.setUrlAvatar(member.getAvatarUrl());
-            if (this.urlAvatar == null)
-                this.setUrlAvatar(member.getDefaultAvatarUrl());
-            this.lastTimeFetch = System.currentTimeMillis();
+    private void fetch() {
+        Member member = Init.devarea.getMemberById(getAsSnowflake()).block();
 
-            this.badges = Badges.getBadgesOf(this, member).toArray(new Badges[0]);
+        this.setId(member.getId().asString());
+        this.setName(member.getUsername());
+        this.tag = member.getTag();
+        this.setUrlAvatar(member.getAvatarUrl());
+        if (this.urlAvatar == null)
+            this.setUrlAvatar(member.getDefaultAvatarUrl());
+        this.lastTimeFetch = System.currentTimeMillis();
 
-            return true;
-        } else if (builder != null) { // SI ce n'est pas un membre du serveur
-
-            User user = builder.getUser();
-            this.setId(user.getId());
-            this.setName(user.getUsername());
-            this.setUrlAvatar(user.getAvatar());
-            if (this.urlAvatar == null) {
-                this.setUrlAvatar("https://discord.com/assets/2d20a45d79110dc5bf947137e9d99b66.svg");
-            }
-            this.lastTimeFetch = System.currentTimeMillis();
-
-            return true;
-        }
-        return false;
+        this.badges = Badges.getBadgesOf(this, member).toArray(new Badges[0]);
     }
 
 
     @JsonIgnore
     private void short_fetch() {
-        this.isMember = ControllerOAuth2.isMember(this.id);
-        if (this.isMember) { // Si c'est un membre du serveur
-            this.missions_list = ControllerMissions.transformMissionListToMissionWebList(MissionsManager.getOf(Snowflake.of(this.id))).toArray(new MissionForWeb[0]);
+        this.missions_list = ControllerMissions.transformMissionListToMissionWebList(MissionsManager.getOf(Snowflake.of(this.id))).toArray(new MissionForWeb[0]);
 
-            if (XpCount.haveBeenSet(getAsSnowflake())) {
-                this.setRank(XpCount.getRankOf(getAsSnowflake()));
-                this.setXp(XpCount.getXpOf(getAsSnowflake()));
-            } else {
-                this.setRank(XpCount.getRankOf(getAsSnowflake()));// may be set to last !
-                this.setXp(0);
-            }
+        if (XpCount.haveBeenSet(getAsSnowflake())) {
+            this.setRank(XpCount.getRankOf(getAsSnowflake()));
+            this.setXp(XpCount.getXpOf(getAsSnowflake()));
+        } else {
+            this.setRank(XpCount.getRankOf(getAsSnowflake()));// may be set to last !
+            this.setXp(0);
         }
-    }
-
-    public boolean canBeFetch() {
-        this.isMember = ControllerOAuth2.isMember(this.id);
-        return this.isMember || builder != null;
     }
 
     public boolean verifFetchNeeded(final boolean force) {
@@ -211,10 +157,6 @@ public class UserInfo {
         }
         short_fetch();
         return false;
-    }
-
-    public void setBuilder(OAuthBuilder builder) {
-        this.builder = builder;
     }
 
     @JsonIgnore

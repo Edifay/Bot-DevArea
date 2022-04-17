@@ -28,11 +28,13 @@ import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import static devarea.bot.commands.Command.delete;
+import static devarea.bot.commands.Command.send;
 import static devarea.bot.event.FunctionEvent.startAway;
 
 public class MissionsManager {
@@ -273,7 +275,7 @@ public class MissionsManager {
                                 .description("Vous ne pouvez pas prendre votre propre mission !")
                                 .color(ColorsUsed.wrong)
                                 .build())
-                        .build()).block();
+                        .build()).subscribe();
                 return true;
             }
             if (alreadyHaveAChannel(mission.getMemberId(), member_react_id.asString())) {
@@ -284,7 +286,7 @@ public class MissionsManager {
                                 .description("Vous suivez déjà cette mission !")
                                 .color(ColorsUsed.wrong)
                                 .build())
-                        .build()).block();
+                        .build()).subscribe();
                 return true;
             }
             Set<PermissionOverwrite> set = new HashSet<>();
@@ -300,6 +302,15 @@ public class MissionsManager {
                     .permissionOverwrites(set)
                     .build()).block();
             int id = missionFollowId;
+
+            send(channel, MessageCreateSpec.builder()
+                    .addEmbed(EmbedCreateSpec.builder()
+                            .title(mission.getTitle())
+                            .description(mission.getDescriptionText() + "\n\nPrix: " + mission.getPrix() + "\nDate de retour: " + mission.getDateRetour() + "\nType de support: " + mission.getSupport() + "\nLangage: " + mission.getLangage() + "\nNiveau estimé: " + mission.getNiveau())
+                            .color(ColorsUsed.just)
+                            .build())
+                    .build(), false);
+
             Message message = channel.createMessage(MessageCreateSpec.builder()
                     .content("<@" + member_react_id.asString() + "> -> <@" + mission.getMemberId() + ">")
                     .addEmbed(EmbedCreateSpec.builder()
@@ -337,26 +348,53 @@ public class MissionsManager {
     }
 
     public static boolean actionToCloseFollowedMission(final ButtonInteractionEvent event) {
-        MissionManagerData.MissionFollow mission = getByMessageID(event.getMessageId());
+        final MissionManagerData.MissionFollow mission = getByMessageID(event.getMessageId());
         if (mission != null) {
-            missionsFollow.remove(mission);
 
-            Set<PermissionOverwrite> set = new HashSet<>();
-            set.add(PermissionOverwrite.forRole(Init.idRoleRulesAccepted, PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL)));
-            set.add(PermissionOverwrite.forRole(Init.devarea.getEveryoneRole().block().getId(), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL)));
-            set.add(PermissionOverwrite.forMember(Snowflake.of(mission.clientID), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES)));
-            set.add(PermissionOverwrite.forMember(Snowflake.of(mission.devID), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES)));
-            set.add(PermissionOverwrite.forRole(Snowflake.of("868441850971824149"), PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
+            send(((TextChannel) event.getInteraction().getChannel().block()), MessageCreateSpec.builder()
+                    .addEmbed(EmbedCreateSpec.builder()
+                            .title("Clôture du Suivis de mission.")
+                            .description("La clôture du suivis a été éxécuté par : <@" + event.getInteraction().getMember().get().getId().asString() + ">. Le suivis fermera dans 1 heure.")
+                            .color(ColorsUsed.same)
+                            .timestamp(Instant.now())
+                            .build())
+                    .build(), false);
 
-            ((TextChannel) event.getInteraction().getChannel().block()).edit(TextChannelEditSpec.builder()
-                    .name("Closed n°" + mission.missionID)
-                    .permissionOverwrites(set)
-                    .build()).subscribe();
             mission.messageSeria.getMessage().edit(MessageEditSpec.builder()
                     .components(new ArrayList<>())
                     .build()).subscribe();
 
-            save();
+            startAway(() -> {
+
+                try {
+                    Thread.sleep(3600000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    missionsFollow.remove(mission);
+
+                    Set<PermissionOverwrite> set = new HashSet<>();
+                    set.add(PermissionOverwrite.forRole(Init.idRoleRulesAccepted, PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL)));
+                    set.add(PermissionOverwrite.forRole(Init.devarea.getEveryoneRole().block().getId(), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL)));
+                    set.add(PermissionOverwrite.forMember(Snowflake.of(mission.clientID), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES)));
+                    set.add(PermissionOverwrite.forMember(Snowflake.of(mission.devID), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES)));
+                    set.add(PermissionOverwrite.forRole(Snowflake.of("868441850971824149"), PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
+
+                    ((TextChannel) event.getInteraction().getChannel().block()).edit(TextChannelEditSpec.builder()
+                            .name("Closed n°" + mission.missionID)
+                            .permissionOverwrites(set)
+                            .build()).subscribe();
+                    EmbedCreateSpec embed = EmbedCreateSpec.builder()
+                            .title("Clôture du suivis n°" + mission.missionID + " !")
+                            .description("Le suivis de mission n°" + mission.missionID + " a été clôturé à la demande de <@" + event.getInteraction().getMember().get().getId().asString() + ">.")
+                            .color(ColorsUsed.just)
+                            .build();
+                    startAway(() -> Init.devarea.getMemberById(Snowflake.of(mission.clientID)).block().getPrivateChannel().block().createMessage(embed).subscribe());
+                    startAway(() -> Init.devarea.getMemberById(Snowflake.of(mission.devID)).block().getPrivateChannel().block().createMessage(embed).subscribe());
+
+                    save();
+                }
+            });
         }
         return false;
     }
