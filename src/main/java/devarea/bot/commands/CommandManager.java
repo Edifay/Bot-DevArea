@@ -1,7 +1,8 @@
 package devarea.bot.commands;
 
+import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
-import devarea.bot.data.ColorsUsed;
+import devarea.bot.presets.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -20,13 +21,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import static devarea.bot.commands.Command.delete;
-import static devarea.bot.data.TextMessage.commandNotFound;
+import static devarea.bot.presets.TextMessage.commandNotFound;
 
 public class CommandManager {
 
@@ -39,9 +41,9 @@ public class CommandManager {
     public static void init() {
         try {
 
-            ArrayList<String> names = getClassNamesFromPackage("devarea.bot.commands.created");
+            ArrayList<String> names = getClassNamesFromPackage("devarea.bot.commands.inLine");
             if (names.size() == 0) {
-                names = getClassNamesFromPackage("BOOT-INF.classes.devarea.bot.commands.created");
+                names = getClassNamesFromPackage("BOOT-INF.classes.devarea.bot.commands.inLine");
             }
             System.out.println("Class name found : " + Arrays.toString(names.toArray()));
 
@@ -49,14 +51,16 @@ public class CommandManager {
                 if (!className.contains("$")) {
                     final String newName = className.startsWith("/") ? className.substring(1) : className;
                     System.out.println(className + "->" + newName);
-                    if (Arrays.stream(Class.forName("devarea.bot.commands.created." + newName).getConstructors())
+                    if (Arrays.stream(Class.forName("devarea.bot.commands.inLine." + newName).getConstructors())
                             .anyMatch(constructor -> constructor.getGenericParameterTypes().length == 3
                                     && constructor.getGenericParameterTypes()[0].equals(Member.class)
                                     && constructor.getGenericParameterTypes()[1].equals(TextChannel.class)
                                     && constructor.getGenericParameterTypes()[2].equals(Message.class)))
-                        classBound.put(newName.toLowerCase(Locale.ROOT), Class.forName("devarea.bot.commands.created." + newName).getConstructor(Member.class, TextChannel.class, Message.class));
+                        classBound.put(newName.toLowerCase(Locale.ROOT), Class.forName("devarea.bot.commands.inLine" +
+                                "." + newName).getConstructor(Member.class, TextChannel.class, Message.class));
                     else
-                        System.err.println("Impossibilité de charger la commande : " + "devarea.bot.commands.created." + newName);
+                        System.err.println("Impossibilité de charger la commande : " + "devarea.bot.commands.inLine" +
+                                "." + newName);
 
                 }
             }
@@ -66,19 +70,21 @@ public class CommandManager {
         }
     }
 
-    public static ArrayList<String> getClassNamesFromPackage(String packageName) throws IOException, URISyntaxException {
+    public static ArrayList<String> getClassNamesFromPackage(String packageName) throws IOException,
+            URISyntaxException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL packageURL;
         ArrayList<String> names = new ArrayList<>();
         packageName = packageName.replace(".", "/");
         packageURL = classLoader.getResource(packageName);
+        System.out.println(packageURL);
         if (packageURL.getProtocol().equals("jar")) {
             String jarFileName;
             JarFile jf;
             Enumeration<JarEntry> jarEntries;
             String entryName;
 
-            jarFileName = URLDecoder.decode(packageURL.getFile(), "UTF-8");
+            jarFileName = URLDecoder.decode(packageURL.getFile(), StandardCharsets.UTF_8);
             jarFileName = jarFileName.substring(5, jarFileName.indexOf("!"));
             System.out.println(">" + jarFileName);
             jf = new JarFile(jarFileName);
@@ -110,21 +116,26 @@ public class CommandManager {
             if (classBound.containsKey(command)) {
                 try {
                     Member member_command = message.getMember().get();
-                    Member member_replaced = logged_as.get(member_command.getId()) == null ? member_command : Init.devarea.getMemberById(logged_as.get(member_command.getId())).block();
+                    Member member_replaced = logged_as.get(member_command.getId()) == null ? member_command :
+                            MemberCache.get(logged_as.get(member_command.getId()).asString());
                     System.out.println("The command " + command + " is executed !");
                     PermissionSet permissionSet = null;
                     try {
-                        PermissionCommand defaultCommand = (PermissionCommand) classBound.get(command).getDeclaringClass().getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
+                        PermissionCommand defaultCommand =
+                                (PermissionCommand) classBound.get(command).getDeclaringClass().getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
                         permissionSet = defaultCommand.getPermissions();
                     } catch (NoSuchMethodException ignored) {
                     }
 
-                    if (permissionSet == null || containPerm(permissionSet, member_command.getBasePermissions().block())) {
-                        Command actualCommand = (Command) classBound.get(command).newInstance(member_replaced, message.getMessage().getChannel().block(), message.getMessage());
+                    if (permissionSet == null || containPerm(permissionSet,
+                            member_command.getBasePermissions().block())) {
+                        Command actualCommand = (Command) classBound.get(command).newInstance(member_replaced,
+                                message.getMessage().getChannel().block(), message.getMessage());
                         if (actualCommand instanceof LongCommand)
                             actualCommands.put(member_replaced.getId(), (LongCommand) actualCommand);
                     } else
-                        Command.sendError((TextChannel) message.getMessage().getChannel().block(), "Vous n'avez pas la permission d'éxécuter cette commande !");
+                        Command.sendError((TextChannel) message.getMessage().getChannel().block(), "Vous n'avez pas " +
+                                "la permission d'éxécuter cette commande !");
 
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
@@ -149,10 +160,12 @@ public class CommandManager {
         synchronized (actualCommands) {
             try {
                 Member member_command = member;
-                Member member_replaced = logged_as.containsKey(member_command.getId()) ? Init.devarea.getMemberById(logged_as.get(member_command.getId())).block() : member_command;
+                Member member_replaced = logged_as.containsKey(member_command.getId()) ?
+                        MemberCache.get(logged_as.get(member_command.getId()).asString()) : member_command;
                 PermissionSet permissionSet = null;
                 try {
-                    PermissionCommand defaultCommand = (PermissionCommand) command.commadClass.getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
+                    PermissionCommand defaultCommand =
+                            (PermissionCommand) command.commadClass.getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
                     permissionSet = defaultCommand.getPermissions();
                 } catch (NoSuchMethodException e) {
                 }
@@ -174,7 +187,8 @@ public class CommandManager {
 
     public static boolean react(ReactionAddEvent event) {
         synchronized (actualCommands) {
-            Member member_replaced = logged_as.get(event.getUserId()) == null ? event.getMember().get() : Init.devarea.getMemberById(logged_as.get(event.getUserId())).block();
+            Member member_replaced = logged_as.get(event.getUserId()) == null ? event.getMember().get() :
+                    MemberCache.get(logged_as.get(event.getUserId()).asString());
             if (actualCommands.containsKey(member_replaced.getId())) {
                 actualCommands.get(member_replaced.getId()).nextStape(event);
                 return true;
@@ -185,7 +199,9 @@ public class CommandManager {
 
     public static boolean receiveMessage(MessageCreateEvent event) {
         synchronized (actualCommands) {
-            Member member_replaced = logged_as.get(event.getMessage().getAuthor().get().getId()) == null ? event.getMember().get() : Init.devarea.getMemberById(logged_as.get(event.getMessage().getAuthor().get().getId())).block();
+            Member member_replaced = logged_as.get(event.getMessage().getAuthor().get().getId()) == null ?
+                    event.getMember().get() :
+                    MemberCache.get(logged_as.get(event.getMessage().getAuthor().get().getId()).asString());
             if (actualCommands.containsKey(member_replaced.getId())) {
                 actualCommands.get(member_replaced.getId()).nextStape(event);
                 return true;
@@ -197,7 +213,9 @@ public class CommandManager {
     public static boolean receiveInteract(ButtonInteractionEvent event) {
         synchronized (actualCommands) {
             if (event.getInteraction().getMember().isEmpty()) return false;
-            Member member_replaced = logged_as.get(event.getInteraction().getMember().get().getId()) == null ? event.getInteraction().getMember().get() : Init.devarea.getMemberById(logged_as.get(event.getInteraction().getMember().get().getId())).block();
+            Member member_replaced = logged_as.get(event.getInteraction().getMember().get().getId()) == null ?
+                    event.getInteraction().getMember().get() :
+                    MemberCache.get(logged_as.get(event.getInteraction().getMember().get().getId()).asString());
             if (actualCommands.containsKey(member_replaced.getId())) {
                 actualCommands.get(member_replaced.getId()).nextStape(event);
                 return true;
@@ -291,7 +309,7 @@ public class CommandManager {
 
     public static Member getMemberLogged(Member member) {
         if (logged_as.containsKey(member))
-            return Init.devarea.getMemberById(logged_as.get(member.getId())).block();
+            return MemberCache.get(logged_as.get(member.getId()).asString());
         else
             return member;
     }

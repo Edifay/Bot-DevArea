@@ -1,12 +1,7 @@
 package devarea.bot.event;
 
-import devarea.bot.Init;
-import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageDeleteEvent;
 import discord4j.core.object.entity.Message;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class MessageDelete {
 

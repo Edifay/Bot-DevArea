@@ -1,20 +1,17 @@
 package devarea.bot.event;
 
+import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.Bump;
-import devarea.bot.automatical.XpCount;
+import devarea.bot.automatical.XPHandler;
 import devarea.bot.commands.CommandManager;
-import devarea.bot.data.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-import static devarea.bot.data.TextMessage.messageDisableInPrivate;
+import static devarea.bot.presets.TextMessage.messageDisableInPrivate;
 import static devarea.bot.event.FunctionEvent.startAway;
 
 public class MessageCreate {
@@ -33,7 +30,8 @@ public class MessageCreate {
             if (!message.getMember().isPresent()) {
                 message.getMessage().getChannel().block().createMessage(MessageCreateSpec.builder().content(messageDisableInPrivate).build()).subscribe();
                 return;
-            }
+            } else
+                MemberCache.use(message.getMember().get());
 
             if (message.getMessage().getChannelId().equals(Init.idBump) && !message.getMessage().getAuthor().get().getId().equals(Snowflake.of("302050872383242240")))
                 Bump.messageInChannel(message);
@@ -45,15 +43,17 @@ public class MessageCreate {
                 embed.setColor(ColorsUsed.same);
                 embed.setTitle(message.getMember().get().getTag() + " a envoyé un message :");
                 embed.setDescription(message.getMessage().getContent());
-                embed.setFooter(date.format(now) + " at " + hours.format(now) + ".", message.getMessage().getAuthor().get().getAvatarUrl());
+                embed.setFooter(date.format(now) + " at " + hours.format(now) + ".", message.getMessage().getAuthor()
+                .get().getAvatarUrl());
             })).subscribe();*/
 
-            startAway(() -> XpCount.onMessage(message));
+            startAway(() -> XPHandler.onMessage(message));
             if (!message.getMessage().getContent().toLowerCase(Locale.ROOT).startsWith("//admin") && CommandManager.receiveMessage(message))
                 return;
 
             if (message.getMessage().getContent().startsWith(Init.prefix))
-                CommandManager.exe(message.getMessage().getContent().substring(Init.prefix.length()).split(" ")[0], message);
+                CommandManager.exe(message.getMessage().getContent().substring(Init.prefix.length()).split(" ")[0],
+                        message);
         } catch (
                 Exception e) {
             e.printStackTrace();

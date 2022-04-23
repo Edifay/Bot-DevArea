@@ -2,17 +2,13 @@ package devarea.bot.automatical;
 
 import devarea.bot.Init;
 import devarea.bot.commands.Command;
-import devarea.bot.data.ColorsUsed;
+import devarea.bot.presets.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
-import discord4j.core.spec.legacy.LegacyMessageCreateSpec;
-import discord4j.core.spec.legacy.LegacyMessageEditSpec;
-
-import java.util.function.Consumer;
 
 public class Bump {
 

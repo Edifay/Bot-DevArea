@@ -2,7 +2,7 @@ package devarea.bot.event;
 
 import discord4j.core.event.domain.message.ReactionRemoveEvent;
 
-import static devarea.bot.automatical.RolesReacts.onRemoveReact;
+import static devarea.bot.automatical.RolesReactsHandler.onRemoveReact;
 
 public class ReactionRemove {
 

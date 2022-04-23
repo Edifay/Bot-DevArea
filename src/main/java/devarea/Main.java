@@ -14,6 +14,7 @@ public class Main {
     public static final boolean developing = false;
 
     public static final String domainName = "https://devarea.fr/";
+    //public static final String domainName = "http://localhost/";
 
     public static void main(String[] args) {
 
@@ -32,4 +33,14 @@ public class Main {
         Init.client.onDisconnect().block();
     }
 
+
+    public String Bar;
+
+    public String getBar() {
+        return Bar;
+    }
+
+    public void setBar(String bar) {
+        Bar = bar;
+    }
 }

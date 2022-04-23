@@ -1,12 +1,7 @@
 package devarea.bot.event;
 
-import devarea.bot.Init;
-import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.message.MessageUpdateEvent;
 import discord4j.core.object.entity.Message;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class MessageUpdate {
     public static void messageUpdateFunction(MessageUpdateEvent messageUpdateEvent) {
@@ -15,6 +10,7 @@ public class MessageUpdate {
 
             if (message.getAuthor().get().isBot() || messageUpdateEvent.getGuildId().isEmpty())
                 return;
+
 /*
             Init.logChannel.createMessage(msg -> msg.setEmbed(embed -> {
                 final DateTimeFormatter hours = DateTimeFormatter.ofPattern("HH:mm");

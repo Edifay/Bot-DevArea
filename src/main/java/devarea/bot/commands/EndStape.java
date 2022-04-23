@@ -1,11 +1,8 @@
 package devarea.bot.commands;
 
-import devarea.bot.data.ColorsUsed;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
-import discord4j.core.spec.EmbedCreateSpec;
-import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
 
 public abstract class EndStape extends Stape {
 

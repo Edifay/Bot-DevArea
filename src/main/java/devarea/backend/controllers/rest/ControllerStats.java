@@ -1,145 +1,36 @@
 package devarea.backend.controllers.rest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import devarea.backend.controllers.data.RoleCount;
-import devarea.backend.controllers.data.XpMember;
-import devarea.bot.Init;
-import devarea.bot.automatical.XpCount;
-import discord4j.common.util.Snowflake;
-import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.Role;
+import devarea.backend.controllers.tools.WebRoleCount;
+import devarea.backend.controllers.tools.WebXPMember;
+import devarea.backend.controllers.rest.requestContent.RequestHandlerStats;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import static devarea.backend.controllers.rest.requestContent.RequestHandlerStats.getRoleCountList;
+import static devarea.backend.controllers.rest.requestContent.RequestHandlerStats.getXpMembers;
 
 @CrossOrigin()
 @RestController
 public class ControllerStats {
 
-    private final static HashMap<String, RoleCount> idToRole = new HashMap<>();
-    private long lastTimeFetched = 0;
-
     @GetMapping(value = "stats/rolesCount_list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RoleCount[] rolesCounts_list(@RequestParam(value = "roles", defaultValue = "[]", required = true) String rolesString) {
-        synchronized (idToRole) {
-            try {
-
-                String[] rolesId = ControllerFonction.mapper.readValue("[" + rolesString + "]", new TypeReference<String[]>() {
-                });
-                boolean newRole = false;
-                for (String id : rolesId) {
-                    if (!contain(id)) {
-                        idToRole.put(id, new RoleCount(id));
-                        newRole = true;
-                    }
-                }
-
-                if ((System.currentTimeMillis() - lastTimeFetched) > 600000 || newRole) {
-                    fetch();
-                    lastTimeFetched = System.currentTimeMillis();
-                }
-
-                RoleCount[] atReturn = new RoleCount[rolesId.length];
-                for (int i = 0; i < rolesId.length; i++)
-                    atReturn[i] = get(rolesId[i]);
-
-                return atReturn;
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
+    public static WebRoleCount[] rolesCounts_list(@RequestParam(value = "roles", defaultValue = "") String rolesString) {
+        return getRoleCountList(rolesString);
     }
-
-    private static void fetch() {
-        List<Member> members = Init.devarea.getMembers().buffer().blockLast();
-
-        for (Map.Entry<String, RoleCount> set : idToRole.entrySet()) {
-            String key = set.getKey();
-            RoleCount value = set.getValue();
-            value.setCountMember(0);
-            if (value.getName() == null) {
-                Role role = Init.devarea.getRoleById(Snowflake.of(key)).block();
-                value.setName(role.getName());
-                value.setColor(String.format("#%06X", (0xFFFFFF & role.getColor().getRGB())));
-            }
-        }
-
-        for (Member member : members) {
-            for (Map.Entry<String, RoleCount> set : idToRole.entrySet()) {
-                String key = set.getKey();
-                RoleCount value = set.getValue();
-                if (member.getRoleIds().contains(Snowflake.of(key))) {
-                    value.setCountMember(value.getCountMember() + 1);
-                }
-            }
-        }
-    }
-
-    private static boolean contain(String id) {
-        for (String key : idToRole.keySet())
-            if (id.equals(key))
-                return true;
-        return false;
-    }
-
-    private static RoleCount get(String id) {
-        for (Map.Entry<String, RoleCount> set : idToRole.entrySet()) {
-            String key = set.getKey();
-            RoleCount value = set.getValue();
-            if (id.equals(key)) {
-                return value;
-            }
-        }
-        return null;
-    }
-
-
-    // -----------------------------------------------------------------------------------------------------
-
-    private static final HashMap<String, XpMember> xpMembers = new HashMap<>();
 
     @GetMapping(value = "/stats/xp_list")
-    public static XpMember[] xp_list(@RequestParam(value = "start", defaultValue = "0") final int start, @RequestParam(value = "end", defaultValue = "50") final int end) {
-        synchronized (xpMembers) {
-            XpMember[] members = XpCount.getListOfIndex(start, end);
-            long actual_time = System.currentTimeMillis();
-            for (XpMember member : members) {
-                if (xpMembers.containsValue(member)) {
-                    XpMember actualMember = xpMembers.get(member.getId());
-                    if (actual_time - actualMember.getLastTimeFetch() > 600000L) {
-                        Member memberDiscord = Init.devarea.getMemberById(Snowflake.of(member.getId())).block();
-                        actualMember.setName(memberDiscord.getDisplayName());
-                        actualMember.setUrlAvatar(memberDiscord.getAvatarUrl());
-                        actualMember.setLastTimeFetch(actual_time);
-                    }
-                    member.setName(actualMember.getName());
-                    member.setUrlAvatar(actualMember.getUrlAvatar());
-                } else {
-                    Member memberDiscord = Init.devarea.getMemberById(Snowflake.of(member.getId())).block();
-                    xpMembers.put(memberDiscord.getId().asString(), member);
-                    member.setName(memberDiscord.getDisplayName());
-                    member.setUrlAvatar(memberDiscord.getAvatarUrl());
-                    member.setLastTimeFetch(actual_time);
-                }
-            }
-            return members;
-        }
+    public static WebXPMember[] xp_list(@RequestParam(value = "start", defaultValue = "0") final int start,
+                                        @RequestParam(value = "end", defaultValue = "50") final int end) {
+        return getXpMembers(start, end);
     }
-
-
-    // -----------------------------------------------------------------------------------------------------
 
     @GetMapping(value = "/stats/member_count")
-    public int getMemberCount() {
-        return Init.membersId.size();
+    public static int getMemberCount() {
+        return RequestHandlerStats.getMemberCount();
     }
+
 
 }

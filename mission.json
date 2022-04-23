@@ -1,5 +1,5 @@
 {
-  "mission_follow_id": 26,
+  "mission_follow_id": 59,
   "missions": [
     {
       "title": "Création d'un thème WHMCS",
@@ -14,22 +14,7 @@
         "idChannel": "943817647060025354"
       },
       "membre": "205052390259294210",
-      "last_update": 1649786315064
-    },
-    {
-      "title": "developpeur minecraft java",
-      "description": "bonjour je recherche un développeur java minecraft pour faire un mod forge en 1.16.5 qui permet que quand on shift clique droit sur de la glace carbonique de powah on obtiens des pebble de glace carbonique de powah qui permet en les mettant dans les case de craft de inventaire de crée cette glace",
-      "prix": "si possible pas plus de 3/5€",
-      "dateRetour": "non définie",
-      "langage": "java",
-      "support": "minecraft",
-      "niveau": "5/10",
-      "message": {
-        "idMessage": "961297462067335218",
-        "idChannel": "943817647060025354"
-      },
-      "membre": "439122826742464514",
-      "last_update": 1649869387835
+      "last_update": 1650392546064
     },
     {
       "title": "WorldSms project",
@@ -44,37 +29,7 @@
         "idChannel": "943817647060025354"
       },
       "membre": "954064371464691712",
-      "last_update": 1649970013159
-    },
-    {
-      "title": "Plugin Minecraft",
-      "description": "Bonjour, je suis à la recherche d'un développeur Java spécialisé dans la conception de plugins Minecraft afin de pouvoir modifier un plugin et le remettre au goût du jour. Pour plus d'infos venez MP !",
-      "prix": "5-10€",
-      "dateRetour": "01.05.2022",
-      "langage": "Java",
-      "support": "Windows",
-      "niveau": "intermédiaire",
-      "message": {
-        "idMessage": "962413183581184070",
-        "idChannel": "943817647060025354"
-      },
-      "membre": "952651823817318400",
-      "last_update": 1649527487641
-    },
-    {
-      "title": "C++ algorithme Ford Fulkerson",
-      "description": "développer un algorithme de Ford Fulkerson je n'ai pas le temps de le faire étant donné que je suis en partiel",
-      "prix": "40 euros",
-      "dateRetour": "15/04",
-      "langage": "C++",
-      "support": "windows",
-      "niveau": "débutant",
-      "message": {
-        "idMessage": "963079510935339098",
-        "idChannel": "943817647060025354"
-      },
-      "membre": "187285968988930048",
-      "last_update": 1649686185838
+      "last_update": 1650577047122
     },
     {
       "title": "Script de scrap de petites annonces",
@@ -89,7 +44,7 @@
         "idChannel": "943817647060025354"
       },
       "membre": "481509597522427905",
-      "last_update": 1649750219670
+      "last_update": 1650357986317
     },
     {
       "title": "Bots discord en masse",
@@ -104,7 +59,7 @@
         "idChannel": "943817647060025354"
       },
       "membre": "372407198753751041",
-      "last_update": 1649868281112
+      "last_update": 1650477412304
     },
     {
       "title": "Optimisation de BOT Discord",
@@ -119,7 +74,11 @@
         "idChannel": "943817647060025354"
       },
       "membre": "281800369498226690",
-      "last_update": 1649879443009
+      "last_update": 1649881336041,
+      "message_verification": {
+        "idMessage": "966433642995920956",
+        "idChannel": "963888849120002088"
+      }
     },
     {
       "title": "Jeux vidéo",
@@ -134,7 +93,11 @@
         "idChannel": "943817647060025354"
       },
       "membre": "568482613443166208",
-      "last_update": 1650067295929
+      "last_update": 1650091148342,
+      "message_verification": {
+        "idMessage": "967313659279867955",
+        "idChannel": "955510478644318298"
+      }
     },
     {
       "title": "Bot Monétaire",
@@ -150,54 +113,189 @@
       },
       "membre": "933454526583828511",
       "last_update": 1650122153016
+    },
+    {
+      "title": "Système de connexion/login en python",
+      "description": "j'ai créé un programme payant (20e), mais il se fait partager et sa m'énerve, ducoup j'ai besoin dun système login hwid :)",
+      "prix": "10-20€ a chaque vente !",
+      "dateRetour": "non définie",
+      "langage": "Python",
+      "support": "Windows",
+      "niveau": "1",
+      "message": {
+        "idMessage": "964974210109808700",
+        "idChannel": "943817647060025354"
+      },
+      "membre": "923211134901841982",
+      "last_update": 1650138096007
+    },
+    {
+      "title": "Recherche développeur Web",
+      "description": "Bonsoir je suis à la recherche d'un développeur web pour la création d'un site pour mon association",
+      "prix": "50-60€",
+      "dateRetour": "20/04/2022",
+      "langage": "aucune préférence",
+      "support": "Web",
+      "niveau": "Intermédiaire",
+      "message": {
+        "idMessage": "964985586832273422",
+        "idChannel": "943817647060025354"
+      },
+      "membre": "708714348725665882",
+      "last_update": 1650140791981
+    },
+    {
+      "title": "Evenement Caritatif site modérateur",
+      "description": "Bonjour, je suis Flav, président de l'association Salad'Corp. \nPour la 2ème édition d'événement caritatif qui se passera fin août nous recherchons un développeur pour  créer un site \"intranet\", qui sera accessible uniquement au modérateur et administrateur. Voici le but du site: \n\n- Des modérateurs rentrent des notes que des jurys donnes aux joueurs selon certain critère \n- Une moyenne est calculé \n- Le tout qui peut être intégré à OBS pour que les spectateurs aient les notes en direct. \n\nC'est pas très compréhensible mais c'est très simple. \n\nN'hésitez pas à me contacter je peux vous montrer en partager mon écran exactement ce que je souhaites. Merci !",
+      "prix": "40€",
+      "dateRetour": "23/04/2022",
+      "langage": "aucune préférence",
+      "support": "Web",
+      "niveau": "Simple",
+      "message": {
+        "idMessage": "965085138318929950",
+        "idChannel": "943817647060025354"
+      },
+      "membre": "178097844262010880",
+      "last_update": 1650164356384
+    },
+    {
+      "title": "Script comparant des données sur un site",
+      "description": "Bonjour,\n\nPaxful est une plateforme d'échange de cryptomonnaies entre particulier.\nLes acheteurs payent principalement avec un virement bancaire, des cartes cadeaux, des paysafecard etc\nIl y a donc des vendeurs qui postent des offres de ventes avec un certain % de frais.\nJe suis un de ces vendeurs.\nÉtant donné qu'il y a plusieurs vendeurs en concurrence je souhaite toujours rester le moins cher de mes concurrents.\n\nJe souhaite donc un script lancé sur un petit VPS ou autre qui va automatiquement m'envoyer via discord un message lorsqu'un vendeur à un % de frais inférieur au miens.\n\nSi au bout de X minutes je suis toujours le moins cher, pas d'envoi de messages par contre si il y a une personne ayant un % de frais moins élevé un message discord est envoyé disant : Attention une personne est moins chère que vous avec X%.\n( Envoi sur discord via un webhook)\n\nCe script sera lancé sur 2 offres différentes donc 2 pages web différentes.\n\nCes données sont accessibles sur un page directement, pas besoin de login ou autre.",
+      "prix": "15-25 eur",
+      "dateRetour": "Non définie",
+      "langage": "Aucune préférence",
+      "support": "Windows",
+      "niveau": "4/10",
+      "message": {
+        "idMessage": "965201099613143060",
+        "idChannel": "943817647060025354"
+      },
+      "membre": "714236249048743967",
+      "last_update": 1650192071693
+    },
+    {
+      "title": "Programme de tri et de calcul de temps de chargement de fichier csv/excel",
+      "description": "1.1)le but est d’écrire un programme pour charger les données et évaluer expérimentalement le temps de chargement. Il faut récupérer pour chaque ligne au moins les valeurs suivantes : l’âge (AGED, 6e colonne), la profession (PROF, 76e colonne) et la superficie du logement (SURF, 85e colonne). Pour charger ces valeurs, il faut créer des enregistrements et des tableaux selon les besoins.\nIl faut évaluer expérimentalement l’évolution du temps de chargement en fonction du nombre de lignes chargées. On peut commencer par charger 105 lignes seulement, puis 2*105, etc. Ajoutez dans le programme du code pour mesurer le temps de chargement et pour stocker ces mesures dans un fichier CSV. Ici, chaque ligne contiendra le nombre de lignes chargées, et le temps de chargement.\n\nÀ l’aide d’un tableur, tracez la courbe des temps en fonction du nombre de lignes chargées. Expliquez comment évolue le temps de chargement. Vous pouvez également essayer de prédire le temps de chargement pour un nombre de lignes élevé (par exemple 1 ou 2 millions) et vérifier expérimentalement votre prédiction.\n\n2.2)\n\nÉcrivez deux fonctions qui trient les données (par exemple par âge), selon deux des méthodes de tri vues en cours. Mesurez les temps de calcul des tris en fonction du nombre d’éléments triés, stockez ces temps dans un fichier CSV et utilisez un tableur pour tracer les courbes expérimentales de complexité des tris. Expliquez ces courbes.\nVous pouvez également, en bonus, écrire du code qui mélange les données, afin de pouvoir les re-trier sans avoir besoin de les recharger à partir du fichier. Mélanger les données dans un tableau peut se faire en parcourant le tableau et en échangeant le contenu de la case courante avec celui d’une autre case tirée au hasard parmi les cases non encore mélangées.",
+      "prix": "45 euros",
+      "dateRetour": "26/04/2022",
+      "langage": "C",
+      "support": "Windows",
+      "niveau": "Moyen",
+      "message": {
+        "idMessage": "965385116526469180",
+        "idChannel": "943817647060025354"
+      },
+      "membre": "280004888312676353",
+      "last_update": 1650235945501
+    },
+    {
+      "title": "Plugin Java Minecraft : DanganAnimation",
+      "description": "✌️ Bonjour, \n\nje me permet d'envoyer un message car je cherche actuellement un développeur Java pour une demande de plugin Minecraft particulière et plutôt simple dans la compréhension et dans sa réalisation. Toute fois ce projet va demandé une certaine imagination et certaine maitrise pour la génération de structure via Plugin (Style schématique).\n\nL'objectif du plugin est de créer des sortes d'animations/scène scénarisé dans principalement l'Univers de Danganronpa, toutefois il sera nécessaire d'imaginer ces propres scènes, d'où le besoin d'imagination.\n**Pour plus de détail voir CDC (Cahier des charges etc.), me contacter en privé en cas de problème ou de questionnement. **\n\n**\uD83D\uDCCBInformation complémentaire :**\n\n**\uD83D\uDCB8 Prix :** A déterminer ensemble\n**⏲️ Deadline :** 1 mois environ\n**\uD83D\uDCBB Version :** 1.16.x\n**Gdoc/CDC : https://docs.google.com/document/d/14TidvWmfl5tXoN6peo13-_OBifgwuZRYDfRQ7FXNxMo/edit?usp=sharing **",
+      "prix": "A déterminer",
+      "dateRetour": "1 mois environ",
+      "langage": "Java",
+      "support": "Minecraft",
+      "niveau": "6/10",
+      "message": {
+        "idMessage": "965731416329568286",
+        "idChannel": "943817647060025354"
+      },
+      "membre": "435919738678542356",
+      "last_update": 1650318610223
+    },
+    {
+      "title": "Connecter API fournisseur à Shopify",
+      "description": "Bonjour, J'aurai besoin de quelqu'un pour pouvoir connecter l'API de mes fournisseurs à mon Shopify. J'ai besoin d'avoir accès au stock et d'un autre côté de pouvoir passer commande.",
+      "prix": "250",
+      "dateRetour": "30 Avril",
+      "langage": "aucune préférence",
+      "support": "Web",
+      "niveau": "3/4",
+      "message": {
+        "idMessage": "966291694012203069",
+        "idChannel": "943817647060025354"
+      },
+      "membre": "481509597522427905",
+      "last_update": 1650452106082
+    },
+    {
+      "title": "Créer une base de données en PL/SQL",
+      "description": "Créer une base de données avec PL/Sql en utilisant notamment les requêtes Trigger etc…",
+      "prix": "50€",
+      "dateRetour": "Avant ce soir",
+      "langage": "Pl/Sql",
+      "support": "N’importe",
+      "niveau": "Facile",
+      "message": {
+        "idMessage": "966296146081382440",
+        "idChannel": "943817647060025354"
+      },
+      "membre": "532968650802462728",
+      "last_update": 1650453217367
+    },
+    {
+      "title": "Créer un plugin de coin farm",
+      "description": "Idée: Créer un plugin avec un système de point de farm et un classement\n\nchaque plant casser/mob tuer rapporte un certain nombre de point de farm, une boutique farm2win avec grade/kit sera disponible,\nun classement rangera les meilleurs farmeur et le Top 3 Recevras une récompense tout les Mois (Points boutiques,Grade,Kits...)\n\nAjouter un hammer en 5x5 et une houe qui replante automatiquement achetable avec les points de farm/points boutique",
+      "prix": "Prix à définir",
+      "dateRetour": "Environ 2semaines",
+      "langage": "java",
+      "support": "windows",
+      "niveau": "aucune idée",
+      "message": {
+        "idMessage": "966364427442094220",
+        "idChannel": "943817647060025354"
+      },
+      "membre": "952789683107164221",
+      "last_update": 1650469497738
+    },
+    {
+      "title": "Résolution d’exercices",
+      "description": "Bonjour j’aurais besoin de quelqu’un disponible ce samedi à 15h pour réaliser 5 exercices en Python en une durée maximum de 3h",
+      "prix": "Je donne 30€ pour cette mission",
+      "dateRetour": "Il faut être disponible ce samedi à 15h et pour une durée grand maximum de 3h",
+      "langage": "Python",
+      "support": "Windows",
+      "niveau": "Intermédiaire - avancé",
+      "message": {
+        "idMessage": "966639851212533810",
+        "idChannel": "943817647060025354"
+      },
+      "membre": "953240302775312384",
+      "last_update": 1650535154930
+    },
+    {
+      "title": "DEV FULL-STACK pour une STARTUP PROMETTEUSE",
+      "description": "Bonjour,\n\n\nPour commencer, je tiens personnellement à vous remercier de lire ce message.\n\nJ’apprécie énormément l’aide que la communauté a pu me procurer depuis maintenant des mois.\nEt il en va de même pour certains utilisateurs Discord.\n\n\nNous sommes à l’aube d’un grand projet exploitant de nouvelles technologies.\nIl est facilement constatable qu’il y a énormément de nouveaux concepts faisant parler d’eux même comme étant innovant aux yeux du monde, sans se jeter trop de fleurs, j’ai la\n\nconviction que le mien répond à un besoin important pour une majorité d’utilisateurs au\ntravers le monde.\n\n\nNotre future entreprise souhaite aider le monde tout en révolutionnant la manière d’utiliser les\nréseaux sociaux.\n\nBien qu’il y ait beaucoup de projets touchant aux réseaux sociaux et le web 3, il y ait fort à\nparier que le contenu et l’expérience utilisateur que nous préparons fasses une réelle\ndifférence.\n\n\nAlors que le projet vient d’être sélectionné par le meilleur incubateur du Luxembourg,\nil m’a été demandé de rassembler une équipe afin d’avancer davantage sur l’aspect\nconceptuelle et ainsi de présenter le projet aux investisseurs.\n\nNotre équipe est pour l’instant constituée d’un responsable marketing ainsi que deux avocats\net d’un “développeur racine”.\n\nNéanmoins, pour ce faire, il nous faut avant tout un développer full-stack, une spécialisation\ndans les technologies blockchains serait un atout.",
+      "prix": "A définir",
+      "dateRetour": "2 mai 2022",
+      "langage": "Typescript, react.js.\nGql, postgreSQL/php/…(back à définir)",
+      "support": "Web",
+      "niveau": "Intermédiaire/avancé",
+      "message": {
+        "idMessage": "966698845394317383",
+        "idChannel": "943817647060025354"
+      },
+      "membre": "344233094041174018",
+      "last_update": 1650549012272
+    },
+    {
+      "title": "Exercice Langage C",
+      "description": "Bonjour j’aurais besoin d’une personne pour me faire 3 exercice ( tableau, pointeur, structure ) en langage C demain a 8h45, je peux faire un virement de 20€. Merci",
+      "prix": "20€",
+      "dateRetour": "22 avril",
+      "langage": "C",
+      "support": "Windows ou linux",
+      "niveau": "Intermédiaire",
+      "message": {
+        "idMessage": "966829563755769886",
+        "idChannel": "943817647060025354"
+      },
+      "membre": "188767026712412169",
+      "last_update": 1650580406419
     }
   ],
   "missions_follow": [
-    {
-      "mission_id": 13,
-      "message": {
-        "idMessage": "964794479045382205",
-        "idChannel": "964794477963259954"
-      },
-      "client_id": "281800369498226690",
-      "dev_id": "614052096857341952"
-    },
-    {
-      "mission_id": 15,
-      "message": {
-        "idMessage": "964796375294410772",
-        "idChannel": "964796374065504316"
-      },
-      "client_id": "481509597522427905",
-      "dev_id": "494183404150194224"
-    },
-    {
-      "mission_id": 18,
-      "message": {
-        "idMessage": "964825338528030740",
-        "idChannel": "964825337169055764"
-      },
-      "client_id": "568482613443166208",
-      "dev_id": "750680906288594962"
-    },
-    {
-      "mission_id": 24,
-      "message": {
-        "idMessage": "964910446383620146",
-        "idChannel": "964910442457735309"
-      },
-      "client_id": "933454526583828511",
-      "dev_id": "386614847019810836"
-    },
-    {
-      "mission_id": 25,
-      "message": {
-        "idMessage": "964913147502796940",
-        "idChannel": "964913146420670495"
-      },
-      "client_id": "933454526583828511",
-      "dev_id": "614052096857341952"
-    },
     {
       "mission_id": 26,
       "message": {
@@ -206,6 +304,78 @@
       },
       "client_id": "933454526583828511",
       "dev_id": "607291511087955972"
+    },
+    {
+      "mission_id": 33,
+      "message": {
+        "idMessage": "964985984766849076",
+        "idChannel": "964985983542120459"
+      },
+      "client_id": "923211134901841982",
+      "dev_id": "748832882952503348"
+    },
+    {
+      "mission_id": 45,
+      "message": {
+        "idMessage": "965537260391002202",
+        "idChannel": "965537257962475541"
+      },
+      "client_id": "280004888312676353",
+      "dev_id": "888500298862178304"
+    },
+    {
+      "mission_id": 48,
+      "message": {
+        "idMessage": "966294807620251718",
+        "idChannel": "966294804411588609"
+      },
+      "client_id": "481509597522427905",
+      "dev_id": "135319719858143232"
+    },
+    {
+      "mission_id": 49,
+      "message": {
+        "idMessage": "966662418333847602",
+        "idChannel": "966662416060542986"
+      },
+      "client_id": "481509597522427905",
+      "dev_id": "199844615249985536"
+    },
+    {
+      "mission_id": 52,
+      "message": {
+        "idMessage": "966774349031952435",
+        "idChannel": "966774346670563328"
+      },
+      "client_id": "953240302775312384",
+      "dev_id": "298036131386097665"
+    },
+    {
+      "mission_id": 53,
+      "message": {
+        "idMessage": "966972121664323625",
+        "idChannel": "966972119600738324"
+      },
+      "client_id": "953240302775312384",
+      "dev_id": "462931540427669545"
+    },
+    {
+      "mission_id": 54,
+      "message": {
+        "idMessage": "967048814265516083",
+        "idChannel": "967048811941859348"
+      },
+      "client_id": "532968650802462728",
+      "dev_id": "469576419048030218"
+    },
+    {
+      "mission_id": 55,
+      "message": {
+        "idMessage": "967051786768769074",
+        "idChannel": "967051783555924000"
+      },
+      "client_id": "188767026712412169",
+      "dev_id": "734839907444457525"
     }
   ]
 }

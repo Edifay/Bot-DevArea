@@ -1,13 +1,13 @@
 package devarea.bot.event;
 
-import devarea.backend.controllers.rest.ControllerOAuth2;
+import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
+import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.*;
-import devarea.bot.data.ColorsUsed;
-import devarea.bot.github.GithubEvent;
+import devarea.bot.presets.ColorsUsed;
 import discord4j.common.util.Snowflake;
-import discord4j.core.object.component.ActionRow;
 import discord4j.core.object.component.Button;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.presence.*;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -24,7 +24,8 @@ public class Ready {
     private static boolean already = false;
 
     public static void readyEventFonction(final Snowflake idDevArea, final Snowflake idLogChannel) {
-        Init.client.updatePresence(ClientPresence.of(Status.ONLINE, ClientActivity.playing("//help | Dev'Area Server !"))).subscribe();
+        Init.client.updatePresence(ClientPresence.of(Status.ONLINE, ClientActivity.playing("//help | Dev'Area Server " +
+                "!"))).subscribe();
         Init.devarea = Init.client.getGuildById(idDevArea).block();
         assert Init.devarea != null;
         startAway(() -> {
@@ -43,16 +44,20 @@ public class Ready {
             ).subscribe();
         });
 
+
         System.out.println("Fetching members...");
         long ms = System.currentTimeMillis();
-        Init.membersId.removeAll(Init.membersId);
-        Init.devarea.getMembers().buffer().blockLast().forEach(member -> Init.membersId.add(member.getId()));
-        System.out.println("Fetch took : " + (System.currentTimeMillis() - ms) + "ms, " + Init.membersId.size() + " members fetch !");
-        if (Init.membersId.size() == 0)
+
+        MemberCache.use(Init.devarea.getMembers().buffer().blockLast().toArray(new Member[0]));
+
+        System.out.println("Fetch took : " + (System.currentTimeMillis() - ms) + "ms, " + MemberCache.cacheSize() +
+                " members fetch !");
+        if (MemberCache.cacheSize() == 0)
             System.exit(0);
 
+
         try {
-            Stats.init();
+            StatsHandler.init();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,21 +65,22 @@ public class Ready {
         if (already)
             return;
 
-        Init.idYes = Init.devarea.getGuildEmojiById(Snowflake.of(Init.document.getElementsByTagName("yes").item(0).getChildNodes().item(0).getNodeValue())).block();
-        startAway(() -> Init.idNo = Init.devarea.getGuildEmojiById(Snowflake.of(Init.document.getElementsByTagName("no").item(0).getChildNodes().item(0).getNodeValue())).block());
+        Init.idYes =
+                Init.devarea.getGuildEmojiById(Snowflake.of(Init.document.getElementsByTagName("yes").item(0).getChildNodes().item(0).getNodeValue())).block();
+        startAway(() -> Init.idNo = Init.devarea.getGuildEmojiById(Snowflake.of(Init.document.getElementsByTagName(
+                "no").item(0).getChildNodes().item(0).getNodeValue())).block());
 
         try {
-            startAway(RolesReacts::load);
-            startAway(Stats::start);
-            startAway(MeetupManager::init);
-            startAway(XpCount::init);
+            startAway(RolesReactsHandler::load);
+            startAway(StatsHandler::start);
+            startAway(MeetupHandler::init);
+            startAway(XPHandler::init);
             if (!developing)
                 startAway(Bump::init);
-            startAway(MissionsManager::init);
-            startAway(FreeLanceManager::init);
+            startAway(MissionsHandler::init);
+            startAway(FreeLanceHandler::init);
 
-            startAway(GithubEvent::init);
-            startAway(ControllerOAuth2::init);
+            startAway(RequestHandlerAuth::init);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,6 +88,17 @@ public class Ready {
         System.out.println("Le bot est en ligne !");
 
         already = true;
+
+        startAway(() -> {
+            try {
+                while (true) {
+                    Thread.sleep(86400000);
+                    MemberCache.use(Init.devarea.getMembers().buffer().blockLast().toArray(new Member[0]));
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 }

@@ -62,9 +62,6 @@ public class Init {
     public static BufferedImage backgroundXp;
     public static Document document;
 
-    public static final ArrayList<Snowflake> membersId = new ArrayList<>();
-
-
     public static void initBot() {
         CommandManager.init();
         try {
@@ -146,7 +143,7 @@ public class Init {
             client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(MessageCreate::messageCreateFunction);
             client.getEventDispatcher().on(MessageUpdateEvent.class).subscribe(MessageUpdate::messageUpdateFunction);
             client.getEventDispatcher().on(MessageDeleteEvent.class).subscribe(MessageDelete::messageDeleteFunction);
-            client.getEventDispatcher().on(MemberJoinEvent.class).subscribe(memberJoinEvent -> MemberJoin.memberJoinFunction(finalIdDevArea, finalIdJoinLogChannel, memberJoinEvent));
+            client.getEventDispatcher().on(MemberJoinEvent.class).subscribe(memberJoinEvent -> MemberJoin.memberJoinFunction(finalIdJoinLogChannel, memberJoinEvent));
             client.getEventDispatcher().on(MemberLeaveEvent.class).subscribe(memberLeaveEvent -> MemberLeave.memberLeaveFunction(finalIdDevArea, finalIdJoinLogChannel, memberLeaveEvent));
             client.getEventDispatcher().on(ReactionAddEvent.class).subscribe(ReactionAdd::reactionAddFunction);
             client.getEventDispatcher().on(ReactionRemoveEvent.class).subscribe(ReactionRemove::FunctionReactionRemoveEvent);
