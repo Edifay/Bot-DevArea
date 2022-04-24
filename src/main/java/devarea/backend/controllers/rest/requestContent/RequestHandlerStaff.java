@@ -6,6 +6,7 @@ import devarea.bot.cache.MemberCache;
 import discord4j.core.object.entity.Member;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
 import static devarea.backend.controllers.rest.requestContent.RequestHandlerGlobal.getObjectsFromJson;
 
@@ -24,16 +25,24 @@ public class RequestHandlerStaff {
 
     public static WebStaff[] requestGetStaffList() {
 
-        for (WebStaff staff : staffs) {
+        WebStaff[] clonedStaffList = staffs.clone();
+
+        for (int i = 0; i < staffs.length; i++) {
+            WebStaff staff = staffs[i].clone();
+
             Member member = MemberCache.get(staff.getId());
+            assert member != null;
             staff.setUrlAvatar(member.getAvatarUrl());
             staff.setName(member.getDisplayName());
+            staff.resetId();
+            clonedStaffList[i] = staff;
+
         }
 
-        for (int i = 0; i < staffs.length; i++)
-            staffs[i].setIdCss(i % 2f != 0f ? "pair" : "impair");
+        for (int i = 0; i < clonedStaffList.length; i++)
+            clonedStaffList[i].setIdCss(i % 2f != 0f ? "pair" : "impair");
 
-        return staffs;
+        return clonedStaffList;
     }
 
 }

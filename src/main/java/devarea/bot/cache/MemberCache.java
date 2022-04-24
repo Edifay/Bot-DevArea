@@ -2,6 +2,7 @@ package devarea.bot.cache;
 
 import devarea.bot.cache.tools.CachedMember;
 import discord4j.core.object.entity.Member;
+import reactor.util.annotation.NonNull;
 
 import java.util.HashMap;
 
@@ -9,9 +10,10 @@ public class MemberCache {
 
     private static final HashMap<String, CachedMember> members = new HashMap<>();
 
-    public static Member get(final String memberID) {
+    public static Member get(@NonNull final String memberID) {
         CachedMember cachedMember = getCachedMember(memberID);
         if (cachedMember == null) {
+            if (!working(memberID)) return null;
             cachedMember = new CachedMember(memberID);
             members.put(memberID, cachedMember);
         }
@@ -19,9 +21,10 @@ public class MemberCache {
         return cachedMember.get();
     }
 
-    public static Member fetch(final String memberID) {
+    public static Member fetch(@NonNull final String memberID) {
         CachedMember cachedMember = getCachedMember(memberID);
         if (cachedMember == null) {
+            if (!working(memberID)) return null;
             cachedMember = new CachedMember(memberID);
             members.put(memberID, cachedMember);
         }
@@ -29,9 +32,11 @@ public class MemberCache {
         return cachedMember.fetch();
     }
 
-    public static Member watch(final String memberID) {
+    public static Member watch(@NonNull final String memberID) {
+        if (!working(memberID)) return null;
         CachedMember cachedMember = getCachedMember(memberID);
         if (cachedMember == null) {
+            if (!working(memberID)) return null;
             cachedMember = new CachedMember(memberID);
             cachedMember.get();
             members.put(memberID, cachedMember);
@@ -39,9 +44,10 @@ public class MemberCache {
         return cachedMember.watch();
     }
 
-    public static void reset(final String memberID) {
+    public static void reset(@NonNull final String memberID) {
         CachedMember cachedMember = getCachedMember(memberID);
         if (cachedMember == null) {
+            if (!working(memberID)) return;
             cachedMember = new CachedMember(memberID);
             members.put(memberID, cachedMember);
         }
@@ -49,7 +55,7 @@ public class MemberCache {
         cachedMember.reset();
     }
 
-    public static void use(Member... membersAtAdd) {
+    public static void use(@NonNull Member... membersAtAdd) {
         for (Member member : membersAtAdd) {
             CachedMember cachedMember = getCachedMember(member.getId().asString());
             if (cachedMember == null)
@@ -82,6 +88,13 @@ public class MemberCache {
 
     public static boolean contain(final String memberID) {
         return members.containsKey(memberID);
+    }
+
+    private static boolean working(final String memberID) {
+        boolean working = true;
+        if (memberID == null)
+            working = false;
+        return working;
     }
 
 }

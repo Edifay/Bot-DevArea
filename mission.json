@@ -1,5 +1,5 @@
 {
-  "mission_follow_id": 59,
+  "mission_follow_id": 60,
   "missions": [
     {
       "title": "Création d'un thème WHMCS",
@@ -62,25 +62,6 @@
       "last_update": 1650477412304
     },
     {
-      "title": "Optimisation de BOT Discord",
-      "description": "J'aimerai optimiser mon BOT Discord en lui rajoutant une expansion modération",
-      "prix": "10-20 euros",
-      "dateRetour": "non définie",
-      "langage": "Langage : Python",
-      "support": "Sur mon VPS Windows",
-      "niveau": "3/10",
-      "message": {
-        "idMessage": "963889610147131472",
-        "idChannel": "943817647060025354"
-      },
-      "membre": "281800369498226690",
-      "last_update": 1649881336041,
-      "message_verification": {
-        "idMessage": "966433642995920956",
-        "idChannel": "963888849120002088"
-      }
-    },
-    {
       "title": "Jeux vidéo",
       "description": "Bonjour je recherche un développeurs pour la réalisation d’un jeux web en mode dino sur Google chrome mais modifié",
       "prix": "200-250 euros",
@@ -100,36 +81,6 @@
       }
     },
     {
-      "title": "Bot Monétaire",
-      "description": "Bot Monétaire",
-      "prix": "Entre 70€ et 120€ pour un bot bien complet",
-      "dateRetour": "2 a 3 Semaine maximum",
-      "langage": "Aucune préférence",
-      "support": "Windows",
-      "niveau": "Assez simple",
-      "message": {
-        "idMessage": "964908265702060113",
-        "idChannel": "943817647060025354"
-      },
-      "membre": "933454526583828511",
-      "last_update": 1650122153016
-    },
-    {
-      "title": "Système de connexion/login en python",
-      "description": "j'ai créé un programme payant (20e), mais il se fait partager et sa m'énerve, ducoup j'ai besoin dun système login hwid :)",
-      "prix": "10-20€ a chaque vente !",
-      "dateRetour": "non définie",
-      "langage": "Python",
-      "support": "Windows",
-      "niveau": "1",
-      "message": {
-        "idMessage": "964974210109808700",
-        "idChannel": "943817647060025354"
-      },
-      "membre": "923211134901841982",
-      "last_update": 1650138096007
-    },
-    {
       "title": "Recherche développeur Web",
       "description": "Bonsoir je suis à la recherche d'un développeur web pour la création d'un site pour mon association",
       "prix": "50-60€",
@@ -142,22 +93,11 @@
         "idChannel": "943817647060025354"
       },
       "membre": "708714348725665882",
-      "last_update": 1650140791981
-    },
-    {
-      "title": "Evenement Caritatif site modérateur",
-      "description": "Bonjour, je suis Flav, président de l'association Salad'Corp. \nPour la 2ème édition d'événement caritatif qui se passera fin août nous recherchons un développeur pour  créer un site \"intranet\", qui sera accessible uniquement au modérateur et administrateur. Voici le but du site: \n\n- Des modérateurs rentrent des notes que des jurys donnes aux joueurs selon certain critère \n- Une moyenne est calculé \n- Le tout qui peut être intégré à OBS pour que les spectateurs aient les notes en direct. \n\nC'est pas très compréhensible mais c'est très simple. \n\nN'hésitez pas à me contacter je peux vous montrer en partager mon écran exactement ce que je souhaites. Merci !",
-      "prix": "40€",
-      "dateRetour": "23/04/2022",
-      "langage": "aucune préférence",
-      "support": "Web",
-      "niveau": "Simple",
-      "message": {
-        "idMessage": "965085138318929950",
-        "idChannel": "943817647060025354"
-      },
-      "membre": "178097844262010880",
-      "last_update": 1650164356384
+      "last_update": 1650142110887,
+      "message_verification": {
+        "idMessage": "967527411824594984",
+        "idChannel": "964984962958909440"
+      }
     },
     {
       "title": "Script comparant des données sur un site",
@@ -172,7 +112,11 @@
         "idChannel": "943817647060025354"
       },
       "membre": "714236249048743967",
-      "last_update": 1650192071693
+      "last_update": 1650192512299,
+      "message_verification": {
+        "idMessage": "967738810714685500",
+        "idChannel": "965194083104620625"
+      }
     },
     {
       "title": "Programme de tri et de calcul de temps de chargement de fichier csv/excel",
@@ -293,6 +237,21 @@
       },
       "membre": "188767026712412169",
       "last_update": 1650580406419
+    },
+    {
+      "title": "Dev bot ",
+      "description": "Bonjour je cherche quelle qu'un qui peut me coder un bot discord permettant a des personne de deposer de la crypto, le bot verifie que la crypto est envoyer puis c'est ajouter a son solde , son investissement augmente de 200%  par semaine , au bout de un mois  (3semaine)  il peut retirer .\nEt quand il veut retirer je recois une notif pour faire le virement pour plus d'info vener PV",
+      "prix": "50% de mes gains (represente 15$ minimum )par personne ayant deposer",
+      "dateRetour": "Non définie",
+      "langage": "Bot discord",
+      "support": "windows",
+      "niveau": "expert",
+      "message": {
+        "idMessage": "967476424531406858",
+        "idChannel": "943817647060025354"
+      },
+      "membre": "900402588216885279",
+      "last_update": 1650734754831
     }
   ],
   "missions_follow": [
@@ -349,15 +308,6 @@
       },
       "client_id": "953240302775312384",
       "dev_id": "298036131386097665"
-    },
-    {
-      "mission_id": 53,
-      "message": {
-        "idMessage": "966972121664323625",
-        "idChannel": "966972119600738324"
-      },
-      "client_id": "953240302775312384",
-      "dev_id": "462931540427669545"
     },
     {
       "mission_id": 54,
