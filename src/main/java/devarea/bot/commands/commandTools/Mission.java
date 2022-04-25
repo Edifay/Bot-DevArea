@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import devarea.backend.controllers.tools.WebMission;
+import devarea.bot.automatical.MissionsHandler;
 
 import java.util.Objects;
 
@@ -15,18 +16,22 @@ public class Mission {
     @JsonProperty("description")
     protected String descriptionText;
     @JsonProperty("prix")
-    protected String prix;
+    protected String budget;
     @JsonProperty("dateRetour")
-    protected String dateRetour;
+    protected String deadLine;
     @JsonProperty("langage")
-    protected String langage;
+    protected String language;
     @JsonProperty("support")
     protected String support;
     @JsonProperty("niveau")
     protected String niveau;
+    @JsonProperty("id")
+    protected String id;
 
     @JsonProperty("message")
     protected MessageSeria message;
+    @JsonProperty("createdAt")
+    protected long createdAt;
     @JsonProperty("membre")
     protected String memberId;
     @JsonProperty("last_update")
@@ -38,23 +43,33 @@ public class Mission {
 
     public Mission() {
         this.last_update = System.currentTimeMillis();
+        this.createdAt = System.currentTimeMillis();
+        this.id = MissionsHandler.generateID();
     }
 
-    public Mission(final String title, final String descriptionText, final String prix, final String dateRetour, final String langage, final String support, final String niveau, final String memberId, final MessageSeria message) {
+    public Mission(final String title, final String descriptionText, final String prix, final String dateRetour,
+                   final String langage, final String support, final String niveau, final String memberId,
+                   final MessageSeria message) {
         this.title = title;
         this.descriptionText = descriptionText;
-        this.prix = prix;
-        this.dateRetour = dateRetour;
-        this.langage = langage;
+        this.budget = prix;
+        this.deadLine = dateRetour;
+        this.language = langage;
         this.support = support;
         this.niveau = niveau;
         this.message = message;
         this.memberId = memberId;
+        this.id = MissionsHandler.generateID();
         this.last_update = System.currentTimeMillis();
+        this.createdAt = System.currentTimeMillis();
     }
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @JsonIgnore
@@ -71,31 +86,31 @@ public class Mission {
         return this.descriptionText;
     }
 
-    public void setPrix(String prix) {
-        this.prix = prix;
+    public void setBudget(String budget) {
+        this.budget = budget;
     }
 
     @JsonIgnore
-    public String getPrix() {
-        return this.prix;
+    public String getBudget() {
+        return this.budget;
     }
 
-    public void setDateRetour(String date) {
-        this.dateRetour = date;
-    }
-
-    @JsonIgnore
-    public String getDateRetour() {
-        return this.dateRetour;
-    }
-
-    public void setLangage(String langage) {
-        this.langage = langage;
+    public void setDeadLine(String date) {
+        this.deadLine = date;
     }
 
     @JsonIgnore
-    public String getLangage() {
-        return this.langage;
+    public String getDeadLine() {
+        return this.deadLine;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    @JsonIgnore
+    public String getLanguage() {
+        return this.language;
     }
 
     public void setSupport(String support) {
@@ -153,6 +168,10 @@ public class Mission {
         this.message_verification = message_verification;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @JsonIgnore
     public void update() {
         this.last_update = System.currentTimeMillis();
@@ -164,9 +183,9 @@ public class Mission {
         return "Mission{" +
                 "title='" + title + '\'' +
                 ", descriptionText='" + descriptionText + '\'' +
-                ", prix='" + prix + '\'' +
-                ", dateRetour='" + dateRetour + '\'' +
-                ", langage='" + langage + '\'' +
+                ", prix='" + budget + '\'' +
+                ", dateRetour='" + deadLine + '\'' +
+                ", langage='" + language + '\'' +
                 ", support='" + support + '\'' +
                 ", niveau='" + niveau + '\'' +
                 ", message=" + message +
@@ -176,6 +195,18 @@ public class Mission {
                 '}';
     }
 
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public WebMission toWebMission(){
+        return new WebMission(this);
+    }
+
     @JsonIgnore
     @Override
     public boolean equals(Object o) {
@@ -183,6 +214,6 @@ public class Mission {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Mission mission = (Mission) o;
-        return Objects.equals(title, mission.title) && Objects.equals(descriptionText, mission.descriptionText) && Objects.equals(prix, mission.prix) && Objects.equals(dateRetour, mission.dateRetour) && Objects.equals(langage, mission.langage) && Objects.equals(support, mission.support) && Objects.equals(niveau, mission.niveau) && Objects.equals(message, mission.message) && Objects.equals(memberId, mission.memberId);
+        return Objects.equals(title, mission.title) && Objects.equals(descriptionText, mission.descriptionText) && Objects.equals(budget, mission.budget) && Objects.equals(deadLine, mission.deadLine) && Objects.equals(language, mission.language) && Objects.equals(support, mission.support) && Objects.equals(niveau, mission.niveau) && Objects.equals(message, mission.message) && Objects.equals(memberId, mission.memberId);
     }
 }

@@ -2,6 +2,7 @@ package devarea.bot.cache.tools;
 
 
 import devarea.bot.Init;
+import devarea.bot.cache.MemberCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 
@@ -27,11 +28,11 @@ public class CachedMember {
 
     public Member get() {
         if (this.member == null || needToBeFetch()) {
-           // System.out.println("Call fetch from get !" + needToBeFetch());
+            // System.out.println("Call fetch from get !" + needToBeFetch());
             return fetch();
         } else
-       //     System.out.println("Cached : " + this.member.getUsername());
-        return this.member;
+            //     System.out.println("Cached : " + this.member.getUsername());
+            return this.member;
     }
 
     protected boolean needToBeFetch() {
@@ -40,18 +41,22 @@ public class CachedMember {
 
     public Member fetch() {
         this.member = Init.devarea.getMemberById(Snowflake.of(this.memberID)).block();
+        if (this.member == null) {
+            MemberCache.slash(this.memberID);
+            return null;
+        }
         this.last_fetch = System.currentTimeMillis();
-   //     System.out.println("Fetch : " + this.member.getUsername());
+        //     System.out.println("Fetch : " + this.member.getUsername());
         return this.member;
     }
 
     public Member watch() {
-     //   System.out.println("Watch : " + this.member.getUsername());
+        //   System.out.println("Watch : " + this.member.getUsername());
         return this.member;
     }
 
     public void use(final Member member) throws Exception {
-    //    System.out.println("Use : " + this.member.getUsername());
+        //    System.out.println("Use : " + this.member.getUsername());
         if (this.memberID.equals(member.getId().asString())) {
             this.member = member;
             this.last_fetch = System.currentTimeMillis();

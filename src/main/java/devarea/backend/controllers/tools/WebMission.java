@@ -15,48 +15,58 @@ public class WebMission {
     protected String title;
     @JsonProperty("description")
     protected String description;
-    @JsonProperty("prix")
-    protected String prix;
-    @JsonProperty("date_retour")
-    protected String date_retour;
-    @JsonProperty("langage")
-    protected String langage;
+    @JsonProperty("budget")
+    protected String budget;
+    @JsonProperty("deadLine")
+    protected String deadLine;
+    @JsonProperty("language")
+    protected String language;
     @JsonProperty("support")
     protected String support;
-    @JsonProperty("niveau")
-    protected String niveau;
-    @JsonProperty("member_name")
-    protected String member_name;
-    @JsonProperty("avatar")
-    protected String member_url;
-    @JsonProperty("member_tag")
-    protected String member_tag;
-    @JsonProperty("message_id")
-    protected String message_id;
-    @JsonProperty("last_update")
-    protected String last_update;
+    @JsonProperty("level")
+    protected String level;
+    @JsonProperty("memberName")
+    protected String memberName;
+    @JsonProperty("avatarURL")
+    protected String avatarURL;
+    @JsonProperty("memberTag")
+    protected String memberTag;
+    @JsonProperty("lastUpdate")
+    protected String lastUpdate;
+    @JsonProperty("id")
+    protected String id;
+    @JsonProperty("createdAt")
+    protected long createdAt;
+    @JsonProperty("memberID")
+    protected String memberId;
 
     public WebMission(Mission mission_base) {
         this.mission = mission_base;
 
         this.title = mission_base.getTitle();
         this.description = mission_base.getDescriptionText();
-        this.prix = mission_base.getPrix();
-        this.date_retour = mission_base.getDateRetour();
-        this.langage = mission_base.getLangage();
+        this.budget = mission_base.getBudget();
+        this.deadLine = mission_base.getDeadLine();
+        this.language = mission_base.getLanguage();
         this.support = mission_base.getSupport();
-        this.niveau = mission_base.getNiveau();
-        this.message_id = mission_base.getMessage().getMessageID().asString();
+        this.level = mission_base.getNiveau();
+        this.memberId = mission_base.getMemberId();
+        this.id = mission_base.getId();
+        this.createdAt = mission_base.getCreatedAt();
 
         Member member = MemberCache.get(mission_base.getMemberId());
 
-        this.member_name = member.getDisplayName();
-        this.member_url = member.getAvatarUrl();
-        this.member_tag = member.getTag();
+        this.memberName = member.getDisplayName();
+        this.avatarURL = member.getAvatarUrl();
+        this.memberTag = member.getTag();
 
-        this.last_update = "" + ((System.currentTimeMillis() - mission_base.getLast_update()) / 86400000);
-        if (this.last_update.equals("0"))
-            this.last_update = "1";
+        this.lastUpdate = "" + ((System.currentTimeMillis() - mission_base.getLast_update()) / 86400000);
+        if (this.lastUpdate.equals("0"))
+            this.lastUpdate = "1";
+    }
+
+    public WebMissionPreview toPreview() {
+        return new WebMissionPreview(this);
     }
 
 
@@ -76,7 +86,36 @@ public class WebMission {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WebMission that = (WebMission) o;
-        return Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(prix, that.prix) && Objects.equals(date_retour, that.date_retour) && Objects.equals(langage, that.langage) && Objects.equals(support, that.support) && Objects.equals(niveau, that.niveau) && Objects.equals(member_name, that.member_name) && Objects.equals(member_url, that.member_url) && Objects.equals(member_tag, that.member_tag) && Objects.equals(mission, that.mission);
+        return Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(budget, that.budget) && Objects.equals(deadLine, that.deadLine) && Objects.equals(language, that.language) && Objects.equals(support, that.support) && Objects.equals(level, that.level) && Objects.equals(memberName, that.memberName) && Objects.equals(avatarURL, that.avatarURL) && Objects.equals(memberTag, that.memberTag) && Objects.equals(mission, that.mission);
+    }
+
+    public static class WebMissionPreview {
+
+        @JsonProperty("title")
+        protected String title;
+        @JsonProperty("id")
+        protected String id;
+        @JsonProperty("lastUpdate")
+        protected String lastUpdate;
+        @JsonProperty("description")
+        protected String description;
+        @JsonProperty("avatarURL")
+        protected String avatarURL;
+        @JsonProperty("budget")
+        protected String budget;
+
+        public WebMissionPreview() {
+        }
+
+        public WebMissionPreview(final WebMission mission) {
+            this.title = mission.title;
+            this.id = mission.id;
+            this.lastUpdate = mission.lastUpdate;
+            this.description = mission.description.length() > 91 ? mission.description.substring(0, 91) :
+                    mission.description;
+            this.avatarURL = mission.avatarURL;
+            this.budget = mission.budget;
+        }
     }
 
 }

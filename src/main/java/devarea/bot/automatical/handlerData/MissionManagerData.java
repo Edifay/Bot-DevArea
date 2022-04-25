@@ -5,6 +5,7 @@ import devarea.bot.commands.commandTools.MessageSeria;
 import devarea.bot.commands.commandTools.Mission;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class MissionManagerData {
     @JsonProperty("mission_follow_id")
@@ -14,9 +15,10 @@ public class MissionManagerData {
     @JsonProperty("missions_follow")
     public ArrayList<MissionFollow> missionsFollow;
 
-    public MissionManagerData(final ArrayList<Mission> missions, final int missionFollowId, final ArrayList<MissionFollow> missionsFollow) {
+    public MissionManagerData(final LinkedHashMap<String, Mission> missions, final int missionFollowId,
+                              final ArrayList<MissionFollow> missionsFollow) {
         this.missionFollowId = missionFollowId;
-        this.missions = missions;
+        this.missions = new ArrayList<>(missions.values());
         this.missionsFollow = missionsFollow;
     }
 
@@ -33,7 +35,8 @@ public class MissionManagerData {
         @JsonProperty("dev_id")
         public String devID;
 
-        public MissionFollow(int missionID, final MessageSeria messageSeria, final String clientID, final String devID) {
+        public MissionFollow(int missionID, final MessageSeria messageSeria, final String clientID,
+                             final String devID) {
             this.missionID = missionID;
             this.messageSeria = messageSeria;
             this.clientID = clientID;

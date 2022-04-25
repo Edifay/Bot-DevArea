@@ -5,9 +5,9 @@ import devarea.backend.controllers.tools.WebUserInfo;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.automatical.MissionsHandler;
 import devarea.bot.commands.commandTools.Mission;
+import discord4j.core.object.entity.Member;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static devarea.bot.event.FunctionEvent.startAway;
@@ -15,36 +15,34 @@ import static devarea.bot.event.FunctionEvent.startAway;
 public class RequestHandlerMission {
 
 
-    public static WebMission[] requestGetMissions(int start, int end) {
-        if (start > end)
-            end = start;
+    public static WebMission.WebMissionPreview[] requestPreviewMission(int start, int end) {
+        final ArrayList<Mission> missions = MissionsHandler.getMissions();
+        final int size = missions.size();
 
-        if (end > MissionsHandler.getMissions().size())
-            end = MissionsHandler.getMissions().size();
+        if (start > end) end = start;
+        if (end > size) end = size;
+        if (start > size) start = size;
 
-        if (start > MissionsHandler.getMissions().size())
-            start = MissionsHandler.getMissions().size();
-
-        ArrayList<Mission> list_at_reverse = (ArrayList<Mission>) MissionsHandler.getMissions().clone();
-        Collections.reverse(list_at_reverse);
-        List<Mission> list = list_at_reverse.subList(start, end);
-        ArrayList<WebMission> list_transformed = transformMissionListToMissionWebList(list);
-
-        return list_transformed.toArray(new WebMission[0]);
+        return transformMissionsToWebMissionsPreview(missions.subList(start, end)).toArray(new WebMission.WebMissionPreview[0]);
     }
 
+    public static WebMission requestGetMission(final String id) {
+        return MissionsHandler.get(id).toWebMission();
+    }
 
-    public static String[] requestDeleteMission(String message_id, String code) {
+    public static String requestTookMission(String missionID, String code) {
+        Member member = RequestHandlerAuth.get(code).getMember();
+        return MissionsHandler.tookMissionFromWeb(missionID, member);
+    }
+
+    public static String[] requestDeleteMission(String id, String code) {
         WebUserInfo user = RequestHandlerAuth.get(code);
         if (user != null) {
-            ArrayList<Mission> missions = MissionsHandler.getOf(user.getAsSnowflake());
-
-            for (Mission mission : missions)
-                if (mission.getMessage().getMessageID().asString().equals(message_id)) {
-                    MissionsHandler.clearThisMission(mission);
-                    return new String[]{"deleted"};
-                }
-
+            Mission mission = MissionsHandler.get(id);
+            if (mission != null) {
+                MissionsHandler.clearThisMission(mission);
+                return new String[]{"deleted"};
+            }
             return new String[]{"mission_not_find"};
         } else
             return new String[]{"wrong_code"};
@@ -88,12 +86,12 @@ public class RequestHandlerMission {
 
     }
 
-    public static ArrayList<WebMission> transformMissionListToMissionWebList(List<Mission> list) {
-        ArrayList<WebMission> list_transformed = new ArrayList<>();
+    public static ArrayList<WebMission.WebMissionPreview> transformMissionsToWebMissionsPreview(List<Mission> list) {
+        ArrayList<WebMission.WebMissionPreview> list_transformed = new ArrayList<>();
 
         for (Mission miss : list)
             if (MemberCache.contain(miss.getMemberId()))
-                list_transformed.add(new WebMission(miss));
+                list_transformed.add(new WebMission(miss).toPreview());
         return list_transformed;
     }
 }

@@ -72,8 +72,10 @@ public class Mission extends LongCommand {
                         .color(ColorsUsed.same)
                         .title("Missions")
                         .description("`delete` -> supprimer une mission")
-                        .addField("Créer une mission", "Pour créer une mission il suffit de réagir dans le channel <#" + Init.idMissionsPayantes.asString() + ">.", false)
-                        .addField("Le site", "Vous avez la possibilité de contrôler vos missions à partir du site internet, dans l'onglet options : https://devarea.fr.", false)
+                        .addField("Créer une mission", "Pour créer une mission il suffit de réagir dans le channel " +
+                                "<#" + Init.idMissionsPayantes.asString() + ">.", false)
+                        .addField("Le site", "Vous avez la possibilité de contrôler vos missions à partir du site " +
+                                "internet, dans l'onglet options : https://devarea.fr.", false)
                         .footer("Vous pouvez annuler | cancel", null).build()).build());
             }
 

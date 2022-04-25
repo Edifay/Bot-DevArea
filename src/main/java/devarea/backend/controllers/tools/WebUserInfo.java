@@ -31,7 +31,7 @@ public class WebUserInfo {
     @JsonProperty
     protected int level;
     @JsonProperty
-    protected WebMission[] missions_list;
+    protected WebMission.WebMissionPreview[] missions_list;
     @JsonProperty
     protected String tag;
     @JsonProperty
@@ -76,7 +76,7 @@ public class WebUserInfo {
 
         // Member Missions
         this.missions_list =
-                RequestHandlerMission.transformMissionListToMissionWebList(MissionsHandler.getOf(Snowflake.of(this.id))).toArray(new WebMission[0]);
+                RequestHandlerMission.transformMissionsToWebMissionsPreview(MissionsHandler.getOf(Snowflake.of(this.id))).toArray(new WebMission.WebMissionPreview[0]);
 
         // Member XP
         if (XPHandler.haveBeenSet(getAsSnowflake())) {

@@ -10,17 +10,28 @@ import static devarea.backend.controllers.rest.requestContent.RequestHandlerMiss
 public class ControllerMissions {
 
 
-    @GetMapping("missions/get")
-    public static WebMission[] get(@RequestParam(value = "start", defaultValue = "0") int start,
-                                   @RequestParam(value = "end", defaultValue = Integer.MAX_VALUE + "") int end) {
-        return requestGetMissions(start, end);
+    @GetMapping("missions/preview")
+    public static WebMission.WebMissionPreview[] preview(@RequestParam(value = "start", defaultValue = "0") int start,
+                                                         @RequestParam(value = "end", defaultValue =
+                                                                 Integer.MAX_VALUE + "") int end) {
+        return requestPreviewMission(start, end);
     }
 
+    @GetMapping("missions/get")
+    public static WebMission getMission(@RequestParam(value = "id", required = true) String id) {
+        return requestGetMission(id);
+    }
+
+    @GetMapping("missions/took")
+    public static String[] tookMission(@RequestParam(value = "missionID", required = true) String missionID,
+                                       @RequestParam(value = "code", required = true) String code) {
+        return new String[]{requestTookMission(missionID, code)};
+    }
 
     @GetMapping("missions/delete")
-    public static String[] delete(@RequestParam(value = "message_id") String message_id,
+    public static String[] delete(@RequestParam(value = "missionID") String id,
                                   @RequestParam(value = "code") String code) {
-        return requestDeleteMission(message_id, code);
+        return requestDeleteMission(id, code);
     }
 
     @PostMapping("missions/create")

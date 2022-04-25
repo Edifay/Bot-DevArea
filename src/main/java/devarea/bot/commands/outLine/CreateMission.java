@@ -40,8 +40,8 @@ public class CreateMission extends LongCommand {
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 mission.setNiveau(event.getMessage().getContent());
-                MissionsHandler.createMission(mission.getTitle(), mission.getDescriptionText(), mission.getPrix(),
-                        mission.getDateRetour(), mission.getLangage(), mission.getSupport(), mission.getNiveau(),
+                MissionsHandler.createMission(mission.getTitle(), mission.getDescriptionText(), mission.getBudget(),
+                        mission.getDeadLine(), mission.getLanguage(), mission.getSupport(), mission.getNiveau(),
                         member);
                 try {
                     startAway(() -> member.getPrivateChannel().block().createMessage(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder().title("Suivis d'une mission").description("La commande `//mission` permet de gérer sa mission, pour par exemple la supprimer.\n\n**Le site web** permet aussi de gérer ces missions dans l'onglet options : https://devarea.fr.").color(ColorsUsed.same).build()).build()).block());
@@ -74,7 +74,7 @@ public class CreateMission extends LongCommand {
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                mission.setLangage(event.getMessage().getContent());
+                mission.setLanguage(event.getMessage().getContent());
                 return callStape(0);
             }
         };
@@ -88,7 +88,7 @@ public class CreateMission extends LongCommand {
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                mission.setDateRetour(event.getMessage().getContent());
+                mission.setDeadLine(event.getMessage().getContent());
                 return callStape(0);
             }
         };
@@ -102,7 +102,7 @@ public class CreateMission extends LongCommand {
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                mission.setPrix(event.getMessage().getContent());
+                mission.setBudget(event.getMessage().getContent());
                 return callStape(0);
             }
         };
