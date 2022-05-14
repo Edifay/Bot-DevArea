@@ -1,3 +1,6 @@
+Le code ici n'est pas mis à jour régulièrement le repo à jour est celui-ci : https://github.com/DevAreaServer/Bot_DevArea
+
+
 Bot discord pour Dev'Area
 ============
 > Voici le bot discord du serveur Dev'Area.
