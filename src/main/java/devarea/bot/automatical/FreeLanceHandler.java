@@ -206,7 +206,7 @@ public class FreeLanceHandler {
                    /* ((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block()).createMessage
                    (messageCreateSpec -> {
                         messageCreateSpec.setContent("Le membre : <@" + freeLance.getMemberId() + "> est considéré
-                        comme \"left\" sa mission devrait être supprimé !");
+                        comme \"left\" sa mission devrait être supprimée !");
                     }).block();*/
                     /*atRemove.add(freeLance);
                     try {
