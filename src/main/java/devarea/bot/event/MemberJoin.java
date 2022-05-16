@@ -20,7 +20,7 @@ public class MemberJoin {
 
         if (channelJoin == null)
             channelJoin = (TextChannel) Init.devarea.getChannelById(finalIdJoinLogChannel).block();
-        channelJoin.createMessage(msg -> msg.setContent(event.getMember().getDisplayName() + " a rejoins le serveur !")).subscribe();
+        channelJoin.createMessage(msg -> msg.setContent(event.getMember().getDisplayName() + " a rejoint le serveur !")).subscribe();
 
         if (!Main.developing)
             CommandManager.addManualCommand(event.getMember(), new ConsumableCommand(JoinCommand.class) {

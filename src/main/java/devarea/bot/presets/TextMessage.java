@@ -17,11 +17,11 @@ public class TextMessage {
      */
     public static final String commandNotFound = "La commande que vous avez demandée n'existe pas !";
     /*
-        Message quand l'utiliseteur n'a pas la permissions de faire la commande qu'il a demandé
+        Message quand l'utilisateur n'a pas la permission de faire la commande qu'il a demandé
      */
     public static final String haventPermission = "Vous n'avez pas la permission d'exécuter cette commande !";
     /*
-        Quand le bot s'arrète !
+        Quand le bot s'arrête !
      */
     public static final String stopCommand = "Le bot a été arrêté ! :o:";
     /*
@@ -31,11 +31,11 @@ public class TextMessage {
     /*
         Le premier message lors du questionnaire de bienvenue
      */
-    public static final String firstText = "Pour que tu puisses bien t'intégrer au serveur, je vais te donner quelques informations, et t'en demander quelques une pour que je puisse bien te diriger !\n\nTu en as pour maximum **2min**, mais attention, tu seras kick après 10min sans avoir complété le questionnaire !\n\nPour passer à la suite il te faut réagir <:ayy:" + Init.idYes.getId().asString() + "> ! Bonne chance !";
+    public static final String firstText = "Pour que tu puisses bien t'intégrer au serveur, je vais te donner quelques informations, et t'en demander quelques-unes pour que je puisse bien te diriger !\n\nTu en as pour maximum **2min**, mais attention, tu seras kick après 10min sans avoir complété le questionnaire !\n\nPour passer à la suite il te faut réagir <:ayy:" + Init.idYes.getId().asString() + "> ! Bonne chance !";
     /*
-        Les règles pour que la communication lors du code sois correcte
+        Les règles pour que la communication lors du code soit correcte
      */
-    public static final String rulesForSpeakCode = "Pour pouvoir discuter efficacement avec la communauté voici quelques règles de base :\n\n- Essayes de parler avec un bon français.\n\n" + "- Le code ne doit pas être envoyé en brut. Tu peux utiliser \\`\\`\\`code\\`\\`\\` => ```code``` pour les petits codes (moins de 2000 caractères). Pour les codes plus grands tu peux utiliser des sites externes comme hastbin/pastebin.\n\n" + "- Poses ta question directement, pas de \"**Quelqu'un peut m'aider ?**\" ou autres questions sans intérêt. Poses directement ta question dans le channel adapté, avec du code et les recherches que tu as effectuées (avant de poser une question, vas regarder rapidement sur google pour être sûr que la réponse n'y est pas déjà).\n\n" + "- Fais attention où tu parles ! **ATTENTION** : le serveur est très structuré, pour la bonne compréhension essayes de respecter les channels.\n\nSi tu as bien lu ces règles, réagis avec <:ayy:" + Init.idYes.getId().asString() + ">";
+    public static final String rulesForSpeakCode = "Pour pouvoir discuter efficacement avec la communauté voici quelques règles de base :\n\n- Essaye de parler avec un bon français.\n\n" + "- Le code ne doit pas être envoyé en brut. Tu peux utiliser \\`\\`\\`code\\`\\`\\` => ```code``` pour les petits codes (moins de 2000 caractères). Pour les codes plus grands tu peux utiliser des sites externes comme hastbin/pastebin.\n\n" + "- Pose ta question directement, pas de \"**Quelqu'un peut m'aider ?**\" ou autres questions sans intérêt. Pose directement ta question dans le channel adapté, avec du code et les recherches que tu as effectuées (avant de poser une question, va regarder rapidement sur google pour être sûr que la réponse n'y est pas déjà).\n\n" + "- Fais attention où tu parles ! **ATTENTION** : le serveur est très structuré, pour la bonne compréhension essaye de respecter les channels.\n\nSi tu as bien lu ces règles, réagis avec <:ayy:" + Init.idYes.getId().asString() + ">";
     /*
         Les règles pour demander des missions
      */
@@ -47,9 +47,9 @@ public class TextMessage {
     /*
         Le message mettant en avant le channel présentation
      */
-    public static final String presentation = "Avant d'aller parler dans les channels et de rencontrer les membres de la communauté, essayes de faire une présentation de toi qui permettra d'entamer la discussion, et d'en savoir un peu plus sur toi ! <#" + Init.idPresentation.asString() + ">" + "\n\nCliques sur : <:ayy:" + Init.idYes.getId().asString() + "> pour accéder à la suite.";
+    public static final String presentation = "Avant d'aller parler dans les channels et de rencontrer les membres de la communauté, essaye de faire une présentation de toi qui permettra d'entamer la discussion, et d'en savoir un peu plus sur toi ! <#" + Init.idPresentation.asString() + ">" + "\n\nCliques sur : <:ayy:" + Init.idYes.getId().asString() + "> pour accéder à la suite.";
     /*
-        Le message mmettant en avant le channel des rôles
+        Le message mettant en avant le channel des rôles
      */
     public static final String roles = "Tu as maintenant accès au <#" + Init.idRolesChannel.asString() + ">, tu dois choisir tes rôles avec précision, **attention cela est la base du serveur**.\n\nJe te donne accès au serveur dans 30 secondes (ne t'inquiète pas si tu prends plus que 30 secondes tu as tout le temps qu'il te faut) tu as donc le temps de prendre tes <#" + Init.idRolesChannel.asString() + ">.\n\nBienvenue !";
     /*
@@ -66,7 +66,7 @@ public class TextMessage {
             .color(ColorsUsed.just)
             .timestamp(Instant.now()).build();
     /*
-        Le message lord de l'help command pour les admins
+        Le message lors de l'help command pour les admins
      */
     public static final EmbedCreateSpec helpEmbedAdmin = EmbedCreateSpec.builder()
             .title("Voici la liste des commandes admin:")

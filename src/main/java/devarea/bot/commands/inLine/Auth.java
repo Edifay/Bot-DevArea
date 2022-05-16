@@ -23,9 +23,9 @@ public class Auth extends ShortCommand {
         final Member reelMember = MemberCache.get(message.getAuthor().get().getId().asString());
         final String code = RequestHandlerAuth.getCodeForMember(reelMember.getId().asString());
         sendEmbed(EmbedCreateSpec.builder()
-                .title("Authentification réussi !")
-                .description("Toutes les informations lié à l'authentification au site de **Dev'Area** t'ont été " +
-                        "transmises par Message Privé !\n\nSi tu ne l'as pas reçu n'hésites pas à nous contacter !")
+                .title("Authentification réussie !")
+                .description("Toutes les informations liées à l'authentification au site de **Dev'Area** t'ont été " +
+                        "transmises par Message Privé !\n\nSi tu ne l'as pas reçu n'hésite pas à nous contacter !")
                 .color(ColorsUsed.just)
                 .build(), false);
         final Message message_at_edit = reelMember.getPrivateChannel().block().createMessage(MessageCreateSpec.builder()

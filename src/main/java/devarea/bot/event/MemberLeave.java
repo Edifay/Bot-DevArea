@@ -26,7 +26,7 @@ public class MemberLeave {
         if (channel == null)
             channel =
                     (TextChannel) Init.client.getGuildById(finalIdDevArea).block().getChannelById(finalIdJoinLogChannel).block();
-        channel.createMessage(msg -> msg.setContent(memberLeaveEvent.getMember().get().getDisplayName() + " a quitter" +
+        channel.createMessage(msg -> msg.setContent(memberLeaveEvent.getMember().get().getDisplayName() + " a quitté" +
                 " le serveur !")).subscribe();
     }
 }
