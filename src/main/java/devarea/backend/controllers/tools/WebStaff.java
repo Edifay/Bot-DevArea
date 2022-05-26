@@ -14,8 +14,6 @@ public class WebStaff {
     private String urlAvatar;
     @JsonProperty("idCss")
     private String idCss;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("id")
     private String id;
 
@@ -38,11 +36,6 @@ public class WebStaff {
 
     public String getId() {
         return id;
-    }
-
-    @JsonIgnore
-    public void resetId() {
-        this.id = null;
     }
 
     public void setUrlAvatar(String urlAvatar) {

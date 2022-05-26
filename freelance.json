@@ -535,7 +535,7 @@
       }
     ],
     "message": {
-      "idMessage": "967747465648418847",
+      "idMessage": "972473608280629260",
       "idChannel": "856081355309842452"
     },
     "membre": "480013899891212289"
@@ -1040,24 +1040,6 @@
     "membre": "846022004918452225"
   },
   {
-    "name": "Div_YT",
-    "description": "9 années de python à mon actif",
-    "fields": [
-      {
-        "title": "Développement de bot discord en python",
-        "description": "+50euros",
-        "prix": "Empty",
-        "temps": "empty",
-        "inline": false
-      }
-    ],
-    "message": {
-      "idMessage": "930561456381001768",
-      "idChannel": "856081355309842452"
-    },
-    "membre": "494183404150194224"
-  },
-  {
     "name": "Shactrap",
     "description": "Développeur par passion. Je code des bot discord en JavaScript. Que ce soit de petits programmes ou de grands programmes, je capable de faire tous types de bot discord.",
     "fields": [
@@ -1380,7 +1362,7 @@
       }
     ],
     "message": {
-      "idMessage": "965248721061314590",
+      "idMessage": "970732177446817882",
       "idChannel": "856081355309842452"
     },
     "membre": "386614847019810836"
@@ -1402,5 +1384,186 @@
       "idChannel": "856081355309842452"
     },
     "membre": "746343302160318594"
+  },
+  {
+    "name": "dark-light",
+    "description": "développeur front-end",
+    "fields": [
+      {
+        "title": "Resolution des exercices HMTL5 CSS3 JS REACT",
+        "description": "salut, je propose mes services dans la résolution des exercices en html5 css3 js react , Je vais convertir vos fichiers psd en html5, je vais faire le front de votre application ou site",
+        "prix": "20 variable",
+        "temps": "en fonction de la tâche",
+        "inline": false
+      },
+      {
+        "title": "conversion des PSD en HTML5",
+        "description": "je vais vous convertir votre fichier psd en html",
+        "prix": "10e variable",
+        "temps": "en fonction de la tâche",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "969592286369415209",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "750512847577939979"
+  },
+  {
+    "name": "Mallet Lorenzo",
+    "description": "Brevet",
+    "fields": [
+      {
+        "title": "Création de serveur discord",
+        "description": "Je peut vous créer n'importe quel serveur à pars NSFW",
+        "prix": "Boost/Nitro",
+        "temps": "https://discord.gg/NB3k7jbz7b",
+        "inline": false
+      },
+      {
+        "title": "Configuration de serveur discord",
+        "description": "Je peut vous rendre une meilleur visibilité sur votre serveur discord, permission ajoute des bots etc...",
+        "prix": "Boost/Nitro",
+        "temps": "2j",
+        "inline": false
+      },
+      {
+        "title": "Création de Bots",
+        "description": "Je peut vous créer un Bots pour l'économie, modération Bienvenue \nVous pouvez précisez et je vous dirais si je pourrais",
+        "prix": "Boost/Nitro",
+        "temps": "2j",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "https://discord.gg/NB3k7jbz7b",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "970013681612099664",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "789932598293692428"
+  },
+  {
+    "name": "Div YT",
+    "description": "ça fait 6 ans que je code en python et j'ai vraiment une grande expérience en tous les languages. Je propose des services en python mais je sais programmer en Java, C/C++, un peu JS .\nJe n'ai pas de diplôme étant au lycée.",
+    "fields": [
+      {
+        "title": "Bot Discord en Python",
+        "description": "Je vous crée un bot pour vos serveurs discord en python avec la lib Discord.py , avec le code open-source. L'hébergeur n'est pas compris dans l'offre",
+        "prix": "+ de 20 euros mais à définir selon le bot",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Aide dans de divers projets pas très longs",
+        "description": "Je vous aide dans vos projets, mais je suis en mesure de refuser des clients si le projet me parait trop long car je fais d'autres choses importantes à côté",
+        "prix": "Prix variable - A définir",
+        "temps": "empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "978711205092917348",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "494183404150194224"
+  },
+  {
+    "name": "Myrmidons",
+    "description": "je suis développeur depuis maintenant 4 ans, je suis rapide, efficace et perfectionniste",
+    "fields": [
+      {
+        "title": "bot discord",
+        "description": "je peux vous faire un bot discord complet, jolie et avec de nombreuses fonctionnalités et commandes de votre choix",
+        "prix": "2~5€ (négociable)",
+        "temps": "dans la semaine",
+        "inline": false
+      },
+      {
+        "title": "site web",
+        "description": "je peux vous faire un jolie site complet avec de nombreuses pages interactives et intuitive \nje saurai protéger votre site car je m'y connais dans le domaine de la cybersécurité",
+        "prix": "5~10€ (négociable)",
+        "temps": "dans la semaine",
+        "inline": false
+      },
+      {
+        "title": "programme python",
+        "description": "vous avez un exercice ou un projet scolaire en python a faire ? je peux vous le faire\nvous voulez un logiciel/application pour répondre a vos besoin ? je peux vous le faire",
+        "prix": "2~20€ (a voir)",
+        "temps": "dans la semaine, dans le mois si c'est un logiciel",
+        "inline": false
+      },
+      {
+        "title": "cours",
+        "description": "vous voulez progresser rapidement en partant d'aucune base et compétence, pour ensuite avec un très bon niveau ?\nje peux vous faire des cours de programmation complet pour avoir un niveau intermédiaire/pro en quelques semaine\nlangages : python, site web(html, css, js)",
+        "prix": "~10€ / semaine (négociable)",
+        "temps": "empty",
+        "inline": false
+      },
+      {
+        "title": "Liens",
+        "description": "site pour un ancien client (avec le style de son choix) : https://aventures-crypto.ovh/ (prix : 3~4€)",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "976460954181201950",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "798111107712811050"
+  },
+  {
+    "name": "Paul Millet",
+    "description": "Je m'appelle Paul Millet, je suis un entrepreneur & développeur passionnée.\n\nPour le côté entrepreneur, je suis entrain de lancer deux startup ^^ (une axée sur un projet Web 3.0 et l'autre une boite de prestation technique d'un nouveau genre)\nPour le côté dev, je travaille avec des plateformes tel que Open-Stack, K8s, AWS, MaaS, JaaS etc ... Pour les langs : Elixir, TypeScript, Rust, Golang, et enfin mes framework : React, Phoenix, Next.JS.\n\nMes jobs :\n- CEO @ Galaxiat => Plateforme de découverte de contenu\n- CTO @ Blue2Start => Entreprise de prestation\n- Tech Lead @ Redstart => Incubateur a startup",
+    "fields": [
+      {
+        "title": "Liens",
+        "description": "Mes liens :\n- https://paulmillet.net\n- https://www.linkedin.com/in/paul-millet/\n- https://github.com/warstrolo\n- me@paulmillet.net",
+        "prix": "Empty",
+        "temps": "Empty",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "978700839558455346",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "944705400744341595"
+  },
+  {
+    "name": "Margotin Jonathan",
+    "description": "Je suis passionné d’informatique depuis l’âge de 11 ans, soit maintenant 8 ans, je n’ai pas de diplôme dans ce domaine, mais avec toutes ces années j’ai développé des compétences, je sous traitre actuellement des entreprises tel que Logoxane, CmsFrance, PurpleHosting.",
+    "fields": [],
+    "message": {
+      "idMessage": "978982475260919818",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "539081853689397259"
+  },
+  {
+    "name": "BlackWolf",
+    "description": "Je suis un jeune passionné d'informatique et je souhaite en faire mon métier.\nJe compte devenir indépendant en temps que développeur, mais je ne sais pas encore quelles branches exactement...\nMême si je ne suis qu'au passage du brevet, je pourrais vous développer un bon Bot Discord, et je suis en cours d'apprentissage d'HTML et CSS (pour les sites web) \uD83D\uDE09",
+    "fields": [
+      {
+        "title": "Bot Discord +50 commandes",
+        "description": "Je suis capable de faire un bot Discord ave environ 50 commandes (voir plus selon les envies) !\nVoici mes compétences en therme de bot Discord :\n\n\uD83D\uDECE️・**Modération** : kick, ban, unban, mute, unmute, lock, unlock, anti-raid\n\n⚙️・**Configuration** : Bienvenue, aurevoir, whitelist\n\n\uD83D\uDCAD・**Message** : embed, say , clear\n\n\uD83D\uDD25・**Utilitaire** : addRole, removeRole, roleall\n\nℹ️・**Information** : userinfo, serverinfo, botinfo, roles, whitelist_members\n\n***PS : Je suis entrain de travailler sur mon bot personnel, donc je rajoute des commandes au fur et à mesure. Les commandes ici ne sont que des exemples, je peux vous en faire des personnalisées si besoin.***",
+        "prix": "Le prix varie selon la demande.",
+        "temps": "Généralement, en moins de 2 semaines.",
+        "inline": false
+      }
+    ],
+    "message": {
+      "idMessage": "979047356953661500",
+      "idChannel": "856081355309842452"
+    },
+    "membre": "556776817998954516"
   }
 ]

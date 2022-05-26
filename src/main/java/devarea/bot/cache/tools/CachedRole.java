@@ -60,7 +60,9 @@ public class CachedRole {
         int count = 0;
 
         for (CachedMember member : MemberCache.cache().values())
-            if (member.member.getRoleIds().contains(Snowflake.of(roleID)))
+            if (member.watch() == null)
+                System.err.println("ERROR !!!!!!!!!!!!! -> Le membre est null !");
+            else if (member.watch().getRoleIds().contains(Snowflake.of(roleID)))
                 count++;
 
         return count;

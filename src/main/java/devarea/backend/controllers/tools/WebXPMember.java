@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class WebXPMember {
 
-    @JsonIgnore
+    @JsonProperty("id")
     protected String id;
     @JsonProperty("name")
     protected String name;

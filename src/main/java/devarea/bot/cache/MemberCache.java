@@ -38,9 +38,11 @@ public class MemberCache {
         if (cachedMember == null) {
             if (!working(memberID)) return null;
             cachedMember = new CachedMember(memberID);
-            cachedMember.get();
             members.put(memberID, cachedMember);
+            cachedMember.get();
         }
+        if (getCachedMember(memberID) == null)
+            return null;
         return cachedMember.watch();
     }
 
@@ -57,14 +59,16 @@ public class MemberCache {
 
     public static void use(@NonNull Member... membersAtAdd) {
         for (Member member : membersAtAdd) {
-            CachedMember cachedMember = getCachedMember(member.getId().asString());
-            if (cachedMember == null)
-                members.put(member.getId().asString(), new CachedMember(member, System.currentTimeMillis()));
-            else {
-                try {
-                    cachedMember.use(member);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (member != null) {
+                CachedMember cachedMember = getCachedMember(member.getId().asString());
+                if (cachedMember == null)
+                    members.put(member.getId().asString(), new CachedMember(member, System.currentTimeMillis()));
+                else {
+                    try {
+                        cachedMember.use(member);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

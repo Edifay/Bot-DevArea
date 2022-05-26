@@ -15,18 +15,22 @@ public class MemberLeave {
 
     public static void memberLeaveFunction(Snowflake finalIdDevArea, Snowflake finalIdJoinLogChannel,
                                            MemberLeaveEvent memberLeaveEvent) {
+        try {
+            MemberCache.slash(memberLeaveEvent.getUser().getId().asString());
 
-        MemberCache.slash(memberLeaveEvent.getUser().getId().asString());
+            if (XPHandler.haveBeenSet(memberLeaveEvent.getUser().getId()))
+                XPHandler.remove(memberLeaveEvent.getUser().getId());
 
-        if (XPHandler.haveBeenSet(memberLeaveEvent.getUser().getId()))
-            XPHandler.remove(memberLeaveEvent.getUser().getId());
-
-        CommandManager.left(memberLeaveEvent.getUser().getId());
-        RequestHandlerAuth.left(memberLeaveEvent.getUser().getId().asString());
-        if (channel == null)
-            channel =
-                    (TextChannel) Init.client.getGuildById(finalIdDevArea).block().getChannelById(finalIdJoinLogChannel).block();
-        channel.createMessage(msg -> msg.setContent(memberLeaveEvent.getMember().get().getDisplayName() + " a quitter" +
-                " le serveur !")).subscribe();
+            CommandManager.left(memberLeaveEvent.getUser().getId());
+            RequestHandlerAuth.left(memberLeaveEvent.getUser().getId().asString());
+            if (channel == null)
+                channel =
+                        (TextChannel) Init.client.getGuildById(finalIdDevArea).block().getChannelById(finalIdJoinLogChannel).block();
+            channel.createMessage(msg -> msg.setContent(memberLeaveEvent.getMember().get().getDisplayName() + " a " +
+                    "quitter" +
+                    " le serveur !")).subscribe();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

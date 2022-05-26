@@ -2,7 +2,8 @@ package devarea.backend.controllers.rest.requestContent;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import devarea.backend.controllers.tools.WebUserInfo;
+import devarea.backend.controllers.tools.userInfos.WebPrivateUserInfos;
+import devarea.backend.controllers.tools.userInfos.WebPublicUserInfos;
 import devarea.bot.Init;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.core.object.entity.Member;
@@ -23,7 +24,7 @@ public class RequestHandlerGlobal {
     public static ArrayList<String> couldown = new ArrayList<>();
 
     public static String[] requestSendMessageToMember(String message_id, String message, String code) {
-        WebUserInfo user = RequestHandlerAuth.get(code);
+        WebPrivateUserInfos user = RequestHandlerAuth.get(code);
         if (user != null && !couldown.contains(code)) {
             couldown.add(code);
             startAway(() -> {
@@ -185,7 +186,6 @@ public class RequestHandlerGlobal {
             return new String(password);
         }
     }
-
 
 
 }

@@ -165,9 +165,9 @@ public class MissionsHandler {
                 });
             }
 
-        System.out.println("Il y a en tout : " + atRemove.size() + " missions à supprimer !");
-
         if (atRemove.size() == 0) return false;
+
+        System.out.println("Il y a en tout : " + atRemove.size() + " missions à supprimer !");
 
         for (Mission mission : atRemove)
             missions.remove(mission.getId(), mission);
@@ -337,8 +337,8 @@ public class MissionsHandler {
         set.add(PermissionOverwrite.forMember(Snowflake.of(mission.getMemberId()),
                 PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY,
                         Permission.SEND_MESSAGES), PermissionSet.of()));
-        set.add(PermissionOverwrite.forRole(Snowflake.of("868441850971824149"),
-                PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
+        set.add(PermissionOverwrite.forRole(Snowflake.of("777782222920744990"), PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
+        set.add(PermissionOverwrite.forRole(Snowflake.of("768383784571240509"), PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
 
         TextChannel channel = Init.devarea.createTextChannel(TextChannelCreateSpec.builder()
                 .parentId(Snowflake.of("964757205184299028"))
@@ -434,7 +434,9 @@ public class MissionsHandler {
                     set.add(PermissionOverwrite.forMember(Snowflake.of(mission.devID), PermissionSet.of(),
                             PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY,
                                     Permission.SEND_MESSAGES)));
-                    set.add(PermissionOverwrite.forRole(Snowflake.of("868441850971824149"),
+                    set.add(PermissionOverwrite.forRole(Snowflake.of("777782222920744990"),
+                            PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
+                    set.add(PermissionOverwrite.forRole(Snowflake.of("768383784571240509"),
                             PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
 
                     ((TextChannel) event.getInteraction().getChannel().block()).edit(TextChannelEditSpec.builder()

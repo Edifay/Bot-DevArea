@@ -1,6 +1,6 @@
 package devarea.backend.controllers.rest;
 
-import devarea.backend.controllers.tools.WebUserInfo;
+import devarea.backend.controllers.tools.userInfos.WebPrivateUserInfos;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +17,7 @@ import static devarea.backend.controllers.rest.requestContent.RequestHandlerAuth
 public class ControllerAuth {
 
     @GetMapping("/auth/get")
-    public static WebUserInfo getUserInfo(@RequestParam(value = "code") final String code) throws IOException {
+    public static WebPrivateUserInfos getUserInfo(@RequestParam(value = "code") final String code) throws IOException {
         return requestGetUserInfo(code);
     }
 

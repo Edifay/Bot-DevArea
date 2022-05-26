@@ -34,7 +34,6 @@ public class RequestHandlerStaff {
             assert member != null;
             staff.setUrlAvatar(member.getAvatarUrl());
             staff.setName(member.getDisplayName());
-            staff.resetId();
             clonedStaffList[i] = staff;
 
         }

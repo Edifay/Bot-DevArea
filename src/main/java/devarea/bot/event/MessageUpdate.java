@@ -6,7 +6,7 @@ import discord4j.core.object.entity.Message;
 public class MessageUpdate {
     public static void messageUpdateFunction(MessageUpdateEvent messageUpdateEvent) {
         try {
-            final Message message = messageUpdateEvent.getMessage().block();
+            /*final Message message = messageUpdateEvent.getMessage().block();
 
             if (message.getAuthor().get().isBot() || messageUpdateEvent.getGuildId().isEmpty())
                 return;
