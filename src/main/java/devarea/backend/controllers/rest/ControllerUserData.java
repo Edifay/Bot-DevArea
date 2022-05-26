@@ -1,8 +1,5 @@
 package devarea.backend.controllers.rest;
 
-import devarea.backend.controllers.handlers.UserInfosHandlers;
-import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
-import devarea.backend.controllers.tools.userInfos.WebPrivateUserInfos;
 import devarea.backend.controllers.tools.userInfos.WebPublicUserInfos;
 import org.springframework.web.bind.annotation.*;
 

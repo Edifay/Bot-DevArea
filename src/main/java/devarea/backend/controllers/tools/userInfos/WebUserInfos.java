@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import devarea.backend.controllers.handlers.UserInfosHandlers;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerMission;
+import devarea.backend.controllers.tools.WebFreelance;
 import devarea.backend.controllers.tools.WebMission;
 import devarea.backend.controllers.tools.badges.Badges;
+import devarea.bot.automatical.FreeLanceHandler;
 import devarea.bot.automatical.MissionsHandler;
 import devarea.bot.automatical.XPHandler;
 import devarea.bot.cache.MemberCache;
@@ -34,6 +36,8 @@ public abstract class WebUserInfos {
     protected int level;
     @JsonProperty
     protected WebMission.WebMissionPreview[] missions_list;
+    @JsonProperty
+    protected WebFreelance freelance;
     @JsonProperty
     protected String tag;
     @JsonProperty
@@ -81,6 +85,11 @@ public abstract class WebUserInfos {
         // Member Missions
         this.missions_list =
                 RequestHandlerMission.transformMissionsToWebMissionsPreview(MissionsHandler.getOf(Snowflake.of(this.id))).toArray(new WebMission.WebMissionPreview[0]);
+
+        // Member Freelance
+
+        if (FreeLanceHandler.hasFreelance(this.id))
+            this.freelance = new WebFreelance(FreeLanceHandler.getFreelance(this.id));
 
         // Member XP
         if (XPHandler.haveBeenSet(getAsSnowflake())) {

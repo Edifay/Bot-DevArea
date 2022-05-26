@@ -1,5 +1,6 @@
 package devarea.bot.commands.outLine;
 
+import devarea.Main;
 import devarea.bot.Init;
 import devarea.bot.automatical.FreeLanceHandler;
 import devarea.bot.commands.commandTools.MessageSeria;
@@ -8,6 +9,8 @@ import devarea.bot.commands.commandTools.FreeLance;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.component.ActionRow;
+import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -54,6 +57,8 @@ public class CreateFreeLance extends LongCommand {
                     freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block(), MessageCreateSpec.builder()
                             .content("**Freelance de <@" + freeLance.getMemberId() + "> :**")
                             .addEmbed(freeLance.getEmbed())
+                            .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + member.getId() + "&open=1",
+                                    "devarea.fr")))
                             .build(), true))));
                     FreeLanceHandler.add(freeLance);
                     FreeLanceHandler.update();

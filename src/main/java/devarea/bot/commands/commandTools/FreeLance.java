@@ -9,7 +9,7 @@ import discord4j.core.spec.EmbedCreateSpec;
 
 import java.util.ArrayList;
 
-public class FreeLance {
+public class FreeLance implements Comparable {
 
     @JsonProperty("name")
     protected String freeLanceName;
@@ -22,9 +22,12 @@ public class FreeLance {
     protected MessageSeria message;
     @JsonProperty("membre")
     protected String memberId;
+    @JsonProperty("last_bump")
+    protected long last_bump;
 
     public FreeLance() {
         this.fields = new ArrayList<>();
+        this.last_bump = System.currentTimeMillis();
     }
 
     public FreeLance(final MessageSeria message, final String memberId, final String freeLanceName) {
@@ -32,6 +35,7 @@ public class FreeLance {
         this.message = message;
         this.memberId = memberId;
         this.freeLanceName = freeLanceName;
+        this.last_bump = System.currentTimeMillis();
     }
 
     public void setMessage(MessageSeria message) {
@@ -93,8 +97,21 @@ public class FreeLance {
                 .color(ColorsUsed.same);
         for (int i = 0; i < this.getFieldNumber(); i++)
             builder.addField(this.getField(i).getTitle(), this.getField(i).getValue(), this.getField(i).getInline());
-        builder.addField("Contact", "Pour contacter le freelancer voici son tag : " + member.getTag() + ", utilisez directement sa mention : <@" + this.memberId + ">", false);
+        builder.addField("Contact", "Pour contacter le freelancer voici son tag : " + member.getTag() + ", utilisez " +
+                "directement sa mention : <@" + this.memberId + ">", false);
         return builder.build();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+
+        FreeLance compareToEmp = (FreeLance) o;
+
+        if (compareToEmp.last_bump == this.last_bump) return 0;
+
+        if (this.last_bump < compareToEmp.last_bump) return 1;
+
+        return -1;
     }
 
     public static class FieldSeria {
@@ -177,5 +194,17 @@ public class FreeLance {
                     + (this.temps.equalsIgnoreCase("empty") ? "" : ("\nTemps de retour: " + this.temps));
         }
 
+    }
+
+    public ArrayList<FieldSeria> getFields() {
+        return fields;
+    }
+
+    public void setLast_bump(long last_bump) {
+        this.last_bump = last_bump;
+    }
+
+    public long getLast_bump() {
+        return last_bump;
     }
 }

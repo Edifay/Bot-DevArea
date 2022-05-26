@@ -2,6 +2,8 @@ package devarea.bot.automatical;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import devarea.Main;
+import devarea.backend.controllers.tools.WebFreelance;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.commands.Command;
@@ -24,6 +26,7 @@ import discord4j.core.spec.MessageCreateSpec;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 import static devarea.bot.commands.Command.delete;
@@ -91,11 +94,11 @@ public class FreeLanceHandler {
             if (!FreeLanceHandler.hasFreelance(member))
                 CommandManager.addManualCommand(event.getInteraction().getMember().get(),
                         new ConsumableCommand(CreateFreeLance.class) {
-                    @Override
-                    protected Command command() {
-                        return new CreateFreeLance(this.member);
-                    }
-                });
+                            @Override
+                            protected Command command() {
+                                return new CreateFreeLance(this.member);
+                            }
+                        });
             else
                 event.reply(InteractionApplicationCommandCallbackSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
@@ -150,8 +153,11 @@ public class FreeLanceHandler {
                     freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block(), MessageCreateSpec.builder()
                             .content("**Freelance de <@" + freeLance.getMemberId() + "> :**")
                             .addEmbed(freeLance.getEmbed())
+                            .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + id + "&open=1",
+                                    "devarea.fr")))
                             .build(), true))));
                     update();
+                    freeLance.setLast_bump(System.currentTimeMillis());
                     save();
                     bumpedFreeLance.add(freeLance);
                     new Thread(() -> {
@@ -231,6 +237,27 @@ public class FreeLanceHandler {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static FreeLance[] getFreelances(int start, int end) {
+        if (start > end) {
+            int temp = start;
+            start = end;
+            end = temp;
+        }
+
+        if (start < 0)
+            start = 0;
+        if (end > freeLances.size())
+            end = freeLances.size();
+
+        Collections.sort(freeLances);
+
+        ArrayList<FreeLance> freeLancesList = new ArrayList<>();
+        for (int i = start; i < end; i++)
+            freeLancesList.add(freeLances.get(i));
+
+        return freeLancesList.toArray(new FreeLance[0]);
     }
 
 }
