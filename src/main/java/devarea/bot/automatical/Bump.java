@@ -20,7 +20,7 @@ public class Bump {
         channel = (TextChannel) Init.devarea.getChannelById(Init.idBump).block();
         message = Command.sendEmbed(channel, EmbedCreateSpec.builder()
                 .color(ColorsUsed.wrong)
-                .description("Le bot vien de s'initialisé utilisez la commande `/bump`, pour lancer le compte à rebours.").build(), true);
+                .description("Le bot vient de s'initialiser utilisez la commande `/bump`, pour lancer le compte à rebours.").build(), true);
         new Thread(() -> {
             try {
                 while (true) {

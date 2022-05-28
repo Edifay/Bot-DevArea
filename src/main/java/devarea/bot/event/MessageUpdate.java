@@ -17,7 +17,7 @@ public class MessageUpdate {
                 final DateTimeFormatter date = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 final LocalDateTime now = LocalDateTime.now();
                 embed.setColor(ColorsUsed.same);
-                embed.setTitle(message.getAuthor().get().getTag() + " a éditer un message :");
+                embed.setTitle(message.getAuthor().get().getTag() + " a édité un message :");
                 embed.setDescription(message.getContent());
                 embed.setFooter(date.format(now) + " at " + hours.format(now) + ".", message.getAuthor().get().getAvatarUrl());
             })).subscribe();*/

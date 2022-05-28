@@ -22,17 +22,14 @@ public class MemberLeave {
 
             if (XPHandler.haveBeenSet(memberLeaveEvent.getUser().getId()))
                 XPHandler.remove(memberLeaveEvent.getUser().getId());
-
+          
             CommandManager.left(memberLeaveEvent.getUser().getId());
             if (FreeLanceHandler.hasFreelance(memberLeaveEvent.getUser().getId().asString()))
                 FreeLanceHandler.remove(FreeLanceHandler.getFreelance(memberLeaveEvent.getUser().getId().asString()));
             RequestHandlerAuth.left(memberLeaveEvent.getUser().getId().asString());
             if (channel == null)
-                channel =
-                        (TextChannel) Init.client.getGuildById(finalIdDevArea).block().getChannelById(finalIdJoinLogChannel).block();
-            channel.createMessage(msg -> msg.setContent(memberLeaveEvent.getMember().get().getDisplayName() + " a " +
-                    "quitter" +
-                    " le serveur !")).subscribe();
+                channel = (TextChannel) Init.client.getGuildById(finalIdDevArea).block().getChannelById(finalIdJoinLogChannel).block();
+            channel.createMessage(msg -> msg.setContent(memberLeaveEvent.getMember().get().getDisplayName() + " a quitté le serveur !")).subscribe();
         } catch (Exception e) {
             e.printStackTrace();
         }

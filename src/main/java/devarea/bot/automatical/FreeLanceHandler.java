@@ -213,8 +213,8 @@ public class FreeLanceHandler {
                 if (!MemberCache.contain(freeLance.getMemberId())) {
                    /* ((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block()).createMessage
                    (messageCreateSpec -> {
-                        messageCreateSpec.setContent("Le membre : <@" + freeLance.getMemberId() + "> est concidéré
-                        comme \"left\" ça missions devrait être supprimer !");
+                        messageCreateSpec.setContent("Le membre : <@" + freeLance.getMemberId() + "> est considéré
+                        comme \"left\" sa mission devrait être supprimée !");
                     }).block();*/
                     /*atRemove.add(freeLance);
                     try {
