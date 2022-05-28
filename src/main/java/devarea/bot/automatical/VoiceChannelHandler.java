@@ -19,14 +19,13 @@ public class VoiceChannelHandler {
     public static void join(VoiceStateUpdateEvent event) {
         try {
             if (event.getCurrent().getChannelId().get().equals(Init.idVoiceChannelHelp)) {
-                Snowflake id = Objects.requireNonNull(Init.devarea.createVoiceChannel(VoiceChannelCreateSpec.builder()
-                        .name("Aide #" + number)
-                        .parentId(Init.idCategoryGeneral)
-                        .userLimit(5)
-                        .build()).block()).getId();
-                Objects.requireNonNull(MemberCache.get(event.getCurrent().getUserId().asString())).edit(
+                MemberCache.get(event.getCurrent().getUserId().asString()).edit(
                         GuildMemberEditSpec.builder()
-                                .newVoiceChannel(Possible.of(Optional.of(id)))
+                                .newVoiceChannel(Possible.of(Optional.of(Init.devarea.createVoiceChannel(VoiceChannelCreateSpec.builder()
+                                        .name("Aide #" + number++)
+                                        .parentId(Init.idCategoryGeneral)
+                                        .userLimit(5)
+                                        .build()).block().getId())))
                                 .build()
                 ).subscribe();
             }

@@ -1,7 +1,7 @@
 package devarea.backend.controllers.rest.requestContent;
 
 import devarea.backend.controllers.tools.WebMission;
-import devarea.backend.controllers.tools.WebUserInfo;
+import devarea.backend.controllers.tools.userInfos.WebPrivateUserInfos;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.automatical.MissionsHandler;
 import devarea.bot.commands.commandTools.Mission;
@@ -36,7 +36,7 @@ public class RequestHandlerMission {
     }
 
     public static String[] requestDeleteMission(String id, String code) {
-        WebUserInfo user = RequestHandlerAuth.get(code);
+        WebPrivateUserInfos user = RequestHandlerAuth.get(code);
         if (user != null) {
             Mission mission = MissionsHandler.get(id);
             if (mission != null) {
@@ -52,7 +52,7 @@ public class RequestHandlerMission {
     public static final ArrayList<String> cooldown_create_Mission = new ArrayList<>();
 
     public static boolean requestCreateMission(final ReceiveMission mission, final String code) {
-        WebUserInfo infos = RequestHandlerAuth.get(code);
+        WebPrivateUserInfos infos = RequestHandlerAuth.get(code);
         System.out.println("infos : " + infos);
         System.out.println("Can post : " + !cooldown_create_Mission.contains(code));
         if (infos != null && !cooldown_create_Mission.contains(code)) {

@@ -2,7 +2,7 @@ package devarea.backend.controllers.rest.requestContent;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import devarea.backend.controllers.tools.WebUserInfo;
+import devarea.backend.controllers.tools.userInfos.WebPrivateUserInfos;
 import devarea.bot.cache.MemberCache;
 
 import java.io.File;
@@ -35,9 +35,9 @@ public class RequestHandlerAuth {
         verifyAllMember();
     }
 
-    public static WebUserInfo get(final String code) {
+    public static WebPrivateUserInfos get(final String code) {
         if (containCode(code))
-            return new WebUserInfo(codeToMemberID.get(code)).update();
+            return (WebPrivateUserInfos) new WebPrivateUserInfos(codeToMemberID.get(code)).update();
         return null;
     }
 
@@ -108,7 +108,7 @@ public class RequestHandlerAuth {
         RequestHandlerAuth.deleteBinding(RequestHandlerAuth.getCodeForMember(memberID));
     }
 
-    public static WebUserInfo requestGetUserInfo(final String code) {
+    public static WebPrivateUserInfos requestGetUserInfo(final String code) {
         return get(code);
     }
 

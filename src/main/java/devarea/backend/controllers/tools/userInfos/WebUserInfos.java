@@ -1,29 +1,33 @@
-package devarea.backend.controllers.tools;
+package devarea.backend.controllers.tools.userInfos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import devarea.backend.controllers.tools.badges.Badges;
+import devarea.backend.controllers.handlers.UserInfosHandlers;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerMission;
-import devarea.bot.cache.MemberCache;
+import devarea.backend.controllers.tools.WebFreelance;
+import devarea.backend.controllers.tools.WebMission;
+import devarea.backend.controllers.tools.badges.Badges;
+import devarea.bot.automatical.FreeLanceHandler;
 import devarea.bot.automatical.MissionsHandler;
 import devarea.bot.automatical.XPHandler;
+import devarea.bot.cache.MemberCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class WebUserInfo {
+public abstract class WebUserInfos {
 
     @JsonProperty
-    private String id;
+    protected String id;
     @JsonProperty
-    private String urlAvatar;
+    protected String urlAvatar;
     @JsonProperty
-    private String name;
+    protected String name;
     @JsonProperty
-    private int rank;
+    protected int rank;
     @JsonProperty
-    private int xp;
+    protected int xp;
     @JsonProperty
     protected int previous_xp_level;
     @JsonProperty
@@ -33,16 +37,18 @@ public class WebUserInfo {
     @JsonProperty
     protected WebMission.WebMissionPreview[] missions_list;
     @JsonProperty
+    protected WebFreelance freelance;
+    @JsonProperty
     protected String tag;
+    @JsonProperty
+    protected String memberDescription;
     @JsonProperty
     Badges[] badges;
 
-    public WebUserInfo() {
-    }
-
-    public WebUserInfo(String id) {
+    public WebUserInfos(String id) {
         this.id = id;
     }
+
 
     @JsonIgnore
     public String getId() {
@@ -64,8 +70,10 @@ public class WebUserInfo {
     }
 
     @JsonIgnore
-    public WebUserInfo update() {
+    public WebUserInfos update() {
         Member member = MemberCache.get(this.id);
+        if (member == null)
+            return null;
 
         // Simple Member Data
         this.id = member.getId().asString();
@@ -78,6 +86,11 @@ public class WebUserInfo {
         this.missions_list =
                 RequestHandlerMission.transformMissionsToWebMissionsPreview(MissionsHandler.getOf(Snowflake.of(this.id))).toArray(new WebMission.WebMissionPreview[0]);
 
+        // Member Freelance
+
+        if (FreeLanceHandler.hasFreelance(this.id))
+            this.freelance = new WebFreelance(FreeLanceHandler.getFreelance(this.id));
+
         // Member XP
         if (XPHandler.haveBeenSet(getAsSnowflake())) {
             this.rank = XPHandler.getRankOf(getAsSnowflake());
@@ -87,6 +100,9 @@ public class WebUserInfo {
             this.setXp(0);
         }
 
+        // UserData
+        memberDescription = UserInfosHandlers.get(this.id).userDescription;
+
         return this;
     }
 
@@ -94,5 +110,4 @@ public class WebUserInfo {
     public Member getMember() {
         return MemberCache.get(this.id);
     }
-
 }

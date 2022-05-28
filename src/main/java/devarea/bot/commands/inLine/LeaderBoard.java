@@ -20,7 +20,7 @@ public class LeaderBoard extends ShortCommand {
         }
         text += "\n---------------------------------------------------------------\n\n";
         text += "`#" + XPHandler.getRankOf(this.member.getId()) + ":` <@" + this.member.getId().asString() + ">: " + XPHandler.getXpOf(this.member.getId()) + "xp.";
-        text += "\n\nVous pouvez retrouver le leaderboard en entier sur le site web : https://devarea.fr/.";
+        text += "\n\nVous pouvez retrouver le leaderboard en entier sur le site web : https://devarea.fr/stats.";
         sendEmbed(EmbedCreateSpec.builder()
                 .title("LeaderBoard !")
                 .color(ColorsUsed.same)

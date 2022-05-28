@@ -35,6 +35,8 @@ public class XPHandler {
         return wordCounts.entrySet().stream().sorted((Map.Entry.<Snowflake, Integer>comparingByValue().reversed())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
+    public static HashMap<Snowflake, Integer> xpEarnVoice = new HashMap<>();
+
     public static void init() {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("./xp.json");
@@ -56,7 +58,7 @@ public class XPHandler {
                     verifLeft();
                     save();
                 }
-            } catch (Exception e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }).start();
@@ -64,13 +66,34 @@ public class XPHandler {
         new Thread(() -> {
             try {
                 while (true) {
-                    Thread.sleep(60000);
-                    List<VoiceState> states = Init.devarea.getVoiceStates().buffer().blockLast();
-                    for (VoiceState voice : states)
-                        addMember(voice.getMember().block(), false);
-                }
-            } catch (Exception e) {
 
+                    Thread.sleep(60000);
+                    try {
+                        List<VoiceState> states = Init.devarea.getVoiceStates().buffer().blockLast();
+                        if (states != null)
+                            for (VoiceState voice : states) {
+                                Member member = MemberCache.get(voice.getUserId().asString());
+                                boolean contain = xpEarnVoice.containsKey(member.getId());
+                                if (!contain || xpEarnVoice.get(member.getId()) <= 90) {
+                                    addMember(member, false);
+                                    xpEarnVoice.put(member.getId(), contain ? xpEarnVoice.get(member.getId()) + 1 : 1);
+                                    startAway(() -> {
+                                        try {
+                                            Thread.sleep(86400000);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        } finally {
+                                            xpEarnVoice.put(member.getId(), xpEarnVoice.get(member.getId()) - 1);
+                                        }
+                                    });
+                                }
+                            }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }).start();
     }

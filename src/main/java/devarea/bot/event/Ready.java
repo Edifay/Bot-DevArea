@@ -1,5 +1,6 @@
 package devarea.bot.event;
 
+import devarea.backend.controllers.handlers.UserInfosHandlers;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
@@ -79,7 +80,7 @@ public class Ready {
                 startAway(Bump::init);
             startAway(MissionsHandler::init);
             startAway(FreeLanceHandler::init);
-
+            startAway(UserInfosHandlers::init);
             startAway(RequestHandlerAuth::init);
         } catch (Exception e) {
             e.printStackTrace();

@@ -40,7 +40,12 @@ public class CachedMember {
     }
 
     public Member fetch() {
-        this.member = Init.devarea.getMemberById(Snowflake.of(this.memberID)).block();
+        try {
+            this.member = Init.devarea.getMemberById(Snowflake.of(this.memberID)).block();
+        } catch (Exception e) {
+            System.err.println("ERROR: Member couldn't be fetched !");
+            this.member = null;
+        }
         if (this.member == null) {
             MemberCache.slash(this.memberID);
             return null;
@@ -52,6 +57,8 @@ public class CachedMember {
 
     public Member watch() {
         //   System.out.println("Watch : " + this.member.getUsername());
+        if (this.member == null)
+            this.fetch();
         return this.member;
     }
 
