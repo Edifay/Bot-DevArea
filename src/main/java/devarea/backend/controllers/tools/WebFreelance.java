@@ -11,15 +11,18 @@ import java.util.ArrayList;
 public class WebFreelance {
 
     @JsonProperty
-    protected String member_id;
+    public String member_id;
     @JsonProperty
-    protected String name;
+    public String name;
     @JsonProperty
-    protected String avatar_url;
+    public String avatar_url;
     @JsonProperty
-    protected String description;
+    public String description;
     @JsonProperty
-    protected ArrayList<FreeLance.FieldSeria> fields;
+    public ArrayList<FreeLance.FieldSeria> fields;
+
+    public WebFreelance(){
+    }
 
     public WebFreelance(FreeLance freelance) {
         this.member_id = freelance.getMemberId();
@@ -38,15 +41,15 @@ public class WebFreelance {
 
     public static class WebFreelancePreview {
         @JsonProperty
-        protected String member_id;
+        public String member_id;
         @JsonProperty
-        protected String name;
+        public String name;
         @JsonProperty
-        protected String avatar_url;
+        public String avatar_url;
         @JsonProperty
-        protected String description;
+        public String description;
         @JsonProperty
-        protected String[] abilities;
+        public String[] abilities;
 
         public WebFreelancePreview(final FreeLance freelance) {
             this.member_id = freelance.getMemberId();

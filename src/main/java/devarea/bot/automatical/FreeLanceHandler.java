@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.Objects;
 
 import static devarea.bot.commands.Command.delete;
+import static devarea.bot.event.FunctionEvent.startAway;
 
 public class FreeLanceHandler {
 
@@ -83,7 +84,8 @@ public class FreeLanceHandler {
                                 .color(ColorsUsed.same)
                                 .title("Proposez vos services !")
                                 .build())
-                        .addComponent(ActionRow.of(Button.primary("createFreelance", "Créer une page Freelance")))
+                        .addComponent(ActionRow.of(Button.link(Main.domainName + "/freelance-creator",
+                                "devarea.fr")))
                         .build()
                 , true);
     }

@@ -2,12 +2,26 @@ package devarea.bot.commands.commandTools;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import devarea.Main;
+import devarea.backend.controllers.tools.WebFreelance;
+import devarea.bot.Init;
+import devarea.bot.automatical.FreeLanceHandler;
 import devarea.bot.cache.MemberCache;
+import devarea.bot.commands.Command;
 import devarea.bot.presets.ColorsUsed;
+import discord4j.core.object.component.ActionRow;
+import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.MessageCreateSpec;
+import discord4j.core.spec.MessageEditSpec;
+import discord4j.discordjson.possible.Possible;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Optional;
 
 public class FreeLance implements Comparable {
 
@@ -35,6 +49,15 @@ public class FreeLance implements Comparable {
         this.message = message;
         this.memberId = memberId;
         this.freeLanceName = freeLanceName;
+        this.last_bump = System.currentTimeMillis();
+    }
+
+    public FreeLance(WebFreelance web) {
+        this.freeLanceName = web.name;
+        this.description = web.description;
+        this.fields = web.fields;
+        this.memberId = web.member_id;
+
         this.last_bump = System.currentTimeMillis();
     }
 
@@ -206,5 +229,36 @@ public class FreeLance implements Comparable {
 
     public long getLast_bump() {
         return last_bump;
+    }
+
+    public void send() {
+        this.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block(), MessageCreateSpec.builder()
+                .content("**Freelance de <@" + this.memberId + "> :**")
+                .addEmbed(this.getEmbed())
+                .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + this.memberId + "&open=1",
+                        "devarea.fr")))
+                .build(), true))));
+        FreeLanceHandler.update();
+    }
+
+    public void edit() {
+        try {
+            Message message = this.message.getMessage();
+            message.edit(MessageEditSpec.builder()
+                    .content(Possible.of(Optional.of("**Freelance de <@" + this.memberId + "> :**")))
+                    .addEmbed(this.getEmbed())
+                    .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + this.memberId + "&open=1",
+                            "devarea.fr")))
+                    .build()).block();
+        } catch (Exception e) {
+            this.send();
+        }
+    }
+
+    public void delete() {
+        try {
+            Command.delete(false, message.getMessage());
+        } catch (Exception ignored) {
+        }
     }
 }
