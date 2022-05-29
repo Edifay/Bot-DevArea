@@ -21,6 +21,7 @@ public class Auth extends ShortCommand {
     public Auth(final Member member, final TextChannel channel, final Message message) {
         super(member, channel);
         final Member reelMember = MemberCache.get(message.getAuthor().get().getId().asString());
+
         final String code = RequestHandlerAuth.getCodeForMember(reelMember.getId().asString());
         sendEmbed(EmbedCreateSpec.builder()
                 .title("Authentification réussie !")

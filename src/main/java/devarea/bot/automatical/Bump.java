@@ -33,7 +33,7 @@ public class Bump {
                                                 .description("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes.")
                                                 .color(ColorsUsed.wrong).build())
                                         .build());
-                        } else if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est disponible avec la commande `/bump`.") && !message.getEmbeds().get(0).getDescription().get().equals("Le bot vien de s'initialisé utilisez la commande `/bump`, pour lancer le compte à rebours."))
+                        } else if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est disponible avec la commande `/bump`.") && !message.getEmbeds().get(0).getDescription().get().equals("Le bot vient de s'initialiser utilisez la commande `/bump`, pour lancer le compte à rebours."))
                             replace(MessageCreateSpec.builder()
                                     .addEmbed(EmbedCreateSpec.builder()
                                             .description("Le bump est disponible avec la commande `/bump`.")

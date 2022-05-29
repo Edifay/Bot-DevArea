@@ -75,7 +75,9 @@ public class MissionsHandler {
         message = Command.send(channel, MessageCreateSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder().color(ColorsUsed.same)
                                 .title("Créer une mission.")
-                                .description("Cliquez sur le bouton ci-dessous pour créer une mission !").build())
+                                .description("Cliquez sur le bouton ci-dessous pour créer une mission !" +
+                                        "!\n\nVisionner les missions sur web -> " + Main.domainName + "missions")
+                                .build())
                         .addComponent(ActionRow.of(Button.link(Main.domainName + "mission-creator", "devarea.fr"))).build(),
                 true);
     }
@@ -337,8 +339,10 @@ public class MissionsHandler {
         set.add(PermissionOverwrite.forMember(Snowflake.of(mission.getMemberId()),
                 PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY,
                         Permission.SEND_MESSAGES), PermissionSet.of()));
-        set.add(PermissionOverwrite.forRole(Snowflake.of("777782222920744990"), PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
-        set.add(PermissionOverwrite.forRole(Snowflake.of("768383784571240509"), PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
+        set.add(PermissionOverwrite.forRole(Snowflake.of("777782222920744990"),
+                PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
+        set.add(PermissionOverwrite.forRole(Snowflake.of("768383784571240509"),
+                PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
 
         TextChannel channel = Init.devarea.createTextChannel(TextChannelCreateSpec.builder()
                 .parentId(Snowflake.of("964757205184299028"))

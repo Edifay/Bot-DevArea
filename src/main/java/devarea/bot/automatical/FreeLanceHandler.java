@@ -80,11 +80,12 @@ public class FreeLanceHandler {
     private static void sendLastMessage() {
         message = Command.send(channel, MessageCreateSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
-                                .description("Cliquez sur le bouton ci-dessous pour créer une page freelance !")
+                                .description("Cliquez sur le bouton ci-dessous pour créer une page freelance " +
+                                        "!\n\nVisionner les freelances sur web -> " + Main.domainName + "freelances")
                                 .color(ColorsUsed.same)
                                 .title("Proposez vos services !")
                                 .build())
-                        .addComponent(ActionRow.of(Button.link(Main.domainName + "/freelance-creator",
+                        .addComponent(ActionRow.of(Button.link(Main.domainName + "freelance-creator",
                                 "devarea.fr")))
                         .build()
                 , true);

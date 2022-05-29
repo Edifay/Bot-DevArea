@@ -18,13 +18,12 @@ public class TimeOnServerBadge extends Badges {
 
     public static Badges getTimeBadgeOf(final WebUserInfos user, final Member member_fetched) {
         Instant instant = member_fetched.getJoinTime().get();
-        if (instant.isBefore(Instant.ofEpochMilli(millis_epoch_created).plus(90, ChronoUnit.DAYS))) {
+        if (instant.isBefore(Instant.ofEpochMilli(millis_epoch_created).plus(90, ChronoUnit.DAYS)))
             return new Precursor_Badge(instant.toString());
-        } else if (instant.isBefore(Instant.now().minus(365, ChronoUnit.DAYS))) {
+        else if (instant.isBefore(Instant.now().minus(365, ChronoUnit.DAYS)))
             return new Senior_Badge(instant.toString());
-        } else {
-            return new Junior_Badge(instant.toString());
-        }
+        else return new Junior_Badge(instant.toString());
+
     }
 
 }

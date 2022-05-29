@@ -1,5 +1,7 @@
 package devarea.bot.commands.outLine;
 
+import devarea.Main;
+import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.commands.CommandManager;
@@ -13,12 +15,15 @@ import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.object.PermissionOverwrite;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.PrivateChannel;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
+
+import java.util.ArrayList;
 
 import static devarea.bot.event.FunctionEvent.startAway;
 
@@ -69,11 +74,50 @@ public class JoinCommand extends LongCommand {
                         endCommand();
 
                         try {
-                            startAway(() -> member.getPrivateChannel().block().createMessage(TextMessage.helpEmbed).subscribe(msg -> {
-                            }, error -> {
-                            }));
+                            PrivateChannel privateChannel = member.getPrivateChannel().block();
+                            startAway(() -> {
+                                privateChannel.createMessage(TextMessage.helpEmbed).block();
+
+                                final String code = RequestHandlerAuth.getCodeForMember(member.getId().asString());
+
+                                final Message message_at_edit = privateChannel.createMessage(MessageCreateSpec.builder()
+                                        .addEmbed(EmbedCreateSpec.builder()
+                                                .title("Authentification au site de Dev'area !")
+                                                .description("Vous venez de vous authentifier sur le site de dev'area" +
+                                                        " !\n\nPour vous connecter utilisez ce lien :\n\n" + Main.domainName + "?code" +
+                                                        "=" + code + "\n\nCe message sera supprimé d'ici **5 " +
+                                                        "minutes** pour sécuriser l'accès. Si vous avez besoin de le " +
+                                                        "retrouver exécutez de nouveau la commande !")
+                                                .color(ColorsUsed.just)
+                                                .build())
+                                        .build()).block();
+
+                                final ArrayList<EmbedCreateSpec> embeds = new ArrayList<>();
+
+                                embeds.add(EmbedCreateSpec.builder()
+                                        .title("Authentification au site de Dev'area !")
+                                        .description("Si vous voulez retrouver le lien d'authentification vous pouvez" +
+                                                " " +
+                                                "exécuter la commande " +
+                                                "`//auth` à nouveau !")
+                                        .color(ColorsUsed.same)
+                                        .build());
+
+                                startAway(() -> {
+                                    try {
+                                        Thread.sleep(300000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        message_at_edit.edit(MessageEditSpec.builder()
+                                                .embeds(embeds)
+                                                .build()).subscribe();
+                                    }
+                                });
+
+                            });
+
                         } catch (Exception e) {
-                            e.printStackTrace();
                         }
 
                         startAway(() -> ((TextChannel) Init.devarea.getChannelById(Init.idWelcomChannel).block()).createMessage(MessageCreateSpec.builder()
