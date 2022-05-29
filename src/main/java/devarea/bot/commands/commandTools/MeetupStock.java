@@ -1,72 +1,87 @@
 package devarea.bot.commands.commandTools;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.MessageCreateSpec;
 
-import java.io.Serializable;
+import javax.imageio.ImageIO;
+import java.io.*;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MeetupStock implements Serializable {
 
+    @JsonProperty
     private String name;
-    private String description;
+    @JsonIgnore
     private Snowflake author;
+    @JsonProperty
     private String idAuthor;
+    @JsonProperty
     private Date date;
+    @JsonProperty
     private String attachment;
+    @JsonProperty
     private Boolean alreayMake = false;
+    @JsonProperty
+    private MessageSeria message;
 
     public MeetupStock() {
     }
 
+    @JsonIgnore
     public String getName() {
         return this.name;
     }
 
-    public String getDescription() {
-        return this.description;
-    }
-
+    @JsonIgnore
     public Snowflake getAuthor() {
         if (this.author == null)
             this.author = Snowflake.of(this.idAuthor);
         return this.author;
     }
 
+    @JsonIgnore
     public Date getDate() {
         return this.date;
     }
 
+    @JsonIgnore
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
+    @JsonIgnore
     public void setAuthor(Snowflake id) {
         this.author = id;
+        this.idAuthor = this.author.asString();
     }
 
+    @JsonIgnore
     public void setDate(Date date) {
         this.date = date;
     }
 
+    @JsonIgnore
     public void setAttachment(String url) {
         this.attachment = url;
     }
 
+    @JsonIgnore
     public String getAttachment() {
         return this.attachment;
     }
 
-    public EmbedCreateSpec getEmbed() {
+    @JsonIgnore
+    public MessageCreateSpec.Builder getEmbed() {
+        MessageCreateSpec.Builder msgBuilder = MessageCreateSpec.builder();
         EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder();
         if (this.name != null)
             builder.title(this.name);
@@ -74,21 +89,31 @@ public class MeetupStock implements Serializable {
             Member member = MemberCache.get(this.author.asString());
             builder.author(member.getDisplayName(), member.getAvatarUrl(), member.getAvatarUrl());
         }
-        if (this.attachment != null)
-            builder.image(this.attachment);
+        if (this.attachment != null) {
+            try {
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                ImageIO.write(ImageIO.read(new URL(this.attachment)), "png", outputStream);
+                msgBuilder.addFile("image.png", new ByteArrayInputStream(outputStream.toByteArray()));
+                builder.image("attachment://image.png");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         if (this.date != null) {
             builder.description("Le meetup aura lieu le " +
                     new SimpleDateFormat("dd/MM/yyyy").format(this.date) + " à " +
                     new SimpleDateFormat("HH").format(this.date) + "h" + new SimpleDateFormat("mm").format(this.date) + ".");
         }
         builder.color(ColorsUsed.just);
-        return builder.build();
+        return msgBuilder.addEmbed(builder.build());
     }
 
+    @JsonIgnore
     public EmbedCreateSpec getEmbedVerif() {
         EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder();
 
-        builder.author("Voici comment sera afficher le meetup ! Vous pouvez comfirmer yes ou annuler cancel le meetup.", Init.client.getSelf().block().getAvatarUrl(), Init.client.getSelf().block().getAvatarUrl());
+        builder.author("Voici comment sera afficher le meetup ! Vous pouvez comfirmer yes ou annuler cancel le meetup" +
+                ".", Init.client.getSelf().block().getAvatarUrl(), Init.client.getSelf().block().getAvatarUrl());
         if (this.name != null)
             builder.title(this.name);
         if (this.author != null) {
@@ -107,18 +132,30 @@ public class MeetupStock implements Serializable {
         return builder.build();
     }
 
+    @JsonIgnore
     public MeetupStock getForWrite() {
         this.idAuthor = this.author.asString();
         this.author = null;
         return this;
     }
 
+    @JsonIgnore
     public Boolean getAlreayMake() {
         return this.alreayMake;
     }
 
+    @JsonIgnore
     public void setAlreadyMake(final boolean bool) {
         this.alreayMake = bool;
     }
 
+    @JsonIgnore
+    public void setMessage(MessageSeria message) {
+        this.message = message;
+    }
+
+    @JsonIgnore
+    public MessageSeria getMessage() {
+        return message;
+    }
 }

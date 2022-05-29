@@ -1,5 +1,7 @@
 package devarea.bot.automatical;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.commands.Command;
@@ -11,74 +13,70 @@ import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
+import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.core.spec.VoiceChannelCreateSpec;
 
 import java.io.*;
 import java.time.Instant;
 import java.util.*;
 
+import static devarea.bot.event.FunctionEvent.startAway;
+
 public class MeetupHandler {
 
-    public static HashMap<Message, MeetupStock> messageBoundToMeetup = new HashMap<>();
 
-    public static HashMap<MeetupStock, Message> messageSended = new HashMap<>();
+    public static ArrayList<MeetupStock> meetups = new ArrayList<>();
 
     public static void init() {
-        File file = new File("./meetup.devarea");
-        if (file.exists()) {
-            try {
-                FileInputStream in = new FileInputStream(file);
-                ObjectInputStream inObj = new ObjectInputStream(new ByteArrayInputStream(in.readAllBytes()));
-                HashMap<MeetupStock, MessageSeria> readed = (HashMap<MeetupStock, MessageSeria>) inObj.readObject();
-                readed.forEach((meetupStock, s) -> messageSended.put(meetupStock, s.getMessage()));
-                in.close();
-                inObj.close();
-                System.out.println("Read meetup successfully !");
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-                System.out.println("Data are loosed !!!!");
-            }
-        }
+        load();
+        System.out.println("Meetups loaded : " + meetups.size() + " detected !");
         new Thread(() -> {
             try {
                 while (true) {
                     Thread.sleep(60000);
                     Date date = new Date();
-                    messageSended.forEach((meetupStock, message) -> {
+                    meetups.forEach(meetupStock -> {
                         if (!meetupStock.getAlreayMake()) {
-                            if (meetupStock.getDate().after(date)) {
-                                Command.send((TextChannel) message.getChannel().block(),
+                            if (date.after(meetupStock.getDate())) {
+                                Command.send((TextChannel) Init.devarea.getChannelById(Init.idMeetupAnnonce).block(),
                                         MessageCreateSpec.builder()
-                                                .content("Un meetup a commencer avec sujet : " + meetupStock.getDescription() + ".\n<@&" + Init.idPingMeetup + ">").build()
+                                                .content("Un meetup a commencé avec sujet :\n\n " + meetupStock.getName() + "\n\n<@&" + Init.idPingMeetup.asString() + ">").build()
                                         , false);
-                                Init.devarea.createVoiceChannel(voiceChannelCreateSpec -> {
-                                    voiceChannelCreateSpec.setParentId(Init.idCategoryGeneral);
-                                    voiceChannelCreateSpec.setName("Meetup by " + MemberCache.get(meetupStock.getAuthor().asString()).getDisplayName());
-                                }).subscribe();
+                                Init.devarea.createVoiceChannel(VoiceChannelCreateSpec.builder()
+                                        .parentId(Init.idCategoryGeneral)
+                                        .name("Meetup by " + MemberCache.get(meetupStock.getAuthor().asString()).getDisplayName())
+                                        .build()).subscribe();
                                 meetupStock.setAlreadyMake(true);
+                                save();
                             }
                         }
                     });
                 }
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }).start();
     }
 
+    public static void load() {
+        File file = new File("meetup.json");
+        if (!file.exists())
+            save();
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            meetups = mapper.readValue(file,
+                    new TypeReference<>() {
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void save() {
         try {
-            File file = new File("./meetup.devarea");
-            FileOutputStream out = new FileOutputStream(file);
-            ByteArrayOutputStream outByte = new ByteArrayOutputStream();
-            ObjectOutputStream outObj = new ObjectOutputStream(outByte);
-            HashMap<MeetupStock, MessageSeria> toWrite = new HashMap<>();
-            messageSended.forEach((meetupStock, message) -> toWrite.put(meetupStock.getForWrite(),
-                    new MessageSeria(message)));
-            outObj.writeObject(toWrite);
-            outObj.flush();
-            out.write(outByte.toByteArray());
-            out.flush();
-            out.close();
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(new File("meetup.json"), meetups);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,9 +84,11 @@ public class MeetupHandler {
 
     public static void addMeetupAtValide(MeetupStock meetup) {
         TextChannel meetupVerif = (TextChannel) Init.devarea.getChannelById(Init.idMeetupVerif).block();
-        Message message = Command.sendEmbed(meetupVerif, meetup.getEmbed(), true);
-        messageBoundToMeetup.put(message, meetup);
+        Message message = Command.send(meetupVerif, meetup.getEmbed().build(), true);
+        meetup.setMessage(new MessageSeria(message));
+        meetups.add(meetup);
         addYesAndNo(message);
+        save();
     }
 
     public static void addYesAndNo(Message message) {
@@ -101,38 +101,39 @@ public class MeetupHandler {
     }
 
     public static boolean getEvent(ReactionAddEvent event) {
-        for (Map.Entry<Message, MeetupStock> entry : messageBoundToMeetup.entrySet()) {
-            Message message = entry.getKey();
-            MeetupStock meetup = entry.getValue();
-            if (message.getId().equals(event.getMessageId())) {
+        if (!event.getChannelId().equals(Init.idMeetupVerif))
+            return false;
+        for (MeetupStock meetup : meetups) {
+            if (meetup.getMessage().getMessageID().equals(event.getMessageId())) {
                 if (event.getEmoji().equals(ReactionEmoji.custom(Init.idYes))) {
                     try {
-                        MemberCache.get(meetup.getAuthor().asString()).getPrivateChannel().block().createEmbed(embedCreateSpec -> {
-                            embedCreateSpec.setTitle("Votre meetup a été accepté !");
-                            embedCreateSpec.setTimestamp(Instant.now());
-                            embedCreateSpec.setColor(ColorsUsed.just);
-                        }).subscribe();
+                        startAway(() -> MemberCache.get(meetup.getAuthor().asString()).getPrivateChannel().block().createMessage(EmbedCreateSpec.builder()
+                                .title("Votre meetup a été accepté !")
+                                .timestamp(Instant.now())
+                                .color(ColorsUsed.just)
+                                .build()).subscribe());
+
                     } catch (Exception e) {
-                        e.printStackTrace();
                     }
-                    messageBoundToMeetup.remove(message);
-                    Message message1 =
-                            ((TextChannel) Init.devarea.getChannelById(Init.idMeetupAnnonce).block()).createEmbed(meetup.getEmbed()).block();
-                    addYes(message1);
-                    messageSended.put(meetup, message1);
-                    save();
+
+                    startAway(() -> Command.delete(false, meetup.getMessage().getMessage()));
+
+                    Message message =
+                            ((TextChannel) Init.devarea.getChannelById(Init.idMeetupAnnonce).block()).createMessage(meetup.getEmbed().build()).block();
+                    addYes(message);
+                    meetup.setMessage(new MessageSeria(message));
                 } else if (event.getEmoji().equals(ReactionEmoji.custom(Init.idNo))) {
                     try {
-                        MemberCache.get(meetup.getAuthor().asString()).getPrivateChannel().block().createEmbed(embedCreateSpec -> {
-                            embedCreateSpec.setTitle("Votre meetup a été rejeté !");
-                            embedCreateSpec.setTimestamp(Instant.now());
-                            embedCreateSpec.setColor(ColorsUsed.wrong);
-                        }).block();
+                        MemberCache.get(meetup.getAuthor().asString()).getPrivateChannel().block().createMessage(EmbedCreateSpec.builder()
+                                .title("Votre meetup a été rejeté !")
+                                .timestamp(Instant.now())
+                                .color(ColorsUsed.wrong)
+                                .build()).block();
                     } catch (Exception e) {
                     }
-                    messageBoundToMeetup.remove(message);
+                    meetups.remove(meetup);
                 }
-                Command.delete(false, message);
+                save();
                 return true;
             }
         }
@@ -141,11 +142,11 @@ public class MeetupHandler {
 
     public static List<MeetupStock> getMeetupsFrom(Snowflake memberID) {
         List<MeetupStock> list = new ArrayList<>();
-        messageBoundToMeetup.forEach((message, meetupStock) -> {
+        meetups.forEach(meetupStock -> {
             if (meetupStock.getAuthor().equals(memberID))
                 list.add(meetupStock);
         });
-        messageSended.forEach((meetupStock, message) -> {
+        meetups.forEach(meetupStock -> {
             if (meetupStock.getAuthor().equals(memberID))
                 list.add(meetupStock);
         });
@@ -153,20 +154,10 @@ public class MeetupHandler {
     }
 
     public static void remove(MeetupStock meetup) {
-        for (Map.Entry<Message, MeetupStock> entry : messageBoundToMeetup.entrySet()) {
-            Message key = entry.getKey();
-            MeetupStock value = entry.getValue();
+        for (MeetupStock value : meetups) {
             if (value.equals(meetup)) {
-                Command.delete(false, key);
-                messageBoundToMeetup.remove(key);
-            }
-        }
-        for (Map.Entry<MeetupStock, Message> entry : messageSended.entrySet()) {
-            MeetupStock meetupStock = entry.getKey();
-            Message message = entry.getValue();
-            if (meetupStock.equals(meetup)) {
-                Command.delete(false, message);
-                messageSended.remove(meetupStock);
+                Command.delete(false, meetup.getMessage().getMessage());
+                meetups.remove(meetup);
                 save();
             }
         }

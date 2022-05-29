@@ -66,9 +66,9 @@ public class Meetup extends LongCommand {
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                if (event.getMessage().getContent().startsWith("non")) {
+                if (event.getMessage().getContent().startsWith("non"))
                     return callStape(0);
-                } else if (!event.getMessage().getAttachments().isEmpty()) {
+                else if (!event.getMessage().getAttachments().isEmpty()) {
                     meetup.setAttachment(((Attachment[]) event.getMessage().getAttachments().toArray(new Attachment[0]))[0].getUrl());
                     return callStape(0);
                 }
@@ -119,7 +119,7 @@ public class Meetup extends LongCommand {
         Stape channel = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setText(EmbedCreateSpec.builder().title("Meetups !").color(ColorsUsed.just).timestamp(Instant.now()).description("Voici le channel des meetups : <#" + Init.idMeetupAnnonce.asString() + ">.").build());
+                setText(EmbedCreateSpec.builder().title("Meetups !").color(ColorsUsed.just).timestamp(Instant.now()).description("Voici le channel des meetups : <#" + Init.idMeetupAnnonce.asString() + ">").build());
                 return end;
             }
         };
@@ -138,11 +138,14 @@ public class Meetup extends LongCommand {
                 canDelete = MeetupHandler.getMeetupsFrom(member.getId());
                 AtomicInteger a = new AtomicInteger();
                 canDelete.forEach(meetupStock -> {
-                    Command.deletedMessage((TextChannel) test.getChannel().block(), MessageCreateSpec.builder().content("**" + a.get() + ":**").addEmbed(meetupStock.getEmbed()).build());
+                    Command.deletedMessage((TextChannel) test.getChannel().block(),
+                            meetupStock.getEmbed().content("**" + a.get() + ":**").build());
                     a.getAndIncrement();
                 });
 
-                setText(EmbedCreateSpec.builder().title("Meetup à delete...").description("Vous allez voir la liste de tout vos meetup s'afficher. Envoyer son numéro attribué pour le supprimer.").footer("Vous pouvez annuler | cancel", null).color(ColorsUsed.just).build());
+                setText(EmbedCreateSpec.builder().title("Meetup à delete...").description("Vous allez voir la liste " +
+                        "de tout vos meetup s'afficher. Envoyer son numéro attribué pour le supprimer.").footer("Vous" +
+                        " pouvez annuler | cancel", null).color(ColorsUsed.just).build());
                 return next;
             }
 
@@ -172,15 +175,15 @@ public class Meetup extends LongCommand {
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                if (event.getMessage().getContent().startsWith("create")) {
+                if (event.getMessage().getContent().startsWith("create"))
                     return callStape(0);
-                } else if (event.getMessage().getContent().startsWith("delete")) {
+                else if (event.getMessage().getContent().startsWith("delete"))
                     return callStape(1);
-                } else if (event.getMessage().getContent().startsWith("channel")) {
+                else if (event.getMessage().getContent().startsWith("channel"))
                     return callStape(2);
-                } else {
+                else
                     sendErrorEntry();
-                }
+
                 return next;
             }
         };
