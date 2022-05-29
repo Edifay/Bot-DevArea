@@ -1,1 +1,256 @@
-{"mission_follow_id":147,"missions":[{"title":"Dev web","description":"Bonjour,\nJe cherche un développeur web pour créer une plateforme de réseau social. Me mp pour plus d'infos","prix":"400€","dateRetour":"Non définie","langage":"Non définie","support":"Web","niveau":"Non définie","id":"h596g7mcy2q8k6bz52r6","message":{"idMessage":"979084936415940728","idChannel":"943817647060025354"},"createdAt":1653502439229,"membre":"810877940866220052","last_update":1653502439229},{"title":"Cherche dev Web Fullstack et 3d","description":"Bonjour,\nJe cherche un développeur sérieux ou 2 développeurs web qui s'y connaissent en 3d. Ils doivent s'y connaitre en react, next, threejs et solidity ( pas obligatoire)\nCeci est un gros projet et nous cherchons des personnes sérieuses\n","prix":"3000€","dateRetour":"Non définie","langage":"Html, Css, Js, Solidity, Nodejs","support":"Web","niveau":"Avancé","id":"152zid68lkjqh2i2940c","message":{"idMessage":"979073910794510367","idChannel":"943817647060025354"},"createdAt":1653499810502,"membre":"829290102936567829","last_update":1653499810502},{"title":"Plugin minecraft","description":"Bonjour je voudrais un plugin minecraft skyblock avec un petit plus. Nous avons plusieurs île et je voudrait que vous rajoutiez des missions qui agrandissent la worldborder ce qui permettra de découvrir les ile ","prix":"environ 20€","dateRetour":"Non définie","langage":"Java","support":"Non définie","niveau":"moyen-pro","id":"dg985u2d58h8891b72er","message":{"idMessage":"978940397298520085","idChannel":"943817647060025354"},"createdAt":1653467978377,"membre":"873913386436546640","last_update":1653467978377},{"title":"UN BOT","description":"Un Bot discord pour un serveur qu'on m'a demandé de faire (un de mes amis) mais là je suis sur un gros projet et je ne pourrai pas le faire si vous pouvez vous en occuper sa serai bien merci\nVous m'envelez une lourde tâche ","prix":"30€","dateRetour":"2 jours","langage":"Python (fr)","support":"Non définie","niveau":"Au moins 2 ans d'expérience","id":"1bt6a31bhtsepy4k8qs1","message":{"idMessage":"978436302217314314","idChannel":"943817647060025354"},"createdAt":1653347792674,"membre":"976976615286407168","last_update":1653347792674},{"title":"Recherche dev bot trading","description":"Bonjour,\nJe cherche une personne pour me faire un bot de trading de cryptomonnaies me mp","prix":"1500€","dateRetour":"1 mois","langage":"Non défini","support":"Non définie","niveau":"Non définie","id":"7nlwi1p1m5sjylao1y84","message":{"idMessage":"977915115045290034","idChannel":"943817647060025354"},"createdAt":1653223532077,"membre":"802862106012942346","last_update":1653223532077},{"title":"Recherche Dev Esp32","description":"Bonjour,\nJe cherche un dev capable de faire un programme c ou python pour du esp32. Ce sera une voiture qui doit communiquer avec un serveur http pour éviter des obstacles, les feux rouges...","prix":"200€","dateRetour":"Samedi Matin","langage":"Python ou C","support":"ESP 32","niveau":"Intérmédiaire","id":"n519y9j5024t3c1s23fz","message":{"idMessage":"976828502907162664","idChannel":"943817647060025354"},"createdAt":1652964463518,"membre":"802862106012942346","last_update":1652964463518},{"title":"Graphiste Maquette site","description":"Salut je suis le gérant d’un serveur discord à bientot 2k et j’aimerai qu’un graphiste fasses une nouvelle maquette pour notre site qui est composé de 3pages","prix":"Voir en mp","dateRetour":"Quelques jours","langage":"Non définie","support":"Web","niveau":"Experimenté","id":"uw875wg0x691a327q62i","message":{"idMessage":"976587510757085184","idChannel":"943817647060025354"},"createdAt":1652907006526,"membre":"784472290796240896","last_update":1652909913966,"message_verification":{"idMessage":"979136419354251294","idChannel":"976586559665107015"}},{"title":"DanganAnimation Plugin MC : DEV","description":"✌️ Bonjour, \n\nje me permet d'envoyer un message car je cherche actuellement un développeur Java pour une demande de plugin Minecraft particulière et plutôt simple dans la compréhension et dans sa réalisation. Toute fois ce projet va demandé une certaine imagination et certaine maitrise pour la génération de structure via Plugin (Style schématique).\n\nL'objectif du plugin est de créer des sortes d'animations/scène scénarisé dans principalement l'Univers de Danganronpa, toutefois il sera nécessaire d'imaginer ces propres scènes, d'où le besoin d'imagination.\nPour plus de détail voir CDC (Cahier des charges etc.), me contacter en privé en cas de problème ou de questionnement. \n\n\uD83D\uDCCBInformation complémentaire :\n\n\uD83D\uDCB8 Prix : A déterminer ensemble\n⏲️ Deadline : 1 mois environ\n\uD83D\uDCBB Version : 1.16.x\n\uD83D\uDCCB Gdoc/CDC : https://docs.google.com/document/d/14TidvWmfl5tXoN6peo13-_OBifgwuZRYDfRQ7FXNxMo/edit?usp=sharing ","prix":"A négocier, environ 75€","dateRetour":"Environ 1 mois","langage":"Java","support":"Minecraft","niveau":"Débutant/Intermédiaire","id":"i879yo0vi9396bidl9t6","message":{"idMessage":"975887224627421194","idChannel":"943817647060025354"},"createdAt":1652740045332,"membre":"435919738678542356","last_update":1653346011136},{"title":"Plugin Practice Spigot 1.8.9","description":"Bonjour je cherche un développeur pour me développer un plugins de Practice, il nous le faut absolument pour le 21/05/2022.\n\nJe chercherais un développeur compétant pour nous développer un plugin de Practice de A à Z, un support (serveur MC) vous sera transmis pour les test, le plugin devra comporter des modes de jeux différent (NoDebuff, DeBuff, HCF, GApple, BuildHUC, Sumo, Sumo [3 Round] et SkyBridge.), certain mode de jeux devrons avoir un accès restreins ce que je veux dire parle c'est qu'il faudra par exemple avoir le grade VIP ou autre.\n\nA la fin de la réalisation de plugin merci de nous le transmettre en Open source, aucun code ou autre ne sera transmis a d'autre serveur qu'il nous propose de l'argent ou autre nous refuserons.\n\nSi intéresser merci de me mp ou de suivre la mission, plus de précision vous serons transmise dans le suivit de mission ou en MP (cahier des charges).","prix":"20€ (à négocier selon la qualité)","dateRetour":"21/05/2022","langage":"Java ou Python comme vous voulet","support":"Serveur MC","niveau":"Entre Professionnel et Intermédiaire","id":"3trv6w45m58x5275it85","message":{"idMessage":"975119258696691783","idChannel":"943817647060025354"},"createdAt":1652556947904,"membre":"850830906293616650","last_update":1653162420333},{"title":"Plugin BedWars Spigot 1.8.9","description":"Bonjour je cherche un développeur pour me développer un plugins de BedWars, il nous le faut absolument pour le 21/05/2022.\n\nJe chercherais un développeur compétant pour nous développer un plugin de BedWars de A à Z, un support (serveur MC) vous sera transmis pour les test, le plugin devra comporter des modes de jeux différent (1v1, 2v2, 3v3, 4v4, 1v1v1v1, 2v2v2v2, 3v3v3v3 et 4v4v4v4.\n\nA la fin de la réalisation de plugin merci de nous le transmettre en Open source, aucun code ou autre ne sera transmis a d'autre serveur qu'il nous propose de l'argent ou autre nous refuserons.\n\nSi intéresser merci de me mp ou de suivre la mission.","prix":"20€ (à négocier selon la qualité)","dateRetour":"21/05/2022","langage":"Java ou Python","support":"Minecraft Spigot 1.8.9","niveau":"Entre Professionnel et Intermédiaire","id":"06e7vutio93ld8c7ng3v","message":{"idMessage":"975116679916953600","idChannel":"943817647060025354"},"createdAt":1652556333053,"membre":"850830906293616650","last_update":1653162421191}],"missions_follow":[{"mission_id":63,"message":{"idMessage":"968110503199113226","idChannel":"968110501403959376"},"client_id":"500542760533884937","dev_id":"357247304891236352"},{"mission_id":127,"message":{"idMessage":"978377127432949850","idChannel":"978377124463411321"},"client_id":"435919738678542356","dev_id":"853373368350539777"},{"mission_id":128,"message":{"idMessage":"978432606892884079","idChannel":"978432604686671932"},"client_id":"614629744931110929","dev_id":"976976615286407168"},{"mission_id":129,"message":{"idMessage":"978523904408702976","idChannel":"978523902294753300"},"client_id":"976976615286407168","dev_id":"386614847019810836"},{"mission_id":131,"message":{"idMessage":"978609897652510770","idChannel":"978609895567949824"},"client_id":"784472290796240896","dev_id":"244489906150178819"},{"mission_id":132,"message":{"idMessage":"978676600784707624","idChannel":"978676598695923732"},"client_id":"976976615286407168","dev_id":"798111107712811050"},{"mission_id":135,"message":{"idMessage":"978696973517471784","idChannel":"978696970136858654"},"client_id":"976976615286407168","dev_id":"597434541719945237"},{"mission_id":137,"message":{"idMessage":"978736783435116595","idChannel":"978736779836407838"},"client_id":"802862106012942346","dev_id":"975438593952735253"},{"mission_id":142,"message":{"idMessage":"979085007480033302","idChannel":"979085004757958676"},"client_id":"810877940866220052","dev_id":"435466369753022476"},{"mission_id":143,"message":{"idMessage":"979085908177453056","idChannel":"979085905572818995"},"client_id":"810877940866220052","dev_id":"539081853689397259"},{"mission_id":144,"message":{"idMessage":"979126251086282812","idChannel":"979126247391113346"},"client_id":"810877940866220052","dev_id":"535118744926683166"},{"mission_id":145,"message":{"idMessage":"979126260565430302","idChannel":"979126257650376755"},"client_id":"829290102936567829","dev_id":"535118744926683166"},{"mission_id":146,"message":{"idMessage":"979132874412421171","idChannel":"979132872202022963"},"client_id":"829290102936567829","dev_id":"435466369753022476"},{"mission_id":147,"message":{"idMessage":"979165900102053969","idChannel":"979165897413513266"},"client_id":"810877940866220052","dev_id":"853373368350539777"}]}
+{
+  "mission_follow_id": 172,
+  "missions": [
+    {
+      "title": "Bot trading crypto",
+      "description": "Bonjour, je recherche un développeur apte à réaliser un bot de trading de crypto à qui je puisse vocal et qui est apte à nous en fournir un.",
+      "prix": "15 000€",
+      "dateRetour": "A voir dans le vocal",
+      "langage": "Non définie",
+      "support": "Non définie",
+      "niveau": "Non définie",
+      "id": "5qwi8a7tl1e3a1lvsj54",
+      "message": {
+        "idMessage": "980444400628953100",
+        "idChannel": "943817647060025354"
+      },
+      "createdAt": 1653826560636,
+      "membre": "568482613443166208",
+      "last_update": 1653826560636
+    },
+    {
+      "title": "Recherche dev web front & back",
+      "description": "Bonjour,\nJe suis le fondateur d'une startup innovante dans le domaine des réseaux sociaux et je cherche 2 développeur back et 2 développeurs front ainsi qu'un graphiste pour compléter mon équipe.\nJe cherche des personnes qui ont de l'expérience et qui sont intéressées par le projet.",
+      "prix": "2500€",
+      "dateRetour": "Non définie",
+      "langage": "React, Html, Css, Js, node",
+      "support": "Web",
+      "niveau": "Avancé",
+      "id": "u6bwja4s326t381x4999",
+      "message": {
+        "idMessage": "979780902685118464",
+        "idChannel": "943817647060025354"
+      },
+      "createdAt": 1653668370452,
+      "membre": "829290102936567829",
+      "last_update": 1653668370452
+    },
+    {
+      "title": "Création de bot de trading crypto ",
+      "description": "Bonjour à tous, \nJe recherche un développeur capable de réaliser un **bot de trading crypto** __grâce à l'API de la plateforme Binance__. \n\nIl y aurait une **interface graphique très simple** nous donnant les résultats et plusieurs statistiques simples à coder, un **système de backtest** (pour pouvoir modifier les paramètres du bot et tester des stratégies sur une longue période). Le bot serait réalisé à l'aide **d'indicateurs de trading** ayant des **codes trouvables sur Internet**. \n\nLe **langage du bot est libre** (mais si possible qu'il soit en Python ou PHP c'est super, sinon pas de souci). \n\nSi la proposition vous enchante, envoyez-moi un MP, je vous donnerai plus de détails !",
+      "prix": "200€",
+      "dateRetour": "Non définie",
+      "langage": "Libre ",
+      "support": "Non définie",
+      "niveau": "Intermédiaire/expert",
+      "id": "wij6q6f244k25lg03hk9",
+      "message": {
+        "idMessage": "979692579887120414",
+        "idChannel": "943817647060025354"
+      },
+      "createdAt": 1653647312732,
+      "membre": "451984081836572672",
+      "last_update": 1653647312732
+    },
+    {
+      "title": "Ajout d'une fonctionnalité et fix quelques bugs flutter",
+      "description": "Bonjour,\nJe cherche une personne pour fix quelques bugs sur une app flutter et d'ajouter une fonctionnalité",
+      "prix": "20-50€",
+      "dateRetour": "Non définie",
+      "langage": "Dart (Flutter)",
+      "support": "Mobile et Web",
+      "niveau": "Non définie",
+      "id": "x51h42n63g0fhw21v9e1",
+      "message": {
+        "idMessage": "979502378132836422",
+        "idChannel": "943817647060025354"
+      },
+      "createdAt": 1653601965088,
+      "membre": "810877940866220052",
+      "last_update": 1653601965088
+    },
+    {
+      "title": "Plugin minecraft",
+      "description": "Bonjour je voudrais un plugin minecraft skyblock avec un petit plus. Nous avons plusieurs île et je voudrait que vous rajoutiez des missions qui agrandissent la worldborder ce qui permettra de découvrir les ile ",
+      "prix": "environ 20€",
+      "dateRetour": "Non définie",
+      "langage": "Java",
+      "support": "Non définie",
+      "niveau": "moyen-pro",
+      "id": "dg985u2d58h8891b72er",
+      "message": {
+        "idMessage": "978940397298520085",
+        "idChannel": "943817647060025354"
+      },
+      "createdAt": 1653467978377,
+      "membre": "873913386436546640",
+      "last_update": 1653467978377
+    },
+    {
+      "title": "Recherche dev bot trading",
+      "description": "Bonjour,\nJe cherche une personne pour me faire un bot de trading de cryptomonnaies me mp",
+      "prix": "1500€",
+      "dateRetour": "1 mois",
+      "langage": "Non défini",
+      "support": "Non définie",
+      "niveau": "Non définie",
+      "id": "7nlwi1p1m5sjylao1y84",
+      "message": {
+        "idMessage": "977915115045290034",
+        "idChannel": "943817647060025354"
+      },
+      "createdAt": 1653223532077,
+      "membre": "802862106012942346",
+      "last_update": 1653225237814,
+      "message_verification": {
+        "idMessage": "980458983494144070",
+        "idChannel": "976827342708170773"
+      }
+    },
+    {
+      "title": "DanganAnimation Plugin MC : DEV",
+      "description": "✌️ Bonjour, \n\nje me permet d'envoyer un message car je cherche actuellement un développeur Java pour une demande de plugin Minecraft particulière et plutôt simple dans la compréhension et dans sa réalisation. Toute fois ce projet va demandé une certaine imagination et certaine maitrise pour la génération de structure via Plugin (Style schématique).\n\nL'objectif du plugin est de créer des sortes d'animations/scène scénarisé dans principalement l'Univers de Danganronpa, toutefois il sera nécessaire d'imaginer ces propres scènes, d'où le besoin d'imagination.\nPour plus de détail voir CDC (Cahier des charges etc.), me contacter en privé en cas de problème ou de questionnement. \n\n\uD83D\uDCCBInformation complémentaire :\n\n\uD83D\uDCB8 Prix : A déterminer ensemble\n⏲️ Deadline : 1 mois environ\n\uD83D\uDCBB Version : 1.16.x\n\uD83D\uDCCB Gdoc/CDC : https://docs.google.com/document/d/14TidvWmfl5tXoN6peo13-_OBifgwuZRYDfRQ7FXNxMo/edit?usp=sharing ",
+      "prix": "A négocier, environ 75€",
+      "dateRetour": "Environ 1 mois",
+      "langage": "Java",
+      "support": "Minecraft",
+      "niveau": "Débutant/Intermédiaire",
+      "id": "i879yo0vi9396bidl9t6",
+      "message": {
+        "idMessage": "975887224627421194",
+        "idChannel": "943817647060025354"
+      },
+      "createdAt": 1652740045332,
+      "membre": "435919738678542356",
+      "last_update": 1653346011136
+    }
+  ],
+  "missions_follow": [
+    {
+      "mission_id": 63,
+      "message": {
+        "idMessage": "968110503199113226",
+        "idChannel": "968110501403959376"
+      },
+      "client_id": "500542760533884937",
+      "dev_id": "357247304891236352"
+    },
+    {
+      "mission_id": 127,
+      "message": {
+        "idMessage": "978377127432949850",
+        "idChannel": "978377124463411321"
+      },
+      "client_id": "435919738678542356",
+      "dev_id": "853373368350539777"
+    },
+    {
+      "mission_id": 132,
+      "message": {
+        "idMessage": "978676600784707624",
+        "idChannel": "978676598695923732"
+      },
+      "client_id": "976976615286407168",
+      "dev_id": "798111107712811050"
+    },
+    {
+      "mission_id": 142,
+      "message": {
+        "idMessage": "979085007480033302",
+        "idChannel": "979085004757958676"
+      },
+      "client_id": "810877940866220052",
+      "dev_id": "435466369753022476"
+    },
+    {
+      "mission_id": 151,
+      "message": {
+        "idMessage": "979488077896613898",
+        "idChannel": "979488075392622652"
+      },
+      "client_id": "295851829416165376",
+      "dev_id": "539081853689397259"
+    },
+    {
+      "mission_id": 156,
+      "message": {
+        "idMessage": "979648581692690432",
+        "idChannel": "979648579142557696"
+      },
+      "client_id": "295851829416165376",
+      "dev_id": "535118744926683166"
+    },
+    {
+      "mission_id": 160,
+      "message": {
+        "idMessage": "979678956150198322",
+        "idChannel": "979678953683959838"
+      },
+      "client_id": "784472290796240896",
+      "dev_id": "180843812204183552"
+    },
+    {
+      "mission_id": 164,
+      "message": {
+        "idMessage": "979787003140915290",
+        "idChannel": "979787000678846485"
+      },
+      "client_id": "829290102936567829",
+      "dev_id": "539081853689397259"
+    },
+    {
+      "mission_id": 165,
+      "message": {
+        "idMessage": "979800724743532564",
+        "idChannel": "979800722281492500"
+      },
+      "client_id": "829290102936567829",
+      "dev_id": "180843812204183552"
+    },
+    {
+      "mission_id": 166,
+      "message": {
+        "idMessage": "979806429798084608",
+        "idChannel": "979806427596075028"
+      },
+      "client_id": "829290102936567829",
+      "dev_id": "535118744926683166"
+    },
+    {
+      "mission_id": 167,
+      "message": {
+        "idMessage": "979869011976282123",
+        "idChannel": "979869009400954880"
+      },
+      "client_id": "829290102936567829",
+      "dev_id": "351192700730736641"
+    },
+    {
+      "mission_id": 170,
+      "message": {
+        "idMessage": "980425614538440715",
+        "idChannel": "980425611455643648"
+      },
+      "client_id": "829290102936567829",
+      "dev_id": "225219701700034561"
+    },
+    {
+      "mission_id": 171,
+      "message": {
+        "idMessage": "980445203087364156",
+        "idChannel": "980445200331726848"
+      },
+      "client_id": "568482613443166208",
+      "dev_id": "750680906288594962"
+    },
+    {
+      "mission_id": 172,
+      "message": {
+        "idMessage": "980483844614524969",
+        "idChannel": "980483840009195581"
+      },
+      "client_id": "568482613443166208",
+      "dev_id": "415198283414241281"
+    }
+  ]
+}
