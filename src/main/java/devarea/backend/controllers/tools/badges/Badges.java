@@ -1,6 +1,7 @@
 package devarea.backend.controllers.tools.badges;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import devarea.backend.controllers.tools.badges.role_badge.RolesBadges;
 import devarea.backend.controllers.tools.userInfos.WebUserInfos;
 import devarea.backend.controllers.tools.badges.time_badge.TimeOnServerBadge;
 import discord4j.core.object.entity.Member;
@@ -36,7 +37,7 @@ public abstract class Badges {
 
 
     public static ArrayList<Badges> getBadgesOf(final WebUserInfos user, final Member member_fetched) {
-        ArrayList<Badges> badges = new ArrayList<>();
+        ArrayList<Badges> badges = new ArrayList<>(RolesBadges.getRolesBadges(user, member_fetched));
         badges.add(TimeOnServerBadge.getTimeBadgeOf(user, member_fetched));
         return badges;
     }

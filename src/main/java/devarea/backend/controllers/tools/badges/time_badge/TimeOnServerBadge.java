@@ -16,7 +16,7 @@ public class TimeOnServerBadge extends Badges {
     }
 
 
-    public static Badges getTimeBadgeOf(final WebUserInfos user, final Member member_fetched) {
+    public static TimeOnServerBadge getTimeBadgeOf(final WebUserInfos user, final Member member_fetched) {
         Instant instant = member_fetched.getJoinTime().get();
         if (instant.isBefore(Instant.ofEpochMilli(millis_epoch_created).plus(90, ChronoUnit.DAYS)))
             return new Precursor_Badge(instant.toString());
