@@ -10,10 +10,6 @@ import java.util.Objects;
 
 public class CachedRole extends CachedObject<Role> {
 
-    protected String roleID;
-    protected Role role;
-    protected long last_fetch;
-
     public CachedRole(final Role role, final long last_fetch) {
         super(role, role.getId().asString(), last_fetch);
     }
@@ -25,13 +21,13 @@ public class CachedRole extends CachedObject<Role> {
 
     @Override
     public Role fetch() {
-        this.role = Init.devarea.getRoleById(Snowflake.of(this.roleID)).block();
-        return this.role;
+        this.object_cached = Init.devarea.getRoleById(Snowflake.of(this.object_id)).block();
+        return this.object_cached;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(roleID, role, last_fetch);
+        return Objects.hash(object_id, object_cached, last_fetch);
     }
 
     public static int getRoleMemberCount(final String roleID) {
