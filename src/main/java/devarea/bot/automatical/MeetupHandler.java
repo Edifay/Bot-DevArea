@@ -39,12 +39,12 @@ public class MeetupHandler {
                     meetups.forEach(meetupStock -> {
                         if (!meetupStock.getAlreayMake()) {
                             if (date.after(meetupStock.getDate())) {
-                                Command.send((TextChannel) Init.devarea.getChannelById(Init.idMeetupAnnonce).block(),
+                                Command.send((TextChannel) Init.devarea.getChannelById(Init.initial.meetupAnnounce_channel).block(),
                                         MessageCreateSpec.builder()
-                                                .content("Un meetup a commencé avec sujet :\n\n " + meetupStock.getName() + "\n\n<@&" + Init.idPingMeetup.asString() + ">").build()
+                                                .content("Un meetup a commencé avec sujet :\n\n " + meetupStock.getName() + "\n\n<@&" + Init.initial.pingMeetup_role.asString() + ">").build()
                                         , false);
                                 Init.devarea.createVoiceChannel(VoiceChannelCreateSpec.builder()
-                                        .parentId(Init.idCategoryGeneral)
+                                        .parentId(Init.initial.general_category)
                                         .name("Meetup by " + MemberCache.get(meetupStock.getAuthor().asString()).getDisplayName())
                                         .build()).subscribe();
                                 meetupStock.setAlreadyMake(true);
@@ -83,7 +83,7 @@ public class MeetupHandler {
     }
 
     public static void addMeetupAtValide(MeetupStock meetup) {
-        TextChannel meetupVerif = (TextChannel) Init.devarea.getChannelById(Init.idMeetupVerif).block();
+        TextChannel meetupVerif = (TextChannel) Init.devarea.getChannelById(Init.initial.meetupVerif_channel).block();
         Message message = Command.send(meetupVerif, meetup.getEmbed().build(), true);
         meetup.setMessage(new MessageSeria(message));
         meetups.add(meetup);
@@ -101,7 +101,7 @@ public class MeetupHandler {
     }
 
     public static boolean getEvent(ReactionAddEvent event) {
-        if (!event.getChannelId().equals(Init.idMeetupVerif))
+        if (!event.getChannelId().equals(Init.initial.meetupVerif_channel))
             return false;
         for (MeetupStock meetup : meetups) {
             if (meetup.getMessage().getMessageID().equals(event.getMessageId())) {
@@ -119,7 +119,7 @@ public class MeetupHandler {
                     startAway(() -> Command.delete(false, meetup.getMessage().getMessage()));
 
                     Message message =
-                            ((TextChannel) Init.devarea.getChannelById(Init.idMeetupAnnonce).block()).createMessage(meetup.getEmbed().build()).block();
+                            ((TextChannel) Init.devarea.getChannelById(Init.initial.meetupAnnounce_channel).block()).createMessage(meetup.getEmbed().build()).block();
                     addYes(message);
                     meetup.setMessage(new MessageSeria(message));
                 } else if (event.getEmoji().equals(ReactionEmoji.custom(Init.idNo))) {

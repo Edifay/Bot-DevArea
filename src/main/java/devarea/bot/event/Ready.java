@@ -1,5 +1,6 @@
 package devarea.bot.event;
 
+import devarea.Main;
 import devarea.backend.controllers.handlers.UserInfosHandlers;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
 import devarea.bot.cache.MemberCache;
@@ -24,13 +25,13 @@ public class Ready {
 
     private static boolean already = false;
 
-    public static void readyEventFonction(final Snowflake idDevArea, final Snowflake idLogChannel) {
+    public static void readyEventFonction() {
         Init.client.updatePresence(ClientPresence.of(Status.ONLINE, ClientActivity.playing("//help | Dev'Area Server " +
                 "!"))).subscribe();
-        Init.devarea = Init.client.getGuildById(idDevArea).block();
+        Init.devarea = Init.client.getGuildById(Init.initial.devarea).block();
         assert Init.devarea != null;
         startAway(() -> {
-            Init.logChannel = (TextChannel) Init.devarea.getChannelById(idLogChannel).block();
+            Init.logChannel = (TextChannel) Init.devarea.getChannelById(Init.initial.log_channel).block();
 
             Button button = Button.primary("id_1", "Le button");
 
@@ -46,13 +47,13 @@ public class Ready {
         });
 
 
-        System.out.println("Fetching members...");
+        System.out.println(Main.separator + "Fetching members...");
         long ms = System.currentTimeMillis();
 
         MemberCache.use(Init.devarea.getMembers().buffer().blockLast().toArray(new Member[0]));
 
         System.out.println("Fetch took : " + (System.currentTimeMillis() - ms) + "ms, " + MemberCache.cacheSize() +
-                " members fetch !");
+                " members fetched !\n" + Main.separator);
         if (MemberCache.cacheSize() == 0)
             System.exit(0);
 
@@ -66,10 +67,8 @@ public class Ready {
         if (already)
             return;
 
-        Init.idYes =
-                Init.devarea.getGuildEmojiById(Snowflake.of(Init.document.getElementsByTagName("yes").item(0).getChildNodes().item(0).getNodeValue())).block();
-        startAway(() -> Init.idNo = Init.devarea.getGuildEmojiById(Snowflake.of(Init.document.getElementsByTagName(
-                "no").item(0).getChildNodes().item(0).getNodeValue())).block());
+        startAway(() -> Init.idYes = Init.devarea.getGuildEmojiById(Init.initial.yes).block());
+        startAway(() -> Init.idNo = Init.devarea.getGuildEmojiById(Init.initial.no).block());
 
         try {
             startAway(RolesReactsHandler::load);

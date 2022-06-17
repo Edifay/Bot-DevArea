@@ -232,7 +232,7 @@ public class FreeLance implements Comparable {
     }
 
     public void send() {
-        this.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block(), MessageCreateSpec.builder()
+        this.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) Init.devarea.getChannelById(Init.initial.freelance_channel).block(), MessageCreateSpec.builder()
                 .content("**Freelance de <@" + this.memberId + "> :**")
                 .addEmbed(this.getEmbed())
                 .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + this.memberId + "&open=1",

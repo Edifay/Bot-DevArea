@@ -89,7 +89,7 @@ public class RequestHandlerGlobal {
                         embed.setColor(ColorsUsed.same);
                         embed.setDescription(
                                 "Rien de plus simple ! Il faut se rendre sur le channel Missions-Payantes de Dev'Area" +
-                                        " (<#" + Init.idMissionsPayantes.asString() + ">)." +
+                                        " (<#" + Init.initial.paidMissions_channel.asString() + ">)." +
                                         "\n\nPuis réagir au message proposant de créer sa mission, et suivre les " +
                                         "étapes de création.\n\nEn espérant t'aider !");
                     });

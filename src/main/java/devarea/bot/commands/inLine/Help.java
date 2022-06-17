@@ -13,7 +13,7 @@ public class Help extends ShortCommand {
     public Help(final Member member, final TextChannel channel, final Message message) {
         super(member, channel);
         this.sendEmbed(TextMessage.helpEmbed, false);
-        if (this.member.getBasePermissions().block().contains(Permission.ADMINISTRATOR) || this.member.getRoleIds().contains(Init.idAdmin) || this.member.getRoleIds().contains(Init.idModo)) {
+        if (this.member.getBasePermissions().block().contains(Permission.ADMINISTRATOR) || this.member.getRoleIds().contains(Init.initial.admin_role) || this.member.getRoleIds().contains(Init.initial.modo_role)) {
             this.sendEmbed(TextMessage.helpEmbedAdmin, false);
         }
         this.endCommand();

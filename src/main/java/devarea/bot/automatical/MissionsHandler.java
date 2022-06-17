@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.Main;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerGlobal;
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.handlerData.MissionManagerData;
@@ -48,7 +49,7 @@ public class MissionsHandler {
 
     public static void init() {
         load();
-        channel = (TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block();
+        channel = (TextChannel) ChannelCache.fetch(Init.initial.paidMissions_channel.asString());
         Message msg = channel.getLastMessage().block();
         if (msg.getEmbeds().size() == 0 || msg.getEmbeds().get(0).getTitle().equals("Créer une mission."))
             sendLastMessage();
@@ -155,7 +156,7 @@ public class MissionsHandler {
 
     public static boolean verif() {
         ArrayList<Mission> atRemove = new ArrayList<>();
-        TextChannel channel = (TextChannel) Init.devarea.getChannelById(Init.idMeetupVerif).block();
+        TextChannel channel = (TextChannel) Init.devarea.getChannelById(Init.initial.meetupVerif_channel).block();
         for (Mission mission : missions.values())
             if (!MemberCache.contain(mission.getMemberId())) {
                 atRemove.add(mission);
@@ -330,7 +331,7 @@ public class MissionsHandler {
 
     private static void followThisMission(Mission mission, Snowflake member_react_id) {
         Set<PermissionOverwrite> set = new HashSet<>();
-        set.add(PermissionOverwrite.forRole(Init.idRoleRulesAccepted, PermissionSet.of(),
+        set.add(PermissionOverwrite.forRole(Init.initial.rulesAccepted_role, PermissionSet.of(),
                 PermissionSet.of(Permission.VIEW_CHANNEL)));
         set.add(PermissionOverwrite.forRole(Init.devarea.getEveryoneRole().block().getId(), PermissionSet.of(),
                 PermissionSet.of(Permission.VIEW_CHANNEL)));
@@ -428,7 +429,7 @@ public class MissionsHandler {
                     missionsFollow.remove(mission);
 
                     Set<PermissionOverwrite> set = new HashSet<>();
-                    set.add(PermissionOverwrite.forRole(Init.idRoleRulesAccepted, PermissionSet.of(),
+                    set.add(PermissionOverwrite.forRole(Init.initial.rulesAccepted_role, PermissionSet.of(),
                             PermissionSet.of(Permission.VIEW_CHANNEL)));
                     set.add(PermissionOverwrite.forRole(Init.devarea.getEveryoneRole().block().getId(),
                             PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL)));
@@ -476,7 +477,7 @@ public class MissionsHandler {
         Mission createdMission = new Mission(title, description, prix, dateRetour, langage, support, niveau,
                 member.getId().asString(), null);
         createdMission.setMessage(new MessageSeria(
-                Objects.requireNonNull(send((TextChannel) Init.devarea.getChannelById(Init.idMissionsPayantes).block(), MessageCreateSpec.builder()
+                Objects.requireNonNull(send((TextChannel) Init.devarea.getChannelById(Init.initial.paidMissions_channel).block(), MessageCreateSpec.builder()
                         .content("**Mission proposée par <@" + member.getId().asString() + "> :**")
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title(title)

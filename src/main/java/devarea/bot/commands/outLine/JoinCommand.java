@@ -45,7 +45,7 @@ public class JoinCommand extends LongCommand {
 
         this.createLocalChannel(
                 member.getDisplayName(),
-                Init.idCategoryJoin,
+                Init.initial.join_category,
                 false);
 
         Stape roles = new Stape() {
@@ -53,7 +53,7 @@ public class JoinCommand extends LongCommand {
             protected boolean onCall(Message message) {
                 final PermissionOverwrite over = PermissionOverwrite.forMember(member.getId(),
                         PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY), PermissionSet.of());
-                startAway(() -> Init.devarea.getChannelById(Init.idRolesChannel).block().addMemberOverwrite(member.getId(), over).subscribe());
+                startAway(() -> Init.devarea.getChannelById(Init.initial.roles_channel).block().addMemberOverwrite(member.getId(), over).subscribe());
                 setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Et le plus important...")
@@ -70,7 +70,7 @@ public class JoinCommand extends LongCommand {
                     }
 
                     if (MemberCache.contain(member.getId().asString())) {
-                        member.addRole(Init.idRoleRulesAccepted).subscribe();
+                        member.addRole(Init.initial.rulesAccepted_role).subscribe();
                         endCommand();
 
                         try {
@@ -120,7 +120,7 @@ public class JoinCommand extends LongCommand {
                         } catch (Exception e) {
                         }
 
-                        startAway(() -> ((TextChannel) Init.devarea.getChannelById(Init.idWelcomChannel).block()).createMessage(MessageCreateSpec.builder()
+                        startAway(() -> ((TextChannel) Init.devarea.getChannelById(Init.initial.welcome_channel).block()).createMessage(MessageCreateSpec.builder()
                                 .addEmbed(EmbedCreateSpec.builder()
                                         .title("Salut ! " + member.getTag() + ", bienvenue sur **Dev'Area**, amuse " +
                                                 "toi bien !")
@@ -130,7 +130,7 @@ public class JoinCommand extends LongCommand {
                                         .build())
                                 .build()).subscribe());
 
-                        ((TextChannel) Init.devarea.getChannelById(Init.idGeneralChannel).block())
+                        ((TextChannel) Init.devarea.getChannelById(Init.initial.general_channel).block())
                                 .createMessage(msg -> msg
                                         .setContent("<@" + member.getId().asString() + "> a passé le petit " +
                                                 "questionnaire d'arrivée ! Vous pouvez lui souhaiter la bienvenue !"))
@@ -146,7 +146,7 @@ public class JoinCommand extends LongCommand {
             protected boolean onCall(Message message) {
                 final PermissionOverwrite over = PermissionOverwrite.forMember(member.getId(),
                         PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY), PermissionSet.of());
-                startAway(() -> Init.devarea.getChannelById(Init.idPresentation).block().addMemberOverwrite(member.getId(), over).subscribe());
+                startAway(() -> Init.devarea.getChannelById(Init.initial.presentation_channel).block().addMemberOverwrite(member.getId(), over).subscribe());
                 setText(EmbedCreateSpec.builder()
                         .title("Avant de commencer !")
                         .description(TextMessage.presentation)
@@ -185,8 +185,8 @@ public class JoinCommand extends LongCommand {
             protected boolean onCall(Message message) {
                 final PermissionOverwrite over = PermissionOverwrite.forMember(member.getId(),
                         PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY), PermissionSet.of());
-                startAway(() -> Init.devarea.getChannelById(Init.idMissionsGratuites).block().addMemberOverwrite(member.getId(), over).subscribe());
-                startAway(() -> Init.devarea.getChannelById(Init.idMissionsPayantes).block().addMemberOverwrite(member.getId(), over).subscribe());
+                startAway(() -> Init.devarea.getChannelById(Init.initial.freeMissions_channel).block().addMemberOverwrite(member.getId(), over).subscribe());
+                startAway(() -> Init.devarea.getChannelById(Init.initial.paidMissions_channel).block().addMemberOverwrite(member.getId(), over).subscribe());
                 startAway(() -> Init.devarea.getChannelById(Snowflake.of("856081355309842452")).block().addMemberOverwrite(member.getId(), over).subscribe());
                 setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()

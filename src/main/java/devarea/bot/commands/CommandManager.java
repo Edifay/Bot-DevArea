@@ -1,5 +1,6 @@
 package devarea.bot.commands;
 
+import devarea.Main;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.presets.ColorsUsed;
@@ -41,6 +42,8 @@ public class CommandManager {
     public static void init() {
         try {
 
+            System.out.println(Main.separator + "Loading commands :");
+
             ArrayList<String> names = getClassNamesFromPackage("devarea.bot.commands.inLine");
             if (names.size() == 0) {
                 names = getClassNamesFromPackage("BOOT-INF.classes.devarea.bot.commands.inLine");
@@ -50,7 +53,7 @@ public class CommandManager {
             for (String className : names) {
                 if (!className.contains("$")) {
                     final String newName = className.startsWith("/") ? className.substring(1) : className;
-                    System.out.println(className + "->" + newName);
+                    System.out.print(className + "->" + newName + " | ");
                     if (Arrays.stream(Class.forName("devarea.bot.commands.inLine." + newName).getConstructors())
                             .anyMatch(constructor -> constructor.getGenericParameterTypes().length == 3
                                     && constructor.getGenericParameterTypes()[0].equals(Member.class)
@@ -59,12 +62,13 @@ public class CommandManager {
                         classBound.put(newName.toLowerCase(Locale.ROOT), Class.forName("devarea.bot.commands.inLine" +
                                 "." + newName).getConstructor(Member.class, TextChannel.class, Message.class));
                     else
-                        System.err.println("Impossibilité de charger la commande : " + "devarea.bot.commands.inLine" +
+                        System.err.println("\nImpossibilité de charger la commande : " + "devarea.bot.commands.inLine" +
                                 "." + newName);
 
                 }
             }
 
+            System.out.println(classBound.size() + " commands loaded !");
         } catch (IOException | URISyntaxException | ClassNotFoundException | NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -146,7 +150,7 @@ public class CommandManager {
                         .description(commandNotFound)
                         .color(ColorsUsed.wrong).build());
 
-            if (Init.vanish)
+            if (Init.initial.vanish)
                 delete(false, message.getMessage());
         }
 

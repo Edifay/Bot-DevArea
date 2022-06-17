@@ -2,9 +2,8 @@ package devarea.bot.automatical;
 
 import devarea.bot.Init;
 import devarea.bot.cache.MemberCache;
-import devarea.bot.cache.tools.CachedMember;
+import devarea.bot.cache.tools.childs.CachedMember;
 import discord4j.common.util.Snowflake;
-import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Role;
 import discord4j.core.object.entity.channel.VoiceChannel;
 import discord4j.core.spec.VoiceChannelEditSpec;
@@ -19,7 +18,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
-import java.util.List;
 
 public class StatsHandler {
 
@@ -45,7 +43,6 @@ public class StatsHandler {
                 if (node instanceof Element && !node.getNodeName().equals("member")) {
                     Element el = (Element) node;
                     roleBoundToChannel.put(Init.devarea.getRoleById(Snowflake.of(el.getElementsByTagName("role").item(0).getChildNodes().item(0).getNodeValue())).block(), (VoiceChannel) Init.devarea.getChannelById(Snowflake.of(el.getElementsByTagName("channel").item(0).getChildNodes().item(0).getNodeValue())).block());
-                    System.out.println("Element : " + el.getNodeName());
                 }
             }
         } catch (Exception e) {
@@ -87,7 +84,7 @@ public class StatsHandler {
             });
 
         roleBoundToChannel.forEach((role, channel) -> channel.edit(VoiceChannelEditSpec.builder()
-                        .name(role.getName() + ": " + channelCount.get(channel))
+                .name(role.getName() + ": " + channelCount.get(channel))
                 .build()).subscribe());
     }
 }

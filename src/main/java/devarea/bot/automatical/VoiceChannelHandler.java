@@ -18,12 +18,12 @@ public class VoiceChannelHandler {
 
     public static void join(VoiceStateUpdateEvent event) {
         try {
-            if (event.getCurrent().getChannelId().get().equals(Init.idVoiceChannelHelp)) {
+            if (event.getCurrent().getChannelId().get().equals(Init.initial.Help_voiceChannel)) {
                 MemberCache.get(event.getCurrent().getUserId().asString()).edit(
                         GuildMemberEditSpec.builder()
                                 .newVoiceChannel(Possible.of(Optional.of(Init.devarea.createVoiceChannel(VoiceChannelCreateSpec.builder()
                                         .name("Aide #" + number++)
-                                        .parentId(Init.idCategoryGeneral)
+                                        .parentId(Init.initial.general_category)
                                         .userLimit(5)
                                         .build()).block().getId())))
                                 .build()

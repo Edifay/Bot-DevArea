@@ -18,7 +18,7 @@ public class DevHelp extends ShortCommand {
         super(member, channel);
         if (channel.getName().equalsIgnoreCase("entraide")) {
             if (!timer.contains(this.channel.getId())) {
-                send(MessageCreateSpec.builder().content("<@" + this.member.getId().asString() + ">, a demandé de l'aide ! <@&" + Init.idDevHelper.asString() + ">.").build(), false);
+                send(MessageCreateSpec.builder().content("<@" + this.member.getId().asString() + ">, a demandé de l'aide ! <@&" + Init.initial.devHelper_role.asString() + ">.").build(), false);
                 timer.add(this.channel.getId());
                 new Thread(() -> {
                     try {

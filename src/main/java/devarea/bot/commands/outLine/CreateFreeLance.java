@@ -33,7 +33,7 @@ public class CreateFreeLance extends LongCommand {
         this.freeLance.setMemberId(member.getId().asString());
         this.deletedCommand(21600000L);
 
-        this.createLocalChannel("creation de freelance", Init.idMissionsCategory);
+        this.createLocalChannel("creation de freelance", Init.initial.missions_category);
 
         Stape validateAll = new EndStape() {
             @Override
@@ -54,7 +54,7 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event)) {
-                    freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block(), MessageCreateSpec.builder()
+                    freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) Init.devarea.getChannelById(Init.initial.freelance_channel).block(), MessageCreateSpec.builder()
                             .content("**Freelance de <@" + freeLance.getMemberId() + "> :**")
                             .addEmbed(freeLance.getEmbed())
                             .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + member.getId() + "&open=1",

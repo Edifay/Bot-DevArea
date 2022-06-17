@@ -1,5 +1,6 @@
 package devarea.bot.event;
 
+import devarea.bot.automatical.EmbedLinkHandler;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.Bump;
@@ -33,27 +34,18 @@ public class MessageCreate {
             } else
                 MemberCache.use(message.getMember().get());
 
-            if (message.getMessage().getChannelId().equals(Init.idBump) && !message.getMessage().getAuthor().get().getId().equals(Snowflake.of("302050872383242240")))
+            if (message.getMessage().getChannelId().equals(Init.initial.bump_channel) && !message.getMessage().getAuthor().get().getId().equals(Snowflake.of("302050872383242240")))
                 Bump.messageInChannel(message);
-
-            /*Init.logChannel.createMessage(msg -> msg.addEmbed(embed -> {
-                final DateTimeFormatter hours = DateTimeFormatter.ofPattern("HH:mm");
-                final DateTimeFormatter date = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                final LocalDateTime now = LocalDateTime.now();
-                embed.setColor(ColorsUsed.same);
-                embed.setTitle(message.getMember().get().getTag() + " a envoyé un message :");
-                embed.setDescription(message.getMessage().getContent());
-                embed.setFooter(date.format(now) + " at " + hours.format(now) + ".", message.getMessage().getAuthor()
-                .get().getAvatarUrl());
-            })).subscribe();*/
 
             startAway(() -> XPHandler.onMessage(message));
             if (!message.getMessage().getContent().toLowerCase(Locale.ROOT).startsWith("//admin") && CommandManager.receiveMessage(message))
                 return;
 
-            if (message.getMessage().getContent().startsWith(Init.prefix))
-                CommandManager.exe(message.getMessage().getContent().substring(Init.prefix.length()).split(" ")[0],
+            if (message.getMessage().getContent().startsWith(Init.initial.prefix))
+                CommandManager.exe(message.getMessage().getContent().substring(Init.initial.prefix.length()).split(" ")[0],
                         message);
+
+            EmbedLinkHandler.onReceive(message);
         } catch (
                 Exception e) {
             e.printStackTrace();

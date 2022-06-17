@@ -1,31 +1,34 @@
-[
-  {
-    "bio": "Je développe depuis plus de 6 ans, fondateur de Dev'Area. Mes langages principaux sont le Java, C++, html/css, JS/TS. N'hésitez pas si vous avez des questions ou des propositions !",
-    "id": "321673326105985025"
-  },
-  {
-    "bio": "Etudiant en prépa, et passioné par l'informatique, je pratique de nombreux langages, tel que le C, Html/css, TypeScript/JavaScript, et bien d'autres.",
-    "id": "561583871183814666"
-  },
-  {
-    "name": "Gatean",
-    "bio": "Je m'appelle Gaëtan, je suis un développeur full stack français et un ingénieur passionné \"Devops\". Utilise actuellement les outils Jetbrains. Travailler sur le double démarrage Manjaro x Windows.",
-    "id": "816406495239208971"
-  },
-  {
-    "bio": "Graphiste pour Dev'Area ! Je travaille sur un nouveau logo ;).",
-    "id": "797593094195249222"
-  },
-  {
-    "bio": "Étudiant, en première générale option SI, NSI et Mathématiques. Je suis arrivé Helper en Janvier 2021, et je suis passé Modérateur en Février. Je fais de l'HTML/CSS, un peu de JS et du Python. Je me ferais un plaisir de vous venir en aide.",
-    "id": "412625084654551050"
-  },
-  {
-    "bio": "Admin depuis le jour 1. Moi développeur ? Pas un jour depuis sa création :). Les relations ça aide !",
-    "id": "378597371380105216"
-  },
-  {
-    "bio": "Fait partit du Staff de Dev'Area. Débutant en programmation, fondateur de plusieurs serveurs discord !",
-    "id": "514138344410841089"
-  }
+[{
+        "bio": "Je développe depuis plus de 6 ans, fondateur de Dev'Area. Mes langages principaux sont le Java, C++, html/css, JS/TS. N'hésitez pas si vous avez des questions ou des propositions !",
+        "id": "321673326105985025"
+    },
+    {
+        "bio": "Etudiant en prépa, et passioné par l'informatique, je pratique de nombreux langages, tel que le C, Html/css, TypeScript/JavaScript, et bien d'autres.",
+        "id": "561583871183814666"
+    },
+    {
+        "name": "Gatean",
+        "bio": "Je m'appelle Gaëtan, je suis un développeur full stack français et un ingénieur passionné \"Devops\". Utilise actuellement les outils Jetbrains. Travailler sur le double démarrage Manjaro x Windows.",
+        "id": "816406495239208971"
+    },
+    {
+        "bio": "Graphiste pour Dev'Area ! Je travaille sur un nouveau logo ;).",
+        "id": "797593094195249222"
+    },
+    {
+        "bio": "Étudiant, en première générale option SI, NSI et Mathématiques. Je suis arrivé Helper en Janvier 2021, et je suis passé Modérateur en Février. Je fais de l'HTML/CSS, un peu de JS et du Python. Je me ferais un plaisir de vous venir en aide.",
+        "id": "412625084654551050"
+    },
+    {
+        "bio": "Admin depuis le jour 1. Moi développeur ? Pas un jour depuis sa création :). Les relations ça aide !",
+        "id": "378597371380105216"
+    },
+    {
+        "bio": "Fait partit du Staff de Dev'Area. Débutant en programmation, fondateur de plusieurs serveurs discord !",
+        "id": "514138344410841089"
+    },
+    {
+        "bio": "Je me présente, moi c'est Dragos, né en 2007, j'ai rejoint l'équipe le 28 mai 2022. Je suis dans le développement depuis Septembre 2021 et je me contente du Python, un langage qui me plaît bien. ",
+        "id": "386614847019810836"
+    }
 ]

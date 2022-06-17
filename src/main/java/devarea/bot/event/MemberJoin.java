@@ -15,12 +15,13 @@ public class MemberJoin {
 
     private static TextChannel channelJoin;
 
-    public static void memberJoinFunction(Snowflake finalIdJoinLogChannel, MemberJoinEvent event) {
+    public static void memberJoinFunction(MemberJoinEvent event) {
         MemberCache.use(event.getMember());
 
         if (channelJoin == null)
-            channelJoin = (TextChannel) Init.devarea.getChannelById(finalIdJoinLogChannel).block();
-        channelJoin.createMessage(msg -> msg.setContent(event.getMember().getDisplayName() + " a rejoint le serveur !")).subscribe();
+            channelJoin = (TextChannel) Init.devarea.getChannelById(Init.initial.logJoin_channel).block();
+        channelJoin.createMessage(msg -> msg.setContent(event.getMember().getDisplayName() + " a rejoint le serveur " +
+                "!")).subscribe();
 
         if (!Main.developing)
             CommandManager.addManualCommand(event.getMember(), new ConsumableCommand(JoinCommand.class) {

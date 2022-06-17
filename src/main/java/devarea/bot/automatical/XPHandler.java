@@ -146,7 +146,7 @@ public class XPHandler {
             if (xp.containsKey(member.getId())) {
                 if (XPHandler.getLevelForXp(xp.get(member.getId())) < XPHandler.getLevelForXp(xp.get(member.getId()) + 1))
                     startAway(() -> {
-                        Command.send((TextChannel) Init.devarea.getChannelById(Init.idCommands).block(),
+                        Command.send((TextChannel) Init.devarea.getChannelById(Init.initial.command_channel).block(),
                                 MessageCreateSpec.builder().content("<@" + member.getId().asString() + ">").addEmbed(EmbedCreateSpec.builder().description("Bien joué <@" + member.getId().asString() + ">, tu es passé niveau " + XPHandler.getLevelForXp(xp.get(member.getId()) + 1) + " !").timestamp(Instant.now()).color(ColorsUsed.same).build()).build(), false);
                     });
                 xp.put(member.getId(), xp.get(member.getId()) + 1);

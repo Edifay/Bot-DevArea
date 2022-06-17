@@ -19,7 +19,7 @@ public class Send extends ShortCommand implements PermissionCommand {
 
     public Send(final Member member, final TextChannel channel, final Message message) {
         super(member, channel);
-        final String strMessage = message.getContent().substring(Init.prefix.length() + "ping".length());
+        final String strMessage = message.getContent().substring(Init.initial.prefix.length() + "ping".length());
         if (!strMessage.isEmpty())
             send(MessageCreateSpec.builder().content(strMessage).build(), false);
         else

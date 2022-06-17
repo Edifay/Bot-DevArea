@@ -19,13 +19,13 @@ public class VoiceStateUpdate {
 
         if (event.getCurrent().getChannelId().isPresent()) {
             if (event.getOld().isEmpty() || event.getOld().get().getChannelId().isEmpty())
-                ((TextChannel) Init.devarea.getChannelById(Init.idNoMic).block()).edit(TextChannelEditSpec.builder()
+                ((TextChannel) Init.devarea.getChannelById(Init.initial.noMic_channel).block()).edit(TextChannelEditSpec.builder()
                         .addPermissionOverwrite(PermissionOverwrite.forMember(event.getCurrent().getUserId(),
                                 PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()))
                         .build()).subscribe();
             VoiceChannelHandler.join(event);
         } else {
-            ((TextChannel) Init.devarea.getChannelById(Init.idNoMic).block()).edit(TextChannelEditSpec.builder()
+            ((TextChannel) Init.devarea.getChannelById(Init.initial.noMic_channel).block()).edit(TextChannelEditSpec.builder()
                     .addPermissionOverwrite(PermissionOverwrite.forMember(event.getCurrent().getUserId(),
                             PermissionSet.of(),
                             PermissionSet.of(Permission.VIEW_CHANNEL)))

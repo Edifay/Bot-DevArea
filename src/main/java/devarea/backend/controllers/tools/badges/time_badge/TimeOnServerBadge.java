@@ -4,6 +4,7 @@ import devarea.backend.controllers.tools.userInfos.WebUserInfos;
 import devarea.backend.controllers.tools.badges.Badges;
 import discord4j.core.object.entity.Member;
 
+import java.awt.image.BufferedImage;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -11,8 +12,10 @@ public class TimeOnServerBadge extends Badges {
 
     public static final long millis_epoch_created = 1595894400000L;
 
-    public TimeOnServerBadge(final String name, final String url, final String time_on_server) {
-        super(name, url, "Vous etes un " + name + ", vous avez rejoin le serveur le " + time_on_server + ".");
+    public TimeOnServerBadge(final String name, final String url, final String time_on_server,
+                             final BufferedImage local_icon) {
+        super(name, url, "Vous etes un " + name + ", vous avez rejoin le serveur le " + time_on_server + ".",
+                local_icon);
     }
 
 

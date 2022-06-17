@@ -48,7 +48,7 @@ public class FreeLanceHandler {
     public static void init() {
         try {
             load();
-            channel = (TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block();
+            channel = (TextChannel) Init.devarea.getChannelById(Init.initial.freelance_channel).block();
             //if (!developing)
             Message msg = channel.getLastMessage().block();
             if (msg.getEmbeds().size() == 0 || msg.getEmbeds().get(0).getTitle().equals("Proposez vos services !"))
@@ -153,7 +153,7 @@ public class FreeLanceHandler {
                         delete(false, freeLance.getMessage().getMessage());
                     } catch (Exception e) {
                     }
-                    freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block(), MessageCreateSpec.builder()
+                    freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) Init.devarea.getChannelById(Init.initial.freelance_channel).block(), MessageCreateSpec.builder()
                             .content("**Freelance de <@" + freeLance.getMemberId() + "> :**")
                             .addEmbed(freeLance.getEmbed())
                             .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + id + "&open=1",

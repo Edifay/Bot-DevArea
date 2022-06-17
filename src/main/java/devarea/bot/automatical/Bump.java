@@ -1,6 +1,7 @@
 package devarea.bot.automatical;
 
 import devarea.bot.Init;
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.commands.Command;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -17,10 +18,11 @@ public class Bump {
     private static TextChannel channel;
 
     public static void init() {
-        channel = (TextChannel) Init.devarea.getChannelById(Init.idBump).block();
+        channel = (TextChannel) Init.devarea.getChannelById(Init.initial.bump_channel).block();
         message = Command.sendEmbed(channel, EmbedCreateSpec.builder()
                 .color(ColorsUsed.wrong)
-                .description("Le bot vient de s'initialiser utilisez la commande `/bump`, pour lancer le compte à rebours.").build(), true);
+                .description("Le bot vient de s'initialiser utilisez la commande `/bump`, pour lancer le compte à " +
+                        "rebours.").build(), true);
         new Thread(() -> {
             try {
                 while (true) {
@@ -28,12 +30,14 @@ public class Bump {
                     try {
                         restartIfNotTheLast();
                         if (dateToBump - System.currentTimeMillis() > 0) {
-                            if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes."))
+                            if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est à nouveau " +
+                                    "disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes."))
                                 edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
                                                 .description("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes.")
                                                 .color(ColorsUsed.wrong).build())
                                         .build());
-                        } else if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est disponible avec la commande `/bump`.") && !message.getEmbeds().get(0).getDescription().get().equals("Le bot vient de s'initialiser utilisez la commande `/bump`, pour lancer le compte à rebours."))
+                        } else if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est disponible " +
+                                "avec la commande `/bump`.") && !message.getEmbeds().get(0).getDescription().get().equals("Le bot vient de s'initialiser utilisez la commande `/bump`, pour lancer le compte à rebours."))
                             replace(MessageCreateSpec.builder()
                                     .addEmbed(EmbedCreateSpec.builder()
                                             .description("Le bump est disponible avec la commande `/bump`.")
@@ -48,7 +52,7 @@ public class Bump {
     }
 
     public synchronized static void getDisboardMessage(MessageCreateEvent event) {
-        if (!event.getMessage().getChannel().block().getId().equals(channel.getId()))
+        if (!event.getMessage().getChannelId().equals(channel.getId()))
             return;
 
         String[] coupes = event.getMessage().getEmbeds().get(0).getDescription().get().split(" ");
@@ -86,7 +90,7 @@ public class Bump {
     }
 
     private static void restartIfNotTheLast() {
-        channel = ((TextChannel) Init.devarea.getChannelById(Init.idBump).block());
+        channel = (TextChannel) ChannelCache.fetch(Init.initial.bump_channel.asString());
         if (!channel.getLastMessageId().get().equals(message.getId())) {
             replace(MessageCreateSpec.builder()
                     .addEmbed(EmbedCreateSpec.builder()

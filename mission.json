@@ -1,128 +1,56 @@
 {
-  "mission_follow_id": 172,
+  "mission_follow_id": 234,
   "missions": [
     {
-      "title": "Bot trading crypto",
-      "description": "Bonjour, je recherche un développeur apte à réaliser un bot de trading de crypto à qui je puisse vocal et qui est apte à nous en fournir un.",
-      "prix": "15 000€",
-      "dateRetour": "A voir dans le vocal",
+      "title": "Launcher",
+      "description": "Bonjour, je recherche une personne pouvant créer une application de bureau permettant de télécharger un dossier puis d'exécuter un .exe ca serait une application de bureau graphique avec des éléments fournis préalablement.\nN'hésitez pas a me mp pour plus d'infos!",
+      "prix": "négociable en mp",
+      "dateRetour": "au plus tard le 30 juin",
+      "langage": "C",
+      "support": " ",
+      "niveau": "intermédiaire ",
+      "id": "72izyhat0a97mee0jix1",
+      "message": {
+        "idMessage": "986581261776736307",
+        "idChannel": "943817647060025354"
+      },
+      "createdAt": 1655289702468,
+      "membre": "925506627543650375",
+      "last_update": 1655289702468
+    },
+    {
+      "title": "Développement Web 3 ",
+      "description": "Bonjour, \nNous développons un Metaverse/MMORPG/P2E. \nEt recherchons activement un développeur en Web3, compétant à la création d'un éco-système pour P2E. Vous intégrerez notre équipe, et votre prestation sera payé en conséquence. De plus nous avons trouvé comment révolutionner le MMORPG, le MMORPG 2.0 est enfin arrivé et il suffisait simplement d'écouter les joueurs. Si vous êtes intéressé n'hésitez pas à me contacter pour de plus amples informations sur nos attentes... \nMerci",
+      "prix": "20% de la recette ",
+      "dateRetour": "Septembre 2022",
       "langage": "Non définie",
       "support": "Non définie",
       "niveau": "Non définie",
-      "id": "5qwi8a7tl1e3a1lvsj54",
+      "id": "2e21jv8k1p6o2b932o0j",
       "message": {
-        "idMessage": "980444400628953100",
+        "idMessage": "985930691164373073",
         "idChannel": "943817647060025354"
       },
-      "createdAt": 1653826560636,
-      "membre": "568482613443166208",
-      "last_update": 1653826560636
+      "createdAt": 1655134594355,
+      "membre": "187638051126640651",
+      "last_update": 1655134594355
     },
     {
-      "title": "Recherche dev web front & back",
-      "description": "Bonjour,\nJe suis le fondateur d'une startup innovante dans le domaine des réseaux sociaux et je cherche 2 développeur back et 2 développeurs front ainsi qu'un graphiste pour compléter mon équipe.\nJe cherche des personnes qui ont de l'expérience et qui sont intéressées par le projet.",
-      "prix": "2500€",
+      "title": "Playbot | Application web Nuxt",
+      "description": "Nous recherchons des dévelopeurs et des graphistes en tout genre afin de nous aider dans la création d'une application web et mobile pour effectuer des recherches de mates dans une multitude de jeux, tracker les infos, système d'amis et de feed etc...\nVeuillez me contacter si le projet vous intéresse : Ayuc#5577",
+      "prix": "Budget envisageable à l'agrandissement du projet",
       "dateRetour": "Non définie",
-      "langage": "React, Html, Css, Js, node",
-      "support": "Web",
-      "niveau": "Avancé",
-      "id": "u6bwja4s326t381x4999",
-      "message": {
-        "idMessage": "979780902685118464",
-        "idChannel": "943817647060025354"
-      },
-      "createdAt": 1653668370452,
-      "membre": "829290102936567829",
-      "last_update": 1653668370452
-    },
-    {
-      "title": "Création de bot de trading crypto ",
-      "description": "Bonjour à tous, \nJe recherche un développeur capable de réaliser un **bot de trading crypto** __grâce à l'API de la plateforme Binance__. \n\nIl y aurait une **interface graphique très simple** nous donnant les résultats et plusieurs statistiques simples à coder, un **système de backtest** (pour pouvoir modifier les paramètres du bot et tester des stratégies sur une longue période). Le bot serait réalisé à l'aide **d'indicateurs de trading** ayant des **codes trouvables sur Internet**. \n\nLe **langage du bot est libre** (mais si possible qu'il soit en Python ou PHP c'est super, sinon pas de souci). \n\nSi la proposition vous enchante, envoyez-moi un MP, je vous donnerai plus de détails !",
-      "prix": "200€",
-      "dateRetour": "Non définie",
-      "langage": "Libre ",
-      "support": "Non définie",
-      "niveau": "Intermédiaire/expert",
-      "id": "wij6q6f244k25lg03hk9",
-      "message": {
-        "idMessage": "979692579887120414",
-        "idChannel": "943817647060025354"
-      },
-      "createdAt": 1653647312732,
-      "membre": "451984081836572672",
-      "last_update": 1653647312732
-    },
-    {
-      "title": "Ajout d'une fonctionnalité et fix quelques bugs flutter",
-      "description": "Bonjour,\nJe cherche une personne pour fix quelques bugs sur une app flutter et d'ajouter une fonctionnalité",
-      "prix": "20-50€",
-      "dateRetour": "Non définie",
-      "langage": "Dart (Flutter)",
-      "support": "Mobile et Web",
+      "langage": "Non définie",
+      "support": "Web Nuxt",
       "niveau": "Non définie",
-      "id": "x51h42n63g0fhw21v9e1",
+      "id": "1kv9xha8o271kmdift97",
       "message": {
-        "idMessage": "979502378132836422",
+        "idMessage": "985123459317256202",
         "idChannel": "943817647060025354"
       },
-      "createdAt": 1653601965088,
-      "membre": "810877940866220052",
-      "last_update": 1653601965088
-    },
-    {
-      "title": "Plugin minecraft",
-      "description": "Bonjour je voudrais un plugin minecraft skyblock avec un petit plus. Nous avons plusieurs île et je voudrait que vous rajoutiez des missions qui agrandissent la worldborder ce qui permettra de découvrir les ile ",
-      "prix": "environ 20€",
-      "dateRetour": "Non définie",
-      "langage": "Java",
-      "support": "Non définie",
-      "niveau": "moyen-pro",
-      "id": "dg985u2d58h8891b72er",
-      "message": {
-        "idMessage": "978940397298520085",
-        "idChannel": "943817647060025354"
-      },
-      "createdAt": 1653467978377,
-      "membre": "873913386436546640",
-      "last_update": 1653467978377
-    },
-    {
-      "title": "Recherche dev bot trading",
-      "description": "Bonjour,\nJe cherche une personne pour me faire un bot de trading de cryptomonnaies me mp",
-      "prix": "1500€",
-      "dateRetour": "1 mois",
-      "langage": "Non défini",
-      "support": "Non définie",
-      "niveau": "Non définie",
-      "id": "7nlwi1p1m5sjylao1y84",
-      "message": {
-        "idMessage": "977915115045290034",
-        "idChannel": "943817647060025354"
-      },
-      "createdAt": 1653223532077,
-      "membre": "802862106012942346",
-      "last_update": 1653225237814,
-      "message_verification": {
-        "idMessage": "980458983494144070",
-        "idChannel": "976827342708170773"
-      }
-    },
-    {
-      "title": "DanganAnimation Plugin MC : DEV",
-      "description": "✌️ Bonjour, \n\nje me permet d'envoyer un message car je cherche actuellement un développeur Java pour une demande de plugin Minecraft particulière et plutôt simple dans la compréhension et dans sa réalisation. Toute fois ce projet va demandé une certaine imagination et certaine maitrise pour la génération de structure via Plugin (Style schématique).\n\nL'objectif du plugin est de créer des sortes d'animations/scène scénarisé dans principalement l'Univers de Danganronpa, toutefois il sera nécessaire d'imaginer ces propres scènes, d'où le besoin d'imagination.\nPour plus de détail voir CDC (Cahier des charges etc.), me contacter en privé en cas de problème ou de questionnement. \n\n\uD83D\uDCCBInformation complémentaire :\n\n\uD83D\uDCB8 Prix : A déterminer ensemble\n⏲️ Deadline : 1 mois environ\n\uD83D\uDCBB Version : 1.16.x\n\uD83D\uDCCB Gdoc/CDC : https://docs.google.com/document/d/14TidvWmfl5tXoN6peo13-_OBifgwuZRYDfRQ7FXNxMo/edit?usp=sharing ",
-      "prix": "A négocier, environ 75€",
-      "dateRetour": "Environ 1 mois",
-      "langage": "Java",
-      "support": "Minecraft",
-      "niveau": "Débutant/Intermédiaire",
-      "id": "i879yo0vi9396bidl9t6",
-      "message": {
-        "idMessage": "975887224627421194",
-        "idChannel": "943817647060025354"
-      },
-      "createdAt": 1652740045332,
-      "membre": "435919738678542356",
-      "last_update": 1653346011136
+      "createdAt": 1654942135282,
+      "membre": "597434541719945237",
+      "last_update": 1654942135282
     }
   ],
   "missions_follow": [
@@ -136,121 +64,76 @@
       "dev_id": "357247304891236352"
     },
     {
-      "mission_id": 127,
+      "mission_id": 209,
       "message": {
-        "idMessage": "978377127432949850",
-        "idChannel": "978377124463411321"
+        "idMessage": "984162983733264484",
+        "idChannel": "984162980927254608"
       },
-      "client_id": "435919738678542356",
+      "client_id": "810877940866220052",
+      "dev_id": "535118744926683166"
+    },
+    {
+      "mission_id": 210,
+      "message": {
+        "idMessage": "984171209770020974",
+        "idChannel": "984171206683029595"
+      },
+      "client_id": "810877940866220052",
       "dev_id": "853373368350539777"
     },
     {
-      "mission_id": 132,
+      "mission_id": 212,
       "message": {
-        "idMessage": "978676600784707624",
-        "idChannel": "978676598695923732"
+        "idMessage": "984210983855751198",
+        "idChannel": "984210981464997918"
       },
-      "client_id": "976976615286407168",
-      "dev_id": "798111107712811050"
-    },
-    {
-      "mission_id": 142,
-      "message": {
-        "idMessage": "979085007480033302",
-        "idChannel": "979085004757958676"
-      },
-      "client_id": "810877940866220052",
+      "client_id": "911009998367256586",
       "dev_id": "435466369753022476"
     },
     {
-      "mission_id": 151,
+      "mission_id": 213,
       "message": {
-        "idMessage": "979488077896613898",
-        "idChannel": "979488075392622652"
+        "idMessage": "984212278159212546",
+        "idChannel": "984212275378417696"
       },
-      "client_id": "295851829416165376",
-      "dev_id": "539081853689397259"
+      "client_id": "911009998367256586",
+      "dev_id": "277783329183498240"
     },
     {
-      "mission_id": 156,
+      "mission_id": 214,
       "message": {
-        "idMessage": "979648581692690432",
-        "idChannel": "979648579142557696"
+        "idMessage": "984327149144141865",
+        "idChannel": "984327146988269598"
       },
-      "client_id": "295851829416165376",
+      "client_id": "911009998367256586",
       "dev_id": "535118744926683166"
     },
     {
-      "mission_id": 160,
+      "mission_id": 218,
       "message": {
-        "idMessage": "979678956150198322",
-        "idChannel": "979678953683959838"
+        "idMessage": "984567849471324191",
+        "idChannel": "984567846170406972"
       },
-      "client_id": "784472290796240896",
-      "dev_id": "180843812204183552"
+      "client_id": "911009998367256586",
+      "dev_id": "326767185705828352"
     },
     {
-      "mission_id": 164,
+      "mission_id": 219,
       "message": {
-        "idMessage": "979787003140915290",
-        "idChannel": "979787000678846485"
+        "idMessage": "984723915236597810",
+        "idChannel": "984723912443187250"
       },
-      "client_id": "829290102936567829",
-      "dev_id": "539081853689397259"
+      "client_id": "911009998367256586",
+      "dev_id": "378615752238039050"
     },
     {
-      "mission_id": 165,
+      "mission_id": 224,
       "message": {
-        "idMessage": "979800724743532564",
-        "idChannel": "979800722281492500"
+        "idMessage": "985983951254482996",
+        "idChannel": "985983947739652217"
       },
-      "client_id": "829290102936567829",
-      "dev_id": "180843812204183552"
-    },
-    {
-      "mission_id": 166,
-      "message": {
-        "idMessage": "979806429798084608",
-        "idChannel": "979806427596075028"
-      },
-      "client_id": "829290102936567829",
-      "dev_id": "535118744926683166"
-    },
-    {
-      "mission_id": 167,
-      "message": {
-        "idMessage": "979869011976282123",
-        "idChannel": "979869009400954880"
-      },
-      "client_id": "829290102936567829",
-      "dev_id": "351192700730736641"
-    },
-    {
-      "mission_id": 170,
-      "message": {
-        "idMessage": "980425614538440715",
-        "idChannel": "980425611455643648"
-      },
-      "client_id": "829290102936567829",
-      "dev_id": "225219701700034561"
-    },
-    {
-      "mission_id": 171,
-      "message": {
-        "idMessage": "980445203087364156",
-        "idChannel": "980445200331726848"
-      },
-      "client_id": "568482613443166208",
-      "dev_id": "750680906288594962"
-    },
-    {
-      "mission_id": 172,
-      "message": {
-        "idMessage": "980483844614524969",
-        "idChannel": "980483840009195581"
-      },
-      "client_id": "568482613443166208",
-      "dev_id": "415198283414241281"
+      "client_id": "911009998367256586",
+      "dev_id": "420188924166668291"
     }
   ]
 }

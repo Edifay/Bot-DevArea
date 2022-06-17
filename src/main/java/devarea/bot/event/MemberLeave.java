@@ -15,21 +15,21 @@ public class MemberLeave {
 
     private static TextChannel channel;
 
-    public static void memberLeaveFunction(Snowflake finalIdDevArea, Snowflake finalIdJoinLogChannel,
-                                           MemberLeaveEvent memberLeaveEvent) {
+    public static void memberLeaveFunction(MemberLeaveEvent memberLeaveEvent) {
         try {
             MemberCache.slash(memberLeaveEvent.getUser().getId().asString());
 
             if (XPHandler.haveBeenSet(memberLeaveEvent.getUser().getId()))
                 XPHandler.remove(memberLeaveEvent.getUser().getId());
-          
+
             CommandManager.left(memberLeaveEvent.getUser().getId());
             if (FreeLanceHandler.hasFreelance(memberLeaveEvent.getUser().getId().asString()))
                 FreeLanceHandler.remove(FreeLanceHandler.getFreelance(memberLeaveEvent.getUser().getId().asString()));
             RequestHandlerAuth.left(memberLeaveEvent.getUser().getId().asString());
             if (channel == null)
-                channel = (TextChannel) Init.client.getGuildById(finalIdDevArea).block().getChannelById(finalIdJoinLogChannel).block();
-            channel.createMessage(msg -> msg.setContent(memberLeaveEvent.getMember().get().getDisplayName() + " a quitté le serveur !")).subscribe();
+                channel = (TextChannel) Init.devarea.getChannelById(Init.initial.logJoin_channel).block();
+            channel.createMessage(msg -> msg.setContent(memberLeaveEvent.getMember().get().getDisplayName() + " a " +
+                    "quitté le serveur !")).subscribe();
         } catch (Exception e) {
             e.printStackTrace();
         }

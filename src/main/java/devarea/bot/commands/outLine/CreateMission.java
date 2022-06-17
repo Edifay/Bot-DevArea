@@ -28,7 +28,7 @@ public class CreateMission extends LongCommand {
         this.mission.setMemberId(member.getId().asString());
         this.deletedCommand(10800000L);
 
-        this.createLocalChannel("creation de mission", Init.idMissionsCategory);
+        this.createLocalChannel("creation de mission", Init.initial.missions_category);
 
         Stape niveauStape = new EndStape() {
             @Override

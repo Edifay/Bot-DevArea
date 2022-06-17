@@ -50,12 +50,13 @@ public abstract class Command {
 
     protected boolean createLocalChannel(final String name, final Snowflake parentId, final boolean canWrite) {
         Set<PermissionOverwrite> set = new HashSet<>();
-        set.add(PermissionOverwrite.forRole(Init.idRoleRulesAccepted,
+        set.add(PermissionOverwrite.forRole(Init.initial.rulesAccepted_role,
                 PermissionSet.of(),
                 PermissionSet.of(Permission.VIEW_CHANNEL)));
         set.add(PermissionOverwrite.forMember(this.member.getId(),
                 canWrite ?
-                        PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY, Permission.SEND_MESSAGES)
+                        PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY,
+                                Permission.SEND_MESSAGES)
                         :
                         PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY),
                 PermissionSet.of(Permission.ADD_REACTIONS)));

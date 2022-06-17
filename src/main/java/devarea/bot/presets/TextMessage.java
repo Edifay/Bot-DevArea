@@ -55,7 +55,7 @@ public class TextMessage {
         Les règles pour demander des missions
      */
     public static final String rulesForAskCode = "Si tu es sur ce serveur c'est donc que tu as besoin de développeurs" +
-            ". \nLes channels : <#" + Init.idMissionsGratuites.asString() + "> et <#" + Init.idMissionsPayantes.asString() + "> te permettent de proposer des missions/projets. \n\nCliques sur : <:ayy:" + Init.idYes.getId().asString() + "> pour accéder à la suite.";
+            ". \nLes channels : <#" + Init.initial.freelance_channel.asString() + "> et <#" + Init.initial.paidMissions_channel.asString() + "> te permettent de proposer des missions/projets. \n\nCliques sur : <:ayy:" + Init.idYes.getId().asString() + "> pour accéder à la suite.";
     /*
         Le message de règles
      */
@@ -68,14 +68,14 @@ public class TextMessage {
      */
     public static final String presentation = "Avant d'aller parler dans les channels et de rencontrer les membres de" +
             " la communauté, essaye de faire une présentation de toi qui permettra d'entamer la discussion, et d'en " +
-            "savoir un peu plus sur toi ! <#" + Init.idPresentation.asString() + ">" + "\n\nCliques sur : <:ayy:" + Init.idYes.getId().asString() + "> pour accéder à la suite.";
+            "savoir un peu plus sur toi ! <#" + Init.initial.presentation_channel.asString() + ">" + "\n\nCliques sur : <:ayy:" + Init.idYes.getId().asString() + "> pour accéder à la suite.";
     /*
         Le message mettant en avant le channel des rôles
      */
-    public static final String roles = "Tu as maintenant accès au <#" + Init.idRolesChannel.asString() + ">, tu dois " +
+    public static final String roles = "Tu as maintenant accès au <#" + Init.initial.roles_channel.asString() + ">, tu dois " +
             "choisir tes rôles avec précision, **attention cela est la base du serveur**.\n\nJe te donne accès au " +
             "serveur dans 30 secondes (ne t'inquiète pas si tu prends plus que 30 secondes tu as tout le temps qu'il " +
-            "te faut) tu as donc le temps de prendre tes <#" + Init.idRolesChannel.asString() + ">.\n\nBienvenue !";
+            "te faut) tu as donc le temps de prendre tes <#" + Init.initial.roles_channel.asString() + ">.\n\nBienvenue !";
     /*
         le message lors de l'help command
      */
@@ -99,7 +99,7 @@ public class TextMessage {
             .addField("Développeurs <-> Clients :", "`//mission` -> permet de gérer les missions créées" +
                     ".\n`//freelance` permet de gérer le message freelance.\n\n`creationMissions` & " +
                     "`creationFreeLance` -> ne se lancent pas comme des commandes classiques, une réaction dans le " +
-                    "channel : <#" + Init.idMissionsPayantes.asString() + "> & <#" + Init.idFreeLance.asString() + ">" +
+                    "channel : <#" + Init.initial.paidMissions_channel.asString() + "> & <#" + Init.initial.freelance_channel.asString() + ">" +
                     " permet de commencer la commande.\n\n", false)
             .addField("Le site", "Le serveur Dev'Area possède aussi un site internet qui permet de gérer certaines " +
                     "fonctionalités du serveur.\n\n   -> https://devarea.fr/", false)

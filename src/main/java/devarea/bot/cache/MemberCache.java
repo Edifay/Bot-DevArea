@@ -1,6 +1,6 @@
 package devarea.bot.cache;
 
-import devarea.bot.cache.tools.CachedMember;
+import devarea.bot.cache.tools.childs.CachedMember;
 import discord4j.core.object.entity.Member;
 import reactor.util.annotation.NonNull;
 
@@ -65,7 +65,7 @@ public class MemberCache {
                     members.put(member.getId().asString(), new CachedMember(member, System.currentTimeMillis()));
                 else {
                     try {
-                        cachedMember.use(member);
+                        cachedMember.use(member, member.getId().asString());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

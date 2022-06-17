@@ -119,7 +119,7 @@ public class Meetup extends LongCommand {
         Stape channel = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setText(EmbedCreateSpec.builder().title("Meetups !").color(ColorsUsed.just).timestamp(Instant.now()).description("Voici le channel des meetups : <#" + Init.idMeetupAnnonce.asString() + ">").build());
+                setText(EmbedCreateSpec.builder().title("Meetups !").color(ColorsUsed.just).timestamp(Instant.now()).description("Voici le channel des meetups : <#" + Init.initial.meetupAnnounce_channel.asString() + ">").build());
                 return end;
             }
         };

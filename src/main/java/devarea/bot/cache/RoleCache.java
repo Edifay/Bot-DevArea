@@ -1,6 +1,6 @@
 package devarea.bot.cache;
 
-import devarea.bot.cache.tools.CachedRole;
+import devarea.bot.cache.tools.childs.CachedRole;
 import discord4j.core.object.entity.Role;
 
 import java.util.HashMap;

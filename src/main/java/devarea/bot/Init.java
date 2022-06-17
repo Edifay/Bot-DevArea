@@ -1,8 +1,12 @@
 package devarea.bot;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import devarea.Main;
 import devarea.bot.commands.CommandManager;
 import devarea.bot.event.*;
-import discord4j.common.util.Snowflake;
+import devarea.bot.utils.InitialData;
+import devarea.bot.utils.SnowflakeModuleSerializer;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
@@ -15,118 +19,74 @@ import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.GuildEmoji;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.gateway.intent.IntentSet;
-import org.w3c.dom.Document;
 
 import javax.imageio.ImageIO;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Init {
+    public static final File initialDataFile = new File("configuration.json");
 
-    public static String prefix;
-    public static Boolean vanish;
-    public static GatewayDiscordClient client = null;
-    public static TextChannel logChannel;
-    public static Snowflake idCategoryJoin;
+    public static InitialData initial;
+
+    public static GatewayDiscordClient client;
     public static Guild devarea;
-
     public static GuildEmoji idYes, idNo;
 
-    public static Snowflake
-            idMissionsPayantes,
-            idMissionsGratuites,
-            idPresentation,
-            idRolesChannel,
-            idRoleRulesAccepted,
-            idWelcomChannel,
-            idGeneralChannel,
-            idModo,
-            idAdmin,
-            idNoMic,
-            idMeetupVerif,
-            idMeetupAnnonce,
-            idBump,
-            idPingMeetup,
-            idCategoryGeneral,
-            idCommands,
-            idDevHelper,
-            idMissionsCategory,
-            idVoiceChannelHelp,
-            idFreeLance;
+    public static TextChannel logChannel;
 
-    public static BufferedImage backgroundXp;
-    public static Document document;
+    public static BufferedImage
+            backgroundXp,
+            admin_badge,
+            fonda_badge,
+            graphist_badge,
+            helper_badge,
+            modo_badge,
+            winner_badge,
+            junior_badge,
+            precursor_badge,
+            senior_badge,
+            profile_back,
+            server_logo;
 
     public static void initBot() {
         CommandManager.init();
+
         try {
-            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            final DocumentBuilder builder = factory.newDocumentBuilder();
+            // Setup mapper
+            System.out.println(Main.separator + "Loading config");
 
-            final File fileNextToJar = new File("./config.xml");
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(SnowflakeModuleSerializer.snowflakeModule);
 
-            if (!fileNextToJar.exists()) {
-                final OutputStream out = new FileOutputStream(fileNextToJar);
-                out.write(Init.class.getResource("/assets/config.xml").openStream().readAllBytes());
-                out.close();
+            if (initialDataFile.exists())
+                initial = mapper.readValue(initialDataFile, new TypeReference<>() {
+                });
+            else {
+                initial = new InitialData();
+                mapper.writeValue(initialDataFile, initial);
+                System.err.println("Vous devez configurer le fichier configuration.json !");
+                System.exit(0);
             }
 
-            String token;
-            Snowflake idDevArea;
-            Snowflake idLogChannel;
-            Snowflake idJoinLogChannel;
+        } catch (Exception e) {
+            System.err.println("Une erreur c'est produite dans le chargement de configuration.json !");
+            e.printStackTrace();
+            System.exit(0);
+        }
 
-            while (true) {
-                try {
-                    document = builder.parse(fileNextToJar);
+        System.out.println("configuration.json loaded !");
 
-                    token = new Scanner(new FileInputStream("./token.token")).nextLine();
-                    prefix = document.getElementsByTagName("prefix").item(0).getChildNodes().item(0).getNodeValue();
-                    vanish = Boolean.parseBoolean(document.getElementsByTagName("vanish").item(0).getChildNodes().item(0).getNodeValue());
-                    idDevArea = getValue("idDevArea");
-                    idLogChannel = getValue("idLogChannel");
-                    idJoinLogChannel = getValue("idLogJoinChannel");
-                    idCategoryJoin = getValue("idJoinCategory");
-                    idMissionsGratuites = getValue("missions-gratuites");
-                    idMissionsPayantes = getValue("mission-payantes");
-                    idPresentation = getValue("idPresentation");
-                    idRolesChannel = getValue("idRolesChannel");
-                    idRoleRulesAccepted = getValue("RulesAccepted");
-                    idWelcomChannel = getValue("idWelcomChannel");
-                    idGeneralChannel = getValue("idGeneral");
-                    idModo = getValue("idModo");
-                    idAdmin = getValue("idAdmin");
-                    idNoMic = getValue("noMic");
-                    idMeetupVerif = getValue("idMeetupVerif");
-                    idMeetupAnnonce = getValue("idMeetupAnnonce");
-                    idBump = getValue("idBump");
-                    idPingMeetup = getValue("idPingMeetup");
-                    idCategoryGeneral = getValue("idCategoryGeneral");
-                    backgroundXp = ImageIO.read(Init.class.getResource("/assets/backgroundXp.jpg").openStream());
-                    idCommands = getValue("idCommands");
-                    idDevHelper = getValue("idDevHelper");
-                    idMissionsCategory = getValue("idMissionsCategory");
-                    idVoiceChannelHelp = getValue("idVoiceChannelHelp");
-                    idFreeLance = getValue("idFreeLance");
+        try {
+            assetsLoader();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Les fichiers assets n'ont pas pu être chargé !!");
+        }
 
-                    break;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    try {
-                        Thread.sleep(250);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                    final OutputStream out = new FileOutputStream(fileNextToJar);
-                    out.write(Init.class.getResource("/assets/config.xml").openStream().readAllBytes());
-                    out.close();
-                }
-            }
+        try {
+            final String token = new Scanner(new FileInputStream("./token.token")).nextLine();
 
             client = DiscordClient.create(token)
                     .gateway()
@@ -134,29 +94,43 @@ public class Init {
                     .login()
                     .block();
 
-            final Snowflake finalIdDevArea = idDevArea;
-            final Snowflake finalIdLogChannel = idLogChannel;
-            final Snowflake finalIdJoinLogChannel = idJoinLogChannel;
             assert client != null;
 
-            client.getEventDispatcher().on(ReadyEvent.class).subscribe(event -> Ready.readyEventFonction(finalIdDevArea, finalIdLogChannel));
+            client.getEventDispatcher().on(ReadyEvent.class).subscribe(event -> Ready.readyEventFonction());
             client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(MessageCreate::messageCreateFunction);
             client.getEventDispatcher().on(MessageUpdateEvent.class).subscribe(MessageUpdate::messageUpdateFunction);
             client.getEventDispatcher().on(MessageDeleteEvent.class).subscribe(MessageDelete::messageDeleteFunction);
-            client.getEventDispatcher().on(MemberJoinEvent.class).subscribe(memberJoinEvent -> MemberJoin.memberJoinFunction(finalIdJoinLogChannel, memberJoinEvent));
-            client.getEventDispatcher().on(MemberLeaveEvent.class).subscribe(memberLeaveEvent -> MemberLeave.memberLeaveFunction(finalIdDevArea, finalIdJoinLogChannel, memberLeaveEvent));
+            client.getEventDispatcher().on(MemberJoinEvent.class).subscribe(MemberJoin::memberJoinFunction);
+            client.getEventDispatcher().on(MemberLeaveEvent.class).subscribe(MemberLeave::memberLeaveFunction);
             client.getEventDispatcher().on(ReactionAddEvent.class).subscribe(ReactionAdd::reactionAddFunction);
             client.getEventDispatcher().on(ReactionRemoveEvent.class).subscribe(ReactionRemove::FunctionReactionRemoveEvent);
             client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(VoiceStateUpdate::VoiceStateUpdateFucntion);
             client.getEventDispatcher().on(ButtonInteractionEvent.class).subscribe(ButtonInteract::ButtonInteractFunction);
-
-        } catch (ParserConfigurationException | IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Le token n'a pas pu être chargé ! (Ou erreur de login à discord !)");
         }
     }
 
-    public static Snowflake getValue(String caseName) {
-        return Snowflake.of(document.getElementsByTagName(caseName).item(0).getChildNodes().item(0).getNodeValue());
+    private static void assetsLoader() throws IOException {
+        System.out.println(Main.separator + "Loading assets...");
+        long ms = System.currentTimeMillis();
+        backgroundXp = loadImageInPot(initial.xp_background);
+        admin_badge = loadImageInPot(initial.admin_badge);
+        fonda_badge = loadImageInPot(initial.fonda_badge);
+        graphist_badge = loadImageInPot(initial.graphist_badge);
+        helper_badge = loadImageInPot(initial.helper_badge);
+        modo_badge = loadImageInPot(initial.modo_badge);
+        winner_badge = loadImageInPot(initial.winner_badge);
+        junior_badge = loadImageInPot(initial.junior_badge);
+        precursor_badge = loadImageInPot(initial.precursor_badge);
+        senior_badge = loadImageInPot(initial.senior_badge);
+        profile_back = loadImageInPot(initial.profile_background);
+        server_logo = loadImageInPot(initial.server_logo);
+        System.out.println("Assets took : " + (System.currentTimeMillis() - ms) + "ms to load !");
+    }
+
+    public static BufferedImage loadImageInPot(String path) throws IOException {
+        return ImageIO.read(Init.class.getResource(path).openStream());
     }
 
 }

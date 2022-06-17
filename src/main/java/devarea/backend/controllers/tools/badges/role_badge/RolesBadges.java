@@ -5,6 +5,7 @@ import devarea.backend.controllers.tools.userInfos.WebUserInfos;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -19,8 +20,8 @@ public class RolesBadges extends Badges {
     // Roles
     public static final Snowflake contest_winner = Snowflake.of("986924934959865876");
 
-    public RolesBadges(String name, String url_icon, String description) {
-        super(name, url_icon, description);
+    public RolesBadges(String name, String url_icon, String description, BufferedImage local_icon) {
+        super(name, url_icon, description, local_icon);
     }
 
     public static ArrayList<RolesBadges> getRolesBadges(final WebUserInfos user, final Member member_fetched) {
@@ -38,12 +39,12 @@ public class RolesBadges extends Badges {
         if (roles.contains(helper))
             badges.add(new Helper_Badge());
         if (roles.contains(graphiste))
-            badges.add(new Graphiste_Badge());
+            badges.add(new Graphist_Badge());
 
 
         // Roles
         if (roles.contains(contest_winner))
-            badges.add(new ContestWinner_Badge());
+            badges.add(new Winner_Badge());
 
 
         return badges;
