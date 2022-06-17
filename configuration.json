@@ -30,13 +30,13 @@
   "xp_background": "/assets/backgroundXp.jpg",
   "profile_background": "/assets/profile_back.png",
   "server_logo": "/assets/logo.jpg",
-  "admin_badge": "/assets/badges/roles_badges/admin_badge.png",
-  "fonda_badge": "/assets/badges/roles_badges/fonda_badge.png",
-  "graphist_badge": "/assets/badges/roles_badges/graphist_badge.png",
-  "helper_badge": "/assets/badges/roles_badges/helper_badge.png",
-  "modo_badge": "/assets/badges/roles_badges/modo_badge.png",
-  "winner_badge": "/assets/badges/roles_badges/winner_badge.png",
-  "junior_badge": "/assets/badges/time_badges/junior_badge.png",
-  "precursor_badge": "/assets/badges/time_badges/precursor_badge.png",
-  "senior_badge": "/assets/badges/time_badges/senior_badge.png"
+  "admin_badge": "/assets/badges/107x107/roles_badges/admin_badge.png",
+  "fonda_badge": "/assets/badges/107x107/roles_badges/fonda_badge.png",
+  "graphist_badge": "/assets/badges/107x107/roles_badges/graphist_badge.png",
+  "helper_badge": "/assets/badges/107x107/roles_badges/helper_badge.png",
+  "modo_badge": "/assets/badges/107x107/roles_badges/modo_badge.png",
+  "winner_badge": "/assets/badges/107x107/roles_badges/winner_badge.png",
+  "junior_badge": "/assets/badges/107x107/time_badges/junior_badge.png",
+  "precursor_badge": "/assets/badges/107x107/time_badges/precursor_badge.png",
+  "senior_badge": "/assets/badges/107x107/time_badges/senior_badge.png"
 }
