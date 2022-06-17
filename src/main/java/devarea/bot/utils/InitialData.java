@@ -64,6 +64,9 @@ public class InitialData {
     public String junior_badge = null;
     public String precursor_badge = null;
     public String senior_badge = null;
+    public String booster_badge = null;
+    public String partner_badge = null;
+    public String profile_badge = null;
 
     public InitialData() {
 

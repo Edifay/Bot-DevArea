@@ -1,7 +1,7 @@
 package devarea.bot.commands.inLine;
 
 import devarea.bot.Init;
-import devarea.bot.automatical.MissionsHandler;
+import devarea.global.handlers.MissionsHandler;
 import devarea.bot.commands.FirstStape;
 import devarea.bot.commands.LongCommand;
 import devarea.bot.commands.Stape;

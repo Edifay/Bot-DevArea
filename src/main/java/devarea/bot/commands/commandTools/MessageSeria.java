@@ -2,8 +2,7 @@ package devarea.bot.commands.commandTools;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import devarea.bot.Init;
-import devarea.bot.cache.ChannelCache;
+import devarea.global.cache.ChannelCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;

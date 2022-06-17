@@ -1,8 +1,8 @@
 package devarea.bot.commands.inLine;
 
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
-import devarea.bot.automatical.XPHandler;
+import devarea.global.handlers.XPHandler;
 import devarea.bot.commands.ShortCommand;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.core.object.entity.Member;

@@ -1,10 +1,10 @@
 package devarea.bot.event;
 
 import devarea.bot.automatical.EmbedLinkHandler;
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
-import devarea.bot.automatical.Bump;
-import devarea.bot.automatical.XPHandler;
+import devarea.bot.automatical.BumpHandler;
+import devarea.global.handlers.XPHandler;
 import devarea.bot.commands.CommandManager;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -23,7 +23,7 @@ public class MessageCreate {
                 return;
 
             if (message.getMessage().getAuthor().get().getId().equals(Snowflake.of("302050872383242240")))
-                Bump.getDisboardMessage(message);
+                BumpHandler.getDisboardMessage(message);
 
             if (message.getMessage().getAuthor().get().isBot() || message.getMessage().getAuthor().get().getId().equals(Init.client.getSelfId()))
                 return;
@@ -35,7 +35,7 @@ public class MessageCreate {
                 MemberCache.use(message.getMember().get());
 
             if (message.getMessage().getChannelId().equals(Init.initial.bump_channel) && !message.getMessage().getAuthor().get().getId().equals(Snowflake.of("302050872383242240")))
-                Bump.messageInChannel(message);
+                BumpHandler.messageInChannel(message);
 
             startAway(() -> XPHandler.onMessage(message));
             if (!message.getMessage().getContent().toLowerCase(Locale.ROOT).startsWith("//admin") && CommandManager.receiveMessage(message))

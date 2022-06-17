@@ -1,6 +1,6 @@
 package devarea.bot.utils;
 
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.MemberCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 

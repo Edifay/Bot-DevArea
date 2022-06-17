@@ -2,8 +2,8 @@ package devarea.bot.commands.outLine;
 
 import devarea.Main;
 import devarea.bot.Init;
-import devarea.bot.automatical.FreeLanceHandler;
-import devarea.bot.cache.ChannelCache;
+import devarea.global.handlers.FreeLanceHandler;
+import devarea.global.cache.ChannelCache;
 import devarea.bot.commands.commandTools.MessageSeria;
 import devarea.bot.commands.*;
 import devarea.bot.commands.commandTools.FreeLance;

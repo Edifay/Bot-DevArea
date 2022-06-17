@@ -1,7 +1,7 @@
 package devarea.bot.commands.inLine;
 
 import devarea.bot.Init;
-import devarea.bot.automatical.XPHandler;
+import devarea.global.handlers.XPHandler;
 import devarea.bot.commands.PermissionCommand;
 import devarea.bot.commands.ShortCommand;
 import devarea.bot.presets.ColorsUsed;

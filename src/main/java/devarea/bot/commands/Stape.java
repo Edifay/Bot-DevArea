@@ -1,7 +1,7 @@
 package devarea.bot.commands;
 
 import devarea.bot.Init;
-import devarea.bot.cache.ChannelCache;
+import devarea.global.cache.ChannelCache;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;

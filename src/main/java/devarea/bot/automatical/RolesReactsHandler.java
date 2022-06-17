@@ -2,7 +2,7 @@ package devarea.bot.automatical;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.commands.commandTools.RoleReact;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.ReactionAddEvent;

@@ -2,11 +2,12 @@ package devarea.bot.automatical;
 
 import devarea.Main;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerUserData;
-import devarea.backend.controllers.tools.badges.Badges;
+import devarea.global.badges.Badges;
 import devarea.bot.Init;
-import devarea.bot.cache.ChannelCache;
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.ChannelCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.commands.Command;
+import devarea.global.handlers.XPHandler;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.component.ActionRow;
 import discord4j.core.object.component.Button;

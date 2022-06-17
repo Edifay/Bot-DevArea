@@ -1,8 +1,8 @@
 package devarea.bot.event;
 
-import devarea.bot.cache.MemberCache;
-import devarea.bot.automatical.FreeLanceHandler;
-import devarea.bot.automatical.MissionsHandler;
+import devarea.global.cache.MemberCache;
+import devarea.global.handlers.FreeLanceHandler;
+import devarea.global.handlers.MissionsHandler;
 import devarea.bot.commands.CommandManager;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 

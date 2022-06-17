@@ -1,6 +1,6 @@
 package devarea.bot.commands.inLine;
 
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.HelpRewardHandler;
 import devarea.bot.commands.ShortCommand;

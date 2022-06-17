@@ -1,8 +1,8 @@
 package devarea.backend.controllers.tools;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import devarea.bot.automatical.FreeLanceHandler;
-import devarea.bot.cache.MemberCache;
+import devarea.global.handlers.FreeLanceHandler;
+import devarea.global.cache.MemberCache;
 import devarea.bot.commands.commandTools.FreeLance;
 import discord4j.core.object.entity.Member;
 

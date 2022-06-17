@@ -1,6 +1,6 @@
 package devarea.bot.commands.inLine;
 
-import devarea.bot.automatical.FreeLanceHandler;
+import devarea.global.handlers.FreeLanceHandler;
 import devarea.bot.commands.Command;
 import devarea.bot.commands.EndStape;
 import devarea.bot.commands.FirstStape;

@@ -38,5 +38,8 @@
   "winner_badge": "/assets/badges/107x107/roles_badges/winner_badge.png",
   "junior_badge": "/assets/badges/107x107/time_badges/junior_badge.png",
   "precursor_badge": "/assets/badges/107x107/time_badges/precursor_badge.png",
-  "senior_badge": "/assets/badges/107x107/time_badges/senior_badge.png"
+  "senior_badge": "/assets/badges/107x107/time_badges/senior_badge.png",
+  "booster_badge": "/assets/badges/107x107/roles_badges/booster_badge.png",
+  "partner_badge": "/assets/badges/107x107/roles_badges/partner_badge.png",
+  "profile_badge": "/assets/badges/107x107/success_badges/profile_badge.png"
 }

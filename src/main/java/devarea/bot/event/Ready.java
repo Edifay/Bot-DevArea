@@ -1,14 +1,17 @@
 package devarea.bot.event;
 
 import devarea.Main;
-import devarea.backend.controllers.handlers.UserInfosHandlers;
+import devarea.global.handlers.UserInfosHandler;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
-import devarea.bot.cache.ChannelCache;
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.ChannelCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.*;
 import devarea.bot.presets.ColorsUsed;
-import discord4j.common.util.Snowflake;
+import devarea.global.handlers.FreeLanceHandler;
+import devarea.global.handlers.MissionsHandler;
+import devarea.global.handlers.StatsHandler;
+import devarea.global.handlers.XPHandler;
 import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -77,10 +80,10 @@ public class Ready {
             startAway(MeetupHandler::init);
             startAway(XPHandler::init);
             if (!developing)
-                startAway(Bump::init);
+                startAway(BumpHandler::init);
             startAway(MissionsHandler::init);
             startAway(FreeLanceHandler::init);
-            startAway(UserInfosHandlers::init);
+            startAway(UserInfosHandler::init);
             startAway(RequestHandlerAuth::init);
         } catch (Exception e) {
             e.printStackTrace();

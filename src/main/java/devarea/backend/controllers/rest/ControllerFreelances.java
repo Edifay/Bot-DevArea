@@ -3,7 +3,7 @@ package devarea.backend.controllers.rest;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
 import devarea.backend.controllers.tools.WebFreelance;
 import devarea.backend.controllers.tools.userInfos.WebUserInfos;
-import devarea.bot.automatical.FreeLanceHandler;
+import devarea.global.handlers.FreeLanceHandler;
 import devarea.bot.commands.commandTools.FreeLance;
 import org.springframework.web.bind.annotation.*;
 

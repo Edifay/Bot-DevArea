@@ -2,7 +2,7 @@ package devarea.backend.controllers.tools;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import devarea.bot.automatical.XPHandler;
+import devarea.global.handlers.XPHandler;
 
 import java.util.Objects;
 

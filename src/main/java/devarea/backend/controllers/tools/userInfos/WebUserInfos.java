@@ -3,15 +3,15 @@ package devarea.backend.controllers.tools.userInfos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import devarea.backend.controllers.handlers.UserInfosHandlers;
+import devarea.global.handlers.UserInfosHandler;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerMission;
 import devarea.backend.controllers.tools.WebFreelance;
 import devarea.backend.controllers.tools.WebMission;
-import devarea.backend.controllers.tools.badges.Badges;
-import devarea.bot.automatical.FreeLanceHandler;
-import devarea.bot.automatical.MissionsHandler;
-import devarea.bot.automatical.XPHandler;
-import devarea.bot.cache.MemberCache;
+import devarea.global.badges.Badges;
+import devarea.global.handlers.FreeLanceHandler;
+import devarea.global.handlers.MissionsHandler;
+import devarea.global.handlers.XPHandler;
+import devarea.global.cache.MemberCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 
@@ -101,7 +101,7 @@ public abstract class WebUserInfos {
         }
 
         // UserData
-        memberDescription = UserInfosHandlers.get(this.id).userDescription;
+        memberDescription = UserInfosHandler.get(this.id).userDescription;
 
         return this;
     }

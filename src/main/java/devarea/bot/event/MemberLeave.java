@@ -1,17 +1,14 @@
 package devarea.bot.event;
 
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
-import devarea.bot.automatical.FreeLanceHandler;
-import devarea.bot.cache.ChannelCache;
-import devarea.bot.cache.MemberCache;
+import devarea.global.handlers.FreeLanceHandler;
+import devarea.global.cache.ChannelCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
-import devarea.bot.automatical.XPHandler;
+import devarea.global.handlers.XPHandler;
 import devarea.bot.commands.CommandManager;
-import devarea.bot.commands.commandTools.FreeLance;
-import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.guild.MemberLeaveEvent;
 import discord4j.core.object.entity.channel.TextChannel;
-import org.w3c.dom.Text;
 
 public class MemberLeave {
 

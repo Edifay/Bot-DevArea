@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import devarea.backend.controllers.tools.WebMission;
-import devarea.bot.automatical.MissionsHandler;
+import devarea.global.handlers.MissionsHandler;
 
 import java.util.Objects;
 

@@ -1,7 +1,7 @@
 package devarea.bot.commands.inLine;
 
 import devarea.bot.automatical.EmbedLinkHandler;
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.commands.ShortCommand;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;

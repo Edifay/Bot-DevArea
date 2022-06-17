@@ -1,7 +1,6 @@
 package devarea.bot.commands.inLine;
 
-import devarea.bot.cache.ChannelCache;
-import devarea.bot.cache.tools.childs.CachedChannel;
+import devarea.global.cache.ChannelCache;
 import devarea.bot.presets.ColorsUsed;
 import devarea.bot.presets.TextMessage;
 import devarea.bot.Init;

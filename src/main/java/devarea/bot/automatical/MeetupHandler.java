@@ -2,8 +2,8 @@ package devarea.bot.automatical;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import devarea.bot.cache.ChannelCache;
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.ChannelCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.commands.Command;
 import devarea.bot.commands.commandTools.MeetupStock;
@@ -23,7 +23,6 @@ import java.time.Instant;
 import java.util.*;
 
 import static devarea.bot.commands.Command.send;
-import static devarea.bot.commands.Command.sendEmbed;
 import static devarea.bot.event.FunctionEvent.startAway;
 
 public class MeetupHandler {

@@ -1,16 +1,14 @@
 package devarea.bot.automatical;
 
 import devarea.bot.Init;
-import devarea.bot.cache.ChannelCache;
-import devarea.bot.cache.MemberCache;
-import discord4j.common.util.Snowflake;
+import devarea.global.cache.ChannelCache;
+import devarea.global.cache.MemberCache;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.object.entity.channel.VoiceChannel;
 import discord4j.core.spec.GuildMemberEditSpec;
 import discord4j.core.spec.VoiceChannelCreateSpec;
 import discord4j.discordjson.possible.Possible;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class VoiceChannelHandler {

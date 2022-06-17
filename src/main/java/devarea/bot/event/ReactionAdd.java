@@ -1,6 +1,6 @@
 package devarea.bot.event;
 
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.automatical.*;
 import devarea.bot.commands.CommandManager;
 import discord4j.core.event.domain.message.ReactionAddEvent;

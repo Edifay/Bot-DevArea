@@ -1,6 +1,6 @@
 package devarea.bot.commands.inLine;
 
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.commands.*;
 import devarea.bot.commands.outLine.JoinThisCommand;
 import devarea.bot.commands.outLine.LeftThisCommand;

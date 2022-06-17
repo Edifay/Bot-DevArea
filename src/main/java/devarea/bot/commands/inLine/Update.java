@@ -1,6 +1,6 @@
 package devarea.bot.commands.inLine;
 
-import devarea.bot.automatical.StatsHandler;
+import devarea.global.handlers.StatsHandler;
 import devarea.bot.commands.PermissionCommand;
 import devarea.bot.commands.ShortCommand;
 import devarea.bot.presets.ColorsUsed;

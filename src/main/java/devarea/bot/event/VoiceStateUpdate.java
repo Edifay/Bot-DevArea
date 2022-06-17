@@ -2,14 +2,11 @@ package devarea.bot.event;
 
 import devarea.bot.Init;
 import devarea.bot.automatical.VoiceChannelHandler;
-import devarea.bot.cache.ChannelCache;
-import devarea.bot.cache.tools.childs.CachedChannel;
+import devarea.global.cache.ChannelCache;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.object.PermissionOverwrite;
 import discord4j.core.object.entity.channel.TextChannel;
-import discord4j.core.object.entity.channel.VoiceChannel;
 import discord4j.core.spec.TextChannelEditSpec;
-import discord4j.core.spec.VoiceChannelEditSpec;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 

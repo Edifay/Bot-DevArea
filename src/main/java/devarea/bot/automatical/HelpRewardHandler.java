@@ -1,6 +1,6 @@
 package devarea.bot.automatical;
 
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.commands.Command;
 import devarea.bot.commands.CommandManager;

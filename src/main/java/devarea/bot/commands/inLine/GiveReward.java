@@ -1,10 +1,10 @@
 package devarea.bot.commands.inLine;
 
-import devarea.bot.cache.ChannelCache;
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.ChannelCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.HelpRewardHandler;
-import devarea.bot.automatical.XPHandler;
+import devarea.global.handlers.XPHandler;
 import devarea.bot.commands.EndStape;
 import devarea.bot.commands.FirstStape;
 import devarea.bot.commands.LongCommand;

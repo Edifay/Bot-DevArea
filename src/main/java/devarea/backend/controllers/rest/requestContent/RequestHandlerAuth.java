@@ -3,7 +3,7 @@ package devarea.backend.controllers.rest.requestContent;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.backend.controllers.tools.userInfos.WebPrivateUserInfos;
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.MemberCache;
 
 import java.io.File;
 import java.io.IOException;

@@ -2,8 +2,8 @@ package devarea.bot.commands.outLine;
 
 import devarea.Main;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
-import devarea.bot.cache.ChannelCache;
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.ChannelCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.commands.CommandManager;
 import devarea.bot.commands.FirstStape;
@@ -11,7 +11,6 @@ import devarea.bot.commands.LongCommand;
 import devarea.bot.commands.Stape;
 import devarea.bot.presets.ColorsUsed;
 import devarea.bot.presets.TextMessage;
-import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.object.PermissionOverwrite;
 import discord4j.core.object.entity.Member;

@@ -1,14 +1,13 @@
 package devarea.bot.event;
 
 import devarea.Main;
-import devarea.bot.cache.ChannelCache;
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.ChannelCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.commands.Command;
 import devarea.bot.commands.CommandManager;
 import devarea.bot.commands.ConsumableCommand;
 import devarea.bot.commands.outLine.JoinCommand;
-import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.core.object.entity.channel.TextChannel;
 

@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import devarea.backend.controllers.tools.WebRoleCount;
 import devarea.backend.controllers.tools.WebXPMember;
-import devarea.bot.cache.MemberCache;
-import devarea.bot.cache.RoleCache;
-import devarea.bot.automatical.XPHandler;
+import devarea.global.cache.MemberCache;
+import devarea.global.cache.RoleCache;
+import devarea.global.handlers.XPHandler;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Role;
 

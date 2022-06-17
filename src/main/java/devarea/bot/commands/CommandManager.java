@@ -1,8 +1,8 @@
 package devarea.bot.commands;
 
 import devarea.Main;
-import devarea.bot.cache.ChannelCache;
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.ChannelCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.common.util.Snowflake;

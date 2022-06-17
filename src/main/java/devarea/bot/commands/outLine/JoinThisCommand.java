@@ -1,6 +1,6 @@
 package devarea.bot.commands.outLine;
 
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.commands.CommandManager;
 import devarea.bot.commands.PermissionCommand;
 import devarea.bot.commands.ShortCommand;

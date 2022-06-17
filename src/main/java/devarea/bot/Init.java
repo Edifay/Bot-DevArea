@@ -49,7 +49,10 @@ public class Init {
             precursor_badge,
             senior_badge,
             profile_back,
-            server_logo;
+            server_logo,
+            booster_badge,
+            partner_badge,
+            profile_badge;
 
     public static void initBot() {
         CommandManager.init();
@@ -128,6 +131,9 @@ public class Init {
         senior_badge = loadImageInPot(initial.senior_badge);
         profile_back = loadImageInPot(initial.profile_background);
         server_logo = loadImageInPot(initial.server_logo);
+        booster_badge = loadImageInPot(initial.booster_badge);
+        partner_badge = loadImageInPot(initial.partner_badge);
+        profile_badge = loadImageInPot(initial.profile_badge);
         System.out.println("Assets took : " + (System.currentTimeMillis() - ms) + "ms to load !");
     }
 

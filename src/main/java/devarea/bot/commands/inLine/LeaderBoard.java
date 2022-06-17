@@ -1,7 +1,7 @@
 package devarea.bot.commands.inLine;
 
 import devarea.bot.presets.ColorsUsed;
-import devarea.bot.automatical.XPHandler;
+import devarea.global.handlers.XPHandler;
 import devarea.bot.commands.ShortCommand;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;

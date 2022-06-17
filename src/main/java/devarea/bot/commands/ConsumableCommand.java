@@ -1,11 +1,9 @@
 package devarea.bot.commands;
 
-import devarea.bot.cache.ChannelCache;
-import discord4j.core.event.domain.message.MessageCreateEvent;
+import devarea.global.cache.ChannelCache;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
-import org.w3c.dom.Text;
 
 public abstract class ConsumableCommand {
     protected Command command;

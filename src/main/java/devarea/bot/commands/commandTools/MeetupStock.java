@@ -2,7 +2,7 @@ package devarea.bot.commands.commandTools;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.common.util.Snowflake;

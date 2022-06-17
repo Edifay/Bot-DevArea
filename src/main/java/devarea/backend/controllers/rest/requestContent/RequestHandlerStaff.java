@@ -2,11 +2,10 @@ package devarea.backend.controllers.rest.requestContent;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import devarea.backend.controllers.tools.WebStaff;
-import devarea.bot.cache.MemberCache;
+import devarea.global.cache.MemberCache;
 import discord4j.core.object.entity.Member;
 
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 
 import static devarea.backend.controllers.rest.requestContent.RequestHandlerGlobal.getObjectsFromJson;
 
