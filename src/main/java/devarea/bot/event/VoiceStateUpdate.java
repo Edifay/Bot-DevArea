@@ -2,6 +2,8 @@ package devarea.bot.event;
 
 import devarea.bot.Init;
 import devarea.bot.automatical.VoiceChannelHandler;
+import devarea.bot.cache.ChannelCache;
+import devarea.bot.cache.tools.childs.CachedChannel;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.object.PermissionOverwrite;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -19,13 +21,13 @@ public class VoiceStateUpdate {
 
         if (event.getCurrent().getChannelId().isPresent()) {
             if (event.getOld().isEmpty() || event.getOld().get().getChannelId().isEmpty())
-                ((TextChannel) Init.devarea.getChannelById(Init.initial.noMic_channel).block()).edit(TextChannelEditSpec.builder()
+                ((TextChannel) ChannelCache.watch(Init.initial.noMic_channel.asString())).edit(TextChannelEditSpec.builder()
                         .addPermissionOverwrite(PermissionOverwrite.forMember(event.getCurrent().getUserId(),
                                 PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()))
                         .build()).subscribe();
             VoiceChannelHandler.join(event);
         } else {
-            ((TextChannel) Init.devarea.getChannelById(Init.initial.noMic_channel).block()).edit(TextChannelEditSpec.builder()
+            ((TextChannel) ChannelCache.watch(Init.initial.noMic_channel.asString())).edit(TextChannelEditSpec.builder()
                     .addPermissionOverwrite(PermissionOverwrite.forMember(event.getCurrent().getUserId(),
                             PermissionSet.of(),
                             PermissionSet.of(Permission.VIEW_CHANNEL)))

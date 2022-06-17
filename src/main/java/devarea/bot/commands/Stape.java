@@ -1,6 +1,7 @@
 package devarea.bot.commands;
 
 import devarea.bot.Init;
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -114,7 +115,8 @@ public abstract class Stape implements Cloneable {
     }
 
     protected void sendErrorEntry() {
-        Command.sendError((TextChannel) this.message.getChannel().block(), "Votre entrée n'est pas valide !");
+        Command.sendError((TextChannel) ChannelCache.watch(this.message.getChannelId().asString()), "Votre entrée " +
+                "n'est pas valide !");
     }
 
     protected void addYesEmoji() {
@@ -130,7 +132,8 @@ public abstract class Stape implements Cloneable {
     }
 
     protected ActionRow getYesNoButton() {
-        return ActionRow.of(Button.primary("yes", ReactionEmoji.custom(Init.idYes)), Button.primary("no", ReactionEmoji.custom(Init.idNo)));
+        return ActionRow.of(Button.primary("yes", ReactionEmoji.custom(Init.idYes)), Button.primary("no",
+                ReactionEmoji.custom(Init.idNo)));
     }
 
     protected ArrayList<LayoutComponent> getEmptyButton() {

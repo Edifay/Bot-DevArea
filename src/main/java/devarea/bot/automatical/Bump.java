@@ -5,6 +5,7 @@ import devarea.bot.cache.ChannelCache;
 import devarea.bot.commands.Command;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
@@ -18,7 +19,7 @@ public class Bump {
     private static TextChannel channel;
 
     public static void init() {
-        channel = (TextChannel) Init.devarea.getChannelById(Init.initial.bump_channel).block();
+        channel = (TextChannel) ChannelCache.watch(Init.initial.bump_channel.asString());
         message = Command.sendEmbed(channel, EmbedCreateSpec.builder()
                 .color(ColorsUsed.wrong)
                 .description("Le bot vient de s'initialiser utilisez la commande `/bump`, pour lancer le compte à " +

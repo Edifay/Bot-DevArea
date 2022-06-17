@@ -1,5 +1,6 @@
 package devarea.bot.commands;
 
+import devarea.bot.cache.ChannelCache;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
@@ -49,7 +50,7 @@ public abstract class ConsumableCommand {
 
     public void setMessageEvent(Message message, Member member) {
         this.message = message;
-        this.channel = (TextChannel) message.getChannel().block();
+        this.channel = (TextChannel) ChannelCache.get(message.getChannelId().asString());
         this.member = member;
     }
 }

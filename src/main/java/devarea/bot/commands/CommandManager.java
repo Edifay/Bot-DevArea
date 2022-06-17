@@ -1,6 +1,7 @@
 package devarea.bot.commands;
 
 import devarea.Main;
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.presets.ColorsUsed;
@@ -134,18 +135,19 @@ public class CommandManager {
                     if (permissionSet == null || containPerm(permissionSet,
                             member_command.getBasePermissions().block())) {
                         Command actualCommand = (Command) classBound.get(command).newInstance(member_replaced,
-                                message.getMessage().getChannel().block(), message.getMessage());
+                                ChannelCache.get(message.getMessage().getChannelId().asString()), message.getMessage());
                         if (actualCommand instanceof LongCommand)
                             actualCommands.put(member_replaced.getId(), (LongCommand) actualCommand);
                     } else
-                        Command.sendError((TextChannel) message.getMessage().getChannel().block(), "Vous n'avez pas " +
+                        Command.sendError((TextChannel) ChannelCache.watch(message.getMessage().getChannelId().asString()), "Vous n'avez pas " +
                                 "la permission d'éxécuter cette commande !");
 
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
             } else
-                Command.deletedEmbed((TextChannel) message.getMessage().getChannel().block(), EmbedCreateSpec.builder()
+                Command.deletedEmbed((TextChannel) ChannelCache.watch(message.getMessage().getChannelId().asString())
+                        , EmbedCreateSpec.builder()
                         .title("Erreur !")
                         .description(commandNotFound)
                         .color(ColorsUsed.wrong).build());

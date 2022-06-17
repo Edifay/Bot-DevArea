@@ -3,6 +3,7 @@ package devarea.bot.event;
 import devarea.Main;
 import devarea.backend.controllers.handlers.UserInfosHandlers;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.*;
@@ -31,7 +32,7 @@ public class Ready {
         Init.devarea = Init.client.getGuildById(Init.initial.devarea).block();
         assert Init.devarea != null;
         startAway(() -> {
-            Init.logChannel = (TextChannel) Init.devarea.getChannelById(Init.initial.log_channel).block();
+            Init.logChannel = (TextChannel) ChannelCache.watch(Init.initial.log_channel.asString());
 
             Button button = Button.primary("id_1", "Le button");
 

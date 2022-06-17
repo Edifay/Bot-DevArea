@@ -1,5 +1,7 @@
 package devarea.bot.commands.inLine;
 
+import devarea.bot.cache.ChannelCache;
+import devarea.bot.cache.tools.childs.CachedChannel;
 import devarea.bot.presets.ColorsUsed;
 import devarea.bot.presets.TextMessage;
 import devarea.bot.Init;
@@ -138,7 +140,7 @@ public class Meetup extends LongCommand {
                 canDelete = MeetupHandler.getMeetupsFrom(member.getId());
                 AtomicInteger a = new AtomicInteger();
                 canDelete.forEach(meetupStock -> {
-                    Command.deletedMessage((TextChannel) test.getChannel().block(),
+                    Command.deletedMessage((TextChannel) ChannelCache.watch(test.getChannelId().asString()),
                             meetupStock.getEmbed().content("**" + a.get() + ":**").build());
                     a.getAndIncrement();
                 });

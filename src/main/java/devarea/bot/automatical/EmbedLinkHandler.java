@@ -67,7 +67,7 @@ public class EmbedLinkHandler {
         if (members.size() == 0)
             return;
 
-        generateLinkEmbed((TextChannel) ChannelCache.get(event.getMessage().getChannelId().asString()), members);
+        generateLinkEmbed((TextChannel) ChannelCache.watch(event.getMessage().getChannelId().asString()), members);
     }
 
     public static void generateLinkEmbed(TextChannel channel, ArrayList<Member> members) {

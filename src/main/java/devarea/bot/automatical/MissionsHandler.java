@@ -8,6 +8,7 @@ import devarea.bot.cache.ChannelCache;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.handlerData.MissionManagerData;
+import devarea.bot.cache.tools.childs.CachedChannel;
 import devarea.bot.commands.Command;
 import devarea.bot.commands.commandTools.MessageSeria;
 import devarea.bot.commands.commandTools.Mission;
@@ -24,6 +25,7 @@ import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.*;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -156,7 +158,6 @@ public class MissionsHandler {
 
     public static boolean verif() {
         ArrayList<Mission> atRemove = new ArrayList<>();
-        TextChannel channel = (TextChannel) Init.devarea.getChannelById(Init.initial.meetupVerif_channel).block();
         for (Mission mission : missions.values())
             if (!MemberCache.contain(mission.getMemberId())) {
                 atRemove.add(mission);
@@ -226,7 +227,7 @@ public class MissionsHandler {
 
         if (current_mission != null) {
             if (event.getCustomId().equals("mission_yes")) {
-                event.getInteraction().getChannel().block().getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
+                ((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())).getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
                                 .title("Mission actualisé !")
                                 .description("La mission : **" + current_mission.getTitle() + "**, a été défini comme" +
                                         " valide pour encore 7 jours.\n\nVous recevrez une nouvelle demande de " +
@@ -238,7 +239,7 @@ public class MissionsHandler {
                 current_mission.setMessage_verification(null);
                 save();
             } else if (event.getCustomId().equals("mission_no")) {
-                event.getInteraction().getChannel().block().getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
+                ((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())).getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
                                 .title("Mission supprimé !")
                                 .description("La mission : **" + current_mission.getTitle() + "**, a été " +
                                         "définitivement supprimé !")
@@ -406,14 +407,15 @@ public class MissionsHandler {
         final MissionManagerData.MissionFollow mission = getByMessageID(event.getMessageId());
         if (mission != null) {
 
-            send(((TextChannel) event.getInteraction().getChannel().block()), MessageCreateSpec.builder()
-                    .addEmbed(EmbedCreateSpec.builder()
-                            .title("Clôture du Suivis de mission.")
-                            .description("La clôture du suivis a été éxécuté par : <@" + event.getInteraction().getMember().get().getId().asString() + ">. Le suivis fermera dans 1 heure.")
-                            .color(ColorsUsed.same)
-                            .timestamp(Instant.now())
-                            .build())
-                    .build(), false);
+            send(((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())),
+                    MessageCreateSpec.builder()
+                            .addEmbed(EmbedCreateSpec.builder()
+                                    .title("Clôture du Suivis de mission.")
+                                    .description("La clôture du suivis a été éxécuté par : <@" + event.getInteraction().getMember().get().getId().asString() + ">. Le suivis fermera dans 1 heure.")
+                                    .color(ColorsUsed.same)
+                                    .timestamp(Instant.now())
+                                    .build())
+                            .build(), false);
 
             mission.messageSeria.getMessage().edit(MessageEditSpec.builder()
                     .components(new ArrayList<>())
@@ -444,7 +446,7 @@ public class MissionsHandler {
                     set.add(PermissionOverwrite.forRole(Snowflake.of("768383784571240509"),
                             PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
 
-                    ((TextChannel) event.getInteraction().getChannel().block()).edit(TextChannelEditSpec.builder()
+                    ((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())).edit(TextChannelEditSpec.builder()
                             .name("Closed n°" + mission.missionID)
                             .permissionOverwrites(set)
                             .build()).subscribe();
@@ -477,7 +479,7 @@ public class MissionsHandler {
         Mission createdMission = new Mission(title, description, prix, dateRetour, langage, support, niveau,
                 member.getId().asString(), null);
         createdMission.setMessage(new MessageSeria(
-                Objects.requireNonNull(send((TextChannel) Init.devarea.getChannelById(Init.initial.paidMissions_channel).block(), MessageCreateSpec.builder()
+                Objects.requireNonNull(send((TextChannel) ChannelCache.watch(Init.initial.paidMissions_channel.asString()), MessageCreateSpec.builder()
                         .content("**Mission proposée par <@" + member.getId().asString() + "> :**")
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title(title)

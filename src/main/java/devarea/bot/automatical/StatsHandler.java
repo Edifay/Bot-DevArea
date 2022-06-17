@@ -1,6 +1,7 @@
 package devarea.bot.automatical;
 
 import devarea.bot.Init;
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.cache.tools.childs.CachedMember;
 import discord4j.common.util.Snowflake;
@@ -36,13 +37,13 @@ public class StatsHandler {
             final Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(fileNextToJar);
             NodeList list = document.getElementsByTagName("stats").item(0).getChildNodes();
             channelMemberCount =
-                    (VoiceChannel) Init.devarea.getChannelById(Snowflake.of(document.getElementsByTagName("member").item(0).getChildNodes().item(0).getNodeValue())).block();
+                    (VoiceChannel) ChannelCache.fetch(document.getElementsByTagName("member").item(0).getChildNodes().item(0).getNodeValue());
 
             for (int i = 0; i < list.getLength(); i++) {
                 Node node = list.item(i);
                 if (node instanceof Element && !node.getNodeName().equals("member")) {
                     Element el = (Element) node;
-                    roleBoundToChannel.put(Init.devarea.getRoleById(Snowflake.of(el.getElementsByTagName("role").item(0).getChildNodes().item(0).getNodeValue())).block(), (VoiceChannel) Init.devarea.getChannelById(Snowflake.of(el.getElementsByTagName("channel").item(0).getChildNodes().item(0).getNodeValue())).block());
+                    roleBoundToChannel.put(Init.devarea.getRoleById(Snowflake.of(el.getElementsByTagName("role").item(0).getChildNodes().item(0).getNodeValue())).block(), (VoiceChannel) ChannelCache.fetch(el.getElementsByTagName("channel").item(0).getChildNodes().item(0).getNodeValue()));
                 }
             }
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package devarea.bot.commands.inLine;
 
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.HelpRewardHandler;
@@ -47,7 +48,7 @@ public class GiveReward extends LongCommand {
         super(target);
         final EndStape endStape = getEndStape(target);
         final Stape selectionStage = getSelectionHelpersStape(helper, endStape);
-        channel = (TextChannel) event.getChannel().block();
+        channel = (TextChannel) ChannelCache.watch(event.getChannelId().asString());
         assert channel != null;
 
         delete(false, event.getMessage().block());

@@ -3,6 +3,7 @@ package devarea.bot.automatical;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.backend.controllers.tools.WebXPMember;
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.commands.Command;
@@ -146,7 +147,7 @@ public class XPHandler {
             if (xp.containsKey(member.getId())) {
                 if (XPHandler.getLevelForXp(xp.get(member.getId())) < XPHandler.getLevelForXp(xp.get(member.getId()) + 1))
                     startAway(() -> {
-                        Command.send((TextChannel) Init.devarea.getChannelById(Init.initial.command_channel).block(),
+                        Command.send((TextChannel) ChannelCache.watch(Init.initial.command_channel.asString()),
                                 MessageCreateSpec.builder().content("<@" + member.getId().asString() + ">").addEmbed(EmbedCreateSpec.builder().description("Bien joué <@" + member.getId().asString() + ">, tu es passé niveau " + XPHandler.getLevelForXp(xp.get(member.getId()) + 1) + " !").timestamp(Instant.now()).color(ColorsUsed.same).build()).build(), false);
                     });
                 xp.put(member.getId(), xp.get(member.getId()) + 1);

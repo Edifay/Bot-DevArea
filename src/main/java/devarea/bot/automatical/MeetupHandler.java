@@ -2,6 +2,7 @@ package devarea.bot.automatical;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.commands.Command;
@@ -21,6 +22,8 @@ import java.io.*;
 import java.time.Instant;
 import java.util.*;
 
+import static devarea.bot.commands.Command.send;
+import static devarea.bot.commands.Command.sendEmbed;
 import static devarea.bot.event.FunctionEvent.startAway;
 
 public class MeetupHandler {
@@ -39,7 +42,7 @@ public class MeetupHandler {
                     meetups.forEach(meetupStock -> {
                         if (!meetupStock.getAlreayMake()) {
                             if (date.after(meetupStock.getDate())) {
-                                Command.send((TextChannel) Init.devarea.getChannelById(Init.initial.meetupAnnounce_channel).block(),
+                                send((TextChannel) ChannelCache.watch(Init.initial.meetupAnnounce_channel.asString()),
                                         MessageCreateSpec.builder()
                                                 .content("Un meetup a commencé avec sujet :\n\n " + meetupStock.getName() + "\n\n<@&" + Init.initial.pingMeetup_role.asString() + ">").build()
                                         , false);
@@ -83,8 +86,8 @@ public class MeetupHandler {
     }
 
     public static void addMeetupAtValide(MeetupStock meetup) {
-        TextChannel meetupVerif = (TextChannel) Init.devarea.getChannelById(Init.initial.meetupVerif_channel).block();
-        Message message = Command.send(meetupVerif, meetup.getEmbed().build(), true);
+        Message message = send((TextChannel) ChannelCache.watch(Init.initial.meetupVerif_channel.asString()),
+                meetup.getEmbed().build(), true);
         meetup.setMessage(new MessageSeria(message));
         meetups.add(meetup);
         addYesAndNo(message);
@@ -119,7 +122,8 @@ public class MeetupHandler {
                     startAway(() -> Command.delete(false, meetup.getMessage().getMessage()));
 
                     Message message =
-                            ((TextChannel) Init.devarea.getChannelById(Init.initial.meetupAnnounce_channel).block()).createMessage(meetup.getEmbed().build()).block();
+                            send((TextChannel) ChannelCache.watch(Init.initial.meetupAnnounce_channel.asString()),
+                                    meetup.getEmbed().build(), true);
                     addYes(message);
                     meetup.setMessage(new MessageSeria(message));
                 } else if (event.getEmoji().equals(ReactionEmoji.custom(Init.idNo))) {

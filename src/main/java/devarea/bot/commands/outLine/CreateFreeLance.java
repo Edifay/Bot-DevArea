@@ -3,6 +3,7 @@ package devarea.bot.commands.outLine;
 import devarea.Main;
 import devarea.bot.Init;
 import devarea.bot.automatical.FreeLanceHandler;
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.commands.commandTools.MessageSeria;
 import devarea.bot.commands.*;
 import devarea.bot.commands.commandTools.FreeLance;
@@ -41,7 +42,8 @@ public class CreateFreeLance extends LongCommand {
                 setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Voulez vous poster votre présentation ?")
-                                .description("La gestion par la suite de l'offre est en développement, si vous voulez la retirer par la suite demandez à un membre du staff !")
+                                .description("La gestion par la suite de l'offre est en développement, si vous voulez" +
+                                        " la retirer par la suite demandez à un membre du staff !")
                                 .color(ColorsUsed.just)
                                 .footer("Vous pouvez annuler | cancel", null).build()
                         ).addComponent(getYesButton())
@@ -54,7 +56,7 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event)) {
-                    freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) Init.devarea.getChannelById(Init.initial.freelance_channel).block(), MessageCreateSpec.builder()
+                    freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) ChannelCache.watch(Init.initial.freelance_channel.asString()), MessageCreateSpec.builder()
                             .content("**Freelance de <@" + freeLance.getMemberId() + "> :**")
                             .addEmbed(freeLance.getEmbed())
                             .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + member.getId() + "&open=1",
@@ -76,7 +78,8 @@ public class CreateFreeLance extends LongCommand {
                 setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Liens")
-                                .description("Voulez vous conserver ces liens. Si vous voulez les refaires choississez non !")
+                                .description("Voulez vous conserver ces liens. Si vous voulez les refaires " +
+                                        "choississez non !")
                                 .color(ColorsUsed.same)
                                 .footer("Vous pouvez annuler | cancel", null).build())
                         .addComponent(getYesNoButton())
@@ -110,10 +113,12 @@ public class CreateFreeLance extends LongCommand {
                         .components(getEmptyButton())
                         .build());
 
-                EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder().title(freeLance.getFreeLanceName()).description(freeLance.getDescription()).color(ColorsUsed.same);
+                EmbedCreateSpec.Builder builder =
+                        EmbedCreateSpec.builder().title(freeLance.getFreeLanceName()).description(freeLance.getDescription()).color(ColorsUsed.same);
 
                 for (int i = 0; i < freeLance.getFieldNumber(); i++) {
-                    builder.addField(freeLance.getField(i).getTitle(), freeLance.getField(i).getValue(), freeLance.getField(i).getInline());
+                    builder.addField(freeLance.getField(i).getTitle(), freeLance.getField(i).getValue(),
+                            freeLance.getField(i).getInline());
                 }
                 builder.addField(actualFied.getTitle(), actualFied.getValue(), actualFied.getInline());
 
@@ -130,7 +135,8 @@ public class CreateFreeLance extends LongCommand {
                             .title(freeLance.getFreeLanceName())
                             .description(freeLance.getDescription());
                     for (int i = 0; i < freeLance.getFieldNumber(); i++) {
-                        builder.addField(freeLance.getField(i).getTitle(), freeLance.getField(i).getValue(), freeLance.getField(i).getInline());
+                        builder.addField(freeLance.getField(i).getTitle(), freeLance.getField(i).getValue(),
+                                freeLance.getField(i).getInline());
                     }
                     builder.addField(actualFied.getTitle(), actualFied.getValue(), actualFied.getInline())
                             .color(ColorsUsed.same);
@@ -150,7 +156,8 @@ public class CreateFreeLance extends LongCommand {
                 setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Voulez-vous ajouter l'onglet liens ?")
-                                .description("Cet onglet permet de partager un portfolio ou autre lien de documentation sur vous.")
+                                .description("Cet onglet permet de partager un portfolio ou autre lien de " +
+                                        "documentation sur vous.")
                                 .footer("Vous pouvez annuler | cancel", null)
                                 .color(ColorsUsed.just).build())
                         .addComponent(getYesNoButton())
@@ -177,7 +184,8 @@ public class CreateFreeLance extends LongCommand {
                 setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Voulez-vous concerver cette offre ?")
-                                .description("Vous pouvez mettre le nombre d'offres que vous voulez, ne vous limitez pas ! Mais si votre offre ne vous convient pas ne la concervez pas !")
+                                .description("Vous pouvez mettre le nombre d'offres que vous voulez, ne vous limitez " +
+                                        "pas ! Mais si votre offre ne vous convient pas ne la concervez pas !")
                                 .color(ColorsUsed.just)
                                 .footer("Vous pouvez annuler | cancel", null).build())
                         .addComponent(getYesNoButton())
@@ -200,7 +208,8 @@ public class CreateFreeLance extends LongCommand {
         Stape getTemps = new Stape(keepField) {
             @Override
             protected boolean onCall(Message message) {
-                setText(EmbedCreateSpec.builder().title("Temps de retour").description("Proposez un temps de retour viable. Si vous n'avez pas de temps de retour précis tapez `empty`.").color(ColorsUsed.same).footer("Vous pouvez annuler | cancel", null).build());
+                setText(EmbedCreateSpec.builder().title("Temps de retour").description("Proposez un temps de retour " +
+                        "viable. Si vous n'avez pas de temps de retour précis tapez `empty`.").color(ColorsUsed.same).footer("Vous pouvez annuler | cancel", null).build());
                 return false;
             }
 
@@ -219,7 +228,8 @@ public class CreateFreeLance extends LongCommand {
         Stape getPrice = new Stape(getTemps) {
             @Override
             protected boolean onCall(Message message) {
-                setText(EmbedCreateSpec.builder().title("Prix").description("Proposez un prix que vous pensez juste, vous pouvez préciser que cela est variable. Si vous n'avez pas de prix tapez `empty`.").color(ColorsUsed.same).footer("Vous pouvez annuler | cancel", null).build());
+                setText(EmbedCreateSpec.builder().title("Prix").description("Proposez un prix que vous pensez juste, " +
+                        "vous pouvez préciser que cela est variable. Si vous n'avez pas de prix tapez `empty`.").color(ColorsUsed.same).footer("Vous pouvez annuler | cancel", null).build());
                 return false;
             }
 
@@ -238,7 +248,9 @@ public class CreateFreeLance extends LongCommand {
         Stape getDescriptionField = new Stape(getPrice) {
             @Override
             protected boolean onCall(Message message) {
-                setText(EmbedCreateSpec.builder().title("L'offre").description("Description de l'offre, essayez de donner de nombreux détails, attention le Prix, et le Temps de retour de l'offre vous seront demmandé après.").color(ColorsUsed.same).footer("Vous pouvez annuler | cancel", null).build());
+                setText(EmbedCreateSpec.builder().title("L'offre").description("Description de l'offre, essayez de " +
+                        "donner de nombreux détails, attention le Prix, et le Temps de retour de l'offre vous seront " +
+                        "demmandé après.").color(ColorsUsed.same).footer("Vous pouvez annuler | cancel", null).build());
                 return false;
             }
 
@@ -261,7 +273,8 @@ public class CreateFreeLance extends LongCommand {
                 setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Donnez moi le titre de la compétence/offre.")
-                                .description("Titre rapide, vous pourrez faire une présentation plus en détails par la suite")
+                                .description("Titre rapide, vous pourrez faire une présentation plus en détails par " +
+                                        "la suite")
                                 .color(ColorsUsed.same)
                                 .footer("Vous pouvez annuler | cancel", null).build())
                         .components(getEmptyButton())
@@ -284,22 +297,29 @@ public class CreateFreeLance extends LongCommand {
         stapeAskForField = new Stape(createNewField, link) {
             @Override
             protected boolean onCall(Message message) {
-                EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder().title(freeLance.getFreeLanceName()).description(freeLance.getDescription()).color(ColorsUsed.same);
+                EmbedCreateSpec.Builder builder =
+                        EmbedCreateSpec.builder().title(freeLance.getFreeLanceName()).description(freeLance.getDescription()).color(ColorsUsed.same);
 
                 if (freeLance.getFieldNumber() == 0)
-                    builder.addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 commandes personnalisées", "Les informations sur votre offre globale,\n\n(toutes les informations ci-dessous vous seront demandé)\n prix : le prix approximatif de l'offre\n temps de réalisation: le temps de rendu de l'offre", false);
+                    builder.addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 " +
+                            "commandes personnalisées", "Les informations sur votre offre globale,\n\n(toutes les " +
+                            "informations ci-dessous vous seront demandé)\n prix : le prix approximatif de l'offre\n " +
+                            "temps de réalisation: le temps de rendu de l'offre", false);
                 else for (int i = 0; i < freeLance.getFieldNumber(); i++) {
-                    builder.addField(freeLance.getField(i).getTitle(), freeLance.getField(i).getValue(), freeLance.getField(i).getInline());
+                    builder.addField(freeLance.getField(i).getTitle(), freeLance.getField(i).getValue(),
+                            freeLance.getField(i).getInline());
                 }
                 builder.addField("Les offres", "Vous pouvez ajouter le nombre d'offre que vous souhaitez", false);
-                builder.addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre...", false);
+                builder.addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre.." +
+                        ".", false);
 
                 messageAtEdit.edit(MessageEditSpec.builder().addEmbed(builder.build()).build()).subscribe();
 
                 setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Voulez vous ajouter une compétence/offre ?")
-                                .description("Vous pouvez ajouter une offre/compétence avec un titre, description, prix, date de retour.")
+                                .description("Vous pouvez ajouter une offre/compétence avec un titre, description, " +
+                                        "prix, date de retour.")
                                 .color(ColorsUsed.same)
                                 .footer("Vous pouvez annuler | cancel", null)
                                 .build())
@@ -322,7 +342,9 @@ public class CreateFreeLance extends LongCommand {
         Stape getDescription = new Stape(stapeAskForField) {
             @Override
             protected boolean onCall(Message message) {
-                setText(EmbedCreateSpec.builder().title("Description").description("Donnez votre expérience dans le milieu / diplôme (Brevet, Bac, études supérieures) etc...").color(ColorsUsed.same).footer("Vous pouvez annuler | cancel", null).build());
+                setText(EmbedCreateSpec.builder().title("Description").description("Donnez votre expérience dans le " +
+                        "milieu / diplôme (Brevet, Bac, études supérieures) etc...").color(ColorsUsed.same).footer(
+                                "Vous pouvez annuler | cancel", null).build());
                 return false;
             }
 
@@ -336,9 +358,16 @@ public class CreateFreeLance extends LongCommand {
                                             EmbedCreateSpec.builder()
                                                     .title(freeLance.getFreeLanceName())
                                                     .description(freeLance.getDescription())
-                                                    .addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 commandes personnalisées", "Les informations sur votre offre globale,\n\n(toutes les informations ci-dessous vous seront demandé)\n prix : le prix approximatif de l'offre\n temps de réalisation: le temps de rendu de l'offre", false)
-                                                    .addField("Les offres", "Vous pouvez ajouter le nombre d'offre que vous souhaitez", false)
-                                                    .addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre...", false)
+                                                    .addField("Titre de la compétence/titre de l'offre. Par exemple: " +
+                                                            "Bot discordJS 25 commandes personnalisées", "Les " +
+                                                            "informations sur votre offre globale,\n\n(toutes les " +
+                                                            "informations ci-dessous vous seront demandé)\n prix : le" +
+                                                            " prix approximatif de l'offre\n temps de réalisation: le" +
+                                                            " temps de rendu de l'offre", false)
+                                                    .addField("Les offres", "Vous pouvez ajouter le nombre d'offre " +
+                                                            "que vous souhaitez", false)
+                                                    .addField("Liens:", "Vous pouvez insérer ici tout vos liens vers " +
+                                                            "linkin, portfolio, ou autre...", false)
                                                     .color(ColorsUsed.same).build()).build())
                             .subscribe();
                     return callStape(0);
@@ -353,7 +382,8 @@ public class CreateFreeLance extends LongCommand {
                 setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Nom Prenom")
-                                .description("Donnez moi le `Nom Prenom` que vous voulez afficher sur la présentation. (Il est conseiller de ne pas donner de pseudo)")
+                                .description("Donnez moi le `Nom Prenom` que vous voulez afficher sur la présentation" +
+                                        ". (Il est conseiller de ne pas donner de pseudo)")
                                 .color(ColorsUsed.same)
                                 .footer("Vous pouvez annuler | cancel", null).build())
                         .components(getEmptyButton())
@@ -368,10 +398,15 @@ public class CreateFreeLance extends LongCommand {
                     freeLance.setFreeLanceName(content);
                     messageAtEdit.edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
                             .title(freeLance.getFreeLanceName())
-                            .description("Depuis comment de temps etes vous en FreeLance, vos dîplomes, etes vous en auto-entreprise sous contract ? Et toutes informations générales importantes...")
-                            .addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 commandes personnalisées", "Les informations sur votre offre globale,\n\n(toutes les informations ci-dessous vous seront demandé)\n prix : le prix approximatif de l'offre\n temps de réalisation: le temps de rendu de l'offre", false)
+                            .description("Depuis comment de temps etes vous en FreeLance, vos dîplomes, etes vous en " +
+                                    "auto-entreprise sous contract ? Et toutes informations générales importantes...")
+                            .addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 " +
+                                    "commandes personnalisées", "Les informations sur votre offre globale,\n\n(toutes" +
+                                    " les informations ci-dessous vous seront demandé)\n prix : le prix approximatif " +
+                                    "de l'offre\n temps de réalisation: le temps de rendu de l'offre", false)
                             .addField("Les offres", "Vous pouvez ajouter le nombre d'offre que vous souhaitez", false)
-                            .addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre...", false)
+                            .addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou " +
+                                    "autre...", false)
                             .color(ColorsUsed.same).build()).build()).subscribe();
                     return callStape(0);
                 }
@@ -385,15 +420,22 @@ public class CreateFreeLance extends LongCommand {
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
                         .title("Le fonctionnement.")
-                        .description("Voici l'embed que vous allez modifier pour créer votre présentation.\n\n**Cliquez sur : <:ayy:" + Init.idYes.getId().asString() + "> pour passer à la suite !**")
+                        .description("Voici l'embed que vous allez modifier pour créer votre présentation" +
+                                ".\n\n**Cliquez sur : <:ayy:" + Init.idYes.getId().asString() + "> pour passer à la " +
+                                "suite !**")
                         .color(ColorsUsed.same)
                         .footer("Vous pouvez annuler | cancel", null).build());
                 messageAtEdit = channel.createMessage(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
                         .title("Nom Prénom")
-                        .description("Depuis comment de temps etes vous en FreeLance, vos dîplomes, etes vous en auto-entreprise sous contract ? Et toutes informations générales importantes...")
-                        .addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 commandes personnalisées", "Les informations sur votre offre globale,\n\n(toutes les informations ci-dessous vous seront demandé)\n prix : le prix approximatif de l'offre\n temps de réalisation: le temps de rendu de l'offre", false)
+                        .description("Depuis comment de temps etes vous en FreeLance, vos dîplomes, etes vous en " +
+                                "auto-entreprise sous contract ? Et toutes informations générales importantes...")
+                        .addField("Titre de la compétence/titre de l'offre. Par exemple: Bot discordJS 25 commandes " +
+                                "personnalisées", "Les informations sur votre offre globale,\n\n(toutes les " +
+                                "informations ci-dessous vous seront demandé)\n prix : le prix approximatif de " +
+                                "l'offre\n temps de réalisation: le temps de rendu de l'offre", false)
                         .addField("Les offres", "Vous pouvez ajouter le nombre d'offre que vous souhaitez", false)
-                        .addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre...", false)
+                        .addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, ou autre." +
+                                "..", false)
                         .color(ColorsUsed.same).build()).build()).block();
                 return false;
             }
@@ -412,7 +454,8 @@ public class CreateFreeLance extends LongCommand {
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
                                 .title("Présentation !")
-                                .description("Vous allez vous même construire votre embed de présentation, je vais essayer de vous aiguiller tout le long de la création !")
+                                .description("Vous allez vous même construire votre embed de présentation, je vais " +
+                                        "essayer de vous aiguiller tout le long de la création !")
                                 .color(ColorsUsed.same)
                                 .footer("Vous pouvez annuler | cancel", null).build())
                         .addComponent(getYesButton())
@@ -438,12 +481,14 @@ public class CreateFreeLance extends LongCommand {
                 .description(freeLance.getDescription());
 
         for (int i = 0; i < freeLance.getFieldNumber(); i++)
-            embed.addField(freeLance.getField(i).getTitle(), freeLance.getField(i).getValue(), freeLance.getField(i).getInline());
+            embed.addField(freeLance.getField(i).getTitle(), freeLance.getField(i).getValue(),
+                    freeLance.getField(i).getInline());
 
         messageAtEdit.edit(MessageEditSpec.builder()
                 .addEmbed(embed
                         .addField(actualFied.getTitle(), actualFied.getValue(), actualFied.getInline())
-                        .addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, github, ou autre...", false)
+                        .addField("Liens:", "Vous pouvez insérer ici tout vos liens vers linkin, portfolio, github, " +
+                                "ou autre...", false)
                         .color(ColorsUsed.same)
                         .build())
                 .build()).block();

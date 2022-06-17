@@ -6,6 +6,7 @@ import devarea.Main;
 import devarea.backend.controllers.tools.WebFreelance;
 import devarea.bot.Init;
 import devarea.bot.automatical.FreeLanceHandler;
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.commands.Command;
 import devarea.bot.presets.ColorsUsed;
@@ -232,7 +233,7 @@ public class FreeLance implements Comparable {
     }
 
     public void send() {
-        this.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) Init.devarea.getChannelById(Init.initial.freelance_channel).block(), MessageCreateSpec.builder()
+        this.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) ChannelCache.watch(Init.initial.freelance_channel.asString()), MessageCreateSpec.builder()
                 .content("**Freelance de <@" + this.memberId + "> :**")
                 .addEmbed(this.getEmbed())
                 .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + this.memberId + "&open=1",

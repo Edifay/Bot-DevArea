@@ -7,6 +7,7 @@ import devarea.bot.commands.CommandManager;
 import devarea.bot.event.*;
 import devarea.bot.utils.InitialData;
 import devarea.bot.utils.SnowflakeModuleSerializer;
+import discord4j.common.store.action.gateway.ChannelCreateAction;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
@@ -106,6 +107,7 @@ public class Init {
             client.getEventDispatcher().on(ReactionRemoveEvent.class).subscribe(ReactionRemove::FunctionReactionRemoveEvent);
             client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(VoiceStateUpdate::VoiceStateUpdateFucntion);
             client.getEventDispatcher().on(ButtonInteractionEvent.class).subscribe(ButtonInteract::ButtonInteractFunction);
+
         } catch (Exception e) {
             System.err.println("Le token n'a pas pu être chargé ! (Ou erreur de login à discord !)");
         }

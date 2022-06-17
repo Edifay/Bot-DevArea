@@ -1,5 +1,6 @@
 package devarea.bot.commands;
 
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
@@ -38,10 +39,11 @@ public abstract class LongCommand extends Command {
             try {
                 Message message = event.getMessage().block();
                 if (!message.getId().equals(this.lastMessage.getId())) {
-                    deletedEmbed((TextChannel) message.getChannel().block(), EmbedCreateSpec.builder()
-                            .title("Error !")
-                            .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
-                            .color(ColorsUsed.wrong).build());
+                    deletedEmbed((TextChannel) ChannelCache.watch(message.getChannelId().asString()),
+                            EmbedCreateSpec.builder()
+                                    .title("Error !")
+                                    .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
+                                    .color(ColorsUsed.wrong).build());
                     message.removeReaction(event.getEmoji(), event.getUserId()).subscribe();
                     return;
                 }
@@ -62,10 +64,11 @@ public abstract class LongCommand extends Command {
         synchronized (this) {
             try {
                 if (!event.getMessage().getChannelId().equals(this.channel.getId())) {
-                    startAway(() -> deletedEmbed((TextChannel) event.getMessage().getChannel().block(), EmbedCreateSpec.builder()
-                            .title("Error !")
-                            .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
-                            .color(ColorsUsed.wrong).build()
+                    startAway(() -> deletedEmbed((TextChannel) ChannelCache.watch(event.getMessage().getChannelId().asString()),
+                            EmbedCreateSpec.builder()
+                                    .title("Error !")
+                                    .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
+                                    .color(ColorsUsed.wrong).build()
                     ));
                     delete(false, event.getMessage());
                     return;

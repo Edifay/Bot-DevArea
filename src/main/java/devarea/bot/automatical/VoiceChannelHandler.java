@@ -1,6 +1,7 @@
 package devarea.bot.automatical;
 
 import devarea.bot.Init;
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.cache.MemberCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
@@ -39,7 +40,7 @@ public class VoiceChannelHandler {
         if (event.getOld().isEmpty() || event.getOld().get().getChannelId().isEmpty())
             return;
 
-        VoiceChannel channel = event.getOld().get().getChannel().block();
+        VoiceChannel channel = (VoiceChannel) ChannelCache.watch(event.getOld().get().getChannelId().get().asString());
         if (channel.getVoiceStates().buffer().blockLast() == null && channel.getName().startsWith("Aide")) {
             number--;
             try {

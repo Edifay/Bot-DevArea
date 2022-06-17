@@ -3,6 +3,7 @@ package devarea.bot.commands.commandTools;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import devarea.bot.Init;
+import devarea.bot.cache.ChannelCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -34,7 +35,7 @@ public class MessageSeria implements Serializable {
 
     @JsonIgnore
     public Message getMessage() {
-        return ((TextChannel) Init.devarea.getChannelById(Snowflake.of(idChannel)).block()).getMessageById(Snowflake.of(this.idMessage)).block();
+        return ((TextChannel) ChannelCache.get(idChannel)).getMessageById(Snowflake.of(this.idMessage)).block();
     }
 
     @JsonIgnore

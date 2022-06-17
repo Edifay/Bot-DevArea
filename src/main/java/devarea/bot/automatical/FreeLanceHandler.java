@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.Main;
 import devarea.backend.controllers.tools.WebFreelance;
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
+import devarea.bot.cache.tools.childs.CachedChannel;
 import devarea.bot.commands.Command;
 import devarea.bot.commands.CommandManager;
 import devarea.bot.commands.ConsumableCommand;
@@ -48,7 +50,7 @@ public class FreeLanceHandler {
     public static void init() {
         try {
             load();
-            channel = (TextChannel) Init.devarea.getChannelById(Init.initial.freelance_channel).block();
+            channel = (TextChannel) ChannelCache.fetch(Init.initial.freelance_channel.asString());
             //if (!developing)
             Message msg = channel.getLastMessage().block();
             if (msg.getEmbeds().size() == 0 || msg.getEmbeds().get(0).getTitle().equals("Proposez vos services !"))
@@ -153,7 +155,7 @@ public class FreeLanceHandler {
                         delete(false, freeLance.getMessage().getMessage());
                     } catch (Exception e) {
                     }
-                    freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) Init.devarea.getChannelById(Init.initial.freelance_channel).block(), MessageCreateSpec.builder()
+                    freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) ChannelCache.watch(Init.initial.freelance_channel.asString()), MessageCreateSpec.builder()
                             .content("**Freelance de <@" + freeLance.getMemberId() + "> :**")
                             .addEmbed(freeLance.getEmbed())
                             .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + id + "&open=1",

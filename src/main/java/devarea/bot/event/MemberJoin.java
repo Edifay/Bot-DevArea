@@ -1,6 +1,7 @@
 package devarea.bot.event;
 
 import devarea.Main;
+import devarea.bot.cache.ChannelCache;
 import devarea.bot.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.commands.Command;
@@ -19,7 +20,7 @@ public class MemberJoin {
         MemberCache.use(event.getMember());
 
         if (channelJoin == null)
-            channelJoin = (TextChannel) Init.devarea.getChannelById(Init.initial.logJoin_channel).block();
+            channelJoin = (TextChannel) ChannelCache.fetch(Init.initial.logJoin_channel.asString());
         channelJoin.createMessage(msg -> msg.setContent(event.getMember().getDisplayName() + " a rejoint le serveur " +
                 "!")).subscribe();
 
