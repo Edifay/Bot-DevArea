@@ -11,6 +11,7 @@ public class InitialData {
     // Emojis
     public Snowflake yes = null;
     public Snowflake no = null;
+    public Snowflake loading = null;
 
     // Guilds
     public Snowflake devarea = Snowflake.of("768370886532137000");

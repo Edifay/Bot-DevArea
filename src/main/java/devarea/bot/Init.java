@@ -33,7 +33,7 @@ public class Init {
 
     public static GatewayDiscordClient client;
     public static Guild devarea;
-    public static GuildEmoji idYes, idNo;
+    public static GuildEmoji idYes, idNo, idLoading;
 
     public static TextChannel logChannel;
 

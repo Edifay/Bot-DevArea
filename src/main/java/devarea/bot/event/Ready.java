@@ -73,6 +73,7 @@ public class Ready {
 
         startAway(() -> Init.idYes = Init.devarea.getGuildEmojiById(Init.initial.yes).block());
         startAway(() -> Init.idNo = Init.devarea.getGuildEmojiById(Init.initial.no).block());
+        startAway(() -> Init.idLoading = Init.devarea.getGuildEmojiById(Init.initial.loading).block());
 
         try {
             startAway(RolesReactsHandler::load);
