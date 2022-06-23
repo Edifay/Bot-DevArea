@@ -6,6 +6,7 @@ import devarea.global.badges.role_badge.RolesBadges;
 import devarea.global.badges.success_badge.SuccessBadge;
 import devarea.backend.controllers.tools.userInfos.WebUserInfos;
 import devarea.global.badges.time_badge.TimeOnServerBadge;
+import devarea.global.badges.xp_badge.XPBadges;
 import discord4j.core.object.entity.Member;
 
 import java.awt.image.BufferedImage;
@@ -49,6 +50,7 @@ public abstract class Badges {
         ArrayList<Badges> badges = new ArrayList<>(RolesBadges.getRolesBadges(user, member_fetched));
         badges.addAll(SuccessBadge.getSuccessBadges(user, member_fetched));
         badges.add(TimeOnServerBadge.getTimeBadgeOf(user, member_fetched));
+        XPBadges.getXPBadgesOf(user, member_fetched);
         return badges;
     }
 

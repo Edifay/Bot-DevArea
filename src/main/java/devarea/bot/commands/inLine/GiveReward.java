@@ -148,7 +148,7 @@ public class GiveReward extends LongCommand {
                 String tmpStr = "";
 
                 for (final Snowflake helper : helpers) {
-                    XPHandler.addXp(MemberCache.get(helper.asString()), 50 / helpers.size());
+                    XPHandler.addXpToMember(MemberCache.get(helper.asString()), false, 50 / helpers.size());
                     tmpList.add(helper.asString());
                     tmpStr += MemberUtil.getMentionTextBySnowflake(helper) + " ";
                 }

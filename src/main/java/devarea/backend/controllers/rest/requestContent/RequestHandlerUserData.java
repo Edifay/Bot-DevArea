@@ -1,6 +1,6 @@
 package devarea.backend.controllers.rest.requestContent;
 
-import devarea.global.handlers.UserInfosHandler;
+import devarea.global.handlers.UserDataHandler;
 import devarea.backend.controllers.tools.userInfos.WebPrivateUserInfos;
 import devarea.backend.controllers.tools.userInfos.WebPublicUserInfos;
 
@@ -15,8 +15,8 @@ public class RequestHandlerUserData {
         if (infos != null) {
             if (description != null && description.length() > 300)
                 description = description.substring(0, 300);
-            UserInfosHandler.get(infos.getId()).userDescription = description;
-            UserInfosHandler.updated();
+            UserDataHandler.get(infos.getId()).userDescription = description;
+            UserDataHandler.updated();
             return true;
         }
         return false;

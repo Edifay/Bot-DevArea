@@ -26,7 +26,6 @@ public abstract class TimeOnServerBadge extends Badges {
         else if (instant.isBefore(Instant.now().minus(365, ChronoUnit.DAYS)))
             return new Senior_Badge(instant.toString());
         else return new Junior_Badge(instant.toString());
-
     }
 
 }

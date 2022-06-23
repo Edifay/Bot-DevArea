@@ -3,7 +3,7 @@ package devarea.backend.controllers.tools.userInfos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import devarea.global.handlers.UserInfosHandler;
+import devarea.global.handlers.UserDataHandler;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerMission;
 import devarea.backend.controllers.tools.WebFreelance;
 import devarea.backend.controllers.tools.WebMission;
@@ -101,9 +101,14 @@ public abstract class WebUserInfos {
         }
 
         // UserData
-        memberDescription = UserInfosHandler.get(this.id).userDescription;
+        memberDescription = UserDataHandler.get(this.id).userDescription;
 
         return this;
+    }
+
+    @JsonIgnore
+    public Badges[] getBadges() {
+        return badges;
     }
 
     @JsonIgnore

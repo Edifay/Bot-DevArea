@@ -135,9 +135,8 @@ public class EmbedLinkHandler {
                     drawCenteredString(g, "XP-" + xp, 700, 272, g.getFont());
 
                     // Badges part
-                    ArrayList<Badges> badges =
-                            Badges.getBadgesOf(RequestHandlerUserData.requestGetMemberProfile(member.getId().asString()),
-                                    member);
+                    Badges[] badges =
+                            RequestHandlerUserData.requestGetMemberProfile(member.getId().asString()).getBadges();
 
                     Font badges_font = initial.deriveFont(30f);
                     g.setFont(badges_font);
@@ -146,10 +145,10 @@ public class EmbedLinkHandler {
                     int inset_y = 380;
 
                     // Draw max of 4 badges inline
-                    for (int i = 0; i < badges.size() && i < 4; i++) {
-                        g.drawImage(badges.get(i).getLocal_icon(), inset_x + 68 + (i * 250),
+                    for (int i = 0; i < badges.length && i < 4; i++) {
+                        g.drawImage(badges[i].getLocal_icon(), inset_x + 68 + (i * 250),
                                 inset_y + 10, 107, 107, null);
-                        drawCenteredString(g, badges.get(i).getName(), inset_x + 120 + (i * 250), inset_y + 150,
+                        drawCenteredString(g, badges[i].getName(), inset_x + 120 + (i * 250), inset_y + 150,
                                 badges_font);
                     }
 

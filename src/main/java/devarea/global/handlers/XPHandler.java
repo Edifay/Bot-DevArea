@@ -76,7 +76,7 @@ public class XPHandler {
                                 Member member = MemberCache.get(voice.getUserId().asString());
                                 boolean contain = xpEarnVoice.containsKey(member.getId());
                                 if (!contain || xpEarnVoice.get(member.getId()) <= 90) {
-                                    addMember(member, false);
+                                    addXpToMember(member, false);
                                     xpEarnVoice.put(member.getId(), contain ? xpEarnVoice.get(member.getId()) + 1 : 1);
                                     startAway(() -> {
                                         try {
@@ -135,26 +135,27 @@ public class XPHandler {
     }
 
     public synchronized static void onMessage(MessageCreateEvent event) {
-        addMember(event.getMember().get());
+        addXpToMember(event.getMember().get());
     }
 
-    public synchronized static void addMember(Member member) {
-        addMember(member, true);
+    public synchronized static void addXpToMember(Member member) {
+        addXpToMember(member, true);
     }
 
-    public synchronized static void addMember(Member member, boolean withTimer) {
+    public synchronized static void addXpToMember(Member member, boolean withTimer) {
+        addXpToMember(member, withTimer, 1);
+    }
+
+    public synchronized static void addXpToMember(Member member, boolean withTimer, Integer value) {
         if (!withTimer || !already.contains(member.getId())) {
             if (xp.containsKey(member.getId())) {
-                if (XPHandler.getLevelForXp(xp.get(member.getId())) < XPHandler.getLevelForXp(xp.get(member.getId()) + 1))
-                    startAway(() -> {
-                        Command.send((TextChannel) ChannelCache.watch(Init.initial.command_channel.asString()),
-                                MessageCreateSpec.builder().content("<@" + member.getId().asString() + ">").addEmbed(EmbedCreateSpec.builder().description("Bien joué <@" + member.getId().asString() + ">, tu es passé niveau " + XPHandler.getLevelForXp(xp.get(member.getId()) + 1) + " !").timestamp(Instant.now()).color(ColorsUsed.same).build()).build(), false);
-                    });
-                xp.put(member.getId(), xp.get(member.getId()) + 1);
+                verifyNextLevelReach(member, value);
+                xp.put(member.getId(), xp.get(member.getId()) + value);
                 xp = sortByValue(xp);
             } else
-                xp.put(member.getId(), 1);
+                xp.put(member.getId(), value);
 
+            UserDataHandler.addOneToXpGainHistory(member.getId().asString(), value);
             if (withTimer) {
                 already.add(member.getId());
                 new Thread(() -> {
@@ -168,14 +169,12 @@ public class XPHandler {
         }
     }
 
-    public synchronized static void addXp(Member member, Integer value) {
-
-        final Snowflake memberId = member.getId();
-
-        if (xp.containsKey(memberId)) {
-            final Integer memberXp = getXpOf(memberId);
-            xp.put(memberId, memberXp + value);
-        }
+    private static void verifyNextLevelReach(Member member, Integer value) {
+        if (XPHandler.getLevelForXp(xp.get(member.getId())) < XPHandler.getLevelForXp(xp.get(member.getId()) + value))
+            startAway(() -> {
+                Command.send((TextChannel) ChannelCache.watch(Init.initial.command_channel.asString()),
+                        MessageCreateSpec.builder().content("<@" + member.getId().asString() + ">").addEmbed(EmbedCreateSpec.builder().description("Bien joué <@" + member.getId().asString() + ">, tu es passé niveau " + XPHandler.getLevelForXp(xp.get(member.getId()) + 1) + " !").timestamp(Instant.now()).color(ColorsUsed.same).build()).build(), false);
+            });
     }
 
     public synchronized static void removeXp(Member member, Integer value) {

@@ -1,6 +1,6 @@
 package devarea.global.badges.success_badge;
 
-import devarea.global.handlers.UserInfosHandler;
+import devarea.global.handlers.UserDataHandler;
 import devarea.global.badges.Badges;
 import devarea.backend.controllers.tools.userInfos.WebUserInfos;
 import discord4j.core.object.entity.Member;
@@ -15,7 +15,7 @@ public abstract class SuccessBadge extends Badges {
 
     public static ArrayList<SuccessBadge> getSuccessBadges(final WebUserInfos user, final Member member_fetched) {
         ArrayList<SuccessBadge> badges = new ArrayList<>();
-        if (UserInfosHandler.get(user.getId()).userDescription != null)
+        if (UserDataHandler.get(user.getId()).userDescription != null)
             badges.add(new Profile_Badge());
         return badges;
     }

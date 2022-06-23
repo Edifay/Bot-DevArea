@@ -1,7 +1,7 @@
 package devarea.bot.event;
 
 import devarea.Main;
-import devarea.global.handlers.UserInfosHandler;
+import devarea.global.handlers.UserDataHandler;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
 import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
@@ -83,11 +83,13 @@ public class Ready {
                 startAway(BumpHandler::init);
             startAway(MissionsHandler::init);
             startAway(FreeLanceHandler::init);
-            startAway(UserInfosHandler::init);
+            startAway(UserDataHandler::init);
             startAway(RequestHandlerAuth::init);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Init.setupEventDispatcher();
 
         System.out.println("Le bot est en ligne !");
 
