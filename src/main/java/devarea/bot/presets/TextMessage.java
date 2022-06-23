@@ -89,6 +89,7 @@ public class TextMessage {
                     ".\n`//ask` -> donne les informations pour bien poser une question.\n`//meetup` -> permet de " +
                     "créer un meetup autour d'un sujet.\n\nLes channels d'aides vocaux sont créés automatiquement par" +
                     " le bot lors de la connexion au channel vocal : \"Votre channel d'aide\".", false)
+            .addField("Développement:", "`//run` -> exécute du code directement depuis Discord.", false)
             .addField("XP:", "`//rank` -> donne l'xp et le rang de la personne (mentionnable).\n`//leaderboard` -> " +
                     "permet de voir le classement des membres du serveur en xp.\n`//askreward [mention de la personne" +
                     " que vous avez aidée]` -> Si vous ou plusieurs personnes avez aidé quelqu'un à résoudre son " +
@@ -269,6 +270,15 @@ public class TextMessage {
             .color(ColorsUsed.just)
             .timestamp(Instant.now()).build();
 
+    public static final EmbedCreateSpec runCommandExplain = EmbedCreateSpec.builder()
+            .title("Run")
+            .description("Cette commande permet d'exécuter du code directement depuis Discord.")
+            .addField("Langages", "Plus de 30 langages sont supportés.\n`//run languages` -> voir la liste des langages.", false)
+            .addField("Utilisation", "//run <arguments> (Optionnel)\n\\`\\`\\`<langage>\nVotre code\n" +
+                                     "\\`\\`\\`<entrée standard> (Optionnel)", false)
+            .addField("Exemple", "//run\n\\`\\`\\`python\nprint(\"Hello World !\")\n\\`\\`\\`", false)
+            .color(ColorsUsed.just)
+            .build();
 
     public static EmbedCreateSpec meetupCommandExplain = EmbedCreateSpec.builder()
             .author("Les meetups sont des rencontres vocales/écrites sur un sujet créé par la communauté.", null, null)
