@@ -92,7 +92,7 @@ public class EmbedLinkHandler {
                     g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
                     // Draw background
-                    g.drawImage(Init.profile_back, 0, 0, 1200, 600, null);
+                    g.drawImage(Init.assetsImages.get("profile_background"), 0, 0, 1200, 600, null);
 
                     // Draw Member Icon !
                     g.drawImage(makeRoundedCorner(ImageIO.read(new URL(member.getAvatarUrl())), 10000), 25, 20, 210,

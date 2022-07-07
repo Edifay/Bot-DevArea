@@ -2,6 +2,8 @@ package devarea.bot.utils;
 
 import discord4j.common.util.Snowflake;
 
+import java.util.HashMap;
+
 public class InitialData {
 
     // Admin
@@ -49,24 +51,10 @@ public class InitialData {
     public Snowflake devHelper_role = null;
 
     // Assets
-    public String xp_background = null;
-    public String profile_background;
-
-    public String server_logo = null;
+    public HashMap<String, String> assetsImages = null;
 
     // -> Badges
-    public String admin_badge = null;
-    public String fonda_badge = null;
-    public String graphist_badge = null;
-    public String helper_badge = null;
-    public String modo_badge = null;
-    public String winner_badge = null;
-    public String junior_badge = null;
-    public String precursor_badge = null;
-    public String senior_badge = null;
-    public String booster_badge = null;
-    public String partner_badge = null;
-    public String profile_badge = null;
+    public HashMap<String, String> badgesImages = null;
 
     public InitialData() {
 

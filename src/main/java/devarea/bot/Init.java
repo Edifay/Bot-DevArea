@@ -7,7 +7,6 @@ import devarea.bot.commands.CommandManager;
 import devarea.bot.event.*;
 import devarea.bot.utils.InitialData;
 import devarea.bot.utils.SnowflakeModuleSerializer;
-import discord4j.common.store.action.gateway.ChannelCreateAction;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
@@ -24,6 +23,8 @@ import discord4j.gateway.intent.IntentSet;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Init {
@@ -37,22 +38,8 @@ public class Init {
 
     public static TextChannel logChannel;
 
-    public static BufferedImage
-            backgroundXp,
-            admin_badge,
-            fonda_badge,
-            graphist_badge,
-            helper_badge,
-            modo_badge,
-            winner_badge,
-            junior_badge,
-            precursor_badge,
-            senior_badge,
-            profile_back,
-            server_logo,
-            booster_badge,
-            partner_badge,
-            profile_badge;
+    public static HashMap<String, BufferedImage> badgesImages = new HashMap<>();
+    public static HashMap<String, BufferedImage> assetsImages = new HashMap<>();
 
     public static void initBot() {
         CommandManager.init();
@@ -90,6 +77,8 @@ public class Init {
         }
 
         try {
+            long ms = System.currentTimeMillis();
+            System.out.println(Main.separator + "Connecting to Discord API.");
             final String token = new Scanner(new FileInputStream("./token.token")).nextLine();
 
             client = DiscordClient.create(token)
@@ -97,6 +86,8 @@ public class Init {
                     .setEnabledIntents(IntentSet.all())
                     .login()
                     .block();
+
+            System.out.println("Connection success !");
 
             assert client != null;
 
@@ -123,21 +114,13 @@ public class Init {
     private static void assetsLoader() throws IOException {
         System.out.println(Main.separator + "Loading assets...");
         long ms = System.currentTimeMillis();
-        backgroundXp = loadImageInPot(initial.xp_background);
-        admin_badge = loadImageInPot(initial.admin_badge);
-        fonda_badge = loadImageInPot(initial.fonda_badge);
-        graphist_badge = loadImageInPot(initial.graphist_badge);
-        helper_badge = loadImageInPot(initial.helper_badge);
-        modo_badge = loadImageInPot(initial.modo_badge);
-        winner_badge = loadImageInPot(initial.winner_badge);
-        junior_badge = loadImageInPot(initial.junior_badge);
-        precursor_badge = loadImageInPot(initial.precursor_badge);
-        senior_badge = loadImageInPot(initial.senior_badge);
-        profile_back = loadImageInPot(initial.profile_background);
-        server_logo = loadImageInPot(initial.server_logo);
-        booster_badge = loadImageInPot(initial.booster_badge);
-        partner_badge = loadImageInPot(initial.partner_badge);
-        profile_badge = loadImageInPot(initial.profile_badge);
+
+        for (Map.Entry<String, String> entry : initial.assetsImages.entrySet())
+            assetsImages.put(entry.getKey(), loadImageInPot(entry.getValue()));
+
+        for (Map.Entry<String, String> entry : initial.badgesImages.entrySet())
+            badgesImages.put(entry.getKey(), loadImageInPot(entry.getValue()));
+
         System.out.println("Assets took : " + (System.currentTimeMillis() - ms) + "ms to load !");
     }
 

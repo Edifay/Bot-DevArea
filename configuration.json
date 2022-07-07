@@ -27,19 +27,27 @@
   "admin_role": "768383784571240509",
   "pingMeetup_role": "798482087224934422",
   "devHelper_role": "768497680385048596",
-  "xp_background": "/assets/backgroundXp.jpg",
-  "profile_background": "/assets/profile_back.png",
-  "server_logo": "/assets/logo.jpg",
-  "admin_badge": "/assets/badges/107x107/roles_badges/admin_badge.png",
-  "fonda_badge": "/assets/badges/107x107/roles_badges/fonda_badge.png",
-  "graphist_badge": "/assets/badges/107x107/roles_badges/graphist_badge.png",
-  "helper_badge": "/assets/badges/107x107/roles_badges/helper_badge.png",
-  "modo_badge": "/assets/badges/107x107/roles_badges/modo_badge.png",
-  "winner_badge": "/assets/badges/107x107/roles_badges/winner_badge.png",
-  "junior_badge": "/assets/badges/107x107/time_badges/junior_badge.png",
-  "precursor_badge": "/assets/badges/107x107/time_badges/precursor_badge.png",
-  "senior_badge": "/assets/badges/107x107/time_badges/senior_badge.png",
-  "booster_badge": "/assets/badges/107x107/roles_badges/booster_badge.png",
-  "partner_badge": "/assets/badges/107x107/roles_badges/partner_badge.png",
-  "profile_badge": "/assets/badges/107x107/success_badges/profile_badge.png"
+  "assetsImages": {
+    "xp_background": "/assets/backgroundXp.jpg",
+    "profile_background": "/assets/profile_back.png",
+
+    "server_logo": "/assets/logo.jpg"
+  },
+  "badgesImages": {
+    "admin_badge": "/assets/badges/107x107/roles_badges/admin_badge.png",
+    "fonda_badge": "/assets/badges/107x107/roles_badges/fonda_badge.png",
+    "graphist_badge": "/assets/badges/107x107/roles_badges/graphist_badge.png",
+    "helper_badge": "/assets/badges/107x107/roles_badges/helper_badge.png",
+    "modo_badge": "/assets/badges/107x107/roles_badges/modo_badge.png",
+    "winner_badge": "/assets/badges/107x107/roles_badges/winner_badge.png",
+    "junior_badge": "/assets/badges/107x107/time_badges/junior_badge.png",
+    "precursor_badge": "/assets/badges/107x107/time_badges/precursor_badge.png",
+    "senior_badge": "/assets/badges/107x107/time_badges/senior_badge.png",
+    "booster_badge": "/assets/badges/107x107/roles_badges/booster_badge.png",
+    "partner_badge": "/assets/badges/107x107/roles_badges/partner_badge.png",
+    "profile_badge": "/assets/badges/107x107/success_badges/profile_badge.png",
+    "occasionedMember_badge": "/assets/badges/107x107/xp_badges/occasionedmember_badge.png",
+    "activeMember_badge": "/assets/badges/107x107/xp_badges/activemember_badge.png",
+    "regularMember_badge": "/assets/badges/107x107/xp_badges/regularmember_badge.png"
+  }
 }

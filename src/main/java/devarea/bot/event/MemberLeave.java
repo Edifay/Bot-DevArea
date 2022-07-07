@@ -5,6 +5,7 @@ import devarea.global.handlers.FreeLanceHandler;
 import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
+import devarea.global.handlers.UserDataHandler;
 import devarea.global.handlers.XPHandler;
 import devarea.bot.commands.CommandManager;
 import discord4j.core.event.domain.guild.MemberLeaveEvent;
@@ -24,6 +25,7 @@ public class MemberLeave {
             if (FreeLanceHandler.hasFreelance(memberLeaveEvent.getUser().getId().asString()))
                 FreeLanceHandler.remove(FreeLanceHandler.getFreelance(memberLeaveEvent.getUser().getId().asString()));
             RequestHandlerAuth.left(memberLeaveEvent.getUser().getId().asString());
+            UserDataHandler.left(memberLeaveEvent.getUser().getId().asString());
             ((TextChannel) ChannelCache.watch(Init.initial.logJoin_channel.asString()))
                     .createMessage(msg -> msg.setContent(memberLeaveEvent.getMember().get().getDisplayName() + " a " +
                             "quitté le serveur !")).subscribe();

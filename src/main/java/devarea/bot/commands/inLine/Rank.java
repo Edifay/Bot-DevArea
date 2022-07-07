@@ -35,9 +35,11 @@ public class Rank extends ShortCommand {
             } else {
 
                 try {
-                    BufferedImage img = new BufferedImage(Init.backgroundXp.getWidth(), Init.backgroundXp.getHeight()
+                    BufferedImage img = new BufferedImage(Init.assetsImages.get("xp_background").getWidth(),
+                            Init.assetsImages.get("xp_background").getHeight()
                             , BufferedImage.TYPE_INT_ARGB);
-                    img.getGraphics().drawImage(Init.backgroundXp, 0, 0, img.getWidth(), img.getHeight(), null);
+                    img.getGraphics().drawImage(Init.assetsImages.get("xp_background"), 0, 0, img.getWidth(),
+                            img.getHeight(), null);
                     Graphics2D g = (Graphics2D) img.getGraphics();
 
                     int xp = XPHandler.getXpOf(pinged.getId());

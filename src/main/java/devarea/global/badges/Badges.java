@@ -48,9 +48,11 @@ public abstract class Badges {
 
     public static ArrayList<Badges> getBadgesOf(final WebUserInfos user, final Member member_fetched) {
         ArrayList<Badges> badges = new ArrayList<>(RolesBadges.getRolesBadges(user, member_fetched));
+        Badges xpBadge;
+        if ((xpBadge = XPBadges.getXPBadgesOf(user, member_fetched)) != null)
+            badges.add(xpBadge);
         badges.addAll(SuccessBadge.getSuccessBadges(user, member_fetched));
         badges.add(TimeOnServerBadge.getTimeBadgeOf(user, member_fetched));
-        XPBadges.getXPBadgesOf(user, member_fetched);
         return badges;
     }
 

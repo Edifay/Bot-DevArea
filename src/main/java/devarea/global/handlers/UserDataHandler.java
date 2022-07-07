@@ -78,4 +78,8 @@ public class UserDataHandler {
 
         updated();
     }
+
+    public static void left(String userID) {
+        data.remove(userID);
+    }
 }
