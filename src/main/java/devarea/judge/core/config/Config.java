@@ -11,17 +11,23 @@ import java.util.TreeMap;
 public class Config {
 
     private final String url;
+    private final boolean rapidapi;
     private final boolean encode;
     private final Map<String, Language> languages;
 
-    public Config(String url, boolean encode, Map<String, Language> languages) {
+    public Config(String url, boolean rapidapi, boolean encode, Map<String, Language> languages) {
         this.url = url;
+        this.rapidapi = rapidapi;
         this.encode = encode;
         this.languages = languages;
     }
 
     public String getUrl() {
         return url;
+    }
+
+    public boolean isRapidapi() {
+        return rapidapi;
     }
 
     public boolean isEncode() {

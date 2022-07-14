@@ -26,8 +26,8 @@ public class ResponseBuilder {
         return new String(Base64.getMimeDecoder().decode(value));
     }
 
-    public JudgeResponse build(Language language, boolean isEncode) {
-        if (isEncode) {
+    public JudgeResponse build(Language language, boolean encode) {
+        if (encode) {
             stdout = decode(stdout);
             stderr = decode(stderr);
             compileOutput = decode(compileOutput);

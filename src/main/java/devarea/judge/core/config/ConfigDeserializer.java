@@ -17,6 +17,7 @@ public class ConfigDeserializer extends JsonDeserializer<Config> {
         Root root = jp.readValueAs(Root.class);
 
         String url = root.url;
+        boolean rapidapi = root.rapidapi;
         boolean encode = root.encode;
         Map<String, Language> languages = new HashMap<>();
 
@@ -24,12 +25,13 @@ public class ConfigDeserializer extends JsonDeserializer<Config> {
             languages.put(lang.id, new Language(lang.id, lang.name, lang.version, lang.aliases));
         }
 
-        return new Config(url, encode, languages);
+        return new Config(url, rapidapi, encode, languages);
     }
 
     private static class Root {
 
         public String url;
+        public boolean rapidapi;
         public boolean encode;
         public List<Lang> languages;
     }

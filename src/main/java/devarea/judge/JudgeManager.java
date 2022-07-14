@@ -30,7 +30,7 @@ public class JudgeManager {
         ObjectMapper mapper = new ObjectMapper();
         try {
             config = mapper.readValue(new File("judge.json"), Config.class);
-            client = new Client(config.getUrl(), config.isEncode());
+            client = new Client(config.getUrl(), config.isRapidapi(), config.isEncode());
         } catch (IOException e) {
             e.printStackTrace();
         }
