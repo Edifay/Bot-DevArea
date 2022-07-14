@@ -42,7 +42,7 @@ public class MessageCreate {
                 return;
 
             if (message.getMessage().getContent().startsWith(Init.initial.prefix))
-                CommandManager.exe(message.getMessage().getContent().substring(Init.initial.prefix.length()).split(" ")[0],
+                CommandManager.exe(message.getMessage().getContent().substring(Init.initial.prefix.length()).split("\\s", 2)[0],
                         message);
 
             EmbedLinkHandler.onReceive(message);
