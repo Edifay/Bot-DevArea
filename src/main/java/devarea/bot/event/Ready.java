@@ -76,6 +76,7 @@ public class Ready {
         startAway(() -> Init.idLoading = Init.devarea.getGuildEmojiById(Init.initial.loading).block());
 
         try {
+            UserDataHandler.init();
             startAway(RolesReactsHandler::load);
             startAway(StatsHandler::start);
             startAway(MeetupHandler::init);
@@ -84,7 +85,6 @@ public class Ready {
                 startAway(BumpHandler::init);
             startAway(MissionsHandler::init);
             startAway(FreeLanceHandler::init);
-            startAway(UserDataHandler::init);
             startAway(RequestHandlerAuth::init);
         } catch (Exception e) {
             e.printStackTrace();

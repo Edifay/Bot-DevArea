@@ -18,9 +18,6 @@ public class MemberLeave {
         try {
             MemberCache.slash(memberLeaveEvent.getUser().getId().asString());
 
-            if (XPHandler.haveBeenSet(memberLeaveEvent.getUser().getId()))
-                XPHandler.remove(memberLeaveEvent.getUser().getId());
-
             CommandManager.left(memberLeaveEvent.getUser().getId());
             if (FreeLanceHandler.hasFreelance(memberLeaveEvent.getUser().getId().asString()))
                 FreeLanceHandler.remove(FreeLanceHandler.getFreelance(memberLeaveEvent.getUser().getId().asString()));

@@ -9,7 +9,6 @@ import devarea.bot.Init;
 import devarea.bot.commands.Command;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.common.util.Snowflake;
-import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.VoiceState;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -22,7 +21,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.bot.event.FunctionEvent.*;
 
 public class XPHandler {
 
@@ -30,87 +29,71 @@ public class XPHandler {
 
     public static HashMap<String, Integer> xpLeft = new HashMap<>();
 
-    private static final ArrayList<Snowflake> already = new ArrayList<>();
+    private static final ArrayList<Snowflake> memberInCouldDown = new ArrayList<>();
 
-    public static LinkedHashMap<Snowflake, Integer> sortByValue(final Map<Snowflake, Integer> wordCounts) {
-        return wordCounts.entrySet().stream().sorted((Map.Entry.<Snowflake, Integer>comparingByValue().reversed())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    public static HashMap<Snowflake, Integer> currentXpEarnVoiceStatus = new HashMap<>();
+
+    /*
+        Initialise the XP System
+     */
+    public static void init() {
+        loadXp();
+        loadXpLeft();
+
+        repeatEachMillis(XPHandler::saveXp, 600000, true);
+
+        setupVoiceXpEarn();
     }
 
-    public static HashMap<Snowflake, Integer> xpEarnVoice = new HashMap<>();
+    /*
+        Setup the loop to add xp to member current in a voice channel !
+     */
+    private static void setupVoiceXpEarn() {
+        repeatEachMillis(() -> {
+            List<VoiceState> states = Init.devarea.getVoiceStates().buffer().blockLast();
+            if (states != null)
 
-    public static void init() {
-        ObjectMapper mapper = new ObjectMapper();
-        File file = new File("./xp.json");
-        if (!file.exists()) save();
-        try {
-            LinkedHashMap<String, Integer> obj = mapper.readValue(file, new TypeReference<>() {
-            });
-            obj.forEach((s, aLong) -> xp.put(Snowflake.of(s), aLong));
-            xp = sortByValue(xp);
-            loadLeft();
-            verifLeft();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        new Thread(() -> {
-            try {
-                while (true) {
-                    Thread.sleep(60000);
-                    verifLeft();
-                    save();
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+                for (VoiceState voice : states) {
+                    Member member = MemberCache.get(voice.getUserId().asString());
+                    boolean memberEarnXpVoiceStatus = currentXpEarnVoiceStatus.containsKey(member.getId());
 
-        new Thread(() -> {
-            try {
-                while (true) {
+                    if (!memberEarnXpVoiceStatus || currentXpEarnVoiceStatus.get(member.getId()) <= 90) {
+                        // Adding xp and apply couldown and maxXpEarnInvVoice count
+                        addXpToMember(member, false);
+                        currentXpEarnVoiceStatus.put(member.getId(), memberEarnXpVoiceStatus ?
+                                currentXpEarnVoiceStatus.get(member.getId()) + 1 : 1);
 
-                    Thread.sleep(60000);
-                    try {
-                        List<VoiceState> states = Init.devarea.getVoiceStates().buffer().blockLast();
-                        if (states != null)
-                            for (VoiceState voice : states) {
-                                Member member = MemberCache.get(voice.getUserId().asString());
-                                boolean contain = xpEarnVoice.containsKey(member.getId());
-                                if (!contain || xpEarnVoice.get(member.getId()) <= 90) {
-                                    addXpToMember(member, false);
-                                    xpEarnVoice.put(member.getId(), contain ? xpEarnVoice.get(member.getId()) + 1 : 1);
-                                    startAway(() -> {
-                                        try {
-                                            Thread.sleep(86400000);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        } finally {
-                                            xpEarnVoice.put(member.getId(), xpEarnVoice.get(member.getId()) - 1);
-                                        }
-                                    });
-                                }
-                            }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        // Removing 1xp earn after 24h
+                        startAwayIn(() -> currentXpEarnVoiceStatus.put(member.getId(),
+                                currentXpEarnVoiceStatus.get(member.getId()) - 1), 86400000, false);
                     }
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+
+        }, 60000, true);
     }
 
-    public static synchronized void save() {
+    private static synchronized void saveXp() {
+        UserDataHandler.setXpList(xp);
+    }
+
+    private static void loadXp() {
+        xp = sortMap(UserDataHandler.getXpList());
+    }
+
+    public static void loadXpLeft() {
         ObjectMapper mapper = new ObjectMapper();
+        File file = new File("./xpLeft.json");
+        if (!file.exists()) saveXpLeft();
         try {
-            final Map<String, Integer> stock = new LinkedHashMap<>();
-            xp.forEach((snowflake, integer) -> stock.put(snowflake.asString(), integer));
-            mapper.writeValue(new File("./xp.json"), stock);
+            HashMap<String, Integer> obj = mapper.readValue(file, new TypeReference<>() {
+            });
+            obj.forEach((s, aLong) -> xpLeft.put(s, aLong));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static synchronized void saveLeft() {
+    private static synchronized void saveXpLeft() {
         ObjectMapper mapper = new ObjectMapper();
         try {
             final Map<String, Integer> stock = new LinkedHashMap<>();
@@ -121,55 +104,56 @@ public class XPHandler {
         }
     }
 
-    public static void loadLeft() {
-        ObjectMapper mapper = new ObjectMapper();
-        File file = new File("./xpLeft.json");
-        if (!file.exists()) saveLeft();
-        try {
-            HashMap<String, Integer> obj = mapper.readValue(file, new TypeReference<>() {
-            });
-            obj.forEach((s, aLong) -> xpLeft.put(s, aLong));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private static LinkedHashMap<Snowflake, Integer> sortMap(final Map<Snowflake, Integer> wordCounts) {
+        return wordCounts.entrySet().stream().sorted((Map.Entry.<Snowflake, Integer>comparingByValue().reversed()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
-    public synchronized static void onMessage(MessageCreateEvent event) {
-        addXpToMember(event.getMember().get());
+    /*
+       Sort the list of xp
+     */
+    public static void sortXp() {
+        xp = sortMap(xp);
     }
 
+    /*
+        Default values :
+        withTimer -> true
+        xp earn value -> 1xp
+     */
     public synchronized static void addXpToMember(Member member) {
         addXpToMember(member, true);
     }
 
+    /*
+        Default values :
+        xp earn value -> 1xp
+     */
     public synchronized static void addXpToMember(Member member, boolean withTimer) {
         addXpToMember(member, withTimer, 1);
     }
 
     public synchronized static void addXpToMember(Member member, boolean withTimer, Integer value) {
-        if (!withTimer || !already.contains(member.getId())) {
+        if (!withTimer || !memberInCouldDown.contains(member.getId())) {
+
             if (xp.containsKey(member.getId())) {
-                verifyNextLevelReach(member, value);
+                verifyIfNextLevelReach(member, value);
                 xp.put(member.getId(), xp.get(member.getId()) + value);
-                xp = sortByValue(xp);
-            } else
+                sortXp();
+            } else if (!addNewMember(member.getId()))
                 xp.put(member.getId(), value);
 
             UserDataHandler.addOneToXpGainHistory(member.getId().asString(), value);
+
+            // setup couldown xp earn
             if (withTimer) {
-                already.add(member.getId());
-                new Thread(() -> {
-                    try {
-                        Thread.sleep(6000);
-                    } catch (InterruptedException e) {
-                    }
-                    removeSafely(member);
-                }).start();
+                memberInCouldDown.add(member.getId());
+                startAwayIn(() -> removeSafely(member), 6000, false);
             }
         }
     }
 
-    private static void verifyNextLevelReach(Member member, Integer value) {
+    private static void verifyIfNextLevelReach(Member member, Integer value) {
         if (XPHandler.getLevelForXp(xp.get(member.getId())) < XPHandler.getLevelForXp(xp.get(member.getId()) + value))
             startAway(() -> {
                 Command.send((TextChannel) ChannelCache.watch(Init.initial.command_channel.asString()),
@@ -177,21 +161,30 @@ public class XPHandler {
             });
     }
 
-    public synchronized static void removeXp(Member member, Integer value) {
+    /*
+        Remove the amount of xp given to the member
+     */
+    public synchronized static void removeXpToMember(Member member, Integer value) {
 
         final Snowflake memberId = member.getId();
 
         if (xp.containsKey(memberId)) {
-            final Integer memberXp = getXpOf(memberId);
+            final Integer memberXp = getXpOfMember(memberId);
             xp.replace(memberId, memberXp, memberXp - value);
         }
     }
 
-    public synchronized static Integer getXpOf(Snowflake id) {
+    /*
+        Get the xp count of the id member requested
+     */
+    public synchronized static Integer getXpOfMember(Snowflake id) {
         return xp.get(id);
     }
 
-    public synchronized static Integer getRankOf(Snowflake id) {
+    /*
+        Get the rank of the id member requested
+     */
+    public synchronized static Integer getRankOfMember(Snowflake id) {
         int i = 0;
         for (Snowflake randomId : xp.keySet())
             if (randomId.equals(id)) return ++i;
@@ -199,6 +192,9 @@ public class XPHandler {
         return i;
     }
 
+    /*
+        Get a sorted array from the xp ArrayList
+     */
     public synchronized static Snowflake[] getSortedMemberArray() {
         Integer[] sorted = xp.values().toArray(new Integer[0]);
         Arrays.sort(sorted, Collections.reverseOrder());
@@ -216,7 +212,10 @@ public class XPHandler {
         return array;
     }
 
-    public synchronized static WebXPMember[] getListOfIndex(final int start, int end) {
+    /*
+        Return the list of WebXPMember
+     */
+    public synchronized static WebXPMember[] getWebXPMemberListOfIndex(final int start, int end) {
         if (start > xp.size()) return new WebXPMember[0];
         if (end > xp.size()) end = xp.size();
 
@@ -230,66 +229,67 @@ public class XPHandler {
             }
             i++;
         }
+
         return atReturn;
     }
 
+    /*
+        Get the level of an xp amount
+     */
     public synchronized static int getLevelForXp(int xp) {
         int level = 0;
         while (xp >= getAmountForLevel(level)) level++;
         return --level;
     }
 
+    /*
+        Get the xp amount for a level
+     */
     public static int getAmountForLevel(int level) {
         return (int) (3 * (Math.pow(level, 2)));
     }
 
+    /*
+        Return if the memberID have already speak on the server
+     */
     public static boolean haveBeenSet(Snowflake id) {
         return xp.containsKey(id);
     }
 
-    public synchronized static void verifLeft() {
-        ArrayList<Snowflake> memberIds = new ArrayList<>();
-        MemberCache.cache().forEach((k, v) -> memberIds.add(Snowflake.of(k)));
-
-        synchronized (XPHandler.class) {
-            ArrayList<Map.Entry<Snowflake, Integer>> atRemove = new ArrayList<>();
-
-            for (Map.Entry<Snowflake, Integer> random : xp.entrySet())
-                if (!memberIds.contains(random.getKey()))
-                    atRemove.add(random);
-
-            for (Map.Entry<Snowflake, Integer> random : atRemove) {
-                xp.remove(random.getKey());
-                xpLeft.put(random.getKey().asString(), random.getValue());
-            }
-
-            save();
-            saveLeft();
-        }
-    }
-
-    public static synchronized void addNewMember(Snowflake id) {
+    /*
+        Check if the member have an old xp.
+        Return :
+        true : if old xp could be fetched
+        false : if old xp couldn't be fetched
+     */
+    public static synchronized boolean addNewMember(Snowflake id) {
         if (xpLeft.containsKey(id.asString())) {
             xp.put(id, xpLeft.get(id.asString()));
-            xp = sortByValue(xp);
+            sortXp();
             xpLeft.remove(id.asString());
-            saveLeft();
+            saveXpLeft();
+            return true;
         }
+        return false;
     }
 
-
-    public static synchronized void remove(Snowflake id) {
-        if (xp.containsKey(id)) xpLeft.put(id.asString(), xp.get(id));
-        saveLeft();
-        xp.remove(id);
+    /*
+        Remove member to actual XP and transfer his xp data to XpLeft
+     */
+    public static synchronized void removeMember(Snowflake id) {
+        if (xp.containsKey(id)) {
+            xpLeft.put(id.asString(), xp.get(id));
+            saveXpLeft();
+            xp.remove(id);
+        }
     }
 
     public static synchronized void stop() {
-        save();
+        saveXp();
     }
 
     public static synchronized void removeSafely(Member member) {
-        already.remove(member.getId());
+        memberInCouldDown.remove(member.getId());
     }
 
 }

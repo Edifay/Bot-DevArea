@@ -153,7 +153,7 @@ public class GiveReward extends LongCommand {
                     tmpStr += MemberUtil.getMentionTextBySnowflake(helper) + " ";
                 }
 
-                XPHandler.removeXp(member, 10);
+                XPHandler.removeXpToMember(member, 10);
 
                 HelpRewardHandler.addHelpReward(new HelpReward(member.getId().asString(), tmpList));
 

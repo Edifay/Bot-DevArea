@@ -16,10 +16,10 @@ public class LeaderBoard extends ShortCommand {
         String text = "";
         Snowflake[] array = XPHandler.getSortedMemberArray();
         for (int i = 0; i < 5; i++) {
-            text += "`#" + (i + 1) + ":` <@" + array[i].asString() + ">: " + XPHandler.getXpOf(array[i]) + "xp.\n";
+            text += "`#" + (i + 1) + ":` <@" + array[i].asString() + ">: " + XPHandler.getXpOfMember(array[i]) + "xp.\n";
         }
         text += "\n---------------------------------------------------------------\n\n";
-        text += "`#" + XPHandler.getRankOf(this.member.getId()) + ":` <@" + this.member.getId().asString() + ">: " + XPHandler.getXpOf(this.member.getId()) + "xp.";
+        text += "`#" + XPHandler.getRankOfMember(this.member.getId()) + ":` <@" + this.member.getId().asString() + ">: " + XPHandler.getXpOfMember(this.member.getId()) + "xp.";
         text += "\n\nVous pouvez retrouver le leaderboard en entier sur le site web : https://devarea.fr/stats.";
         sendEmbed(EmbedCreateSpec.builder()
                 .title("LeaderBoard !")

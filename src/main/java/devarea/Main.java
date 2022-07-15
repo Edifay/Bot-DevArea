@@ -5,7 +5,6 @@ import devarea.bot.Init;
 import org.springframework.boot.SpringApplication;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintStream;
 
 public class Main {
@@ -19,6 +18,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+        // Setup System streams
         if (!developing)
             try {
                 PrintStream out = new PrintStream("out.txt");
@@ -28,6 +28,7 @@ public class Main {
                 e.printStackTrace();
             }
 
+        // Init modules
         SpringApplication.run(SpringBackend.class, args);
         devarea.bot.Init.initBot();
 

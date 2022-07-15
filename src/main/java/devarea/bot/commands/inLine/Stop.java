@@ -1,6 +1,7 @@
 package devarea.bot.commands.inLine;
 
 import devarea.bot.Init;
+import devarea.global.handlers.UserDataHandler;
 import devarea.global.handlers.XPHandler;
 import devarea.bot.commands.PermissionCommand;
 import devarea.bot.commands.ShortCommand;
@@ -25,6 +26,7 @@ public class Stop extends ShortCommand implements PermissionCommand {
     public Stop(final Member member, final TextChannel channel, final Message message) {
         super(member, channel);
         XPHandler.stop();
+        UserDataHandler.updated();
         sendEmbed(EmbedCreateSpec.builder()
                 .title(stopCommand)
                 .color(ColorsUsed.wrong).build(), false);

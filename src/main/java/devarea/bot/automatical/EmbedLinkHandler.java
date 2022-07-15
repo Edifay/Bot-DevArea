@@ -104,7 +104,7 @@ public class EmbedLinkHandler {
                     drawCentredAndCentred(g, member.getDisplayName(), 730, 90, getFontSize(member.getDisplayName(), g));
 
                     // Draw Xp Part
-                    Integer xp = XPHandler.getXpOf(member.getId());
+                    Integer xp = XPHandler.getXpOfMember(member.getId());
                     if (xp == null)
                         xp = 0;
                     int level = XPHandler.getLevelForXp(xp);

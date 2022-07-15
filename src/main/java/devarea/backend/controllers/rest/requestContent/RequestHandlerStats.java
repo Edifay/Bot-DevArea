@@ -36,7 +36,7 @@ public class RequestHandlerStats {
 
 
     public static WebXPMember[] getXpMembers(int start, int end) {
-        WebXPMember[] members = XPHandler.getListOfIndex(start, end);
+        WebXPMember[] members = XPHandler.getWebXPMemberListOfIndex(start, end);
         for (WebXPMember member : members) {
             Member member_cached = MemberCache.watch(member.getId());
             member.setName(member_cached.getDisplayName());

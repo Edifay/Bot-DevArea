@@ -37,12 +37,13 @@ public class MessageCreate {
             if (message.getMessage().getChannelId().equals(Init.initial.bump_channel) && !message.getMessage().getAuthor().get().getId().equals(Snowflake.of("302050872383242240")))
                 BumpHandler.messageInChannel(message);
 
-            startAway(() -> XPHandler.onMessage(message));
+            startAway(() -> XPHandler.addXpToMember(message.getMember().get()));
             if (!message.getMessage().getContent().toLowerCase(Locale.ROOT).startsWith("//admin") && CommandManager.receiveMessage(message))
                 return;
 
             if (message.getMessage().getContent().startsWith(Init.initial.prefix))
-                CommandManager.exe(message.getMessage().getContent().substring(Init.initial.prefix.length()).split("\\s", 2)[0],
+                CommandManager.exe(message.getMessage().getContent().substring(Init.initial.prefix.length()).split(
+                        "\\s", 2)[0],
                         message);
 
             EmbedLinkHandler.onReceive(message);

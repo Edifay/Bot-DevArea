@@ -42,7 +42,7 @@ public class Rank extends ShortCommand {
                             img.getHeight(), null);
                     Graphics2D g = (Graphics2D) img.getGraphics();
 
-                    int xp = XPHandler.getXpOf(pinged.getId());
+                    int xp = XPHandler.getXpOfMember(pinged.getId());
                     int level = XPHandler.getLevelForXp(xp);
 
                     float pourcentage =
@@ -73,7 +73,7 @@ public class Rank extends ShortCommand {
                     g.drawString(level + "", 240, 182);
                     drawLeft(g, (level + 1) + "", 659, 182, g.getFont());
                     drawCenteredString(g, "xp-" + xp, 450, 182, g.getFont());
-                    String name = pinged.getDisplayName() + "#" + XPHandler.getRankOf(pinged.getId());
+                    String name = pinged.getDisplayName() + "#" + XPHandler.getRankOfMember(pinged.getId());
                     drawLeftAndTop(g, name, 685, -10, getFontSize(name, g));
 
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

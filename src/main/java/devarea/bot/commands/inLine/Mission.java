@@ -49,11 +49,7 @@ public class Mission extends LongCommand {
                 try {
                     Integer number = Integer.parseInt(content);
                     if (number >= 0 && number < ofMember.size()) {
-                        MissionsHandler.remove(ofMember.get(number));
-                        try {
-                            ofMember.get(number).getMessage().getMessage().delete().subscribe();
-                        } catch (Exception e) {
-                        }
+                        MissionsHandler.clearThisMission(ofMember.get(number));
                         setText(EmbedCreateSpec.builder()
                                 .color(ColorsUsed.just)
                                 .title("Votre mission a bien été supprimé !").build());

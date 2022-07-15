@@ -93,10 +93,10 @@ public abstract class WebUserInfos {
 
         // Member XP
         if (XPHandler.haveBeenSet(getAsSnowflake())) {
-            this.rank = XPHandler.getRankOf(getAsSnowflake());
-            this.setXp(XPHandler.getXpOf(getAsSnowflake()));
+            this.rank = XPHandler.getRankOfMember(getAsSnowflake());
+            this.setXp(XPHandler.getXpOfMember(getAsSnowflake()));
         } else {
-            this.rank = XPHandler.getRankOf(getAsSnowflake());
+            this.rank = XPHandler.getRankOfMember(getAsSnowflake());
             this.setXp(0);
         }
 

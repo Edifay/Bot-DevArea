@@ -7,22 +7,19 @@ import devarea.bot.commands.commandTools.Mission;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class MissionManagerData {
+public class MissionHandlerData {
     @JsonProperty("mission_follow_id")
     public int missionFollowId;
-    @JsonProperty("missions")
-    public ArrayList<Mission> missions;
     @JsonProperty("missions_follow")
     public ArrayList<MissionFollow> missionsFollow;
 
-    public MissionManagerData(final LinkedHashMap<String, Mission> missions, final int missionFollowId,
+    public MissionHandlerData(final int missionFollowId,
                               final ArrayList<MissionFollow> missionsFollow) {
         this.missionFollowId = missionFollowId;
-        this.missions = new ArrayList<>(missions.values());
         this.missionsFollow = missionsFollow;
     }
 
-    public MissionManagerData() {
+    public MissionHandlerData() {
     }
 
     public static class MissionFollow {

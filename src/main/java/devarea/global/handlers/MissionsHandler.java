@@ -7,7 +7,7 @@ import devarea.backend.controllers.rest.requestContent.RequestHandlerGlobal;
 import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
-import devarea.global.handlers.handlerData.MissionManagerData;
+import devarea.global.handlers.handlerData.MissionHandlerData;
 import devarea.bot.commands.Command;
 import devarea.bot.commands.commandTools.MessageSeria;
 import devarea.bot.commands.commandTools.Mission;
@@ -32,48 +32,60 @@ import java.util.*;
 
 import static devarea.bot.commands.Command.delete;
 import static devarea.bot.commands.Command.send;
+import static devarea.bot.event.FunctionEvent.repeatEachMillis;
 import static devarea.bot.event.FunctionEvent.startAway;
 
 public class MissionsHandler {
+    /*
+        Message at the bottom of the channel
+     */
+    public static Message bottomMessage;
 
-    public static Message message;
     private static LinkedHashMap<String, Mission> missions = new LinkedHashMap<>();
-    private static ArrayList<MissionManagerData.MissionFollow> missionsFollow = new ArrayList<>();
-    private static TextChannel channel;
+    private static ArrayList<MissionHandlerData.MissionFollow> missionsFollow = new ArrayList<>();
+    private static TextChannel missionChannel;
     private static int missionFollowId = 0;
-
-    private static final RequestHandlerGlobal.PasswordGenerator generator =
+    /*
+        ID generator
+     */
+    private static final RequestHandlerGlobal.PasswordGenerator IDgenerator =
             new RequestHandlerGlobal.PasswordGenerator(new RequestHandlerGlobal.PasswordGenerator.PasswordGeneratorBuilder()
                     .useDigits(true)
                     .useLower(true));
 
+    /*
+        Initialise MissinsHandler
+     */
     public static void init() {
         load();
-        channel = (TextChannel) ChannelCache.fetch(Init.initial.paidMissions_channel.asString());
-        Message msg = channel.getLastMessage().block();
-        if (msg.getEmbeds().size() == 0 || msg.getEmbeds().get(0).getTitle().equals("Créer une mission."))
+
+        // Fetch message at the bottom
+        missionChannel = (TextChannel) ChannelCache.fetch(Init.initial.paidMissions_channel.asString());
+        Message currentAtBottom = missionChannel.getLastMessage().block();
+        if (currentAtBottom.getEmbeds().size() == 0 || currentAtBottom.getEmbeds().get(0).getTitle().equals("Créer " +
+                "une mission."))
             sendLastMessage();
-        else message = msg;
-        new Thread(() -> {
-            try {
-                while (true) {
-                    if (verif()) save();
-                    if (!Main.developing)
-                        checkForUpdate();
-                    Thread.sleep(3600000);
-                }
-            } catch (InterruptedException ignored) {
-            }
-        }).start();
+        else bottomMessage = currentAtBottom;
+
+        repeatEachMillis(() -> {
+            if (!Main.developing)
+                checkForUpdate();
+        }, 3600000, false);
     }
 
-    public static void update() {
-        delete(false, message);
+    /*
+        Resend message at the bottom of the channel
+     */
+    public static void updateMessage() {
+        delete(false, bottomMessage);
         sendLastMessage();
     }
 
+    /*
+        Send the message at the bottom of the channel
+     */
     private static void sendLastMessage() {
-        message = Command.send(channel, MessageCreateSpec.builder()
+        bottomMessage = Command.send(missionChannel, MessageCreateSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder().color(ColorsUsed.same)
                                 .title("Créer une mission.")
                                 .description("Cliquez sur le bouton ci-dessous pour créer une mission !" +
@@ -83,6 +95,9 @@ public class MissionsHandler {
                 true);
     }
 
+    /*
+        Dispatch Interactions
+     */
     public static boolean interact(final ButtonInteractionEvent event) {
         if (event.getCustomId().startsWith("mission"))
             return actionToUpdateMessage(event);
@@ -94,7 +109,11 @@ public class MissionsHandler {
         return false;
     }
 
+    /*
+        Add new mission
+     */
     public static void add(Mission mission) {
+        // add on the top of the map
         LinkedHashMap<String, Mission> temp = (LinkedHashMap<String, Mission>) missions.clone();
         missions.clear();
         missions.put(mission.getId(), mission);
@@ -103,36 +122,56 @@ public class MissionsHandler {
         save();
     }
 
+    public static void left(String userID, Collection<Mission> userMissions) {
+        for (Mission current : userMissions)
+            clearThisMission(current);
+
+        // Check and close missions follow
+        for (MissionHandlerData.MissionFollow follow : missionsFollow)
+            if (follow.clientID.equals(userID) || follow.devID.equals(userID))
+                closeFollowedMission(userID, follow);
+    }
+
+    /*
+        Remove with out deleting message
+     */
     public static void remove(Mission mission) {
         missions.remove(mission.getId(), mission);
         save();
     }
 
+    /*
+        Remove with deleting message bind
+     */
     public static void clearThisMission(Mission mission) {
         missions.remove(mission.getId(), mission);
-        startAway(() -> {
-            try {
-                delete(true, mission.getMessage().getMessage());
-            } catch (Exception ignored) {
-            }
-        });
+        startAway(() -> delete(true, mission.getMessage().getMessage()));
         save();
     }
 
+    /*
+        Load missionsData and fetch missions from UserDataHandler
+     */
     private static void load() {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("./mission.json");
         if (!file.exists()) save();
         try {
 
-            MissionManagerData missionData = mapper.readValue(file, new TypeReference<>() {
+            // Load data
+            MissionHandlerData missionData = mapper.readValue(file, new TypeReference<>() {
             });
 
-            missionData.missions.forEach((mission) -> {
-                if (mission.getId().equals("0"))
-                    mission.setId(generateID());
-                missions.put(mission.getId(), mission);
-            });
+            // Load Missions From UserDataHandler
+            UserDataHandler.getMissionList().forEach((mission) -> missions.put(mission.getId(), mission));
+            List<Map.Entry<String, Mission>> entries =
+                    new ArrayList<>(missions.entrySet());
+
+            entries.sort((a, b) -> Long.compare(b.getValue().getCreatedAt(), a.getValue().getCreatedAt()));
+
+            // Set to MissionsHandler
+            for (Map.Entry<String, Mission> entry : entries)
+                missions.put(entry.getKey(), entry.getValue());
 
             missionFollowId = missionData.missionFollowId;
             missionsFollow = missionData.missionsFollow;
@@ -146,47 +185,26 @@ public class MissionsHandler {
         }
     }
 
-    public static <T, Q> LinkedHashMap<T, Q> reverseMap(LinkedHashMap<T, Q> toReverse) {
-        LinkedHashMap<T, Q> reversedMap = new LinkedHashMap<>();
-        List<T> reverseOrderedKeys = new ArrayList<>(toReverse.keySet());
-        Collections.reverse(reverseOrderedKeys);
-        reverseOrderedKeys.forEach((key) -> reversedMap.put(key, toReverse.get(key)));
-        return reversedMap;
-    }
-
-    public static boolean verif() {
-        ArrayList<Mission> atRemove = new ArrayList<>();
-        for (Mission mission : missions.values())
-            if (!MemberCache.contain(mission.getMemberId())) {
-                atRemove.add(mission);
-                startAway(() -> {
-                    try {
-                        delete(false, mission.getMessage().getMessage());
-                    } catch (Exception ignored) {
-                    }
-                });
-            }
-
-        if (atRemove.size() == 0) return false;
-
-        System.out.println("Il y a en tout : " + atRemove.size() + " missions à supprimer !");
-
-        for (Mission mission : atRemove)
-            missions.remove(mission.getId(), mission);
-
-        return true;
-    }
-
+    /*
+        Saves MissionData and transfer to UserDataHandler
+     */
     public static void save() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            MissionManagerData missionData = new MissionManagerData(missions, missionFollowId, missionsFollow);
+            // Save to ./mission.json
+            MissionHandlerData missionData = new MissionHandlerData(missionFollowId, missionsFollow);
             mapper.writeValue(new File("./mission.json"), missionData);
+
+            // transfer to UserDataHandler
+            UserDataHandler.setMissionList(missions);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /*
+        Get missions of Member -> id
+     */
     public static ArrayList<Mission> getOf(Snowflake id) {
         ArrayList<Mission> newArray = new ArrayList<>();
         for (Mission mission : missions.values())
@@ -197,12 +215,17 @@ public class MissionsHandler {
     }
 
     /*
-    Do not use this method
+        Do not use this method
      */
     public static ArrayList<Mission> getMissions() {
         return new ArrayList<>(missions.values());
     }
 
+    /*
+        Check status Missions :
+        -> AskValidate
+        -> Spoil
+     */
     public static void checkForUpdate() {
         ArrayList<Mission> spoiled_missions = new ArrayList<>();
 
@@ -217,6 +240,11 @@ public class MissionsHandler {
 
     }
 
+    /*
+        React to the response to askValidate :
+        -> mission_yes = revalidate mission
+        -> mission_no = delete mission
+     */
     public static boolean actionToUpdateMessage(final ButtonInteractionEvent event) {
         Mission current_mission = null;
         for (Mission mission : missions.values())
@@ -225,25 +253,10 @@ public class MissionsHandler {
 
         if (current_mission != null) {
             if (event.getCustomId().equals("mission_yes")) {
-                ((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())).getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                                .title("Mission actualisé !")
-                                .description("La mission : **" + current_mission.getTitle() + "**, a été défini comme" +
-                                        " valide pour encore 7 jours.\n\nVous recevrez une nouvelle demande de " +
-                                        "validation dans 7 jours.")
-                                .color(ColorsUsed.just).build())
-                        .components(new ArrayList<>())
-                        .build()).block();
-                current_mission.update();
-                current_mission.setMessage_verification(null);
+                sendMissionRevalidateSucessful(event, current_mission);
                 save();
             } else if (event.getCustomId().equals("mission_no")) {
-                ((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())).getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                                .title("Mission supprimé !")
-                                .description("La mission : **" + current_mission.getTitle() + "**, a été " +
-                                        "définitivement supprimé !")
-                                .color(ColorsUsed.just).build())
-                        .components(new ArrayList<>())
-                        .build()).block();
+                sendMissionDeleteSuccessful(event, current_mission);
                 clearThisMission(current_mission);
             }
             return true;
@@ -251,6 +264,38 @@ public class MissionsHandler {
         return false;
     }
 
+    /*
+        Message for mission_no response
+     */
+    private static void sendMissionDeleteSuccessful(ButtonInteractionEvent event, Mission current_mission) {
+        ((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())).getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
+                        .title("Mission supprimé !")
+                        .description("La mission : **" + current_mission.getTitle() + "**, a été " +
+                                "définitivement supprimé !")
+                        .color(ColorsUsed.just).build())
+                .components(new ArrayList<>())
+                .build()).block();
+    }
+
+    /*
+        Message for mission_yes response
+     */
+    private static void sendMissionRevalidateSucessful(ButtonInteractionEvent event, Mission current_mission) {
+        ((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())).getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
+                        .title("Mission actualisé !")
+                        .description("La mission : **" + current_mission.getTitle() + "**, a été défini comme" +
+                                " valide pour encore 7 jours.\n\nVous recevrez une nouvelle demande de " +
+                                "validation dans 7 jours.")
+                        .color(ColorsUsed.just).build())
+                .components(new ArrayList<>())
+                .build()).block();
+        current_mission.update();
+        current_mission.setMessage_verification(null);
+    }
+
+    /*
+        Ask validate for his mission to the mission owner
+     */
     public static void askValidate(Mission mission) {
         Member mission_member = MemberCache.get(mission.getMemberId());
         Message message = mission_member.getPrivateChannel().block().createMessage(MessageCreateSpec.builder()
@@ -268,6 +313,10 @@ public class MissionsHandler {
         save();
     }
 
+    /*
+        The member owner of the mission didn't respond before the 3 days.
+        The mission is deleted and a message is sent
+     */
     public static void validateSpoilAction(Mission mission) {
         Member mission_member = MemberCache.get(mission.getMemberId());
         mission_member.getPrivateChannel().block().getMessageById(mission.getMessage_verification().getMessageID()).block()
@@ -281,6 +330,9 @@ public class MissionsHandler {
         clearThisMission(mission);
     }
 
+    /*
+        Reaction to the push button "Prendre la mission" on the mission embed.
+     */
     public static boolean actionToTookMission(final ButtonInteractionEvent event) {
         Mission mission = getMissionOfMessage(event.getMessageId());
         Snowflake member_react_id = event.getInteraction().getMember().get().getId();
@@ -313,6 +365,9 @@ public class MissionsHandler {
         return false;
     }
 
+    /*
+        Response to the tookMission request
+     */
     public static String tookMissionFromWeb(final String missionId, final Member member) {
         Mission mission = get(missionId);
         Snowflake member_react_id = member.getId();
@@ -328,6 +383,11 @@ public class MissionsHandler {
         return "La mission n'a pas été trouvé !";
     }
 
+    /*
+        Follow the mission :
+        -> open a new channel with special perms
+        -> send basics information
+     */
     private static void followThisMission(Mission mission, Snowflake member_react_id) {
         Set<PermissionOverwrite> set = new HashSet<>();
         set.add(PermissionOverwrite.forRole(Init.initial.rulesAccepted_role, PermissionSet.of(),
@@ -381,12 +441,15 @@ public class MissionsHandler {
                 .addComponent(ActionRow.of(Button.secondary("followMission_close", "Cloturer le channel")))
                 .build()).block();
 
-        missionsFollow.add(new MissionManagerData.MissionFollow(id, new MessageSeria(message),
+        missionsFollow.add(new MissionHandlerData.MissionFollow(id, new MessageSeria(message),
                 mission.getMemberId(), member_react_id.asString()));
 
         save();
     }
 
+    /*
+        Try to find a mission by a mission message !
+     */
     public static Mission getMissionOfMessage(final Snowflake message_id) {
         for (Mission mission : missions.values())
             if (mission.getMessage().getMessageID().equals(message_id))
@@ -394,22 +457,36 @@ public class MissionsHandler {
         return null;
     }
 
+    /*
+        Check if a dev and a client have already a follow channel !
+     */
     public static boolean alreadyHaveAChannel(final String clientID, final String devID) {
-        for (MissionManagerData.MissionFollow mission : missionsFollow)
+        for (MissionHandlerData.MissionFollow mission : missionsFollow)
             if (mission.clientID.equals(clientID) && mission.devID.equals(devID))
                 return true;
         return false;
     }
 
+    /*
+        Act to delete a follow channel from interaction, transfer data to closeFollowedMission()
+     */
     public static boolean actionToCloseFollowedMission(final ButtonInteractionEvent event) {
-        final MissionManagerData.MissionFollow mission = getByMessageID(event.getMessageId());
+        return closeFollowedMission(event.getInteraction().getMember().get().getId().asString(),
+                getMissionFollowByMessageID(event.getMessageId()));
+    }
+
+    /*
+        Main function to delete followed Mission
+     */
+    private static boolean closeFollowedMission(String memberRequest, MissionHandlerData.MissionFollow mission) {
         if (mission != null) {
 
-            send(((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())),
+            send(((TextChannel) ChannelCache.watch(mission.messageSeria.getChannelID().asString())),
                     MessageCreateSpec.builder()
                             .addEmbed(EmbedCreateSpec.builder()
                                     .title("Clôture du Suivis de mission.")
-                                    .description("La clôture du suivis a été éxécuté par : <@" + event.getInteraction().getMember().get().getId().asString() + ">. Le suivis fermera dans 1 heure.")
+                                    .description("La clôture du suivis a été éxécuté par : <@" + memberRequest + ">. " +
+                                            "Le suivis fermera dans 1 heure.")
                                     .color(ColorsUsed.same)
                                     .timestamp(Instant.now())
                                     .build())
@@ -444,14 +521,14 @@ public class MissionsHandler {
                     set.add(PermissionOverwrite.forRole(Snowflake.of("768383784571240509"),
                             PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
 
-                    ((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())).edit(TextChannelEditSpec.builder()
+                    ((TextChannel) ChannelCache.watch(mission.messageSeria.getChannelID().asString())).edit(TextChannelEditSpec.builder()
                             .name("Closed n°" + mission.missionID)
                             .permissionOverwrites(set)
                             .build()).subscribe();
                     EmbedCreateSpec embed = EmbedCreateSpec.builder()
                             .title("Clôture du suivis n°" + mission.missionID + " !")
                             .description("Le suivis de mission n°" + mission.missionID + " a été clôturé à la demande" +
-                                    " de <@" + event.getInteraction().getMember().get().getId().asString() + ">.")
+                                    " de <@" + memberRequest + ">.")
                             .color(ColorsUsed.just)
                             .build();
                     startAway(() -> MemberCache.get(mission.clientID).getPrivateChannel().block().createMessage(embed).subscribe());
@@ -464,13 +541,19 @@ public class MissionsHandler {
         return false;
     }
 
-    public static MissionManagerData.MissionFollow getByMessageID(final Snowflake messageID) {
-        for (MissionManagerData.MissionFollow mission : missionsFollow)
+    /*
+        Get the MissionFollow from a messageID
+     */
+    public static MissionHandlerData.MissionFollow getMissionFollowByMessageID(final Snowflake messageID) {
+        for (MissionHandlerData.MissionFollow mission : missionsFollow)
             if (mission.messageSeria.getMessageID().equals(messageID))
                 return mission;
         return null;
     }
 
+    /*
+        Create a new mission by parameters
+     */
     public static Mission createMission(final String title, final String description, final String prix,
                                         final String dateRetour, final String langage, final String support,
                                         final String niveau, final Member member) {
@@ -493,15 +576,21 @@ public class MissionsHandler {
                         .build(), true))
         ));
         MissionsHandler.add(createdMission);
-        MissionsHandler.update();
+        MissionsHandler.updateMessage();
         return createdMission;
     }
 
+    /*
+        Get mission by ID
+     */
     public static Mission get(final String id) {
         return missions.get(id);
     }
 
+    /*
+        Generate a new ID
+     */
     public static String generateID() {
-        return generator.generate(20);
+        return IDgenerator.generate(20);
     }
 }

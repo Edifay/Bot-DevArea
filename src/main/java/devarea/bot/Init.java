@@ -38,12 +38,53 @@ public class Init {
 
     public static TextChannel logChannel;
 
+    /*
+        Setup dynamic assets from initalData
+     */
     public static HashMap<String, BufferedImage> badgesImages = new HashMap<>();
+    /*
+        Setup dynamic assets from initalData
+     */
     public static HashMap<String, BufferedImage> assetsImages = new HashMap<>();
 
     public static void initBot() {
+
         CommandManager.init();
 
+        setupInitialConfig();
+        assetsLoader();
+        connectDiscordClient();
+
+        assert client != null;
+
+        // Setup ready event
+        client.getEventDispatcher().on(ReadyEvent.class).subscribe(event -> Ready.readyEventFonction());
+    }
+
+    /*
+         Setup connection with discord API,
+     */
+    private static void connectDiscordClient() {
+        try {
+            long ms = System.currentTimeMillis();
+            System.out.println(Main.separator + "Connecting to Discord API.");
+            final String token = new Scanner(new FileInputStream("./token.token")).nextLine();
+
+            client = DiscordClient.create(token)
+                    .gateway()
+                    .setEnabledIntents(IntentSet.all())
+                    .login()
+                    .block();
+
+            System.out.println("Connection success !");
+        } catch (Exception e) {
+            System.err.println("Le token n'a pas pu être chargé ! (Ou erreur de login à discord !)");
+        }
+    }
+    /*
+        Load configuration and setup the var -> initial
+     */
+    private static void setupInitialConfig() {
         try {
             // Setup mapper
             System.out.println(Main.separator + "Loading config");
@@ -62,43 +103,15 @@ public class Init {
             }
 
         } catch (Exception e) {
-            System.err.println("Une erreur c'est produite dans le chargement de configuration.json !");
-            e.printStackTrace();
+            System.err.println("Une erreur c'est produite dans le chargement de configuration.json ! : \n" + e.getMessage());
             System.exit(0);
         }
 
         System.out.println("configuration.json loaded !");
-
-        try {
-            assetsLoader();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Les fichiers assets n'ont pas pu être chargé !!");
-        }
-
-        try {
-            long ms = System.currentTimeMillis();
-            System.out.println(Main.separator + "Connecting to Discord API.");
-            final String token = new Scanner(new FileInputStream("./token.token")).nextLine();
-
-            client = DiscordClient.create(token)
-                    .gateway()
-                    .setEnabledIntents(IntentSet.all())
-                    .login()
-                    .block();
-
-            System.out.println("Connection success !");
-
-            assert client != null;
-
-            client.getEventDispatcher().on(ReadyEvent.class).subscribe(event -> Ready.readyEventFonction());
-
-
-        } catch (Exception e) {
-            System.err.println("Le token n'a pas pu être chargé ! (Ou erreur de login à discord !)");
-        }
     }
-
+    /*
+        Setup all events when all init are done.
+     */
     public static void setupEventDispatcher() {
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(MessageCreate::messageCreateFunction);
         client.getEventDispatcher().on(MessageUpdateEvent.class).subscribe(MessageUpdate::messageUpdateFunction);
@@ -110,20 +123,29 @@ public class Init {
         client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(VoiceStateUpdate::VoiceStateUpdateFucntion);
         client.getEventDispatcher().on(ButtonInteractionEvent.class).subscribe(ButtonInteract::ButtonInteractFunction);
     }
+    /*
+        Setup assets used by the bot from initial
+     */
+    private static void assetsLoader() {
+        try {
+            System.out.println(Main.separator + "Loading assets...");
+            long ms = System.currentTimeMillis();
 
-    private static void assetsLoader() throws IOException {
-        System.out.println(Main.separator + "Loading assets...");
-        long ms = System.currentTimeMillis();
+            for (Map.Entry<String, String> entry : initial.assetsImages.entrySet())
+                assetsImages.put(entry.getKey(), loadImageInPot(entry.getValue()));
 
-        for (Map.Entry<String, String> entry : initial.assetsImages.entrySet())
-            assetsImages.put(entry.getKey(), loadImageInPot(entry.getValue()));
+            for (Map.Entry<String, String> entry : initial.badgesImages.entrySet())
+                badgesImages.put(entry.getKey(), loadImageInPot(entry.getValue()));
 
-        for (Map.Entry<String, String> entry : initial.badgesImages.entrySet())
-            badgesImages.put(entry.getKey(), loadImageInPot(entry.getValue()));
-
-        System.out.println("Assets took : " + (System.currentTimeMillis() - ms) + "ms to load !");
+            System.out.println("Assets took : " + (System.currentTimeMillis() - ms) + "ms to load !");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Les fichiers assets n'ont pas pu être chargé !!");
+        }
     }
-
+    /*
+        Load an Image in the jar pot
+     */
     public static BufferedImage loadImageInPot(String path) throws IOException {
         return ImageIO.read(Init.class.getResource(path).openStream());
     }
