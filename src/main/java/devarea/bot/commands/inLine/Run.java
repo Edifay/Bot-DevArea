@@ -62,7 +62,7 @@ public class Run extends ShortCommand {
                     .build();
 
             JudgeManager.get().executeAsync(submission).thenAccept(response -> {
-                this.sendEmbed(embedResponse(response, member), false);
+                this.sendEmbed(embedResponse(response), false);
             }).whenComplete((res, e) -> {
                 message.removeSelfReaction(ReactionEmoji.custom(Init.idLoading)).subscribe();
                 if (e != null) {
@@ -84,7 +84,7 @@ public class Run extends ShortCommand {
         try {
             Map<String, List<String>> languages = JudgeManager.get().getConfig().languages();
 
-            StringBuilder field = new StringBuilder("```");
+            StringBuilder field = new StringBuilder("```\n");
             for (Map.Entry<String, List<String>> entry : languages.entrySet()) {
                 field.append(String.format("> %s --> %s\n", entry.getKey(), String.join(", ", entry.getValue())));
             }
@@ -125,7 +125,7 @@ public class Run extends ShortCommand {
             output = " ";
         }
 
-        StringBuilder formattedOutput = new StringBuilder("```")
+        StringBuilder formattedOutput = new StringBuilder("```\n")
                 .append(output)
                 .append("```");
 
@@ -136,7 +136,7 @@ public class Run extends ShortCommand {
         embed.addField("Résultat", formattedOutput.toString(), false);
     }
 
-    private EmbedCreateSpec embedResponse(JudgeResponse response, Member member) {
+    private EmbedCreateSpec embedResponse(JudgeResponse response) {
         String author = String.format("Code de %s | %s %s",
                 member.getUsername(),
                 response.getLanguage().getName(),
