@@ -36,6 +36,24 @@ public class RunHandler {
         return true;
     }
 
+    public static boolean onDelete(Message message) {
+        Snowflake replyId = latestMessages.remove(message.getId());
+
+        if (replyId == null) {
+            return false;
+        }
+
+        TextChannel channel = (TextChannel) message.getChannel().block();
+        Message reply;
+
+        if (channel == null || (reply = channel.getMessageById(replyId).block()) == null) {
+            return false;
+        }
+
+        reply.delete().subscribe();
+        return true;
+    }
+
     public static void addMessage(Snowflake message, Snowflake reply) {
         latestMessages.put(message, reply);
         if (latestMessages.size() > MAX_MESSAGES) {
