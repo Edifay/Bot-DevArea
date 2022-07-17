@@ -1,8 +1,12 @@
 package devarea.bot.automatical;
 
 import devarea.bot.Init;
+import devarea.bot.commands.Command;
+import devarea.bot.commands.CommandManager;
+import devarea.bot.commands.ConsumableCommand;
 import devarea.bot.commands.inLine.Run;
 import devarea.global.cache.ChannelCache;
+import devarea.global.cache.MemberCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -20,20 +24,28 @@ public class RunHandler {
 
     private static final Map<Snowflake, Snowflake> latestMessages = new LinkedHashMap<>();
 
-    public static boolean onEdit(Message message) {
-        if (!latestMessages.containsKey(message.getId())
-                || !message.getContent().startsWith(Init.initial.prefix + "run")
-                || message.getAuthor().isEmpty()) {
+    public static boolean onEdit(Message messageHandler) {
+        if (!latestMessages.containsKey(messageHandler.getId())
+                || !messageHandler.getContent().startsWith(Init.initial.prefix + "run")
+                || messageHandler.getAuthor().isEmpty()) {
             return false;
         }
 
-        TextChannel channel = (TextChannel) ChannelCache.get(message.getChannelId().asString());
+        TextChannel channelHander = (TextChannel) ChannelCache.get(messageHandler.getChannelId().asString());
 
-        if (channel == null) {
+        if (channelHander == null) {
             return false;
         }
 
-        new Run(message.getAuthor().get().asMember(Init.devarea.getId()).block(), channel, message);
+        CommandManager.addManualCommand(MemberCache.get(messageHandler.getAuthor().get().getId().asString()),
+                new ConsumableCommand(Run.class) {
+            @Override
+            protected Command command() {
+                return new Run(MemberCache.get(messageHandler.getAuthor().get().getId().asString()), channelHander,
+                        messageHandler);
+            }
+        });
+
         return true;
     }
 
@@ -45,13 +57,7 @@ public class RunHandler {
         }
 
         TextChannel channel = (TextChannel) ChannelCache.get(message.getChannelId().asString());
-        Message reply;
-
-        if (channel == null || (reply = channel.getMessageById(replyId).block()) == null) {
-            return false;
-        }
-
-        reply.delete().subscribe();
+        Command.delete(false, channel.getMessageById(replyId).block());
         return true;
     }
 
