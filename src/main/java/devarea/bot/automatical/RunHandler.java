@@ -2,6 +2,7 @@ package devarea.bot.automatical;
 
 import devarea.bot.Init;
 import devarea.bot.commands.inLine.Run;
+import devarea.global.cache.ChannelCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -26,7 +27,7 @@ public class RunHandler {
             return false;
         }
 
-        TextChannel channel = (TextChannel) message.getChannel().block();
+        TextChannel channel = (TextChannel) ChannelCache.get(message.getChannelId().asString());
 
         if (channel == null) {
             return false;
@@ -43,7 +44,7 @@ public class RunHandler {
             return false;
         }
 
-        TextChannel channel = (TextChannel) message.getChannel().block();
+        TextChannel channel = (TextChannel) ChannelCache.get(message.getChannelId().asString());
         Message reply;
 
         if (channel == null || (reply = channel.getMessageById(replyId).block()) == null) {
@@ -63,7 +64,7 @@ public class RunHandler {
 
     public static void sendResponse(Message message, EmbedCreateSpec spec, boolean edit) {
         Snowflake replyId = latestMessages.get(message.getId());
-        TextChannel channel = (TextChannel) message.getChannel().block();
+        TextChannel channel = (TextChannel) ChannelCache.get(message.getChannelId().asString());
         Message reply;
 
         if (channel == null) {
