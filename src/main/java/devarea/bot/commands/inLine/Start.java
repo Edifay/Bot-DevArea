@@ -1,25 +1,26 @@
 package devarea.bot.commands.inLine;
 
-import devarea.bot.commands.EndStape;
-import devarea.bot.commands.FirstStape;
-import devarea.bot.commands.LongCommand;
-import devarea.bot.commands.Stape;
+import devarea.bot.commands.*;
 import devarea.bot.presets.TextMessage;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.discordjson.json.ApplicationCommandRequest;
 
-public class Start extends LongCommand {
+public class Start extends LongCommand implements SlashCommand {
 
-    public Start(final Member member, final TextChannel channel, final Message message) {
-        super(member, channel);
+    public Start(final Member member, final ChatInputInteractionEvent chatInteraction) {
+        super(member, chatInteraction);
+        chatInteraction.deferReply().subscribe();
 
         Stape java = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setText(TextMessage.startJava);
+                editEmbed(TextMessage.startJava);
+                delete(false, this.message);
                 return end;
             }
         };
@@ -27,21 +28,24 @@ public class Start extends LongCommand {
         Stape python = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setText(TextMessage.startPython);
+                editEmbed(TextMessage.startPython);
+                delete(false, this.message);
                 return end;
             }
         };
         Stape CSharp = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setText(TextMessage.startCSharp);
+                editEmbed(TextMessage.startCSharp);
+                delete(false, this.message);
                 return end;
             }
         };
         Stape HtmlCss = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setText(TextMessage.startHtmlCss);
+                editEmbed(TextMessage.startHtmlCss);
+                delete(false, this.message);
                 return end;
             }
         };
@@ -71,4 +75,14 @@ public class Start extends LongCommand {
         this.lastMessage = this.firstStape.getMessage();
     }
 
+    public Start() {
+    }
+
+    @Override
+    public ApplicationCommandRequest getSlashCommandDefinition() {
+        return ApplicationCommandRequest.builder()
+                .name("start")
+                .description("Donne un petit texte explicatif pour bien commencer le langage souhaité !")
+                .build();
+    }
 }

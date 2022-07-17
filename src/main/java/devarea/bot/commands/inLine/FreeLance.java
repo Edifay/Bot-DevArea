@@ -1,41 +1,43 @@
 package devarea.bot.commands.inLine;
 
+import devarea.bot.commands.*;
 import devarea.global.handlers.FreeLanceHandler;
-import devarea.bot.commands.Command;
-import devarea.bot.commands.EndStape;
-import devarea.bot.commands.FirstStape;
-import devarea.bot.commands.LongCommand;
 import devarea.bot.presets.ColorsUsed;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.discordjson.json.ApplicationCommandRequest;
 
-public class FreeLance extends LongCommand {
+public class FreeLance extends LongCommand implements SlashCommand {
+    public FreeLance() {
+    }
 
-    public FreeLance(final Member member, final TextChannel channel, final Message message) {
-        super(member, channel);
+    public FreeLance(final Member member, final ChatInputInteractionEvent chatInteraction) {
+        super(member, chatInteraction);
+        chatInteraction.deferReply().subscribe();
+
         EndStape bumpStape = new EndStape() {
             protected boolean onCall(Message message) {
                 if (FreeLanceHandler.hasFreelance(FreeLance.this.member)) {
                     if (FreeLanceHandler.bumpFreeLance(FreeLance.this.member.getId().asString()))
-                        setText(EmbedCreateSpec.builder()
+                        editEmbed(EmbedCreateSpec.builder()
                                 .title("Le bump a effectué !")
                                 .color(ColorsUsed.just).build());
                     else
-                        setText(EmbedCreateSpec.builder()
+                        editEmbed(EmbedCreateSpec.builder()
                                 .title("Error")
                                 .description("Vous devez attendre 24 heures entre chaque bump !")
                                 .color(ColorsUsed.wrong).build());
 
                 } else
-                    setText(EmbedCreateSpec.builder()
+                    editEmbed(EmbedCreateSpec.builder()
                             .title("Error")
                             .description("Vous ne possédez pas de freelance !")
                             .color(ColorsUsed.wrong).build());
-
+                delete(false, this.message);
                 return true;
             }
         };
@@ -50,17 +52,18 @@ public class FreeLance extends LongCommand {
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
-                    setText(EmbedCreateSpec.builder()
+                    editEmbed(EmbedCreateSpec.builder()
                             .title("Suppression")
-                            .description("Votre mission a bien été supprimé !")
+                            .description("Votre freelance a bien été supprimé !")
                             .color(ColorsUsed.just).build());
                 } else {
-                    setText(EmbedCreateSpec.builder()
+                    editEmbed(EmbedCreateSpec.builder()
                             .title("Error")
                             .description("Vous n'avez pas de freelance !")
                             .color(ColorsUsed.wrong)
                             .build());
                 }
+                delete(false, this.message);
                 return true;
             }
         };
@@ -69,7 +72,8 @@ public class FreeLance extends LongCommand {
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
                         .title("FreeLance")
-                        .description("Vous pouvez ici effectuer des modifications sur votre freelance !\n`bump` -> cette commande va bump votre message freelance !\n" +
+                        .description("Vous pouvez ici effectuer des modifications sur votre freelance !\n`bump` -> " +
+                                "cette commande va bump votre message freelance !\n" +
                                 "`delete` -> supprimer votre freelance !")
                         .color(ColorsUsed.same)
                         .footer("cancel | annuler pour quitter.", null).build()).build());
@@ -85,5 +89,13 @@ public class FreeLance extends LongCommand {
             }
         };
         this.lastMessage = this.firstStape.getMessage();
+    }
+
+    @Override
+    public ApplicationCommandRequest getSlashCommandDefinition() {
+        return ApplicationCommandRequest.builder()
+                .name("freelance")
+                .description("Permet de gérer votre page freelance.")
+                .build();
     }
 }

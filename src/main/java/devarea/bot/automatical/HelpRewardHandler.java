@@ -1,5 +1,6 @@
 package devarea.bot.automatical;
 
+import devarea.bot.presets.ColorsUsed;
 import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.commands.Command;
@@ -9,11 +10,14 @@ import devarea.bot.commands.inLine.GiveReward;
 import devarea.bot.commands.commandTools.HelpReward;
 import devarea.bot.utils.MemberUtil;
 import discord4j.common.util.Snowflake;
+import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.Embed;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.reaction.ReactionEmoji;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -27,11 +31,13 @@ public class HelpRewardHandler {
     private static final TemporalAmount limitTime = Duration.ofHours(2);
     private static final ArrayList<HelpReward> helpRewards = new ArrayList<>();
 
-    public static boolean react(ReactionAddEvent event) {
-        final Message message = event.getMessage().block();
+    public static boolean react(ButtonInteractionEvent event) {
 
-        if (message == null || message.getEmbeds().isEmpty()) return false;
+        System.out.println("Here ! React to the emoji !");
 
+        if (event.getMessage().isEmpty() || event.getMessage().get().getEmbeds().isEmpty()) return false;
+
+        final Message message = event.getMessage().get();
         final Embed embed = message.getEmbeds().get(0);
 
         if (embed.getDescription().isEmpty()) return false;
@@ -50,12 +56,20 @@ public class HelpRewardHandler {
         final Member target = MemberCache.get(MemberUtil.getSnowflakeByMentionText(members[0]).asString());
         final Member helper = MemberCache.get(MemberUtil.getSnowflakeByMentionText(members[1]).asString());
 
-        if (!event.getMember().get().equals(target)) {
-            message.removeReaction(event.getEmoji(), event.getUserId()).block();
+        System.out.println("Get target and helper");
+
+        if (!event.getInteraction().getMember().get().equals(target)) {
+            event.reply(InteractionApplicationCommandCallbackSpec.builder()
+                    .ephemeral(true)
+                    .addEmbed(EmbedCreateSpec.builder()
+                            .color(ColorsUsed.wrong)
+                            .title("Error !")
+                            .description("Vous ne pouvez pas réagir à ce message !")
+                            .build())
+                    .build()).subscribe();
             return false;
         }
 
-        if (!event.getEmoji().equals(ReactionEmoji.custom(Init.idYes))) return false;
         CommandManager.addManualCommand(target, new ConsumableCommand(GiveReward.class) {
             @Override
             protected Command command() {

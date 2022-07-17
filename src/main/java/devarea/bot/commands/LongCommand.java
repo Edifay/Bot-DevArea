@@ -4,6 +4,7 @@ import devarea.global.cache.ChannelCache;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Member;
@@ -11,6 +12,7 @@ import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
+import discord4j.core.spec.InteractionReplyEditSpec;
 
 import static devarea.bot.event.FunctionEvent.startAway;
 
@@ -31,6 +33,11 @@ public abstract class LongCommand extends Command {
 
     public LongCommand(final Member member, final TextChannel channel) {
         super(member, channel);
+        this.isLocalChannel = false;
+    }
+
+    public LongCommand(final Member member, final ChatInputInteractionEvent chatInteraction) {
+        super(member, chatInteraction);
         this.isLocalChannel = false;
     }
 
@@ -105,7 +112,16 @@ public abstract class LongCommand extends Command {
     }
 
     protected void removeTrace() {
-        sendError("Vous avez annuler la commande !");
+        if (chatInteraction != null)
+            chatInteraction.editReply(InteractionReplyEditSpec.builder()
+                    .addEmbed(EmbedCreateSpec.builder()
+                            .title("Error !")
+                            .description("Vous avez annuler la commande")
+                            .color(ColorsUsed.wrong)
+                            .build())
+                    .build()).subscribe();
+        else
+            sendError("Vous avez annuler la commande !");
         delete(false, this.lastMessage);
         endCommand();
     }

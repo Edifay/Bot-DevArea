@@ -1,27 +1,28 @@
 package devarea.bot.commands.inLine;
 
 import devarea.bot.Init;
+import devarea.bot.commands.*;
 import devarea.global.handlers.MissionsHandler;
-import devarea.bot.commands.FirstStape;
-import devarea.bot.commands.LongCommand;
-import devarea.bot.commands.Stape;
 import devarea.bot.presets.ColorsUsed;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.discordjson.json.ApplicationCommandRequest;
 
 import java.util.ArrayList;
 
-public class Mission extends LongCommand {
+public class Mission extends LongCommand implements SlashCommand {
     ArrayList<devarea.bot.commands.commandTools.Mission> ofMember;
 
-    public Mission(final Member member, final TextChannel channel, final Message message) {
-        super(member, channel);
+    public Mission(final Member member, final ChatInputInteractionEvent chatInteraction) {
+        super(member, chatInteraction);
+        chatInteraction.deferReply().subscribe();
 
-        Stape deleteList = new Stape() {
+        Stape deleteList = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
                 ofMember = MissionsHandler.getOf(member.getId());
@@ -35,9 +36,10 @@ public class Mission extends LongCommand {
                             .description(msg)
                             .footer("Vous pouvez annuler | cancel", null).build());
                 } else {
-                    setText(EmbedCreateSpec.builder()
+                    editEmbed(EmbedCreateSpec.builder()
                             .color(ColorsUsed.same)
                             .title("Vous n'avez acutellement acune mission !").build());
+                    delete(false, this.message);
                     return end;
                 }
                 return next;
@@ -50,14 +52,15 @@ public class Mission extends LongCommand {
                     Integer number = Integer.parseInt(content);
                     if (number >= 0 && number < ofMember.size()) {
                         MissionsHandler.clearThisMission(ofMember.get(number));
-                        setText(EmbedCreateSpec.builder()
+                        editEmbed(EmbedCreateSpec.builder()
                                 .color(ColorsUsed.just)
                                 .title("Votre mission a bien été supprimé !").build());
+                        delete(false, this.message);
                         return end;
                     }
                 } catch (Exception e) {
                 }
-                return super.onReceiveMessage(event);
+                return next;
             }
         };
 
@@ -83,8 +86,17 @@ public class Mission extends LongCommand {
                 }
                 return super.onReceiveMessage(event);
             }
-        }
+        };
+    }
 
-        ;
+    public Mission() {
+    }
+
+    @Override
+    public ApplicationCommandRequest getSlashCommandDefinition() {
+        return ApplicationCommandRequest.builder()
+                .name("mission")
+                .description("Permet de contrôler et gérer les missions possédé !")
+                .build();
     }
 }

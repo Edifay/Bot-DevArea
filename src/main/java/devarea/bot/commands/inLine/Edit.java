@@ -5,18 +5,21 @@ import devarea.bot.commands.*;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.InteractionReplyEditSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
+import discord4j.discordjson.json.ApplicationCommandRequest;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 
-public class Edit extends LongCommand implements PermissionCommand {
+public class Edit extends LongCommand implements PermissionCommand, SlashCommand {
     Message atModif = null;
     String title = "";
     String description = "";
@@ -26,17 +29,22 @@ public class Edit extends LongCommand implements PermissionCommand {
         super();
     }
 
+    public Edit() {
+    }
 
-    public Edit(final Member member, final TextChannel channel, final Message message) {
-        super(member, channel);
+    public Edit(final Member member, final ChatInputInteractionEvent chatInteraction) {
+        super(member, chatInteraction);
+        chatInteraction.deferReply().subscribe();
 
         Stape endStape = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setText(EmbedCreateSpec.builder()
-                        .title("Votre message a été modifé !")
-                        .color(ColorsUsed.just).build()
-                );
+                chatInteraction.editReply(InteractionReplyEditSpec.builder()
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .title("Votre message a été modifé !")
+                                .color(ColorsUsed.just).build())
+                        .build()).subscribe();
+                delete(false, this.message);
                 return end;
             }
         };
@@ -74,7 +82,8 @@ public class Edit extends LongCommand implements PermissionCommand {
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
                         .title("Couleur")
-                        .description("Donnez moi la couleur que vous voulez, il y en a 3 disponible : `just`, `same`, `wrong`")
+                        .description("Donnez moi la couleur que vous voulez, il y en a 3 disponible : `just`, `same`," +
+                                " `wrong`")
                         .color(color).build());
                 return next;
             }
@@ -192,7 +201,8 @@ public class Edit extends LongCommand implements PermissionCommand {
                 super.onFirstCall(MessageCreateSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Quel message voulez-vous modifier ?")
-                                .description("Donnez-moi l'id du message a modifier, ATTENTION ce message doit être dans le channel de cette commande !")
+                                .description("Donnez-moi l'id du message a modifier, ATTENTION ce message doit être " +
+                                        "dans le channel de cette commande !")
                                 .color(ColorsUsed.same).build()
                         ).build());
             }
@@ -214,5 +224,13 @@ public class Edit extends LongCommand implements PermissionCommand {
     @Override
     public PermissionSet getPermissions() {
         return PermissionSet.of(Permission.MANAGE_MESSAGES);
+    }
+
+    @Override
+    public ApplicationCommandRequest getSlashCommandDefinition() {
+        return ApplicationCommandRequest.builder()
+                .name("edit")
+                .description("Permet d'éditer un message envoyé par le bot Dev'Area.")
+                .build();
     }
 }

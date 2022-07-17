@@ -3,26 +3,36 @@ package devarea.bot;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.Main;
+import devarea.bot.commands.Command;
 import devarea.bot.commands.CommandManager;
+import devarea.bot.commands.ConsumableCommand;
+import devarea.bot.commands.inLine.Run;
 import devarea.bot.event.*;
 import devarea.bot.utils.InitialData;
 import devarea.bot.utils.SnowflakeModuleSerializer;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
+import discord4j.core.event.ReactiveEventAdapter;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.core.event.domain.guild.MemberLeaveEvent;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.*;
+import discord4j.core.object.command.ApplicationCommandOption;
 import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.GuildEmoji;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.discordjson.json.ApplicationCommandOptionData;
+import discord4j.discordjson.json.ApplicationCommandRequest;
 import discord4j.gateway.intent.IntentSet;
+import org.reactivestreams.Publisher;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -48,9 +58,6 @@ public class Init {
     public static HashMap<String, BufferedImage> assetsImages = new HashMap<>();
 
     public static void initBot() {
-
-        CommandManager.init();
-
         setupInitialConfig();
         assetsLoader();
         connectDiscordClient();
@@ -81,6 +88,7 @@ public class Init {
             System.err.println("Le token n'a pas pu être chargé ! (Ou erreur de login à discord !)");
         }
     }
+
     /*
         Load configuration and setup the var -> initial
      */
@@ -109,6 +117,7 @@ public class Init {
 
         System.out.println("configuration.json loaded !");
     }
+
     /*
         Setup all events when all init are done.
      */
@@ -122,7 +131,9 @@ public class Init {
         client.getEventDispatcher().on(ReactionRemoveEvent.class).subscribe(ReactionRemove::FunctionReactionRemoveEvent);
         client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(VoiceStateUpdate::VoiceStateUpdateFucntion);
         client.getEventDispatcher().on(ButtonInteractionEvent.class).subscribe(ButtonInteract::ButtonInteractFunction);
+
     }
+
     /*
         Setup assets used by the bot from initial
      */
@@ -143,6 +154,7 @@ public class Init {
             System.err.println("Les fichiers assets n'ont pas pu être chargé !!");
         }
     }
+
     /*
         Load an Image in the jar pot
      */

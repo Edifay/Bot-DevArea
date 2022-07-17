@@ -11,12 +11,12 @@ public class ChannelCache {
 
     private static final HashMap<String, CachedChannel> channels = new HashMap<>();
 
-    public static GuildChannel get(@NonNull final String memberID) {
-        CachedChannel cachedChannel = getCachedChannel(memberID);
+    public static GuildChannel get(@NonNull final String channelID) {
+        CachedChannel cachedChannel = getCachedChannel(channelID);
         if (cachedChannel == null) {
-            if (!working(memberID)) return null;
-            cachedChannel = new CachedChannel(memberID);
-            channels.put(memberID, cachedChannel);
+            if (!working(channelID)) return null;
+            cachedChannel = new CachedChannel(channelID);
+            channels.put(channelID, cachedChannel);
         }
 
         return cachedChannel.get();
@@ -33,29 +33,18 @@ public class ChannelCache {
         return cachedChannel.fetch();
     }
 
-    public static GuildChannel watch(@NonNull final String memberID) {
-        if (!working(memberID)) return null;
-        CachedChannel cachedChannel = getCachedChannel(memberID);
-        if (cachedChannel == null) {
-            if (!working(memberID)) return null;
-            cachedChannel = new CachedChannel(memberID);
-            channels.put(memberID, cachedChannel);
-            cachedChannel.get();
-        }
-        if (getCachedChannel(memberID) == null)
-            return null;
-        return cachedChannel.watch();
-    }
-
-    public static void reset(@NonNull final String channelID) {
+    public static GuildChannel watch(@NonNull final String channelID) {
+        if (!working(channelID)) return null;
         CachedChannel cachedChannel = getCachedChannel(channelID);
         if (cachedChannel == null) {
-            if (!working(channelID)) return;
+            if (!working(channelID)) return null;
             cachedChannel = new CachedChannel(channelID);
             channels.put(channelID, cachedChannel);
+            cachedChannel.get();
         }
-
-        cachedChannel.reset();
+        if (getCachedChannel(channelID) == null)
+            return null;
+        return cachedChannel.watch();
     }
 
     public static void use(@NonNull GuildChannel... channelsAtAdd) {
@@ -73,6 +62,17 @@ public class ChannelCache {
                 }
             }
         }
+    }
+
+    public static void reset(@NonNull final String channelID) {
+        CachedChannel cachedChannel = getCachedChannel(channelID);
+        if (cachedChannel == null) {
+            if (!working(channelID)) return;
+            cachedChannel = new CachedChannel(channelID);
+            channels.put(channelID, cachedChannel);
+        }
+
+        cachedChannel.reset();
     }
 
     public static void slash(final String channelID) {

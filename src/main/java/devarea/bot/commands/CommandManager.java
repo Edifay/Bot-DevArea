@@ -1,19 +1,25 @@
 package devarea.bot.commands;
 
 import devarea.Main;
+import devarea.bot.commands.inLine.Rank;
 import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.common.util.Snowflake;
+import discord4j.core.event.ReactiveEventAdapter;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.discordjson.json.ApplicationCommandRequest;
 import discord4j.rest.util.PermissionSet;
+import org.reactivestreams.Publisher;
+import reactor.util.annotation.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +36,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import static devarea.bot.commands.Command.delete;
+import static devarea.bot.commands.Command.sendError;
 import static devarea.bot.presets.TextMessage.commandNotFound;
 
 public class CommandManager {
@@ -41,6 +48,15 @@ public class CommandManager {
     private static final Map<Snowflake, Snowflake> logged_as = new HashMap<>();
 
     public static void init() {
+        Init.client.on(new ReactiveEventAdapter() {
+            @Override
+            public Publisher<?> onChatInputInteraction(ChatInputInteractionEvent event) {
+                System.out.println(event.getCommandName());
+                exe(event.getCommandName(), null, event);
+                return super.onChatInputInteraction(event);
+            }
+        }).subscribe();
+
         try {
 
             System.out.println(Main.separator + "Loading commands :");
@@ -51,27 +67,51 @@ public class CommandManager {
             }
             System.out.println("Class name found : " + Arrays.toString(names.toArray()));
 
+            List<ApplicationCommandRequest> slashCommands = new ArrayList<>();
+
             for (String className : names) {
                 if (!className.contains("$")) {
                     final String newName = className.startsWith("/") ? className.substring(1) : className;
                     System.out.print(className + "->" + newName + " | ");
-                    if (Arrays.stream(Class.forName("devarea.bot.commands.inLine." + newName).getConstructors())
+                    Class<?> currentClass = Class.forName("devarea.bot.commands.inLine." + newName);
+                    if (Arrays.stream(currentClass.getConstructors())
                             .anyMatch(constructor -> constructor.getGenericParameterTypes().length == 3
                                     && constructor.getGenericParameterTypes()[0].equals(Member.class)
                                     && constructor.getGenericParameterTypes()[1].equals(TextChannel.class)
-                                    && constructor.getGenericParameterTypes()[2].equals(Message.class)))
-                        classBound.put(newName.toLowerCase(Locale.ROOT), Class.forName("devarea.bot.commands.inLine" +
-                                "." + newName).getConstructor(Member.class, TextChannel.class, Message.class));
-                    else
+                                    && constructor.getGenericParameterTypes()[2].equals(Message.class))) {
+
+                        classBound.put(newName.toLowerCase(Locale.ROOT), currentClass.getConstructor(Member.class,
+                                TextChannel.class, Message.class));
+                    } else if (Arrays.stream(currentClass.getConstructors())
+                            .anyMatch(constructor -> constructor.getGenericParameterTypes().length == 2
+                                    && constructor.getGenericParameterTypes()[0].equals(Member.class)
+                                    && constructor.getGenericParameterTypes()[1].equals(ChatInputInteractionEvent.class))) {
+                        classBound.put(newName.toLowerCase(Locale.ROOT), currentClass.getConstructor(Member.class,
+                                ChatInputInteractionEvent.class));
+                        // If is slash command add it to the collection !
+                        if (Arrays.asList(currentClass.getInterfaces()).contains(SlashCommand.class))
+                            slashCommands.add(((SlashCommand) currentClass.getConstructor().newInstance()).getSlashCommandDefinition());
+                    } else
                         System.err.println("\nImpossibilité de charger la commande : " + "devarea.bot.commands.inLine" +
                                 "." + newName);
 
                 }
             }
+            System.out.println();
+            System.out.println("Size of slash commands : " + slashCommands.size());
+
+            Init.client.getRestClient().getApplicationService()
+                    .bulkOverwriteGlobalApplicationCommand(Init.client.getRestClient().getApplicationId().block(),
+                            slashCommands)
+                    .subscribe();
 
             System.out.println(classBound.size() + " commands loaded !");
-        } catch (IOException | URISyntaxException | ClassNotFoundException | NoSuchMethodException e) {
+        } catch (IOException | URISyntaxException | ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            System.err.println("The SlashCommand need an empty constructor to work !\n\n" + e.getMessage());
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -115,12 +155,14 @@ public class CommandManager {
         return names;
     }
 
-    public static void exe(String command, final MessageCreateEvent message) {
+    public static void exe(String command, @Nullable final MessageCreateEvent message,
+                           @Nullable final ChatInputInteractionEvent chatInteraction) {
         synchronized (actualCommands) {
             command = command.toLowerCase(Locale.ROOT);
             if (classBound.containsKey(command)) {
                 try {
-                    Member member_command = message.getMember().get();
+                    Member member_command = message != null ? message.getMember().get() :
+                            chatInteraction.getInteraction().getMember().get();
                     Member member_replaced = logged_as.get(member_command.getId()) == null ? member_command :
                             MemberCache.get(logged_as.get(member_command.getId()).asString());
                     System.out.println("The command " + command + " is executed !");
@@ -134,8 +176,20 @@ public class CommandManager {
 
                     if (permissionSet == null || containPerm(permissionSet,
                             member_command.getBasePermissions().block())) {
-                        Command actualCommand = (Command) classBound.get(command).newInstance(member_replaced,
-                                ChannelCache.get(message.getMessage().getChannelId().asString()), message.getMessage());
+                        Command actualCommand;
+                        if (message != null) {
+                            if (classBound.get(command).getParameterCount() == 2) {
+                                sendError((TextChannel) ChannelCache.get(message.getMessage().getChannelId().asString()), "Cette commande à migré vers les ``slash`` commandes !");
+                                return;
+                            } else
+                                actualCommand = (Command) classBound.get(command).newInstance(member_replaced,
+                                        ChannelCache.get(message.getMessage().getChannelId().asString()),
+                                        message.getMessage());
+
+                        } else {
+                            actualCommand = (Command) classBound.get(command).newInstance(member_replaced,
+                                    chatInteraction);
+                        }
                         if (actualCommand instanceof LongCommand)
                             actualCommands.put(member_replaced.getId(), (LongCommand) actualCommand);
                     } else
@@ -148,9 +202,9 @@ public class CommandManager {
             } else
                 Command.deletedEmbed((TextChannel) ChannelCache.watch(message.getMessage().getChannelId().asString())
                         , EmbedCreateSpec.builder()
-                        .title("Erreur !")
-                        .description(commandNotFound)
-                        .color(ColorsUsed.wrong).build());
+                                .title("Erreur !")
+                                .description(commandNotFound)
+                                .color(ColorsUsed.wrong).build());
 
             if (Init.initial.vanish)
                 delete(false, message.getMessage());

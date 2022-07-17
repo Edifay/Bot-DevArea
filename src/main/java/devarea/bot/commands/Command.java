@@ -2,15 +2,15 @@ package devarea.bot.commands;
 
 import devarea.bot.Init;
 import devarea.bot.presets.ColorsUsed;
+import devarea.global.cache.ChannelCache;
 import discord4j.common.util.Snowflake;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.PermissionOverwrite;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
-import discord4j.core.spec.EmbedCreateSpec;
-import discord4j.core.spec.MessageCreateSpec;
-import discord4j.core.spec.TextChannelCreateSpec;
+import discord4j.core.spec.*;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 
@@ -21,6 +21,7 @@ public abstract class Command {
 
     protected final Member member;
     protected TextChannel channel;
+    protected ChatInputInteractionEvent chatInteraction;
 
     public Command() {
         this.member = null;
@@ -35,18 +36,17 @@ public abstract class Command {
         this.channel = channel;
     }
 
+    public Command(final Member member, final ChatInputInteractionEvent chatInteraction) {
+        this.member = member;
+        this.channel = (TextChannel) ChannelCache.get(chatInteraction.getInteraction().getChannelId().asString());
+        this.chatInteraction = chatInteraction;
+    }
+
     protected Boolean endCommand() {
         CommandManager.removeCommand(this.member.getId(), this);
         return true;
     }
 
-    protected Message deletedMessage(final MessageCreateSpec spec) {
-        return deletedMessage(this.channel, spec);
-    }
-
-    protected Message deletedEmbed(final EmbedCreateSpec spec) {
-        return deletedMessage(MessageCreateSpec.builder().addEmbed(spec).build());
-    }
 
     protected boolean createLocalChannel(final String name, final Snowflake parentId, final boolean canWrite) {
         Set<PermissionOverwrite> set = new HashSet<>();
@@ -80,12 +80,6 @@ public abstract class Command {
         return send(MessageCreateSpec.builder().addEmbed(spec).build(), block);
     }
 
-    protected Message sendError(final String error) {
-        return deletedEmbed(EmbedCreateSpec.builder()
-                .title("Error !")
-                .description(error)
-                .color(ColorsUsed.wrong).build());
-    }
 
     protected void deletedCommand(final long millis, final Runnable runnable) {
         new Thread(() -> {
@@ -123,6 +117,53 @@ public abstract class Command {
         return null;
     }
 
+    public static Boolean delete(boolean block, final Message... messages) {
+        boolean bool = true;
+        for (Message message : messages)
+            try {
+                if (block)
+                    message.delete().block();
+                else
+                    message.delete().subscribe(unused -> {
+                    }, throwable -> {
+
+                    });
+            } catch (Exception e) {
+                bool = false;
+            }
+        return bool;
+    }
+
+    public static Message sendEmbed(final TextChannel channel, final EmbedCreateSpec spec, boolean block) {
+        return send(channel, MessageCreateSpec.builder().addEmbed(spec).build(), block);
+    }
+
+    public static Snowflake getMention(final MessageCreateEvent event) {
+        return event.getMessage().getUserMentionIds().toArray(new Snowflake[0])[0];
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+
+    /// DELETED !
+
+    protected Message deletedMessage(final MessageCreateSpec spec) {
+        return deletedMessage(this.channel, spec);
+    }
+
+    protected Message deletedEmbed(final EmbedCreateSpec spec) {
+        return deletedMessage(MessageCreateSpec.builder().addEmbed(spec).build());
+    }
+
+    protected Message sendError(final String error) {
+        return deletedEmbed(EmbedCreateSpec.builder()
+                .title("Error !")
+                .description(error)
+                .color(ColorsUsed.wrong).build());
+    }
+
     public static Message sendError(final TextChannel channel, final String error) {
         return deletedEmbed(channel, EmbedCreateSpec.builder()
                 .title("Error !")
@@ -142,36 +183,41 @@ public abstract class Command {
         return atDelete;
     }
 
-    public static Boolean delete(boolean block, final Message... messages) {
-        boolean bool = true;
-        for (Message message : messages)
-            try {
-                if (block)
-                    message.delete().block();
-                else
-                    message.delete().subscribe(unused -> {
-                    }, throwable -> {
-
-                    });
-            } catch (Exception e) {
-                bool = false;
-            }
-        return bool;
-    }
-
     public static Message deletedEmbed(final TextChannel channel, final EmbedCreateSpec spec) {
         return deletedMessage(channel, MessageCreateSpec.builder().addEmbed(spec).build());
     }
 
-    public static Message sendEmbed(final TextChannel channel, final EmbedCreateSpec spec, boolean block) {
-        return send(channel, MessageCreateSpec.builder().addEmbed(spec).build(), block);
+    public void reply(InteractionApplicationCommandCallbackSpec reply, boolean block) {
+        if (block) chatInteraction.reply(reply).block();
+        else chatInteraction.reply(reply).subscribe();
     }
 
-    public static Snowflake getMention(final MessageCreateEvent event) {
-        return event.getMessage().getUserMentionIds().toArray(new Snowflake[0])[0];
+    public void reply(InteractionApplicationCommandCallbackSpec reply) {
+        reply(reply, false);
     }
 
-    public Member getMember() {
-        return member;
+    public void replyEmbed(EmbedCreateSpec embed, boolean block) {
+        reply(InteractionApplicationCommandCallbackSpec.builder().addEmbed(embed).build(), block);
+    }
+
+    public void replyEmbed(EmbedCreateSpec embed) {
+        replyEmbed(embed, false);
+    }
+
+    public void replyError(String content) {
+        reply(InteractionApplicationCommandCallbackSpec.builder()
+                .addEmbed(EmbedCreateSpec.builder()
+                        .color(ColorsUsed.wrong)
+                        .title("Error !")
+                        .description(content)
+                        .build())
+                .ephemeral(true)
+                .build());
+    }
+
+    public void editEmbed(EmbedCreateSpec embed) {
+        chatInteraction.editReply(InteractionReplyEditSpec.builder()
+                .addEmbed(embed)
+                .build()).subscribe();
     }
 }

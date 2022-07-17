@@ -2,6 +2,7 @@ package devarea;
 
 import devarea.backend.SpringBackend;
 import devarea.bot.Init;
+import devarea.global.cache.ChannelCache;
 import org.springframework.boot.SpringApplication;
 
 import java.io.FileNotFoundException;
@@ -11,7 +12,7 @@ public class Main {
 
     public static final String separator = "-------------------------------------------------------------\n";
 
-    public static final boolean developing = false;
+    public static final boolean developing = true;
 
     public static final String domainName = "https://devarea.fr/";
     // public static final String domainName = "http://localhost/";

@@ -27,7 +27,7 @@ public class FunctionEvent {
         });
     }
 
-    public synchronized static void startAwayIn(Runnable runnable, long time, boolean error) {
+    public synchronized static void  startAwayIn(Runnable runnable, long time, boolean error) {
         exe.submit(() -> {
             try {
                 Thread.sleep(time);

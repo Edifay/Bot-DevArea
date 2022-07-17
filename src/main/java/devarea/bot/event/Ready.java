@@ -1,6 +1,7 @@
 package devarea.bot.event;
 
 import devarea.Main;
+import devarea.bot.commands.CommandManager;
 import devarea.global.handlers.UserDataHandler;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
 import devarea.global.cache.ChannelCache;
@@ -70,6 +71,8 @@ public class Ready {
 
         if (already)
             return;
+
+        CommandManager.init();
 
         startAway(() -> Init.idYes = Init.devarea.getGuildEmojiById(Init.initial.yes).block());
         startAway(() -> Init.idNo = Init.devarea.getGuildEmojiById(Init.initial.no).block());

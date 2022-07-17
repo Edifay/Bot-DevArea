@@ -1,16 +1,13 @@
 package devarea.bot.commands.inLine;
 
+import devarea.bot.commands.*;
 import devarea.global.cache.ChannelCache;
 import devarea.bot.presets.ColorsUsed;
 import devarea.bot.presets.TextMessage;
 import devarea.bot.Init;
 import devarea.bot.automatical.MeetupHandler;
-import devarea.bot.commands.Command;
-import devarea.bot.commands.FirstStape;
-import devarea.bot.commands.LongCommand;
 import devarea.bot.commands.commandTools.MeetupStock;
-import devarea.bot.commands.Stape;
-import devarea.bot.commands.EndStape;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Attachment;
 import discord4j.core.object.entity.Member;
@@ -18,6 +15,7 @@ import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.discordjson.json.ApplicationCommandRequest;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,20 +23,21 @@ import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Meetup extends LongCommand {
+public class Meetup extends LongCommand implements SlashCommand {
 
     private MeetupStock meetup;
     private List<MeetupStock> canDelete;
 
-    public Meetup(final Member member, final TextChannel channel_param, final Message message) {
-        super(member, channel_param);
-
+    public Meetup(final Member member, final ChatInputInteractionEvent chatInteraction) {
+        super(member, chatInteraction);
+        chatInteraction.deferReply().subscribe();
 
         Stape lastStape = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
                 MeetupHandler.addMeetupAtValide(meetup);
-                setText(TextMessage.meetupCreateAsk);
+                editEmbed(TextMessage.meetupCreateAsk);
+                delete(false, this.message);
                 return end;
             }
         };
@@ -120,7 +119,11 @@ public class Meetup extends LongCommand {
         Stape channel = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setText(EmbedCreateSpec.builder().title("Meetups !").color(ColorsUsed.just).timestamp(Instant.now()).description("Voici le channel des meetups : <#" + Init.initial.meetupAnnounce_channel.asString() + ">").build());
+                editEmbed(EmbedCreateSpec.builder().title("Meetups !")
+                        .color(ColorsUsed.just).timestamp(Instant.now())
+                        .description("Voici le channel des meetups : <#" + Init.initial.meetupAnnounce_channel.asString() + ">")
+                        .build());
+                delete(false, this.message);
                 return end;
             }
         };
@@ -128,7 +131,8 @@ public class Meetup extends LongCommand {
         Stape endDelete = new EndStape() {
             @Override
             protected boolean onCall(Message message) {
-                setText(EmbedCreateSpec.builder().title("Le meetup a bien été supprimé !").color(ColorsUsed.just).timestamp(Instant.now()).build());
+                editEmbed(EmbedCreateSpec.builder().title("Le meetup a bien été supprimé !").color(ColorsUsed.just).timestamp(Instant.now()).build());
+                delete(false, this.message);
                 return end;
             }
         };
@@ -191,4 +195,14 @@ public class Meetup extends LongCommand {
         this.lastMessage = this.firstStape.getMessage();
     }
 
+    public Meetup() {
+    }
+
+    @Override
+    public ApplicationCommandRequest getSlashCommandDefinition() {
+        return ApplicationCommandRequest.builder()
+                .name("meetup")
+                .description("Permet de créer et de gérer ces meetups possédés.")
+                .build();
+    }
 }
