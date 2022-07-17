@@ -1,6 +1,7 @@
 package devarea.bot.commands.inLine;
 
 import devarea.bot.Init;
+import devarea.bot.automatical.RunHandler;
 import devarea.bot.commands.ShortCommand;
 import devarea.bot.presets.ColorsUsed;
 import devarea.bot.presets.TextMessage;
@@ -27,7 +28,7 @@ public class Run extends ShortCommand {
     final static int MAX_LINES = 20;
     final static int MAX_CHARS = 900;
     // Regex to extract the different parts of the message.
-    final static String PATTERN = "^(.*)\\n```(.+)\\n(?s)(.*\\S.*)```\\n?(.*)$";
+    final static Pattern PATTERN = Pattern.compile("^(.*)\\n```(.+)\\n(?s)(.*\\S.*)```\\n?(.*)$");
     final static String ZERO_WIDTH_SPACE = "\u200b";
     final static int ID_ACCEPTED = 3;
 
@@ -37,19 +38,22 @@ public class Run extends ShortCommand {
         String content = message.getContent().substring((Init.initial.prefix + "run").length());
 
         if (content.isBlank()) {
-            this.sendEmbed(TextMessage.runCommandExplain, false);
+            RunHandler.sendResponse(message, TextMessage.runCommandExplain, false);
             this.endCommand();
             return;
         }
 
         if (content.strip().equals("languages")) {
-            sendListLanguages();
+            try {
+                RunHandler.sendResponse(message, embedListLanguages(), false);
+            } catch (JudgeException e) {
+                this.sendError(e.getMessage());
+            }
             this.endCommand();
             return;
         }
 
-        Pattern pattern = Pattern.compile(PATTERN);
-        Matcher matcher = pattern.matcher(content);
+        Matcher matcher = PATTERN.matcher(content);
 
         if (matcher.find()) {
             message.addReaction(ReactionEmoji.custom(Init.idLoading)).subscribe();
@@ -62,7 +66,7 @@ public class Run extends ShortCommand {
                     .build();
 
             JudgeManager.get().executeAsync(submission).thenAccept(response -> {
-                this.sendEmbed(embedResponse(response, member), false);
+                RunHandler.sendResponse(message, embedResponse(response), true);
             }).whenComplete((res, e) -> {
                 message.removeSelfReaction(ReactionEmoji.custom(Init.idLoading)).subscribe();
                 if (e != null) {
@@ -80,25 +84,20 @@ public class Run extends ShortCommand {
         this.endCommand();
     }
 
-    private void sendListLanguages() {
-        try {
-            Map<String, List<String>> languages = JudgeManager.get().getConfig().languages();
+    private EmbedCreateSpec embedListLanguages() throws JudgeException {
+        Map<String, List<String>> languages = JudgeManager.get().getConfig().languages();
 
-            StringBuilder field = new StringBuilder("```");
-            for (Map.Entry<String, List<String>> entry : languages.entrySet()) {
-                field.append(String.format("> %s --> %s\n", entry.getKey(), String.join(", ", entry.getValue())));
-            }
-            field.append("```");
-
-            EmbedCreateSpec.Builder embed = EmbedCreateSpec.builder()
-                    .addField("Langages supportés", field.toString(), false)
-                    .color(ColorsUsed.same);
-
-            this.sendEmbed(embed.build(), false);
-
-        } catch (JudgeException e) {
-            sendError(e.getMessage());
+        StringBuilder field = new StringBuilder("```\n");
+        for (Map.Entry<String, List<String>> entry : languages.entrySet()) {
+            field.append(String.format("> %s --> %s\n", entry.getKey(), String.join(", ", entry.getValue())));
         }
+        field.append("```");
+
+        EmbedCreateSpec.Builder embed = EmbedCreateSpec.builder()
+                .addField("Langages supportés", field.toString(), false)
+                .color(ColorsUsed.same);
+
+        return embed.build();
     }
 
     private void embedCodeOutput(EmbedCreateSpec.Builder embed, String judgeMessage, String... values) {
@@ -125,7 +124,7 @@ public class Run extends ShortCommand {
             output = " ";
         }
 
-        StringBuilder formattedOutput = new StringBuilder("```")
+        StringBuilder formattedOutput = new StringBuilder("```\n")
                 .append(output)
                 .append("```");
 
@@ -136,7 +135,7 @@ public class Run extends ShortCommand {
         embed.addField("Résultat", formattedOutput.toString(), false);
     }
 
-    private EmbedCreateSpec embedResponse(JudgeResponse response, Member member) {
+    private EmbedCreateSpec embedResponse(JudgeResponse response) {
         String author = String.format("Code de %s | %s %s",
                 member.getUsername(),
                 response.getLanguage().getName(),

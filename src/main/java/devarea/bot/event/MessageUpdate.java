@@ -1,27 +1,20 @@
 package devarea.bot.event;
 
+import devarea.bot.automatical.RunHandler;
 import discord4j.core.event.domain.message.MessageUpdateEvent;
 import discord4j.core.object.entity.Message;
 
 public class MessageUpdate {
     public static void messageUpdateFunction(MessageUpdateEvent messageUpdateEvent) {
         try {
-            /*final Message message = messageUpdateEvent.getMessage().block();
+            final Message message = messageUpdateEvent.getMessage().block();
 
-            if (message.getAuthor().get().isBot() || messageUpdateEvent.getGuildId().isEmpty())
+            if (message == null || message.getAuthor().isEmpty() || message.getAuthor().get().isBot())
                 return;
 
-/*
-            Init.logChannel.createMessage(msg -> msg.setEmbed(embed -> {
-                final DateTimeFormatter hours = DateTimeFormatter.ofPattern("HH:mm");
-                final DateTimeFormatter date = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                final LocalDateTime now = LocalDateTime.now();
-                embed.setColor(ColorsUsed.same);
-                embed.setTitle(message.getAuthor().get().getTag() + " a édité un message :");
-                embed.setDescription(message.getContent());
-                embed.setFooter(date.format(now) + " at " + hours.format(now) + ".", message.getAuthor().get().getAvatarUrl());
-            })).subscribe();*/
-        }catch (Exception e){
+            RunHandler.onEdit(message);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
