@@ -1,15 +1,18 @@
 package devarea.bot.commands.inLine;
 
+import devarea.bot.commands.SlashCommand;
 import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.global.handlers.XPHandler;
 import devarea.bot.commands.ShortCommand;
 import devarea.bot.presets.ColorsUsed;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
+import discord4j.core.object.command.ApplicationCommandOption;
 import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.discordjson.json.ApplicationCommandOptionData;
+import discord4j.discordjson.json.ApplicationCommandRequest;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -21,16 +24,22 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
 
-public class Rank extends ShortCommand {
-    public Rank(final Member member, final TextChannel channel, final Message message) {
-        super(member, channel);
+public class Rank extends ShortCommand implements SlashCommand {
+
+    public Rank(final Member member, final ChatInputInteractionEvent event) {
+        super(member, event);
+        System.out.println("Member : " + member);
         Member pinged = member;
         try {
-            pinged = MemberCache.get(message.getUserMentions().get(0).getId().asString());
+            if (event.getOption("membre").isPresent() && event.getOption("membre").get().getValue().isPresent()) {
+                pinged = MemberCache.get(event.getOption("membre").get().getValue().get().asSnowflake().asString());
+                if (pinged == null)
+                    pinged = member;
+            }
         } catch (Exception e) {
         } finally {
             if (!XPHandler.haveBeenSet(pinged.getId())) {
-                sendError("Ce membre n'a pas encore parlé !");
+                replyError("Ce membre n'a pas encore parlé !");
                 this.endCommand();
             } else {
 
@@ -79,11 +88,11 @@ public class Rank extends ShortCommand {
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     ImageIO.write(img, "png", outputStream);
                     Member finalPinged = pinged;
+                    event.reply("**Voici l'XP de " + pinged.getUsername() + "** :").subscribe();
                     this.send(MessageCreateSpec.builder()
                             .addFile("xp.png", new ByteArrayInputStream(outputStream.toByteArray()))
                             .addEmbed(EmbedCreateSpec.builder()
                                     .color(ColorsUsed.just)
-                                    .title("Voici l'xp de " + finalPinged.getDisplayName())
                                     .image("attachment://xp.png").build()
                             ).build(), false);
                 } catch (IOException | FontFormatException e) {
@@ -146,4 +155,20 @@ public class Rank extends ShortCommand {
         return font;
     }
 
+    public Rank() {
+    }
+
+    @Override
+    public ApplicationCommandRequest getSlashCommandDefinition() {
+        return ApplicationCommandRequest.builder()
+                .name("rank")
+                .description("Donne les informations concernant l'XP d'un membre.")
+                .addOption(ApplicationCommandOptionData.builder()
+                        .name("membre")
+                        .description("Vous pouvez demander le membre que vous voulez. Par default ce sera vous.")
+                        .type(ApplicationCommandOption.Type.MENTIONABLE.getValue())
+                        .required(false)
+                        .build())
+                .build();
+    }
 }

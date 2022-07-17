@@ -37,7 +37,7 @@ public class FreeLanceHandler {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final long timeBetweenBump = 86400000L;
 
-    public static Message message;
+    private static Message message;
     private static ArrayList<FreeLance> freeLances = new ArrayList<>();
 
     private static TextChannel channel;

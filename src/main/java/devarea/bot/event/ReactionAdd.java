@@ -23,7 +23,7 @@ public class ReactionAdd {
             if (event.getMember().get().isBot() || RolesReactsHandler.onReact(event))
                 return;
 
-            if (CommandManager.react(event) || MeetupHandler.getEvent(event) || HelpRewardHandler.react(event))
+            if (CommandManager.react(event) || MeetupHandler.getEvent(event))
                 return;
 
         } catch (Exception e) {

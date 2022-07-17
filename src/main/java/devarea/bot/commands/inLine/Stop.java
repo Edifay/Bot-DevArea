@@ -1,15 +1,18 @@
 package devarea.bot.commands.inLine;
 
 import devarea.bot.Init;
+import devarea.bot.commands.SlashCommand;
 import devarea.global.handlers.UserDataHandler;
 import devarea.global.handlers.XPHandler;
 import devarea.bot.commands.PermissionCommand;
 import devarea.bot.commands.ShortCommand;
 import devarea.bot.presets.ColorsUsed;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.discordjson.json.ApplicationCommandRequest;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 
@@ -17,17 +20,17 @@ import java.util.Set;
 
 import static devarea.bot.presets.TextMessage.stopCommand;
 
-public class Stop extends ShortCommand implements PermissionCommand {
+public class Stop extends ShortCommand implements PermissionCommand, SlashCommand {
 
     public Stop(PermissionCommand permissionCommand) {
         super();
     }
 
-    public Stop(final Member member, final TextChannel channel, final Message message) {
-        super(member, channel);
+    public Stop(final Member member, final ChatInputInteractionEvent chatInteraction) {
+        super(member, chatInteraction);
         XPHandler.stop();
         UserDataHandler.updated();
-        sendEmbed(EmbedCreateSpec.builder()
+        replyEmbed(EmbedCreateSpec.builder()
                 .title(stopCommand)
                 .color(ColorsUsed.wrong).build(), false);
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
@@ -42,5 +45,16 @@ public class Stop extends ShortCommand implements PermissionCommand {
     @Override
     public PermissionSet getPermissions() {
         return PermissionSet.of(Permission.ADMINISTRATOR);
+    }
+
+    public Stop() {
+    }
+
+    @Override
+    public ApplicationCommandRequest getSlashCommandDefinition() {
+        return ApplicationCommandRequest.builder()
+                .name("stop")
+                .description("Commande pour Edifay ;) !")
+                .build();
     }
 }

@@ -2,6 +2,7 @@ package devarea;
 
 import devarea.backend.SpringBackend;
 import devarea.bot.Init;
+import devarea.global.cache.ChannelCache;
 import org.springframework.boot.SpringApplication;
 
 import java.io.FileNotFoundException;

@@ -1,6 +1,7 @@
 package devarea.bot.commands;
 
 import devarea.global.cache.ChannelCache;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -11,6 +12,7 @@ public abstract class ConsumableCommand {
     public TextChannel channel;
     public Member member;
     public Message message;
+    public ChatInputInteractionEvent chatInteraction;
 
     public ConsumableCommand(final Class commandClass, final TextChannel channel) {
         this.commadClass = commandClass;
@@ -50,5 +52,9 @@ public abstract class ConsumableCommand {
         this.message = message;
         this.channel = (TextChannel) ChannelCache.get(message.getChannelId().asString());
         this.member = member;
+    }
+
+    public void setChatInteraction(ChatInputInteractionEvent chatInteraction) {
+        this.chatInteraction = chatInteraction;
     }
 }

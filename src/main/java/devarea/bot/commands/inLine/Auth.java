@@ -2,34 +2,31 @@ package devarea.bot.commands.inLine;
 
 import devarea.Main;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
+import devarea.bot.commands.SlashCommand;
 import devarea.global.cache.MemberCache;
 import devarea.bot.commands.ShortCommand;
 import devarea.bot.presets.ColorsUsed;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
-import discord4j.core.spec.EmbedCreateSpec;
-import discord4j.core.spec.MessageCreateSpec;
-import discord4j.core.spec.MessageEditSpec;
+import discord4j.core.spec.*;
+import discord4j.discordjson.json.ApplicationCommandRequest;
 
 import java.util.ArrayList;
 
 import static devarea.bot.event.FunctionEvent.startAway;
 
-public class Auth extends ShortCommand {
+public class Auth extends ShortCommand implements SlashCommand {
 
-    public Auth(final Member member, final TextChannel channel, final Message message) {
-        super(member, channel);
-        final Member reelMember = MemberCache.get(message.getAuthor().get().getId().asString());
+    public Auth(final Member member, final ChatInputInteractionEvent chatInteraction) {
+        super(member, chatInteraction);
+        final Member reelMember =
+                MemberCache.get(chatInteraction.getInteraction().getMember().get().getId().asString());
 
         final String code = RequestHandlerAuth.getCodeForMember(reelMember.getId().asString());
-        sendEmbed(EmbedCreateSpec.builder()
-                .title("Authentification réussie !")
-                .description("Toutes les informations liées à l'authentification au site de **Dev'Area** t'ont été " +
-                        "transmises par Message Privé !\n\nSi tu ne l'as pas reçu n'hésite pas à nous contacter !")
-                .color(ColorsUsed.just)
-                .build(), false);
-        final Message message_at_edit = reelMember.getPrivateChannel().block().createMessage(MessageCreateSpec.builder()
+        chatInteraction.reply(InteractionApplicationCommandCallbackSpec.builder()
+                .ephemeral(true)
                 .addEmbed(EmbedCreateSpec.builder()
                         .title("Authentification au site de Dev'area !")
                         .description("Vous venez de vous authentifier sur le site de dev'area !\n\nPour vous " +
@@ -38,7 +35,7 @@ public class Auth extends ShortCommand {
                                 "besoin de le retrouver exécutez de nouveau la commande !")
                         .color(ColorsUsed.just)
                         .build())
-                .build()).block();
+                .build()).subscribe();
         final ArrayList<EmbedCreateSpec> embeds = new ArrayList<>();
         embeds.add(EmbedCreateSpec.builder()
                 .title("Authentification au site de Dev'area !")
@@ -52,7 +49,7 @@ public class Auth extends ShortCommand {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
-                message_at_edit.edit(MessageEditSpec.builder()
+                chatInteraction.editReply(InteractionReplyEditSpec.builder()
                         .embeds(embeds)
                         .build()).subscribe();
             }
@@ -60,4 +57,14 @@ public class Auth extends ShortCommand {
         this.endCommand();
     }
 
+    public Auth() {
+    }
+
+    @Override
+    public ApplicationCommandRequest getSlashCommandDefinition() {
+        return ApplicationCommandRequest.builder()
+                .name("auth")
+                .description("Obtenez votre lien d'authentification au site de Dev'Area.")
+                .build();
+    }
 }

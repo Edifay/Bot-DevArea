@@ -1,58 +1,57 @@
 package devarea.bot.commands.inLine;
 
+import devarea.bot.commands.*;
 import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.HelpRewardHandler;
 import devarea.global.handlers.XPHandler;
-import devarea.bot.commands.EndStape;
-import devarea.bot.commands.FirstStape;
-import devarea.bot.commands.LongCommand;
-import devarea.bot.commands.Stape;
 import devarea.bot.commands.commandTools.HelpReward;
 import devarea.bot.presets.ColorsUsed;
 import devarea.bot.utils.MemberUtil;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
+import discord4j.core.object.command.ApplicationCommandOption;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
-import discord4j.core.spec.EmbedCreateSpec;
-import discord4j.core.spec.MessageCreateSpec;
-import discord4j.core.spec.MessageEditSpec;
+import discord4j.core.spec.*;
+import discord4j.discordjson.json.ApplicationCommandOptionData;
+import discord4j.discordjson.json.ApplicationCommandRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GiveReward extends LongCommand {
+public class GiveReward extends LongCommand implements SlashCommand {
 
     final List<Snowflake> helpers = new ArrayList<>();
 
-    public GiveReward(final Member member, final TextChannel channel, final Message message) {
-        super(member, channel);
+    public GiveReward(final Member member, final ChatInputInteractionEvent chatInteraction) {
+        super(member, chatInteraction);
 
         if (!channel.getName().contains("entraide")) {
-            this.sendError("Vous ne pouvez utiliser cette commande que dans les channels d'entraide");
+            this.replyError("Vous ne pouvez utiliser cette commande que dans les channels d'entraide");
             this.endCommand();
             return;
         }
-
+        chatInteraction.deferReply().subscribe();
         this.firstStape = getMessageCreateEventFirstStape(getEndStape(member));
         this.lastMessage = firstStape.getMessage();
     }
 
-    public GiveReward(ReactionAddEvent event, Member target, Member helper) {
+    public GiveReward(ButtonInteractionEvent event, Member target, Member helper) {
         super(target);
         final EndStape endStape = getEndStape(target);
         final Stape selectionStage = getSelectionHelpersStape(helper, endStape);
-        channel = (TextChannel) ChannelCache.watch(event.getChannelId().asString());
+        channel = (TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString());
         assert channel != null;
 
-        delete(false, event.getMessage().block());
-        this.firstStape = getReactionAddEventFirstStape(event, helper, endStape, selectionStage);
+        delete(false, event.getInteraction().getMessage().get());
+        this.firstStape = getReactionAddEventFirstStape(helper, endStape, selectionStage);
         this.lastMessage = firstStape.getMessage();
     }
 
@@ -76,12 +75,16 @@ public class GiveReward extends LongCommand {
                 }
 
                 if (!HelpRewardHandler.canSendReward(member, new ArrayList<>(mentions))) {
-
-                    sendError(
-                            "Vous avez déjà récompensé cette personne ou" +
-                                    " il vous a déjà récompensé il y'a moins de deux heures"
-                    );
-                    return false;
+                    chatInteraction.editReply(InteractionReplyEditSpec.builder()
+                            .addEmbed(EmbedCreateSpec.builder()
+                                    .title("Error !")
+                                    .color(ColorsUsed.wrong)
+                                    .description("Vous avez déjà récompensé cette personne ou" +
+                                            " il vous a déjà récompensé il y'a moins de deux heures")
+                                    .build())
+                            .build()).subscribe();
+                    delete(false, this.message);
+                    return true;
                 }
 
                 for (final Snowflake mention : mentions) {
@@ -109,7 +112,7 @@ public class GiveReward extends LongCommand {
 
     }
 
-    private FirstStape getReactionAddEventFirstStape(ReactionAddEvent event, Member helper, Stape... stapes) {
+    private FirstStape getReactionAddEventFirstStape(Member helper, Stape... stapes) {
         return new FirstStape(channel, stapes) {
             @Override
             public void onFirstCall(MessageCreateSpec spec) {
@@ -164,14 +167,22 @@ public class GiveReward extends LongCommand {
                         : "%s a récompensé %s qui l'a aidé. Il a reçu 50 xp !";
                 final String descript = String.format(description, authorMentionText, helpersText);
 
-                setMessage(MessageEditSpec.builder()
-                        .addEmbed(EmbedCreateSpec.builder()
-                                .title("Dev'Area est heureux d'avoir pu servir à résoudre votre problème !")
-                                .description(descript)
-                                .color(ColorsUsed.just).build()
-                        )
-                        .components(getEmptyButton())
-                        .build());
+                if (chatInteraction != null) {
+                    chatInteraction.editReply(InteractionReplyEditSpec.builder()
+                            .addEmbed(EmbedCreateSpec.builder()
+                                    .title("Dev'Area est heureux d'avoir pu servir à résoudre votre problème !")
+                                    .description(descript)
+                                    .color(ColorsUsed.just).build())
+                            .build()).subscribe();
+                    delete(false, this.message);
+                } else
+                    setMessage(MessageEditSpec.builder()
+                            .addEmbed(EmbedCreateSpec.builder()
+                                    .title("Dev'Area est heureux d'avoir pu servir à résoudre votre problème !")
+                                    .description(descript)
+                                    .color(ColorsUsed.just).build())
+                            .components(getEmptyButton())
+                            .build());
                 return end;
             }
         };
@@ -199,7 +210,8 @@ public class GiveReward extends LongCommand {
                 final Message message = event.getMessage();
                 final List<Snowflake> mentions = message.getUserMentionIds();
                 if (mentions.isEmpty() || mentions.contains(helper.getId())) {
-                    return super.receiveMessage(event);
+                    sendError("Veillez mentionner quelqu'un d'autre !");
+                    return false;
                 }
 
                 if (!HelpRewardHandler.canSendReward(member, new ArrayList<>(mentions))) {
@@ -237,4 +249,15 @@ public class GiveReward extends LongCommand {
         };
     }
 
+    public GiveReward() {
+
+    }
+
+    @Override
+    public ApplicationCommandRequest getSlashCommandDefinition() {
+        return ApplicationCommandRequest.builder()
+                .name("givereward")
+                .description("Permet de donner une petite récompenses aux personnes qui vont aidé !")
+                .build();
+    }
 }

@@ -1,5 +1,6 @@
 package devarea.bot.event;
 
+import devarea.bot.automatical.HelpRewardHandler;
 import devarea.global.cache.MemberCache;
 import devarea.global.handlers.FreeLanceHandler;
 import devarea.global.handlers.MissionsHandler;
@@ -13,7 +14,7 @@ public class ButtonInteract {
             if (event.getInteraction().getMember().isPresent())
                 MemberCache.use(event.getInteraction().getMember().get());
             if (CommandManager.receiveInteract(event) || FreeLanceHandler.interact(event)
-                    || MissionsHandler.interact(event)) ;
+                    || MissionsHandler.interact(event) || HelpRewardHandler.react(event)) ;
             event.deferEdit().subscribe(msg -> {
             }, err -> {
             });

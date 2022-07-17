@@ -68,20 +68,28 @@ public class EmbedLinkHandler {
         if (members.size() == 0)
             return;
 
-        generateLinkEmbed((TextChannel) ChannelCache.watch(event.getMessage().getChannelId().asString()), members);
+        generateLinkEmbed((TextChannel) ChannelCache.watch(event.getMessage().getChannelId().asString()), members, false);
     }
 
-    public static void generateLinkEmbed(TextChannel channel, ArrayList<Member> members) {
+    public static void generateLinkEmbed(TextChannel channel, ArrayList<Member> members, boolean isReply) {
         long ms = System.currentTimeMillis();
         for (Member member : members) {
             startAway(() -> {
                 try {
-                    MessageCreateSpec.Builder msgBuilder = MessageCreateSpec.builder()
-                            .addEmbed(EmbedCreateSpec.builder()
-                                    .title("Profil de : " + member.getDisplayName())
-                                    .image("attachment://profil.png")
-                                    .color(discord4j.rest.util.Color.of(255, 87, 51)).build()
-                            );
+                    MessageCreateSpec.Builder msgBuilder;
+                    if (isReply)
+                        msgBuilder = MessageCreateSpec.builder()
+                                .addEmbed(EmbedCreateSpec.builder()
+                                        .image("attachment://profil.png")
+                                        .color(discord4j.rest.util.Color.of(255, 87, 51)).build()
+                                );
+                    else
+                        msgBuilder = MessageCreateSpec.builder()
+                                .addEmbed(EmbedCreateSpec.builder()
+                                        .title("Profil de : " + member.getDisplayName())
+                                        .image("attachment://profil.png")
+                                        .color(discord4j.rest.util.Color.of(255, 87, 51)).build()
+                                );
 
                     // Creating components to draw !
                     BufferedImage img = new BufferedImage(1200, 600, BufferedImage.TYPE_INT_ARGB);

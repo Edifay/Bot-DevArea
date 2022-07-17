@@ -3,19 +3,26 @@ package devarea.bot.commands.inLine;
 import devarea.bot.commands.CommandManager;
 import devarea.bot.commands.LongCommand;
 import devarea.bot.commands.ShortCommand;
+import devarea.bot.commands.SlashCommand;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.common.util.Snowflake;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.discordjson.json.ApplicationCommandRequest;
 
 import java.time.Instant;
 import java.util.Map;
 
-public class InCommand extends ShortCommand {
-    public InCommand(final Member member, final TextChannel channel, final Message message) {
-        super(member, channel);
+public class InCommand extends ShortCommand implements SlashCommand {
+
+    public InCommand() {
+    }
+
+    public InCommand(final Member member, final ChatInputInteractionEvent chatInteraction) {
+        super(member, chatInteraction);
         String text = "";
         if (CommandManager.size() > 0) {
             text += "Il y a actuellement " + CommandManager.size() + " commandes en cour :\n";
@@ -26,10 +33,18 @@ public class InCommand extends ShortCommand {
         } else
             text = "Il n'y actuellement personnes avec des commandes en cour.";
 
-        this.sendEmbed(EmbedCreateSpec.builder()
+        this.replyEmbed(EmbedCreateSpec.builder()
                 .title("Voici toutes les personnes ayant des commandes actives.").description(text)
                 .color(ColorsUsed.same)
                 .timestamp(Instant.now()).build(), false);
         this.endCommand();
+    }
+
+    @Override
+    public ApplicationCommandRequest getSlashCommandDefinition() {
+        return ApplicationCommandRequest.builder()
+                .name("incommand")
+                .description("Permet de savoir si des membres sont actuellement en LongCommand.")
+                .build();
     }
 }

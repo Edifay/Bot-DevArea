@@ -5,6 +5,7 @@ import devarea.bot.commands.CommandManager;
 import devarea.bot.commands.PermissionCommand;
 import devarea.bot.commands.ShortCommand;
 import devarea.bot.presets.ColorsUsed;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -17,18 +18,17 @@ public class LeftThisCommand extends ShortCommand implements PermissionCommand {
         super();
     }
 
-    public LeftThisCommand(Member member, final TextChannel channel, final Message message) {
-        super(member, channel);
-        member = MemberCache.get(message.getAuthor().get().getId().asString());
+    public LeftThisCommand(Member member, final ChatInputInteractionEvent chatInteraction) {
+        super(member, chatInteraction);
+        member = MemberCache.get(chatInteraction.getInteraction().getMember().get().getId().asString());
         if (CommandManager.getLoggedAs(member.getId()) != null) {
-            sendEmbed(EmbedCreateSpec.builder()
+            replyEmbed(EmbedCreateSpec.builder()
                     .title("Admin")
                     .description("Vous venez de vous déconnecter du log de <@" + CommandManager.getLoggedAs(member.getId()).asString() + ">")
                     .color(ColorsUsed.same).build(), false);
             CommandManager.unLog(member.getId());
-        } else {
-            sendError("Vous n'êtes loggé à personne !");
-        }
+        } else
+            replyError("Vous n'êtes loggé à personne !");
     }
 
     @Override

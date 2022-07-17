@@ -1,5 +1,6 @@
 package devarea.bot.commands.inLine;
 
+import devarea.bot.commands.SlashCommand;
 import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.HelpRewardHandler;
@@ -7,42 +8,50 @@ import devarea.bot.commands.ShortCommand;
 import devarea.bot.presets.ColorsUsed;
 import devarea.bot.utils.MemberUtil;
 import discord4j.common.util.Snowflake;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
+import discord4j.core.object.command.ApplicationCommandOption;
+import discord4j.core.object.component.ActionRow;
+import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.User;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
+import discord4j.core.spec.InteractionFollowupCreateSpec;
+import discord4j.discordjson.json.ApplicationCommandOptionData;
+import discord4j.discordjson.json.ApplicationCommandRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class AskReward extends ShortCommand {
-    public AskReward(final Member member, final TextChannel channel, final Message message) {
-        super(member, channel);
+public class AskReward extends ShortCommand implements SlashCommand {
+    public AskReward() {
+    }
 
-        List<User> mentions = message.getUserMentions();
-
+    public AskReward(final Member member, final ChatInputInteractionEvent chatInteraction) {
+        super(member, chatInteraction);
 
         if (!channel.getName().contains("entraide")) {
-            this.sendError("Vous ne pouvez utiliser cette commande que dans les channels d'entraide");
+            this.replyError("Vous ne pouvez utiliser cette commande que dans les channels d'entraide");
             this.endCommand();
             return;
         }
 
-        if (mentions.size() < 1) {
-            this.sendError("Veuillez mentionner la personne que vous avez aidé");
+        if (chatInteraction.getOption("mention").isEmpty() && chatInteraction.getOption("mention").get().getValue().isEmpty()) {
+            this.replyError("Veuillez mentionner la personne que vous avez aidé");
             this.endCommand();
             return;
         }
 
-        Snowflake firstMention = mentions.get(0).getId();
 
-        Member target = MemberCache.get(firstMention.asString());
+        Member target =
+                MemberCache.get(chatInteraction.getOption("mention").get().getValue().get().asSnowflake().asString());
 
         if (member.equals(target)) {
-            this.sendError("Veuillez mentionner une autre personne que vous même");
+            this.replyError("Veuillez mentionner une autre personne que vous même");
             this.endCommand();
             return;
         }
@@ -52,9 +61,8 @@ public class AskReward extends ShortCommand {
 
         tmpList.add(target.getId());
         if (!(HelpRewardHandler.canSendReward(member, tmpList))) {
-            this.sendError(
-                    "Vous avez déjà récompensé cette personne ou il vous a déjà récompensé il y'a moins de deux heures"
-            );
+            this.replyError("Vous avez déjà récompensé cette personne ou il vous a déjà récompensé il y'a moins de " +
+                    "deux heures");
             this.endCommand();
             return;
         }
@@ -63,12 +71,28 @@ public class AskReward extends ShortCommand {
         final String targetMentionText = MemberUtil.getMentionTextByMember(target);
         final String descriptionText = "%s vous pourriez offrir une récompense à %s pour son aide.";
 
-        Message newMessage = this.sendEmbed(
-                EmbedCreateSpec.builder()
+
+        reply(InteractionApplicationCommandCallbackSpec.builder()
+                .addComponent(ActionRow.of(Button.primary("yes", ReactionEmoji.custom(Init.idYes))))
+                .addEmbed(EmbedCreateSpec.builder()
                         .title("Votre problème est-il résolu ?")
                         .description(String.format(descriptionText, targetMentionText, authorMentionText))
-                        .color(ColorsUsed.same).build(), true);
-        newMessage.addReaction(ReactionEmoji.custom(Init.idYes)).subscribe();
+                        .color(ColorsUsed.same).build())
+                .build());
         this.endCommand();
+    }
+
+    @Override
+    public ApplicationCommandRequest getSlashCommandDefinition() {
+        return ApplicationCommandRequest.builder()
+                .name("askreward")
+                .description("Permet de faire une demande de reward à un membre du serveur !")
+                .addOption(ApplicationCommandOptionData.builder()
+                        .name("mention")
+                        .description("Mentionnez la personne que vous avez aider.")
+                        .type(ApplicationCommandOption.Type.MENTIONABLE.getValue())
+                        .required(true)
+                        .build())
+                .build();
     }
 }
