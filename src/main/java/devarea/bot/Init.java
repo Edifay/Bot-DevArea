@@ -103,7 +103,7 @@ public class Init {
             }
 
         } catch (Exception e) {
-            System.err.println("Une erreur c'est produite dans le chargement de configuration.json ! : \n" + e.getMessage());
+            System.err.println("Une erreur s'est produite dans le chargement de configuration.json ! : \n" + e.getMessage());
             System.exit(0);
         }
 

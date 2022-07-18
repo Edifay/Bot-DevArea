@@ -49,7 +49,7 @@ public class Meetup extends LongCommand implements SlashCommand {
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                if (event.getMessage().getContent().startsWith("yes")) return callStape(0);
+                if (event.getMessage().getContent().startsWith("yes")) return callStep(0);
                 sendErrorEntry();
                 return next;
             }
@@ -65,10 +65,10 @@ public class Meetup extends LongCommand implements SlashCommand {
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 if (event.getMessage().getContent().startsWith("non"))
-                    return callStape(0);
+                    return callStep(0);
                 else if (!event.getMessage().getAttachments().isEmpty()) {
                     meetup.setAttachment(((Attachment[]) event.getMessage().getAttachments().toArray(new Attachment[0]))[0].getUrl());
-                    return callStape(0);
+                    return callStep(0);
                 }
                 sendErrorEntry();
                 return next;
@@ -86,7 +86,7 @@ public class Meetup extends LongCommand implements SlashCommand {
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 try {
                     meetup.setDate(new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(event.getMessage().getContent()));
-                    return callStape(0);
+                    return callStep(0);
                 } catch (ParseException e) {
                     sendErrorEntry();
                 }
@@ -107,7 +107,7 @@ public class Meetup extends LongCommand implements SlashCommand {
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 if (!event.getMessage().getContent().isEmpty() && !event.getMessage().getContent().isBlank()) {
                     meetup.setName(event.getMessage().getContent());
-                    return callStape(0);
+                    return callStep(0);
                 }
                 sendErrorEntry();
                 return next;
@@ -156,7 +156,7 @@ public class Meetup extends LongCommand implements SlashCommand {
                     int number = Integer.parseInt(event.getMessage().getContent());
                     if (number >= 0 && number < canDelete.size()) {
                         MeetupHandler.remove(canDelete.get(number));
-                        return callStape(0);
+                        return callStep(0);
                     } else {
                         sendErrorEntry();
                         return next;
@@ -168,7 +168,7 @@ public class Meetup extends LongCommand implements SlashCommand {
             }
         };
 
-        this.firstStape = new FirstStep(this.channel, create, delete, channel) {
+        this.firstStep = new FirstStep(this.channel, create, delete, channel) {
             @Override
             public void onFirstCall(MessageCreateSpec spec) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(TextMessage.meetupCommandExplain).build());
@@ -177,18 +177,18 @@ public class Meetup extends LongCommand implements SlashCommand {
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 if (event.getMessage().getContent().startsWith("create"))
-                    return callStape(0);
+                    return callStep(0);
                 else if (event.getMessage().getContent().startsWith("delete"))
-                    return callStape(1);
+                    return callStep(1);
                 else if (event.getMessage().getContent().startsWith("channel"))
-                    return callStape(2);
+                    return callStep(2);
                 else
                     sendErrorEntry();
 
                 return next;
             }
         };
-        this.lastMessage = this.firstStape.getMessage();
+        this.lastMessage = this.firstStep.getMessage();
     }
 
     public Meetup() {

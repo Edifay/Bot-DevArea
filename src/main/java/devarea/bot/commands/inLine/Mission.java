@@ -60,7 +60,7 @@ public class Mission extends LongCommand implements SlashCommand {
             }
         };
 
-        this.firstStape = new FirstStep(this.channel, deleteList) {
+        this.firstStep = new FirstStep(this.channel, deleteList) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
@@ -78,7 +78,7 @@ public class Mission extends LongCommand implements SlashCommand {
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 String content = event.getMessage().getContent();
                 if (content.equalsIgnoreCase("delete")) {
-                    return callStape(0);
+                    return callStep(0);
                 }
                 return super.onReceiveMessage(event);
             }

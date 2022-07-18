@@ -80,9 +80,9 @@ public abstract class Step implements Cloneable {
             return this.called.receiveInteract(event);
     }
 
-    protected Step stape(int nb) throws Exception {
+    protected Step step(int nb) throws Exception {
         if (nb < 0 || nb >= steps.length) {
-            throw new Exception("Le numéro de la stape n'est pas associé !");
+            throw new Exception("Le numéro du step n'est pas associé !");
         }
         return steps[nb];
     }
@@ -105,9 +105,9 @@ public abstract class Step implements Cloneable {
         return next;
     }
 
-    protected boolean callStape(int nb) {
+    protected boolean callStep(int nb) {
         try {
-            return this.call(stape(nb));
+            return this.call(step(nb));
         } catch (Exception e) {
             e.printStackTrace();
         }

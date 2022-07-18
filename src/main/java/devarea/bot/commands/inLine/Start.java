@@ -44,7 +44,7 @@ public class Start extends LongCommand implements SlashCommand {
             }
         };
 
-        this.firstStape = new FirstStep(this.channel, java, python, CSharp, HtmlCss) {
+        this.firstStep = new FirstStep(this.channel, java, python, CSharp, HtmlCss) {
             @Override
             public void onFirstCall(MessageCreateSpec spec) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(TextMessage.startCommandExplain).build());
@@ -54,19 +54,19 @@ public class Start extends LongCommand implements SlashCommand {
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 String content = event.getMessage().getContent();
                 if (content.equalsIgnoreCase("java"))
-                    return callStape(0);
+                    return callStep(0);
                 else if (content.equalsIgnoreCase("python"))
-                    return callStape(1);
+                    return callStep(1);
                 else if (content.equalsIgnoreCase("csharp") || content.equalsIgnoreCase("c#"))
-                    return callStape(2);
+                    return callStep(2);
                 else if (content.equalsIgnoreCase("html/css") || content.equalsIgnoreCase("htmlcss") || content.equalsIgnoreCase("html") || content.equalsIgnoreCase("css"))
-                    return callStape(3);
+                    return callStep(3);
                 else
                     sendErrorEntry();
                 return next;
             }
         };
-        this.lastMessage = this.firstStape.getMessage();
+        this.lastMessage = this.firstStep.getMessage();
     }
 
     public Start() {

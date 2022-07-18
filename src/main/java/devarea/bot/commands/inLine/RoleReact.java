@@ -88,7 +88,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
                     isID = "false";
                 }
 
-                return callStape(0);
+                return callStep(0);
             }
         };
 
@@ -109,7 +109,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
                 try {
                     atModif = channel.getMessageById(Snowflake.of(event.getMessage().getContent())).block();
                     if (atModif != null && atModif.getAuthor().get().getId().equals(Init.client.getSelfId())) {
-                        return callStape(0);
+                        return callStep(0);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -155,7 +155,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
         };
 
 
-        this.firstStape = new FirstStep(this.channel, firstStepCreate, firstStepRemove) {
+        this.firstStep = new FirstStep(this.channel, firstStepCreate, firstStepRemove) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder()
@@ -172,15 +172,15 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 String content = event.getMessage().getContent().toLowerCase(Locale.ROOT);
                 if (content.equals("create")) {
-                    return callStape(0);
+                    return callStep(0);
                 } else if (content.equals("remove")) {
-                    return callStape(1);
+                    return callStep(1);
                 }
                 sendErrorEntry();
                 return next;
             }
         };
-        this.lastMessage = this.firstStape.getMessage();
+        this.lastMessage = this.firstStep.getMessage();
     }
 
     @Override

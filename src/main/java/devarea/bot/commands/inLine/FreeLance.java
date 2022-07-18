@@ -18,7 +18,7 @@ public class FreeLance extends LongCommand implements SlashCommand {
     public FreeLance(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
 
-        EndStep bumpStape = new EndStep() {
+        EndStep bumpStep = new EndStep() {
             protected boolean onCall(Message message) {
                 if (FreeLanceHandler.hasFreelance(FreeLance.this.member)) {
                     if (FreeLanceHandler.bumpFreeLance(FreeLance.this.member.getId().asString()))
@@ -40,7 +40,7 @@ public class FreeLance extends LongCommand implements SlashCommand {
             }
         };
 
-        EndStep deleteStape = new EndStep() {
+        EndStep deleteStep = new EndStep() {
             protected boolean onCall(Message message) {
                 if (FreeLanceHandler.hasFreelance(member)) {
                     devarea.bot.commands.commandTools.FreeLance free = FreeLanceHandler.getFreelance(member);
@@ -64,7 +64,7 @@ public class FreeLance extends LongCommand implements SlashCommand {
                 return true;
             }
         };
-        this.firstStape = new FirstStep(this.channel, bumpStape, deleteStape) {
+        this.firstStep = new FirstStep(this.channel, bumpStep, deleteStep) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
@@ -79,13 +79,13 @@ public class FreeLance extends LongCommand implements SlashCommand {
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 String content = getContent(event);
                 if (content.equalsIgnoreCase("bump"))
-                    return callStape(0);
+                    return callStep(0);
                 if (content.equalsIgnoreCase("delete"))
-                    return callStape(1);
+                    return callStep(1);
                 return super.onReceiveMessage(event);
             }
         };
-        this.lastMessage = this.firstStape.getMessage();
+        this.lastMessage = this.firstStep.getMessage();
     }
 
     @Override

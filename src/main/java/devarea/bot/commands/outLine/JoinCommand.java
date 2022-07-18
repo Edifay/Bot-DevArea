@@ -155,7 +155,7 @@ public class JoinCommand extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
-                    return callStape(0);
+                    return callStep(0);
                 return super.onReceiveInteract(event);
             }
         };
@@ -173,7 +173,7 @@ public class JoinCommand extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
-                    return callStape(0);
+                    return callStep(0);
                 return super.onReceiveInteract(event);
             }
         };
@@ -199,7 +199,7 @@ public class JoinCommand extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
-                    return callStape(0);
+                    return callStep(0);
                 return super.onReceiveInteract(event);
             }
         };
@@ -220,7 +220,7 @@ public class JoinCommand extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
-                    return callStape(0);
+                    return callStep(0);
                 return super.onReceiveInteract(event);
             }
         };
@@ -243,15 +243,15 @@ public class JoinCommand extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event)) {
-                    return callStape(0);
+                    return callStep(0);
                 } else if (isNo(event)) {
-                    return callStape(1);
+                    return callStep(1);
                 }
                 return super.onReceiveInteract(event);
             }
         };
 
-        this.firstStape = new FirstStep(this.channel, DevOrNeedDev) {
+        this.firstStep = new FirstStep(this.channel, DevOrNeedDev) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 startAway(() -> ((TextChannel) ChannelCache.watch("843823896222629888")).addMemberOverwrite(member.getId(), PermissionOverwrite.forMember(member.getId(), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL))).subscribe());
@@ -266,11 +266,11 @@ public class JoinCommand extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
-                    return callStape(0);
+                    return callStep(0);
                 return super.onReceiveInteract(event);
             }
         };
-        this.lastMessage = this.firstStape.getMessage();
+        this.lastMessage = this.firstStep.getMessage();
     }
 
 }

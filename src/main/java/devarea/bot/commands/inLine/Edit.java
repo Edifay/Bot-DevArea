@@ -64,7 +64,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                 String content = event.getMessage().getContent();
                 if (!content.equals("")) {
                     atModif.edit(MessageEditSpec.builder().contentOrNull(content).build()).subscribe();
-                    return callStape(0);
+                    return callStep(0);
                 }
                 sendErrorEntry();
                 return next;
@@ -106,7 +106,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                                         .color(color)
                                         .build())
                                 .build()).subscribe();
-                        return callStape(0);
+                        return callStep(0);
                     }
                 }
                 return super.onReceiveMessage(event);
@@ -132,7 +132,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                             .title(title)
                             .description(description)
                             .build()).build()).subscribe();
-                    return callStape(0);
+                    return callStep(0);
                 }
                 sendErrorEntry();
                 return super.onReceiveMessage(event);
@@ -157,7 +157,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                 String content = event.getMessage().getContent();
                 if (!content.equals("")) {
                     title = content;
-                    return callStape(0);
+                    return callStep(0);
                 }
                 sendErrorEntry();
                 return super.onReceiveMessage(event);
@@ -181,16 +181,16 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (event.getCustomId().equals("yes")) {
-                    return callStape(1);
+                    return callStep(1);
                 } else if (event.getCustomId().equals("no")) {
-                    return callStape(0);
+                    return callStep(0);
                 }
                 return super.onReceiveInteract(event);
             }
 
         };
 
-        this.firstStape = new FirstStep(this.channel, isEmbedOrText) {
+        this.firstStep = new FirstStep(this.channel, isEmbedOrText) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder()
@@ -207,13 +207,13 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                 try {
                     atModif = this.textChannel.getMessageById(Snowflake.of(event.getMessage().getContent())).block();
                     if (atModif != null && atModif.getAuthor().get().getId().equals(Init.client.getSelfId()))
-                        return callStape(0);
+                        return callStep(0);
                 } catch (Exception e) {
                 }
                 return super.onReceiveMessage(event);
             }
         };
-        this.lastMessage = this.firstStape.getMessage();
+        this.lastMessage = this.firstStep.getMessage();
     }
 
     @Override

@@ -61,7 +61,7 @@ public class CreateMission extends LongCommand {
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 mission.setSupport(event.getMessage().getContent());
-                return callStape(0);
+                return callStep(0);
             }
         };
 
@@ -75,7 +75,7 @@ public class CreateMission extends LongCommand {
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 mission.setLanguage(event.getMessage().getContent());
-                return callStape(0);
+                return callStep(0);
             }
         };
 
@@ -89,7 +89,7 @@ public class CreateMission extends LongCommand {
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 mission.setDeadLine(event.getMessage().getContent());
-                return callStape(0);
+                return callStep(0);
             }
         };
 
@@ -103,7 +103,7 @@ public class CreateMission extends LongCommand {
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 mission.setBudget(event.getMessage().getContent());
-                return callStape(0);
+                return callStep(0);
             }
         };
 
@@ -117,11 +117,11 @@ public class CreateMission extends LongCommand {
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 mission.setDescriptionText(event.getMessage().getContent());
-                return callStape(0);
+                return callStep(0);
             }
         };
 
-        this.firstStape = new FirstStep(this.channel, description) {
+        this.firstStep = new FirstStep(this.channel, description) {
             @Override
             public void onFirstCall(MessageCreateSpec spec) {
                 super.onFirstCall(MessageCreateSpec.builder().content("<@" + member.getId().asString() + ">,").addEmbed(TextMessage.missionTitle).build());
@@ -130,10 +130,10 @@ public class CreateMission extends LongCommand {
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 mission.setTitle(event.getMessage().getContent());
-                return callStape(0);
+                return callStep(0);
             }
         };
-        this.lastMessage = this.firstStape.getMessage();
+        this.lastMessage = this.firstStep.getMessage();
     }
 
 }

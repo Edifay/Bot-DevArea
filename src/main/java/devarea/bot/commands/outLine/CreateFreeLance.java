@@ -91,7 +91,7 @@ public class CreateFreeLance extends LongCommand {
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event)) {
                     freeLance.addField(actualField);
-                    return callStape(0);
+                    return callStep(0);
                 } else if (isNo(event)) {
                     return call(link);
                 }
@@ -144,7 +144,7 @@ public class CreateFreeLance extends LongCommand {
                             .addEmbed(builder
                                     .build())
                             .build()).subscribe();
-                    return callStape(0);
+                    return callStep(0);
                 }
                 return super.onReceiveMessage(event);
             }
@@ -168,9 +168,9 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event)) {
-                    return callStape(0);
+                    return callStep(0);
                 } else if (isNo(event)) {
-                    return callStape(1);
+                    return callStep(1);
                 }
                 return super.onReceiveInteract(event);
             }
@@ -221,7 +221,7 @@ public class CreateFreeLance extends LongCommand {
                 if (!content.isEmpty() && !content.isBlank()) {
                     actualField.setTemps(content);
                     updateEmbed();
-                    return callStape(0);
+                    return callStep(0);
                 }
                 return super.onReceiveMessage(event);
             }
@@ -243,7 +243,7 @@ public class CreateFreeLance extends LongCommand {
                 if (!content.isEmpty() && !content.isBlank()) {
                     actualField.setPrix(content);
                     updateEmbed();
-                    return callStape(0);
+                    return callStep(0);
                 }
                 return super.onReceiveMessage(event);
             }
@@ -266,7 +266,7 @@ public class CreateFreeLance extends LongCommand {
                 if (!content.isEmpty() && !content.isBlank()) {
                     actualField.setDescription(content);
                     updateEmbed();
-                    return callStape(0);
+                    return callStep(0);
                 }
                 return super.onReceiveMessage(event);
             }
@@ -294,7 +294,7 @@ public class CreateFreeLance extends LongCommand {
                 if (!content.isEmpty() && !content.isBlank()) {
                     actualField.setTitle(content);
                     updateEmbed();
-                    return callStape(0);
+                    return callStep(0);
                 }
                 return super.onReceiveMessage(event);
             }
@@ -336,9 +336,9 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event)) {
-                    return callStape(0);
+                    return callStep(0);
                 } else if (isNo(event)) {
-                    return callStape(1);
+                    return callStep(1);
                 }
                 return super.onReceiveInteract(event);
             }
@@ -376,7 +376,7 @@ public class CreateFreeLance extends LongCommand {
                                                             "linkedin, portfolio, ou autre...", false)
                                                     .color(ColorsUsed.same).build()).build())
                             .subscribe();
-                    return callStape(0);
+                    return callStep(0);
                 }
                 return super.onReceiveMessage(event);
             }
@@ -414,7 +414,7 @@ public class CreateFreeLance extends LongCommand {
                             .addField("Liens:", "Vous pouvez insérer ici tous vos liens vers linkedin, portfolio, ou " +
                                     "autre...", false)
                             .color(ColorsUsed.same).build()).build()).subscribe();
-                    return callStape(0);
+                    return callStep(0);
                 }
 
                 return super.onReceiveMessage(event);
@@ -449,13 +449,13 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (event.getCustomId().equals("yes")) {
-                    return callStape(0);
+                    return callStep(0);
                 }
                 return super.onReceiveInteract(event);
             }
         };
 
-        this.firstStape = new FirstStep(this.channel, showEmbed) {
+        this.firstStep = new FirstStep(this.channel, showEmbed) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
@@ -471,14 +471,14 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (event.getCustomId().equals("yes")) {
-                    return callStape(0);
+                    return callStep(0);
                 }
                 return super.onReceiveInteract(event);
             }
 
         };
 
-        this.lastMessage = this.firstStape.getMessage();
+        this.lastMessage = this.firstStep.getMessage();
     }
 
     public void updateEmbed() {

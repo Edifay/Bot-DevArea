@@ -36,23 +36,23 @@ public class GiveReward extends LongCommand implements SlashCommand {
             return;
         }
 
-        this.firstStape = getMessageCreateEventFirstStape(getEndStape(member));
-        this.lastMessage = firstStape.getMessage();
+        this.firstStep = getMessageCreateEventFirstStep(getEndStep(member));
+        this.lastMessage = firstStep.getMessage();
     }
 
     public GiveReward(ButtonInteractionEvent event, Member target, Member helper) {
         super(target);
-        final EndStep endStape = getEndStape(target);
-        final Step selectionStage = getSelectionHelpersStape(helper, endStape);
+        final EndStep endStep = getEndStep(target);
+        final Step selectionStage = getSelectionHelpersStep(helper, endStep);
         channel = (TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString());
         assert channel != null;
 
         delete(false, event.getInteraction().getMessage().get());
-        this.firstStape = getReactionAddEventFirstStape(helper, endStape, selectionStage);
-        this.lastMessage = firstStape.getMessage();
+        this.firstStep = getReactionAddEventFirstStep(helper, endStep, selectionStage);
+        this.lastMessage = firstStep.getMessage();
     }
 
-    private FirstStep getMessageCreateEventFirstStape(Step... steps) {
+    private FirstStep getMessageCreateEventFirstStep(Step... steps) {
         return new FirstStep(channel, steps) {
             @Override
             public void onFirstCall(MessageCreateSpec spec) {
@@ -102,13 +102,13 @@ public class GiveReward extends LongCommand implements SlashCommand {
                     return false;
                 }
                 helpers.addAll(mentions);
-                return callStape(0);
+                return callStep(0);
             }
         };
 
     }
 
-    private FirstStep getReactionAddEventFirstStape(Member helper, Step... steps) {
+    private FirstStep getReactionAddEventFirstStep(Member helper, Step... steps) {
         return new FirstStep(channel, steps) {
             @Override
             public void onFirstCall(MessageCreateSpec spec) {
@@ -124,13 +124,13 @@ public class GiveReward extends LongCommand implements SlashCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
 
-                int stapeIndex = -1;
-                if (event.getCustomId().equals("yes")) stapeIndex = 1;
-                if (event.getCustomId().equals("no")) stapeIndex = 0;
+                int stepIndex = -1;
+                if (event.getCustomId().equals("yes")) stepIndex = 1;
+                if (event.getCustomId().equals("no")) stepIndex = 0;
 
-                if (stapeIndex > -1) {
+                if (stepIndex > -1) {
                     helpers.add(helper.getId());
-                    return callStape(stapeIndex);
+                    return callStep(stepIndex);
                 }
 
                 return super.onReceiveInteract(event);
@@ -138,7 +138,7 @@ public class GiveReward extends LongCommand implements SlashCommand {
         };
     }
 
-    private EndStep getEndStape(Member member) {
+    private EndStep getEndStep(Member member) {
         return new EndStep() {
             @Override
             protected boolean onCall(Message message) {
@@ -183,7 +183,7 @@ public class GiveReward extends LongCommand implements SlashCommand {
         };
     }
 
-    private Step getSelectionHelpersStape(Member helper, Step... steps) {
+    private Step getSelectionHelpersStep(Member helper, Step... steps) {
 
         return new Step(steps) {
 
@@ -239,7 +239,7 @@ public class GiveReward extends LongCommand implements SlashCommand {
 
                 helpers.addAll(mentions);
 
-                return callStape(0);
+                return callStep(0);
             }
         };
     }
