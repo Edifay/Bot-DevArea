@@ -8,6 +8,7 @@ import devarea.backend.controllers.tools.userInfos.WebUserInfos;
 import devarea.global.badges.time_badge.TimeOnServerBadge;
 import devarea.global.badges.xp_badge.XPBadges;
 import discord4j.core.object.entity.Member;
+import reactor.util.annotation.Nullable;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -46,13 +47,16 @@ public abstract class Badges {
         return local_icon;
     }
 
-    public static ArrayList<Badges> getBadgesOf(final WebUserInfos user, final Member member_fetched) {
-        ArrayList<Badges> badges = new ArrayList<>(RolesBadges.getRolesBadges(user, member_fetched));
+    /*
+        Check every badges types and return all the bages own by the user -> (member_fetched)
+     */
+    public static ArrayList<Badges> getBadgesOf(final Member member_fetched) {
+        ArrayList<Badges> badges = new ArrayList<>(RolesBadges.getRolesBadges(member_fetched));
         Badges xpBadge;
-        if ((xpBadge = XPBadges.getXPBadgesOf(user, member_fetched)) != null)
+        if ((xpBadge = XPBadges.getXPBadgesOf(member_fetched)) != null)
             badges.add(xpBadge);
-        badges.addAll(SuccessBadge.getSuccessBadges(user, member_fetched));
-        badges.add(TimeOnServerBadge.getTimeBadgeOf(user, member_fetched));
+        badges.addAll(SuccessBadge.getSuccessBadges(member_fetched));
+        badges.add(TimeOnServerBadge.getTimeBadgeOf(member_fetched));
         return badges;
     }
 

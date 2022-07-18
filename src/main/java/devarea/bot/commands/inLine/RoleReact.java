@@ -16,9 +16,9 @@ import discord4j.discordjson.json.ApplicationCommandRequest;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 
-import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Map;
+
+import static devarea.bot.automatical.RolesReactsHandler.getListByMessageRolesReact;
 
 public class RoleReact extends LongCommand implements PermissionCommand, SlashCommand {
 
@@ -34,16 +34,14 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
 
     public RoleReact(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
-        chatInteraction.deferReply().subscribe();
 
-        Stape getRole = new EndStape() {
+        Step getRole = new EndStep() {
             @Override
             protected boolean onCall(Message message) {
-                editEmbed(EmbedCreateSpec.builder()
+                setText(EmbedCreateSpec.builder()
                         .title("Le Role")
                         .description("Mentionnez le rôle que vous voulez ajouter.")
                         .color(ColorsUsed.same).build());
-                delete(false, this.message);
                 return next;
             }
 
@@ -54,10 +52,10 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
                         roleID = event.getMessage().getRoleMentionIds().stream().findFirst().get();
                         devarea.bot.commands.commandTools.RoleReact react =
                                 new devarea.bot.commands.commandTools.RoleReact(emojiID, atModif, isID);
-                        RolesReactsHandler.rolesReacts.put(react, roleID);
+                        RolesReactsHandler.addNewRoleReact(react, roleID);
                         RolesReactsHandler.save();
                         atModif.addReaction(react.getEmoji()).subscribe();
-                        this.setText(EmbedCreateSpec.builder()
+                        endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
                                 .title("Création du RoleReact réussie !")
                                 .color(ColorsUsed.just)
                                 .description("Vous avez bien créé un lien entre " + (react.getStringEmoji()) + " -> " +
@@ -70,7 +68,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
             }
         };
 
-        Stape getEmoji = new Stape(getRole) {
+        Step getEmoji = new Step(getRole) {
             @Override
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
@@ -95,7 +93,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
         };
 
 
-        Stape firstStapeCreate = new Stape(getEmoji) {
+        Step firstStepCreate = new Step(getEmoji) {
             @Override
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
@@ -120,40 +118,11 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
             }
         };
 
-        Stape firstStapeRemove = new EndStape() {
+        Step firstStepRemove = new EndStep() {
             @Override
             protected boolean onCall(Message message) {
-                String str = "";
-                ArrayList<Snowflake> messageAlready = new ArrayList<>();
-                int number = 0;
-                removeTable = new devarea.bot.commands.commandTools.RoleReact[RolesReactsHandler.rolesReacts.size()];
-                for (Map.Entry<devarea.bot.commands.commandTools.RoleReact, Snowflake> entry :
-                        RolesReactsHandler.rolesReacts.entrySet()) {
-                    devarea.bot.commands.commandTools.RoleReact k = entry.getKey();
-                    Snowflake v = entry.getValue();
-                    Snowflake snow = k.getMessageSeria().getMessageID();
-                    boolean find = false;
-                    for (Snowflake s : messageAlready)
-                        if (s.equals(snow)) {
-                            find = true;
-                            break;
-                        }
-
-                    if (!find) {
-                        str += "https://discord.com/channels/" + Init.devarea.getId().asString() + "/" + k.getMessageSeria().getChannelID().asString() + "/" + snow.asString() + " :\n";
-                        for (Map.Entry<devarea.bot.commands.commandTools.RoleReact, Snowflake> e :
-                                RolesReactsHandler.rolesReacts.entrySet()) {
-                            devarea.bot.commands.commandTools.RoleReact k1 = e.getKey();
-                            Snowflake v1 = e.getValue();
-                            if (k1.getMessageSeria().getMessageID().equals(snow)) {
-                                str += "`" + number + "`:" + k1.getStringEmoji() + " -> <@&" + v1.asString() + ">\n";
-                                removeTable[number] = k1;
-                                number++;
-                            }
-                        }
-                        messageAlready.add(snow);
-                    }
-                }
+                removeTable = new devarea.bot.commands.commandTools.RoleReact[RolesReactsHandler.getRoleReactCount()];
+                String str = getListByMessageRolesReact(removeTable);
                 str += "Donnez le numéro que vous souhaitez supprimer !";
                 String finalStr = str;
                 this.setText(EmbedCreateSpec.builder()
@@ -163,19 +132,19 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
                 return next;
             }
 
+
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 try {
                     int number = Integer.parseInt(event.getMessage().getContent());
                     if (number >= 0 && number < removeTable.length) {
-                        RolesReactsHandler.rolesReacts.remove(removeTable[number]);
+                        RolesReactsHandler.removeRoleReact(removeTable[number]);
                         RolesReactsHandler.save();
                         removeTable[number].delete();
-                        editEmbed(EmbedCreateSpec.builder()
+                        endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
                                 .title("Remove effectué !")
                                 .description("Vous avez bien supprimé le rolereact !")
                                 .color(ColorsUsed.just).build());
-                        delete(false, this.message);
                         return end;
                     }
                 } catch (Exception e) {
@@ -186,7 +155,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
         };
 
 
-        this.firstStape = new FirstStape(this.channel, firstStapeCreate, firstStapeRemove) {
+        this.firstStape = new FirstStep(this.channel, firstStepCreate, firstStepRemove) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder()

@@ -1,4 +1,4 @@
-package devarea.bot.utils;
+package devarea.global.utils;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -13,7 +13,12 @@ import discord4j.common.util.Snowflake;
 import java.io.IOException;
 
 public class SnowflakeModuleSerializer {
+    /*
+        Add this module to your ObjectMapper to serialize and deserialize Snowflake.
 
+        -> mapper.registerModule(SnowflakeModuleSerializer.snowflakeModule);
+
+     */
     public static SimpleModule snowflakeModule;
 
     static {

@@ -1,6 +1,7 @@
 package devarea.global.handlers.handlerData;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import devarea.bot.commands.commandTools.FreeLance;
 import devarea.bot.commands.commandTools.Mission;
 
 import java.util.LinkedHashMap;
@@ -10,6 +11,7 @@ public class UserData {
 
     public String userDescription;
     public Integer xp;
+    public FreeLance freeLance;
     public LinkedHashMap<String, Integer> xpGainHistory = new LinkedHashMap<>();
     public LinkedHashMap<String, Mission> missions = new LinkedHashMap<>();
 

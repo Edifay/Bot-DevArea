@@ -1,127 +1,169 @@
 package devarea.global.handlers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.Main;
 import devarea.global.cache.ChannelCache;
-import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.commands.Command;
-import devarea.bot.commands.CommandManager;
-import devarea.bot.commands.ConsumableCommand;
 import devarea.bot.commands.commandTools.FreeLance;
 import devarea.bot.commands.commandTools.MessageSeria;
-import devarea.bot.commands.outLine.CreateFreeLance;
-import devarea.bot.presets.ColorsUsed;
-import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.object.component.ActionRow;
 import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
-import discord4j.core.spec.EmbedCreateSpec;
-import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
 import discord4j.core.spec.MessageCreateSpec;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Objects;
+import java.util.*;
 
 import static devarea.bot.commands.Command.delete;
+import static devarea.global.utils.ThreadHandler.*;
+import static devarea.bot.presets.TextMessage.freelanceBottomMessage;
 
 public class FreeLanceHandler {
+    /*
+        Time defined between each bump
+     */
+    private static final long TIME_BETWEEN_BUMP = 86400000L;
 
-    private static final String localFile = "./freelance.json";
-    private static final ObjectMapper mapper = new ObjectMapper();
-    private static final long timeBetweenBump = 86400000L;
+    private static Message bottomMessage;
+    private static LinkedHashMap<String, FreeLance> freeLances = new LinkedHashMap<>();
 
-    private static Message message;
-    private static ArrayList<FreeLance> freeLances = new ArrayList<>();
+    private static TextChannel freelanceChannel;
 
-    private static TextChannel channel;
-
+    /*
+        This is a temporary Array don't save anything here. Used for the cooldown of bumps !
+     */
     private final static ArrayList<FreeLance> bumpedFreeLance = new ArrayList<>();
 
+    /*
+        Initialise FreeLanceHandler
+     */
     public static void init() {
         try {
             load();
-            channel = (TextChannel) ChannelCache.fetch(Init.initial.freelance_channel.asString());
-            //if (!developing)
-            Message msg = channel.getLastMessage().block();
-            if (msg.getEmbeds().size() == 0 || msg.getEmbeds().get(0).getTitle().equals("Proposez vos services !"))
-                sendLastMessage();
-            else
-                message = msg;
 
+            freelanceChannel = (TextChannel) ChannelCache.fetch(Init.initial.freelance_channel.asString());
 
-            new Thread(() -> {
-                try {
-                    while (true) {
-                        if (verif())
-                            save();
-                        Thread.sleep(86400000L);
-                    }
-                } catch (InterruptedException e) {
-                }
-            }).start();
+            if (freelanceChannel == null) {
+                System.err.println("Le channel freelance n'a pas pu être trouvé !");
+                return;
+            }
+
+            setupLastMessage();
+
+            repeatEachMillis(FreeLanceHandler::save, 86400000L, false);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void update() {
-        delete(false, message);
+    /*
+        Transfer freelances to UserDataHandler
+     */
+    private static void save() {
+        UserDataHandler.setFreelancesHashMap(freeLances);
+    }
+
+    /*
+        Load data from UserDataHandler
+     */
+    private static void load() throws IOException {
+        freeLances = (LinkedHashMap<String, FreeLance>) UserDataHandler.getFreelances();
+        System.out.println("FreeLance loaded : " + freeLances.size() + " detected !");
+    }
+
+    /*
+        Secure the stop of the bot
+     */
+    public static void stop() {
+        save();
+    }
+
+    /*
+        Setup the bottomMessage
+     */
+    private static void setupLastMessage() {
+        Message msg = freelanceChannel.getLastMessage().block();
+        if (msg == null || msg.getEmbeds().size() == 0 || !msg.getEmbeds().get(0).getTitle().get().equals("Proposez vos services !"))
+            sendLastMessage();
+        else
+            bottomMessage = msg;
+    }
+
+    /*
+        Resend BottomMessage to keep it at the bottom of the channel
+     */
+    public static void updateBottomMessage() {
+        delete(false, bottomMessage);
         sendLastMessage();
     }
 
+    /*
+        Send a new BottomMessage
+     */
     private static void sendLastMessage() {
-        message = Command.send(channel, MessageCreateSpec.builder()
-                        .addEmbed(EmbedCreateSpec.builder()
-                                .description("Cliquez sur le bouton ci-dessous pour créer une page freelance " +
-                                        "!\n\nVisionner les freelances sur web -> " + Main.domainName + "freelances")
-                                .color(ColorsUsed.same)
-                                .title("Proposez vos services !")
-                                .build())
-                        .addComponent(ActionRow.of(Button.link(Main.domainName + "freelance-creator",
-                                "devarea.fr")))
-                        .build()
-                , true);
+        bottomMessage = Command.send(freelanceChannel, freelanceBottomMessage, true);
     }
 
-    public static boolean interact(ButtonInteractionEvent event) {
-        if (event.getCustomId().equals("createFreelance")) {
-            Member member = CommandManager.getMemberLogged(event.getInteraction().getMember().get());
-            if (!FreeLanceHandler.hasFreelance(member))
-                CommandManager.addManualCommand(event.getInteraction().getMember().get(),
-                        new ConsumableCommand(CreateFreeLance.class) {
-                            @Override
-                            protected Command command() {
-                                return new CreateFreeLance(this.member);
-                            }
-                        });
-            else
-                event.reply(InteractionApplicationCommandCallbackSpec.builder()
-                        .addEmbed(EmbedCreateSpec.builder()
-                                .title("Erreur !")
-                                .description("Vous avez déjà une page FreeLance, utilisez la commande `/freelance` " +
-                                        "pour effectuer des modifications.")
-                                .color(ColorsUsed.wrong)
-                                .build())
-                        .ephemeral(true)
-                        .build()).subscribe();
-            return true;
-        }
-        return false;
+    /*
+        Bump the freelance of member -> id
+     */
+    public static boolean bumpFreeLance(String id) {
+
+        if (!hasFreelance(id))
+            return false;
+
+        FreeLance freeLance = FreeLanceHandler.getFreelance(id);
+
+        if (bumpedFreeLance.contains(freeLance))
+            return false;
+
+        // Delete old message
+        delete(false, freeLance.getMessage().getMessage());
+
+        Message newMessage = sendFreelanceMessage(freeLance);
+        freeLance.setMessage(new MessageSeria(newMessage));
+        freeLance.setLast_bump(System.currentTimeMillis());
+
+        updateBottomMessage();
+
+        bumpedFreeLance.add(freeLance);
+        startAwayIn(() -> bumpedFreeLance.remove(freeLance), TIME_BETWEEN_BUMP, false);
+
+        return true;
     }
+
+    /*
+        Clear the freelance
+     */
+    public static void left(String userID) {
+        if (FreeLanceHandler.hasFreelance(userID))
+            FreeLanceHandler.remove(FreeLanceHandler.getFreelance(userID));
+    }
+
+
+    /*
+        Send the message of the freelance param
+     */
+    public static Message sendFreelanceMessage(final FreeLance freeLance) {
+        return Command.send((TextChannel) ChannelCache.watch(Init.initial.freelance_channel.asString()),
+                MessageCreateSpec.builder()
+                        .content("**Freelance de <@" + freeLance.getMemberId() + "> :**")
+                        .addEmbed(freeLance.getEmbed())
+                        .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + freeLance.getMemberId() +
+                                        "&open=1",
+                                "devarea.fr")))
+                        .build(),
+                true);
+    }
+
+
+    // ------------------- UTILS -------------------
 
     public static boolean hasFreelance(String id) {
-        synchronized (freeLances) {
-            for (FreeLance freeLance : freeLances)
-                if (freeLance.getMemberId().equals(id)) return true;
-        }
-        return false;
+        return freeLances.containsKey(id);
     }
 
     public static boolean hasFreelance(Member member) {
@@ -129,119 +171,36 @@ public class FreeLanceHandler {
     }
 
     public static FreeLance getFreelance(String id) {
-        synchronized (freeLances) {
-            for (FreeLance freeLance : freeLances)
-                if (freeLance.getMemberId().equals(id))
-                    return freeLance;
-            return null;
-        }
+        return freeLances.get(id);
     }
 
     public static FreeLance getFreelance(Member member) {
         return getFreelance(member.getId().asString());
     }
 
-    public static boolean bumpFreeLance(String id) {
-        synchronized (bumpedFreeLance) {
-            synchronized (freeLances) {
-                if (!hasFreelance(id)) return false;
-                FreeLance freeLance = FreeLanceHandler.getFreelance(id);
-
-                if (!bumpedFreeLance.contains(freeLance)) {
-                    try {
-                        delete(false, freeLance.getMessage().getMessage());
-                    } catch (Exception e) {
-                    }
-                    freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) ChannelCache.watch(Init.initial.freelance_channel.asString()), MessageCreateSpec.builder()
-                            .content("**Freelance de <@" + freeLance.getMemberId() + "> :**")
-                            .addEmbed(freeLance.getEmbed())
-                            .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + id + "&open=1",
-                                    "devarea.fr")))
-                            .build(), true))));
-                    update();
-                    freeLance.setLast_bump(System.currentTimeMillis());
-                    save();
-                    bumpedFreeLance.add(freeLance);
-                    new Thread(() -> {
-                        try {
-                            Thread.sleep(timeBetweenBump);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } finally {
-                            synchronized (bumpedFreeLance) {
-                                bumpedFreeLance.remove(freeLance);
-                            }
-                        }
-                    }).start();
-                    return true;
-                }
-            }
-        }
-        return false;
+    /*
+        Add a new freelance, if a member had already a freelance it override it !
+    */
+    public static void add(FreeLance freelance) {
+        freeLances.put(freelance.getMemberId(), freelance);
+        save();
     }
 
-
-    public static void add(FreeLance mission) {
-        synchronized (freeLances) {
-            freeLances.add(mission);
-            save();
-        }
+    /*
+        Remove the freelance
+     */
+    public static void remove(FreeLance freeLance) {
+        startAway(() -> delete(false, freeLance.getMessage().getMessage()));
+        freeLances.remove(freeLance.getMemberId(), freeLance);
+        save();
     }
 
-    public static void remove(FreeLance mission) {
-        synchronized (freeLances) {
-            freeLances.remove(mission);
-            save();
-        }
-    }
-
-    private static void load() throws IOException {
-        synchronized (freeLances) {
-            File file = new File(localFile);
-            if (!file.exists())
-                save();
-            freeLances = mapper.readValue(file, new TypeReference<>() {
-            });
-            System.out.println("FreeLance loaded : " + freeLances.size() + " detected !");
-        }
-    }
-
-    public static boolean verif() {
-        synchronized (freeLances) {
-            ArrayList<FreeLance> atRemove = new ArrayList<>();
-            for (FreeLance freeLance : freeLances)
-                if (!MemberCache.contain(freeLance.getMemberId())) {
-                   /* ((TextChannel) Init.devarea.getChannelById(Init.idFreeLance).block()).createMessage
-                   (messageCreateSpec -> {
-                        messageCreateSpec.setContent("Le membre : <@" + freeLance.getMemberId() + "> est considéré
-                        comme \"left\" sa mission devrait être supprimée !");
-                    }).block();*/
-                    /*atRemove.add(freeLance);
-                    try {
-                        delete(false, freeLance.getMessage().getMessage());
-                    } catch (Exception e) {
-                    }*/
-                }
-
-            if (atRemove.size() == 0)
-                return false;
-
-            freeLances.removeAll(atRemove);
-            return true;
-        }
-    }
-
-    public static void save() {
-        synchronized (freeLances) {
-            try {
-                mapper.writeValue(new File(localFile), freeLances);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
+    /*
+        Get a sorted list by last_bump time of all freelances !
+     */
     public static FreeLance[] getFreelances(int start, int end) {
+        ArrayList<FreeLance> freelanceArray = new ArrayList<>(freeLances.values());
+
         if (start > end) {
             int temp = start;
             start = end;
@@ -250,16 +209,12 @@ public class FreeLanceHandler {
 
         if (start < 0)
             start = 0;
-        if (end > freeLances.size())
-            end = freeLances.size();
+        if (end > freelanceArray.size())
+            end = freelanceArray.size();
 
-        Collections.sort(freeLances);
+        Collections.sort(freelanceArray);
 
-        ArrayList<FreeLance> freeLancesList = new ArrayList<>();
-        for (int i = start; i < end; i++)
-            freeLancesList.add(freeLances.get(i));
-
-        return freeLancesList.toArray(new FreeLance[0]);
+        return freelanceArray.subList(start, end).toArray(new FreeLance[0]);
     }
 
 }

@@ -13,7 +13,7 @@ import discord4j.discordjson.json.ApplicationCommandRequest;
 
 import java.util.ArrayList;
 
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.global.utils.ThreadHandler.startAway;
 
 public class Auth extends ShortCommand implements SlashCommand {
 

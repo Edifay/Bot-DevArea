@@ -2,6 +2,7 @@ package devarea.bot.commands.inLine;
 
 import devarea.bot.Init;
 import devarea.bot.commands.SlashCommand;
+import devarea.global.handlers.FreeLanceHandler;
 import devarea.global.handlers.UserDataHandler;
 import devarea.global.handlers.XPHandler;
 import devarea.bot.commands.PermissionCommand;
@@ -27,6 +28,7 @@ public class Stop extends ShortCommand implements PermissionCommand, SlashComman
     public Stop(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
         XPHandler.stop();
+        FreeLanceHandler.stop();
         UserDataHandler.updated();
         replyEmbed(EmbedCreateSpec.builder()
                 .title(stopCommand)

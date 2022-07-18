@@ -6,9 +6,9 @@ import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.commands.CommandManager;
-import devarea.bot.commands.FirstStape;
+import devarea.bot.commands.FirstStep;
 import devarea.bot.commands.LongCommand;
-import devarea.bot.commands.Stape;
+import devarea.bot.commands.Step;
 import devarea.bot.presets.ColorsUsed;
 import devarea.bot.presets.TextMessage;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
@@ -25,7 +25,7 @@ import discord4j.rest.util.PermissionSet;
 
 import java.util.ArrayList;
 
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.global.utils.ThreadHandler.startAway;
 
 public class JoinCommand extends LongCommand {
 
@@ -48,7 +48,7 @@ public class JoinCommand extends LongCommand {
                 Init.initial.join_category,
                 false);
 
-        Stape roles = new Stape() {
+        Step roles = new Step() {
             @Override
             protected boolean onCall(Message message) {
                 final PermissionOverwrite over = PermissionOverwrite.forMember(member.getId(),
@@ -139,7 +139,7 @@ public class JoinCommand extends LongCommand {
             }
         };
 
-        Stape presentation = new Stape(roles) {
+        Step presentation = new Step(roles) {
             @Override
             protected boolean onCall(Message message) {
                 final PermissionOverwrite over = PermissionOverwrite.forMember(member.getId(),
@@ -160,7 +160,7 @@ public class JoinCommand extends LongCommand {
             }
         };
 
-        Stape rules = new Stape(presentation) {
+        Step rules = new Step(presentation) {
             @Override
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
@@ -178,7 +178,7 @@ public class JoinCommand extends LongCommand {
             }
         };
 
-        Stape needDevInfo = new Stape(rules) {
+        Step needDevInfo = new Step(rules) {
             @Override
             protected boolean onCall(Message message) {
                 final PermissionOverwrite over = PermissionOverwrite.forMember(member.getId(),
@@ -204,7 +204,7 @@ public class JoinCommand extends LongCommand {
             }
         };
 
-        Stape devInfo = new Stape(rules) {
+        Step devInfo = new Step(rules) {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder()
@@ -225,7 +225,7 @@ public class JoinCommand extends LongCommand {
             }
         };
 
-        Stape DevOrNeedDev = new Stape(devInfo, needDevInfo) {
+        Step DevOrNeedDev = new Step(devInfo, needDevInfo) {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder()
@@ -251,7 +251,7 @@ public class JoinCommand extends LongCommand {
             }
         };
 
-        this.firstStape = new FirstStape(this.channel, DevOrNeedDev) {
+        this.firstStape = new FirstStep(this.channel, DevOrNeedDev) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 startAway(() -> ((TextChannel) ChannelCache.watch("843823896222629888")).addMemberOverwrite(member.getId(), PermissionOverwrite.forMember(member.getId(), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL))).subscribe());

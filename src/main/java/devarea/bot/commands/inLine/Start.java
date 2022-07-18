@@ -13,43 +13,38 @@ public class Start extends LongCommand implements SlashCommand {
 
     public Start(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
-        chatInteraction.deferReply().subscribe();
 
-        Stape java = new EndStape() {
+        Step java = new EndStep() {
             @Override
             protected boolean onCall(Message message) {
-                editEmbed(TextMessage.startJava);
-                delete(false, this.message);
+                endEditMessageForChatInteractionLongCommand(TextMessage.startJava);
                 return end;
             }
         };
 
-        Stape python = new EndStape() {
+        Step python = new EndStep() {
             @Override
             protected boolean onCall(Message message) {
-                editEmbed(TextMessage.startPython);
-                delete(false, this.message);
+                endEditMessageForChatInteractionLongCommand(TextMessage.startPython);
                 return end;
             }
         };
-        Stape CSharp = new EndStape() {
+        Step CSharp = new EndStep() {
             @Override
             protected boolean onCall(Message message) {
-                editEmbed(TextMessage.startCSharp);
-                delete(false, this.message);
+                endEditMessageForChatInteractionLongCommand(TextMessage.startCSharp);
                 return end;
             }
         };
-        Stape HtmlCss = new EndStape() {
+        Step HtmlCss = new EndStep() {
             @Override
             protected boolean onCall(Message message) {
-                editEmbed(TextMessage.startHtmlCss);
-                delete(false, this.message);
+                endEditMessageForChatInteractionLongCommand(TextMessage.startHtmlCss);
                 return end;
             }
         };
 
-        this.firstStape = new FirstStape(this.channel, java, python, CSharp, HtmlCss) {
+        this.firstStape = new FirstStep(this.channel, java, python, CSharp, HtmlCss) {
             @Override
             public void onFirstCall(MessageCreateSpec spec) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(TextMessage.startCommandExplain).build());

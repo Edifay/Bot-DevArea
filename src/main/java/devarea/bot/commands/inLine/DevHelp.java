@@ -11,7 +11,7 @@ import discord4j.discordjson.json.ApplicationCommandRequest;
 
 import java.util.ArrayList;
 
-import static devarea.bot.event.FunctionEvent.startAwayIn;
+import static devarea.global.utils.ThreadHandler.startAwayIn;
 
 public class DevHelp extends ShortCommand implements SlashCommand {
 

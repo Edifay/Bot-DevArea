@@ -2,6 +2,7 @@ package devarea.bot.automatical;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import devarea.bot.Init;
 import devarea.global.cache.MemberCache;
 import devarea.bot.commands.commandTools.RoleReact;
 import discord4j.common.util.Snowflake;
@@ -11,12 +12,14 @@ import discord4j.core.object.entity.Member;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RolesReactsHandler {
 
-    public static HashMap<RoleReact, Snowflake> rolesReacts = new HashMap<>();
+    private static HashMap<RoleReact, Snowflake> rolesReacts = new HashMap<>();
 
     public static void init() {
         load();
@@ -25,9 +28,10 @@ public class RolesReactsHandler {
     public static void save() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            final HashMap<HashMap<String, String>, String> stock = new HashMap<>();
-            rolesReacts.forEach((roleReact, role) -> stock.put(roleReact.getHashMap(), role.asString()));
-            mapper.writeValue(new File("./roleReact.json"), stock);
+            final HashMap<String, RoleReact> invertedMap = new HashMap<>();
+            rolesReacts.forEach((k, v) -> invertedMap.put(v.asString(), k));
+            mapper.writeValue(new File("./roleReact.json"), invertedMap);
+            System.out.println("Save !");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -40,23 +44,12 @@ public class RolesReactsHandler {
         }
         ObjectMapper mapper = new ObjectMapper();
         try {
-            HashMap<String, String> obj = mapper.readValue(file, new TypeReference<>() {
-            });
-            HashMap<HashMap<String, String>, String> after = new HashMap<>();
-            obj.forEach((k, v) -> {
-                HashMap<String, String> newHash = null;
-                String str = k.replace("reactionId=", "\"reactionId\":\"").replace(", message={", "\", \"message" +
-                        "\":\"{").replace("}}", "}\"}").replace("isID=", "\"isID\":").replace("false", "\"false\"").replace("true", "\"true\"");
-                try {
-                    newHash = mapper.readValue(str, new TypeReference<>() {
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                after.put(newHash, v);
+            final HashMap<String, RoleReact> temp = mapper.readValue(file, new TypeReference<>() {
             });
 
-            after.forEach((hash, role) -> rolesReacts.put(new RoleReact(hash), Snowflake.of(role)));
+            temp.forEach((k, v) -> rolesReacts.put(v, Snowflake.of(k)));
+
+            System.out.println("RolesReact loaded : " + rolesReacts.size() + " detected !");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,6 +86,57 @@ public class RolesReactsHandler {
                 e.printStackTrace();
             }
         });
+    }
+
+    // ---------------- UTILS ----------------
+
+    public static int getRoleReactCount() {
+        return rolesReacts.size();
+    }
+
+    /*
+        Setup sorted by message list !
+     */
+    public static String getListByMessageRolesReact(RoleReact[] removeTable) {
+        StringBuilder str = new StringBuilder();
+
+        ArrayList<Snowflake> uniqueMessageAlreadyComplete = new ArrayList<>();
+        int setted = 0;
+
+        for (Map.Entry<RoleReact, Snowflake> entry : rolesReacts.entrySet()) {
+            RoleReact roleReact = entry.getKey();
+            Snowflake v = entry.getValue();
+            Snowflake currentMessageID = roleReact.getMessageSeria().getMessageID();
+
+            if (!uniqueMessageAlreadyComplete.contains(currentMessageID)) { // New message detection
+
+                // set URL message
+                str.append("https://discord.com/channels/").append(Init.devarea.getId().asString()).append("/").append(roleReact.getMessageSeria().getChannelID().asString()).append("/").append(currentMessageID.asString()).append(" :\n");
+
+                for (Map.Entry<RoleReact, Snowflake> e : rolesReacts.entrySet()) {
+                    RoleReact roleReactToSet = e.getKey();
+                    Snowflake roleId = e.getValue();
+                    if (roleReactToSet.getMessageSeria().getMessageID().equals(currentMessageID)) { // add only
+                        // rolereact on same message
+                        str.append("`").append(setted).append("`:").append(roleReactToSet.getStringEmoji()).append(" " +
+                                "-> <@&").append(roleId.asString()).append(">\n");
+                        removeTable[setted] = roleReactToSet;
+                        setted++;
+                    }
+                }
+
+                uniqueMessageAlreadyComplete.add(currentMessageID);
+            }
+        }
+        return str.toString();
+    }
+
+    public synchronized static void addNewRoleReact(final RoleReact roleReact, final Snowflake roleId) {
+        rolesReacts.put(roleReact, roleId);
+    }
+
+    public synchronized static void removeRoleReact(final RoleReact roleReact) {
+        rolesReacts.remove(roleReact);
     }
 
 }

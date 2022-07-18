@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.global.utils.ThreadHandler.startAway;
 
 public class RequestHandlerGlobal {
 

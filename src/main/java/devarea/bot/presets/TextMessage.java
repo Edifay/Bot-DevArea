@@ -1,7 +1,14 @@
 package devarea.bot.presets;
 
+import devarea.Main;
 import devarea.bot.Init;
+import devarea.bot.commands.commandTools.Mission;
+import discord4j.common.util.Snowflake;
+import discord4j.core.object.component.ActionRow;
+import discord4j.core.object.component.Button;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
+import discord4j.core.spec.MessageCreateSpec;
 
 import java.time.Instant;
 import java.util.Calendar;
@@ -68,14 +75,16 @@ public class TextMessage {
      */
     public static final String presentation = "Avant d'aller parler dans les channels et de rencontrer les membres de" +
             " la communauté, essaye de faire une présentation de toi qui permettra d'entamer la discussion, et d'en " +
-            "savoir un peu plus sur toi ! <#" + Init.initial.presentation_channel.asString() + ">" + "\n\nCliques sur : <:ayy:" + Init.idYes.getId().asString() + "> pour accéder à la suite.";
+            "savoir un peu plus sur toi ! <#" + Init.initial.presentation_channel.asString() + ">" + "\n\nClique sur" +
+            " : <:ayy:" + Init.idYes.getId().asString() + "> pour accéder à la suite.";
     /*
         Le message mettant en avant le channel des rôles
      */
-    public static final String roles = "Tu as maintenant accès au <#" + Init.initial.roles_channel.asString() + ">, tu dois " +
-            "choisir tes rôles avec précision, **attention cela est la base du serveur**.\n\nJe te donne accès au " +
+    public static final String roles = "Tu as maintenant accès au <#" + Init.initial.roles_channel.asString() + ">, " +
+            "tu dois choisir tes rôles avec précision, **attention cela est la base du serveur**.\n\nJe te donne accès au " +
             "serveur dans 30 secondes (ne t'inquiète pas si tu prends plus que 30 secondes tu as tout le temps qu'il " +
-            "te faut) tu as donc le temps de prendre tes <#" + Init.initial.roles_channel.asString() + ">.\n\nBienvenue !";
+            "te faut) tu as donc le temps de prendre tes <#" + Init.initial.roles_channel.asString() + ">.\n" +
+            "\nBienvenue !";
     /*
         le message lors de la commande help
      */
@@ -273,9 +282,10 @@ public class TextMessage {
     public static final EmbedCreateSpec runCommandExplain = EmbedCreateSpec.builder()
             .title("Run")
             .description("Cette commande permet d'exécuter du code directement depuis Discord.")
-            .addField("Langages", "Plus de 30 langages sont supportés.\n`//run languages` -> voir la liste des langages.", false)
+            .addField("Langages", "Plus de 30 langages sont supportés.\n`//run languages` -> voir la liste des " +
+                    "langages.", false)
             .addField("Utilisation", "//run <arguments> (Optionnel)\n\\`\\`\\`<langage>\nVotre code\n" +
-                                     "\\`\\`\\`<entrée standard> (Optionnel)", false)
+                    "\\`\\`\\`<entrée standard> (Optionnel)", false)
             .addField("Exemple", "//run\n\\`\\`\\`python\nprint(\"Hello World !\")\n\\`\\`\\`", false)
             .color(ColorsUsed.just)
             .build();
@@ -292,7 +302,8 @@ public class TextMessage {
     public static final EmbedCreateSpec meetupCreateGetDescription = EmbedCreateSpec.builder()
             .title("Sujet")
             .description("Quel est le sujet de votre meetup, le but que vous voulez accomplir lors de ce regroupement" +
-                    " ? Décrivez brièvement, mais avec toutes les informations nécessaires, vous ne pourrez pas ajouter de description par la suite !")
+                    " ? Décrivez brièvement, mais avec toutes les informations nécessaires, vous ne pourrez pas " +
+                    "ajouter de description par la suite !")
             .footer("Vous pouvez annuler | cancel", null)
             .color(ColorsUsed.just).build();
 
@@ -362,4 +373,86 @@ public class TextMessage {
             .description("Donnez le niveau de difficulté de la mission (estimation).")
             .footer("cancel | annuler pour quitter.", null)
             .color(ColorsUsed.just).build();
+
+    public static final MessageCreateSpec freelanceBottomMessage = MessageCreateSpec.builder()
+            .addEmbed(EmbedCreateSpec.builder()
+                    .title("Proposez vos services !")
+                    .description("Cliquez sur le bouton ci-dessous pour créer une page freelance " +
+                            "!\n\nVisionner les freelances sur le web -> " + Main.domainName + "freelances")
+                    .color(ColorsUsed.same)
+                    .build())
+            .addComponent(ActionRow.of(Button.link(Main.domainName + "freelance-creator",
+                    "devarea.fr")))
+            .build();
+
+    public static final MessageCreateSpec missionBottomMessage = MessageCreateSpec.builder()
+            .addEmbed(EmbedCreateSpec.builder().color(ColorsUsed.same)
+                    .title("Créer une mission.")
+                    .description("Cliquez sur le bouton ci-dessous pour créer une mission !" +
+                            "!\n\nVisionner les missions sur web -> " + Main.domainName + "missions")
+                    .build())
+            .addComponent(ActionRow.of(Button.link(Main.domainName + "mission-creator", "devarea.fr"))).build();
+
+    public static MessageCreateSpec missionFollowedCloseIn1Hour(String memberID) {
+        return MessageCreateSpec.builder()
+                .addEmbed(EmbedCreateSpec.builder()
+                        .title("Clôture du Suivi de mission.")
+                        .description("La clôture du suivi a été exécutée par : <@" + memberID + ">. " +
+                                "Le suivi fermera dans 1 heure.")
+                        .color(ColorsUsed.same)
+                        .timestamp(Instant.now())
+                        .build())
+                .build();
+    }
+
+    public static MessageCreateSpec missionFollowedCreateMessageExplication(Snowflake member_react_id, Mission mission){
+        return MessageCreateSpec.builder()
+                .content("<@" + member_react_id.asString() + "> -> <@" + mission.getMemberId() + ">")
+                .addEmbed(EmbedCreateSpec.builder()
+                        .title("Suivi de Mission !")
+                        .description("Bienvenue dans ce channel !\n\n" +
+                                "Ce channel a été créé car <@" + member_react_id.asString() + "> est intéressé " +
+                                "par la mission de <@" + mission.getMemberId() + ">." +
+                                "\n\nCe channel est dédié pour vous, ainsi qu'à la mise en place de la mission et" +
+                                " nous vous demandons de passer exclusivement par ce channel pour toute " +
+                                "discussion à propos de celle-ci." +
+                                "\n\nCeci a pour but d'augmenter la fiabilité des clients et des développeurs " +
+                                "pour qu'une mission puisse se passer de la meilleure des manières" +
+                                ".\nRèglementation des missions : <#768435208906735656>." +
+                                "\n\nVous pouvez clôturer ce channel à tout moment !")
+                        .color(ColorsUsed.same)
+                        .build())
+                .addComponent(ActionRow.of(Button.secondary("followMission_close", "Cloturer le channel")))
+                .build();
+    }
+
+    public static MessageCreateSpec missionFollowMissionPreview(Mission mission){
+        return MessageCreateSpec.builder()
+                .addEmbed(EmbedCreateSpec.builder()
+                        .title(mission.getTitle())
+                        .description(mission.getDescriptionText() + "\n\nPrix: " + mission.getBudget() + "\nDate " +
+                                "de retour: " + mission.getDeadLine() + "\nType de support: " + mission.getSupport()
+                                + "\nLangage: " + mission.getLanguage() + "\nNiveau estimé: " + mission.getNiveau())
+                        .color(ColorsUsed.just)
+                        .build())
+                .build();
+    }
+
+    public static InteractionApplicationCommandCallbackSpec cannotFollowYourOwnMission = InteractionApplicationCommandCallbackSpec.builder()
+            .ephemeral(true)
+            .addEmbed(EmbedCreateSpec.builder()
+                    .title("Erreur !")
+                    .description("Vous ne pouvez pas prendre votre propre mission !")
+                    .color(ColorsUsed.wrong)
+                    .build())
+            .build();
+
+    public static InteractionApplicationCommandCallbackSpec alreadyFollowingThisMission = InteractionApplicationCommandCallbackSpec.builder()
+            .ephemeral(true)
+            .addEmbed(EmbedCreateSpec.builder()
+                    .title("Erreur !")
+                    .description("Vous suivez déjà cette mission !")
+                    .color(ColorsUsed.wrong)
+                    .build())
+            .build();
 }

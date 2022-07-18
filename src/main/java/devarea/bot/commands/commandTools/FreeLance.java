@@ -239,7 +239,7 @@ public class FreeLance implements Comparable {
                 .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + this.memberId + "&open=1",
                         "devarea.fr")))
                 .build(), true))));
-        FreeLanceHandler.update();
+        FreeLanceHandler.updateBottomMessage();
     }
 
     public void edit() {

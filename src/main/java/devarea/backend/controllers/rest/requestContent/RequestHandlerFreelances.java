@@ -7,7 +7,7 @@ import devarea.bot.commands.commandTools.FreeLance;
 
 import java.util.ArrayList;
 
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.global.utils.ThreadHandler.startAway;
 
 public class RequestHandlerFreelances {
 

@@ -69,6 +69,9 @@ public abstract class WebUserInfos {
         return Snowflake.of(this.id);
     }
 
+    /*
+        Implement all attribut of this object, with Member object !
+     */
     @JsonIgnore
     public WebUserInfos update() {
         Member member = MemberCache.get(this.id);
@@ -80,7 +83,7 @@ public abstract class WebUserInfos {
         this.name = member.getUsername();
         this.tag = member.getTag();
         this.urlAvatar = member.getAvatarUrl();
-        this.badges = Badges.getBadgesOf(this, member).toArray(new Badges[0]);
+        this.badges = Badges.getBadgesOf(member).toArray(new Badges[0]);
 
         // Member Missions
         this.missions_list =

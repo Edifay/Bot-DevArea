@@ -21,7 +21,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static devarea.bot.event.FunctionEvent.*;
+import static devarea.global.utils.ThreadHandler.*;
 
 public class XPHandler {
 
@@ -283,7 +283,9 @@ public class XPHandler {
             xp.remove(id);
         }
     }
-
+    /*
+        Secure the stop of the bot
+     */
     public static synchronized void stop() {
         saveXp();
     }

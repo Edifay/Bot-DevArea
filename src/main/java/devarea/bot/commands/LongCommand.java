@@ -14,12 +14,12 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
 import discord4j.core.spec.InteractionReplyEditSpec;
 
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.global.utils.ThreadHandler.startAway;
 
 public abstract class LongCommand extends Command {
 
     protected Message lastMessage;
-    protected FirstStape firstStape;
+    protected FirstStep firstStep;
     protected boolean isLocalChannel;
 
     public LongCommand() {
@@ -38,72 +38,72 @@ public abstract class LongCommand extends Command {
 
     public LongCommand(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
+        chatInteraction.deferReply().subscribe();
         this.isLocalChannel = false;
     }
 
-    public void nextStape(final ReactionAddEvent event) {
-        synchronized (this) {
-            try {
-                Message message = event.getMessage().block();
-                if (!message.getId().equals(this.lastMessage.getId())) {
-                    deletedEmbed((TextChannel) ChannelCache.watch(message.getChannelId().asString()),
-                            EmbedCreateSpec.builder()
-                                    .title("Erreur !")
-                                    .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
-                                    .color(ColorsUsed.wrong).build());
-                    message.removeReaction(event.getEmoji(), event.getUserId()).subscribe();
-                    return;
-                }
-                if (this.firstStape.receiveReact(event)) {
-                    this.endCommand();
-                }
-                try {
-                    message.removeReaction(event.getEmoji(), event.getUserId()).block();
-                } catch (Exception e) {
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+    public void nextStep(final ReactionAddEvent event) {
+        try {
+
+            // Verify the validity of the Reaction
+            Message message = event.getMessage().block();
+            if (!message.getId().equals(this.lastMessage.getId())) {
+                sendErrorYouAreInCommand(event.getChannelId().asString());
+                message.removeReaction(event.getEmoji(), event.getUserId()).subscribe();
+                return;
             }
+
+            // Call the Step
+            if (this.firstStep.receiveReact(event)) {
+                this.endCommand();
+            }
+
+            // Shadow
+            message.removeReaction(event.getEmoji(), event.getUserId()).block();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public void nextStape(final MessageCreateEvent event) {
-        synchronized (this) {
-            try {
-                if (!event.getMessage().getChannelId().equals(this.channel.getId())) {
-                    startAway(() -> deletedEmbed((TextChannel) ChannelCache.watch(event.getMessage().getChannelId().asString()),
-                            EmbedCreateSpec.builder()
-                                    .title("Erreur !")
-                                    .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
-                                    .color(ColorsUsed.wrong).build()
-                    ));
-                    delete(false, event.getMessage());
-                    return;
-                }
-                if (event.getMessage().getContent().toLowerCase().startsWith("cancel") || event.getMessage().getContent().toLowerCase().startsWith("annuler"))
-                    this.removeTrace();
-                else if (this.firstStape.receiveMessage(event))
-                    this.endCommand();
+    public void nextStep(final MessageCreateEvent event) {
+        try {
+            // Verify the validity of the Message
+            if (!event.getMessage().getChannelId().equals(this.channel.getId())) {
+                sendErrorYouAreInCommand(event.getMessage().getChannelId().asString());
                 delete(false, event.getMessage());
-            } catch (Exception e) {
-                e.printStackTrace();
+                return;
             }
+
+            // Check if it's cancel call
+            String content = event.getMessage().getContent().toLowerCase();
+            if (content.startsWith("cancel") || content.startsWith("annuler")) {
+                delete(false, event.getMessage());
+                this.removeTrace();
+                return;
+            }
+
+            // Call the Step
+            if (this.firstStep.receiveMessage(event))
+                this.endCommand();
+
+            // Shadow
+            delete(false, event.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public void nextStape(final ButtonInteractionEvent event) {
+    public void nextStep(final ButtonInteractionEvent event) {
         synchronized (this) {
             try {
+                // Verify the validity of the Interaction
                 if (!event.getMessage().get().getChannelId().equals(this.channel.getId())) {
-                    event.reply(InteractionApplicationCommandCallbackSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                            .title("Erreur !")
-                            .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
-                            .color(ColorsUsed.wrong).build()).ephemeral(true).build()).subscribe();
+                    sendErrorYourAreInCommand(event);
                     return;
                 }
-                if (event.getMessage().get().getContent().toLowerCase().startsWith("cancel") || event.getMessage().get().getContent().toLowerCase().startsWith("annuler"))
-                    this.removeTrace();
-                else if (this.firstStape.receiveInteract(event))
+
+                // Call the Step
+                if (this.firstStep.receiveInteract(event))
                     this.endCommand();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -138,6 +138,8 @@ public abstract class LongCommand extends Command {
             } catch (Exception e) {
             }
         }
+        if (chatInteraction != null)
+            delete(false, this.firstStep.message);
         return super.endCommand();
     }
 
@@ -151,5 +153,27 @@ public abstract class LongCommand extends Command {
     protected boolean createLocalChannel(String name, Snowflake parentId, boolean canWrite) {
         this.isLocalChannel = super.createLocalChannel(name, parentId, canWrite);
         return this.isLocalChannel;
+    }
+
+    private void sendErrorYouAreInCommand(String channelId) {
+        startAway(() -> deletedEmbed((TextChannel) ChannelCache.watch(channelId),
+                EmbedCreateSpec.builder()
+                        .title("Erreur !")
+                        .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
+                        .color(ColorsUsed.wrong).build()
+        ));
+
+    }
+
+    /*
+        With ephemeral
+     */
+    private void sendErrorYourAreInCommand(ButtonInteractionEvent event) {
+        event.reply(InteractionApplicationCommandCallbackSpec.builder().addEmbed(EmbedCreateSpec.builder()
+                                .title("Erreur !")
+                                .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
+                                .color(ColorsUsed.wrong).build())
+                        .ephemeral(true).build())
+                .subscribe();
     }
 }

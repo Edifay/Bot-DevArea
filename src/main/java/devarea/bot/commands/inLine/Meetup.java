@@ -30,19 +30,17 @@ public class Meetup extends LongCommand implements SlashCommand {
 
     public Meetup(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
-        chatInteraction.deferReply().subscribe();
 
-        Stape lastStape = new EndStape() {
+        Step lastStep = new EndStep() {
             @Override
             protected boolean onCall(Message message) {
                 MeetupHandler.addMeetupAtValide(meetup);
-                editEmbed(TextMessage.meetupCreateAsk);
-                delete(false, this.message);
+                endEditMessageForChatInteractionLongCommand(TextMessage.meetupCreateAsk);
                 return end;
             }
         };
 
-        Stape valide = new Stape(lastStape) {
+        Step valide = new Step(lastStep) {
             @Override
             protected boolean onCall(Message message) {
                 setText(meetup.getEmbedVerif());
@@ -57,7 +55,7 @@ public class Meetup extends LongCommand implements SlashCommand {
             }
         };
 
-        Stape image = new Stape(valide) {
+        Step image = new Step(valide) {
             @Override
             protected boolean onCall(Message message) {
                 setText(TextMessage.meetupCreateGetImage);
@@ -77,7 +75,7 @@ public class Meetup extends LongCommand implements SlashCommand {
             }
         };
 
-        Stape getDate = new Stape(image) {
+        Step getDate = new Step(image) {
             @Override
             protected boolean onCall(Message message) {
                 setText(TextMessage.meetupCreateGetDate);
@@ -96,7 +94,7 @@ public class Meetup extends LongCommand implements SlashCommand {
             }
         };
 
-        Stape create = new Stape(getDate) {
+        Step create = new Step(getDate) {
             @Override
             protected boolean onCall(Message message) {
                 setText(TextMessage.meetupCreateGetDescription);
@@ -116,28 +114,26 @@ public class Meetup extends LongCommand implements SlashCommand {
             }
         };
 
-        Stape channel = new EndStape() {
+        Step channel = new EndStep() {
             @Override
             protected boolean onCall(Message message) {
-                editEmbed(EmbedCreateSpec.builder().title("Meetups !")
+                endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder().title("Meetups !")
                         .color(ColorsUsed.just).timestamp(Instant.now())
                         .description("Voici le channel des meetups : <#" + Init.initial.meetupAnnounce_channel.asString() + ">")
                         .build());
-                delete(false, this.message);
                 return end;
             }
         };
 
-        Stape endDelete = new EndStape() {
+        Step endDelete = new EndStep() {
             @Override
             protected boolean onCall(Message message) {
-                editEmbed(EmbedCreateSpec.builder().title("Le meetup a bien été supprimé !").color(ColorsUsed.just).timestamp(Instant.now()).build());
-                delete(false, this.message);
+                endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder().title("Le meetup a bien été supprimé !").color(ColorsUsed.just).timestamp(Instant.now()).build());
                 return end;
             }
         };
 
-        Stape delete = new Stape(endDelete) {
+        Step delete = new Step(endDelete) {
             @Override
             protected boolean onCall(Message test) {
                 canDelete = MeetupHandler.getMeetupsFrom(member.getId());
@@ -172,7 +168,7 @@ public class Meetup extends LongCommand implements SlashCommand {
             }
         };
 
-        this.firstStape = new FirstStape(this.channel, create, delete, channel) {
+        this.firstStape = new FirstStep(this.channel, create, delete, channel) {
             @Override
             public void onFirstCall(MessageCreateSpec spec) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(TextMessage.meetupCommandExplain).build());

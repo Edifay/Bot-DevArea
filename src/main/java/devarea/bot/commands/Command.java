@@ -215,7 +215,7 @@ public abstract class Command {
                 .build());
     }
 
-    public void editEmbed(EmbedCreateSpec embed) {
+    public void endEditMessageForChatInteractionLongCommand(EmbedCreateSpec embed) {
         chatInteraction.editReply(InteractionReplyEditSpec.builder()
                 .addEmbed(embed)
                 .build()).subscribe();

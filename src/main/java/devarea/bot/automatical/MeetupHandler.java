@@ -23,7 +23,7 @@ import java.time.Instant;
 import java.util.*;
 
 import static devarea.bot.commands.Command.send;
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.global.utils.ThreadHandler.startAway;
 
 public class MeetupHandler {
 

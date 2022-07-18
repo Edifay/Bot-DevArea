@@ -24,6 +24,9 @@ public class RunHandler {
 
     private static final Map<Snowflake, Snowflake> latestMessages = new LinkedHashMap<>();
 
+    /*
+        Detect edits on message. If it is linked to a response message restart Run Command.
+     */
     public static boolean onEdit(Message messageHandler) {
         if (!latestMessages.containsKey(messageHandler.getId())
                 || !messageHandler.getContent().startsWith(Init.initial.prefix + "run")
@@ -39,16 +42,20 @@ public class RunHandler {
 
         CommandManager.addManualCommand(MemberCache.get(messageHandler.getAuthor().get().getId().asString()),
                 new ConsumableCommand(Run.class) {
-            @Override
-            protected Command command() {
-                return new Run(MemberCache.get(messageHandler.getAuthor().get().getId().asString()), channelHandler,
-                        messageHandler);
-            }
-        });
+                    @Override
+                    protected Command command() {
+                        return new Run(MemberCache.get(messageHandler.getAuthor().get().getId().asString()),
+                                channelHandler,
+                                messageHandler);
+                    }
+                });
 
         return true;
     }
 
+    /*
+        Detect delete message. If it is linked to a response message delete the response message.
+     */
     public static boolean onDelete(Message message) {
         Snowflake replyId = latestMessages.remove(message.getId());
 
@@ -68,6 +75,9 @@ public class RunHandler {
         }
     }
 
+    /*
+        Message binder, bind a message to a response if possible.
+     */
     public static void sendResponse(Message message, EmbedCreateSpec spec, boolean edit) {
         Snowflake replyId = latestMessages.get(message.getId());
         TextChannel channel = (TextChannel) ChannelCache.get(message.getChannelId().asString());

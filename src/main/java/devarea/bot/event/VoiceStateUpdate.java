@@ -17,18 +17,15 @@ public class VoiceStateUpdate {
             return;
 
         if (event.getCurrent().getChannelId().isPresent()) {
-            if (event.getOld().isEmpty() || event.getOld().get().getChannelId().isEmpty())
-                ((TextChannel) ChannelCache.watch(Init.initial.noMic_channel.asString())).edit(TextChannelEditSpec.builder()
-                        .addPermissionOverwrite(PermissionOverwrite.forMember(event.getCurrent().getUserId(),
-                                PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()))
-                        .build()).subscribe();
+            if (event.getOld().isEmpty() || event.getOld().get().getChannelId().isEmpty()) { // make no-mic visible
+                ((TextChannel) ChannelCache.watch(Init.initial.noMic_channel.asString())).addMemberOverwrite(event.getCurrent().getUserId(), PermissionOverwrite.forMember(event.getCurrent().getUserId(),
+                        PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of())).subscribe();
+            }
             VoiceChannelHandler.join(event);
         } else {
-            ((TextChannel) ChannelCache.watch(Init.initial.noMic_channel.asString())).edit(TextChannelEditSpec.builder()
-                    .addPermissionOverwrite(PermissionOverwrite.forMember(event.getCurrent().getUserId(),
-                            PermissionSet.of(),
-                            PermissionSet.of(Permission.VIEW_CHANNEL)))
-                    .build()).subscribe();
+            // make no-mic invisible
+            ((TextChannel) ChannelCache.watch(Init.initial.noMic_channel.asString())).addMemberOverwrite(event.getCurrent().getUserId(), PermissionOverwrite.forMember(event.getCurrent().getUserId(),
+                    PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL))).subscribe();
             VoiceChannelHandler.leave(event);
         }
     }

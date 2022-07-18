@@ -4,10 +4,10 @@ import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 
-public abstract class EndStape extends Stape {
+public abstract class EndStep extends Step {
 
-    public EndStape(Stape... stapes) {
-        this.stapes = stapes;
+    public EndStep(Step... steps) {
+        this.steps = steps;
     }
 
     @Override

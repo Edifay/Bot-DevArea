@@ -13,7 +13,7 @@ import discord4j.core.spec.MessageCreateSpec;
 import java.util.Locale;
 
 import static devarea.bot.presets.TextMessage.messageDisableInPrivate;
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.global.utils.ThreadHandler.startAway;
 
 public class MessageCreate {
 
@@ -43,8 +43,7 @@ public class MessageCreate {
 
             if (message.getMessage().getContent().startsWith(Init.initial.prefix))
                 CommandManager.exe(message.getMessage().getContent().substring(Init.initial.prefix.length()).split(
-                                "\\s", 2)[0],
-                        message, null);
+                        "\\s", 2)[0], message, null);
 
             EmbedLinkHandler.onReceive(message);
         } catch (

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.Main;
 import devarea.bot.event.*;
 import devarea.bot.utils.InitialData;
-import devarea.bot.utils.SnowflakeModuleSerializer;
+import devarea.global.utils.SnowflakeModuleSerializer;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
@@ -46,6 +46,9 @@ public class Init {
      */
     public static HashMap<String, BufferedImage> assetsImages = new HashMap<>();
 
+    /*
+        Initialise bot part
+     */
     public static void initBot() {
         setupInitialConfig();
         assetsLoader();
