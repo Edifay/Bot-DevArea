@@ -1,7 +1,6 @@
 package devarea.bot.commands;
 
 import devarea.Main;
-import devarea.bot.commands.inLine.Rank;
 import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
@@ -194,7 +193,7 @@ public class CommandManager {
                             actualCommands.put(member_replaced.getId(), (LongCommand) actualCommand);
                     } else
                         Command.sendError((TextChannel) ChannelCache.watch(message.getMessage().getChannelId().asString()), "Vous n'avez pas " +
-                                "la permission d'éxécuter cette commande !");
+                                "la permission d'exécuter cette commande !");
 
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
@@ -225,7 +224,7 @@ public class CommandManager {
                 PermissionSet permissionSet = null;
                 try {
                     PermissionCommand defaultCommand =
-                            (PermissionCommand) command.commadClass.getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
+                            (PermissionCommand) command.commandClass.getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
                     permissionSet = defaultCommand.getPermissions();
                 } catch (NoSuchMethodException e) {
                 }
@@ -237,7 +236,7 @@ public class CommandManager {
                     }
                     return true;
                 }
-                Command.sendError(command.channel, "Vous n'avez pas la permission d'éxécuter cette commande !");
+                Command.sendError(command.channel, "Vous n'avez pas la permission d'exécuter cette commande !");
             } catch (Exception e) {
                 e.printStackTrace();
             }

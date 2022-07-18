@@ -13,14 +13,11 @@ import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.event.domain.message.ReactionAddEvent;
-import discord4j.core.object.command.ApplicationCommandOption;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.*;
-import discord4j.discordjson.json.ApplicationCommandOptionData;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 
 import java.util.ArrayList;
@@ -77,10 +74,10 @@ public class GiveReward extends LongCommand implements SlashCommand {
                 if (!HelpRewardHandler.canSendReward(member, new ArrayList<>(mentions))) {
                     chatInteraction.editReply(InteractionReplyEditSpec.builder()
                             .addEmbed(EmbedCreateSpec.builder()
-                                    .title("Error !")
+                                    .title("Erreur !")
                                     .color(ColorsUsed.wrong)
                                     .description("Vous avez déjà récompensé cette personne ou" +
-                                            " il vous a déjà récompensé il y'a moins de deux heures")
+                                            " elle vous a déjà récompensé il y a moins de deux heures")
                                     .build())
                             .build()).subscribe();
                     delete(false, this.message);
@@ -93,7 +90,7 @@ public class GiveReward extends LongCommand implements SlashCommand {
                     assert mentionedMember != null;
 
                     if (mentionedMember.equals(member)) {
-                        sendError("Veuillez mentionner une autre personne que vous même");
+                        sendError("Veuillez mentionner une autre personne que vous-même");
                         return false;
                     }
                 }
@@ -101,7 +98,7 @@ public class GiveReward extends LongCommand implements SlashCommand {
                 if (!HelpRewardHandler.canSendReward(member, new ArrayList<>(mentions))) {
                     sendError(
                             "Vous avez déjà récompensé cette personne ou" +
-                                    " il vous a déjà récompensé il y'a moins de deux heures"
+                                    " elle vous a déjà récompensé il y a moins de deux heures"
                     );
                     return false;
                 }
@@ -197,7 +194,7 @@ public class GiveReward extends LongCommand implements SlashCommand {
                 this.setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Veuillez mentionner les personnes à ajouter")
-                                .description(MemberUtil.getMentionTextByMember(member) + ", inutile de selectionner à" +
+                                .description(MemberUtil.getMentionTextByMember(member) + ", inutile de sélectionner à" +
                                         " nouveau " + MemberUtil.getMentionTextByMember(helper))
                                 .color(ColorsUsed.same).build())
                         .components(getEmptyButton())
@@ -218,7 +215,7 @@ public class GiveReward extends LongCommand implements SlashCommand {
 
                     sendError(
                             "Vous avez déjà récompensé cette personne ou" +
-                                    " il vous a déjà récompensé il y'a moins de deux heures"
+                                    " elle vous a déjà récompensé il y a moins de deux heures"
                     );
                     return false;
                 }
@@ -229,7 +226,7 @@ public class GiveReward extends LongCommand implements SlashCommand {
                     assert mentionedMember != null;
 
                     if (mentionedMember.equals(member)) {
-                        sendError("Veuillez mentionner une autre personne que vous même");
+                        sendError("Veuillez mentionner une autre personne que vous-même");
                         return false;
                     }
 
@@ -237,7 +234,7 @@ public class GiveReward extends LongCommand implements SlashCommand {
                 if (!HelpRewardHandler.canSendReward(member, new ArrayList<>(mentions))) {
                     sendError(
                             "Vous avez déjà récompensé cette personne ou" +
-                                    " il vous a déjà récompensé il y'a moins de deux heures"
+                                    " elle vous a déjà récompensé il y a moins de deux heures"
                     );
                     return false;
                 }
@@ -257,7 +254,7 @@ public class GiveReward extends LongCommand implements SlashCommand {
     public ApplicationCommandRequest getSlashCommandDefinition() {
         return ApplicationCommandRequest.builder()
                 .name("givereward")
-                .description("Permet de donner une petite récompenses aux personnes qui vont aidé !")
+                .description("Permet de donner une petite récompense aux personnes qui vous ont aidé !")
                 .build();
     }
 }

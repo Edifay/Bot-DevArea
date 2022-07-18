@@ -159,14 +159,14 @@ public abstract class Command {
 
     protected Message sendError(final String error) {
         return deletedEmbed(EmbedCreateSpec.builder()
-                .title("Error !")
+                .title("Erreur !")
                 .description(error)
                 .color(ColorsUsed.wrong).build());
     }
 
     public static Message sendError(final TextChannel channel, final String error) {
         return deletedEmbed(channel, EmbedCreateSpec.builder()
-                .title("Error !")
+                .title("Erreur !")
                 .description(error)
                 .color(ColorsUsed.wrong).build());
     }
@@ -208,7 +208,7 @@ public abstract class Command {
         reply(InteractionApplicationCommandCallbackSpec.builder()
                 .addEmbed(EmbedCreateSpec.builder()
                         .color(ColorsUsed.wrong)
-                        .title("Error !")
+                        .title("Erreur !")
                         .description(content)
                         .build())
                 .ephemeral(true)

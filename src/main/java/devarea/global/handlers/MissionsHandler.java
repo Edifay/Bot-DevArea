@@ -54,7 +54,7 @@ public class MissionsHandler {
                     .useLower(true));
 
     /*
-        Initialise MissinsHandler
+        Initialise MissionsHandler
      */
     public static void init() {
         load();
@@ -133,7 +133,7 @@ public class MissionsHandler {
     }
 
     /*
-        Remove with out deleting message
+        Remove without deleting message
      */
     public static void remove(Mission mission) {
         missions.remove(mission.getId(), mission);
@@ -253,7 +253,7 @@ public class MissionsHandler {
 
         if (current_mission != null) {
             if (event.getCustomId().equals("mission_yes")) {
-                sendMissionRevalidateSucessful(event, current_mission);
+                sendMissionRevalidateSuccessful(event, current_mission);
                 save();
             } else if (event.getCustomId().equals("mission_no")) {
                 sendMissionDeleteSuccessful(event, current_mission);
@@ -269,9 +269,9 @@ public class MissionsHandler {
      */
     private static void sendMissionDeleteSuccessful(ButtonInteractionEvent event, Mission current_mission) {
         ((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())).getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                        .title("Mission supprimé !")
+                        .title("Mission supprimée !")
                         .description("La mission : **" + current_mission.getTitle() + "**, a été " +
-                                "définitivement supprimé !")
+                                "définitivement supprimée !")
                         .color(ColorsUsed.just).build())
                 .components(new ArrayList<>())
                 .build()).block();
@@ -280,10 +280,10 @@ public class MissionsHandler {
     /*
         Message for mission_yes response
      */
-    private static void sendMissionRevalidateSucessful(ButtonInteractionEvent event, Mission current_mission) {
+    private static void sendMissionRevalidateSuccessful(ButtonInteractionEvent event, Mission current_mission) {
         ((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())).getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                        .title("Mission actualisé !")
-                        .description("La mission : **" + current_mission.getTitle() + "**, a été défini comme" +
+                        .title("Mission actualisée !")
+                        .description("La mission : **" + current_mission.getTitle() + "**, a été définie comme" +
                                 " valide pour encore 7 jours.\n\nVous recevrez une nouvelle demande de " +
                                 "validation dans 7 jours.")
                         .color(ColorsUsed.just).build())
@@ -302,8 +302,8 @@ public class MissionsHandler {
                 .addEmbed(EmbedCreateSpec.builder()
                         .title("Vérification de la validité d'une mission.")
                         .description("Vous avez une mission actuellement active !\n\nLe titre de cette mission est : " +
-                                "**" + mission.getTitle() + "**\n\nIl vous reste 3 jours pour nous comfirmer ou non " +
-                                "si cette mission est-elle toujours d'actualité ?\n\nSi oui : <:ayy:" + Init.idYes.getId().asString() + "> si non : <:ayy:" + Init.idNo.getId().asString() + ">.")
+                                "**" + mission.getTitle() + "**\n\nIl vous reste 3 jours pour nous confirmer ou non " +
+                                "si cette mission est toujours d'actualité.\n\nSi oui : <:ayy:" + Init.idYes.getId().asString() + "> si non : <:ayy:" + Init.idNo.getId().asString() + ">.")
                         .color(ColorsUsed.same).build())
                 .addComponent(ActionRow.of(Button.primary("mission_yes", ReactionEmoji.custom(Init.idYes)),
                         Button.primary("mission_no", ReactionEmoji.custom(Init.idNo))))
@@ -322,8 +322,8 @@ public class MissionsHandler {
         mission_member.getPrivateChannel().block().getMessageById(mission.getMessage_verification().getMessageID()).block()
                 .edit(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
-                                .title("Mission supprimé !")
-                                .description("Le délais des 3 jours a été expiré. La mission : **" + mission.getTitle() + "**, a été définitivement supprimé !")
+                                .title("Mission supprimée !")
+                                .description("Le délai des 3 jours a expiré. La mission : **" + mission.getTitle() + "**, a été définitivement supprimée !")
                                 .color(ColorsUsed.wrong).build())
                         .components(new ArrayList<>()).build())
                 .subscribe();
@@ -341,7 +341,7 @@ public class MissionsHandler {
                 event.reply(InteractionApplicationCommandCallbackSpec.builder()
                         .ephemeral(true)
                         .addEmbed(EmbedCreateSpec.builder()
-                                .title("Error !")
+                                .title("Erreur !")
                                 .description("Vous ne pouvez pas prendre votre propre mission !")
                                 .color(ColorsUsed.wrong)
                                 .build())
@@ -352,7 +352,7 @@ public class MissionsHandler {
                 event.reply(InteractionApplicationCommandCallbackSpec.builder()
                         .ephemeral(true)
                         .addEmbed(EmbedCreateSpec.builder()
-                                .title("Error !")
+                                .title("Erreur !")
                                 .description("Vous suivez déjà cette mission !")
                                 .color(ColorsUsed.wrong)
                                 .build())
@@ -380,7 +380,7 @@ public class MissionsHandler {
             followThisMission(mission, member_react_id);
             return "Vous avez pris cette mission !";
         }
-        return "La mission n'a pas été trouvé !";
+        return "La mission n'a pas été trouvée !";
     }
 
     /*
@@ -406,7 +406,7 @@ public class MissionsHandler {
 
         TextChannel channel = Init.devarea.createTextChannel(TextChannelCreateSpec.builder()
                 .parentId(Snowflake.of("964757205184299028"))
-                .name("Suivis de mission n°" + ++missionFollowId)
+                .name("Suivi de mission n°" + ++missionFollowId)
                 .permissionOverwrites(set)
                 .build()).block();
         int id = missionFollowId;
@@ -415,8 +415,7 @@ public class MissionsHandler {
                 .addEmbed(EmbedCreateSpec.builder()
                         .title(mission.getTitle())
                         .description(mission.getDescriptionText() + "\n\nPrix: " + mission.getBudget() + "\nDate " +
-                                "de" +
-                                " retour: " + mission.getDeadLine() + "\nType de support: " + mission.getSupport()
+                                "de retour: " + mission.getDeadLine() + "\nType de support: " + mission.getSupport()
                                 + "\nLangage: " + mission.getLanguage() + "\nNiveau estimé: " + mission.getNiveau())
                         .color(ColorsUsed.just)
                         .build())
@@ -438,7 +437,7 @@ public class MissionsHandler {
                                 "\n\nVous pouvez clôturer ce channel à tout moment !")
                         .color(ColorsUsed.same)
                         .build())
-                .addComponent(ActionRow.of(Button.secondary("followMission_close", "Cloturer le channel")))
+                .addComponent(ActionRow.of(Button.secondary("followMission_close", "Clôturer le channel")))
                 .build()).block();
 
         missionsFollow.add(new MissionHandlerData.MissionFollow(id, new MessageSeria(message),
@@ -448,7 +447,7 @@ public class MissionsHandler {
     }
 
     /*
-        Try to find a mission by a mission message !
+        Try to find a mission from a mission message !
      */
     public static Mission getMissionOfMessage(final Snowflake message_id) {
         for (Mission mission : missions.values())
@@ -484,9 +483,9 @@ public class MissionsHandler {
             send(((TextChannel) ChannelCache.watch(mission.messageSeria.getChannelID().asString())),
                     MessageCreateSpec.builder()
                             .addEmbed(EmbedCreateSpec.builder()
-                                    .title("Clôture du Suivis de mission.")
-                                    .description("La clôture du suivis a été éxécuté par : <@" + memberRequest + ">. " +
-                                            "Le suivis fermera dans 1 heure.")
+                                    .title("Clôture du Suivi de mission.")
+                                    .description("La clôture du suivi a été exécuté par : <@" + memberRequest + ">. " +
+                                            "Le suivi fermera dans 1 heure.")
                                     .color(ColorsUsed.same)
                                     .timestamp(Instant.now())
                                     .build())
@@ -526,8 +525,8 @@ public class MissionsHandler {
                             .permissionOverwrites(set)
                             .build()).subscribe();
                     EmbedCreateSpec embed = EmbedCreateSpec.builder()
-                            .title("Clôture du suivis n°" + mission.missionID + " !")
-                            .description("Le suivis de mission n°" + mission.missionID + " a été clôturé à la demande" +
+                            .title("Clôture du suivi n°" + mission.missionID + " !")
+                            .description("Le suivi de mission n°" + mission.missionID + " a été clôturé à la demande" +
                                     " de <@" + memberRequest + ">.")
                             .color(ColorsUsed.just)
                             .build();
@@ -566,7 +565,7 @@ public class MissionsHandler {
                                 .title(title)
                                 .description(description + "\n\nPrix: " + prix + "\nDate de retour: " + dateRetour +
                                         "\nType de support: " + support + "\nLangage: " + langage + "\nNiveau estimé:" +
-                                        " " + niveau + "\n\nCette mission est posté par : " + "<@" + member.getId().asString() + ">.")
+                                        " " + niveau + "\n\nCette mission est postée par : " + "<@" + member.getId().asString() + ">.")
                                 .color(ColorsUsed.just)
                                 .author(member.getDisplayName(), member.getAvatarUrl(), member.getAvatarUrl())
                                 .timestamp(Instant.now())

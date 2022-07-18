@@ -77,41 +77,41 @@ public class TextMessage {
             "serveur dans 30 secondes (ne t'inquiète pas si tu prends plus que 30 secondes tu as tout le temps qu'il " +
             "te faut) tu as donc le temps de prendre tes <#" + Init.initial.roles_channel.asString() + ">.\n\nBienvenue !";
     /*
-        le message lors de l'help command
+        le message lors de la commande help
      */
     public static final EmbedCreateSpec helpEmbed = EmbedCreateSpec.builder()
             .title("Voici la liste des commandes :")
             .description("Voici la liste de toutes les commandes :")
-            .addField("Les commandes globales :", "`//help` -> donne cette liste.\n`//ping` -> donne le temps de " +
-                    "latence du bot.\n`//start` -> envoie un message qui permet de bien commencer dans un langage.\n"
+            .addField("Les commandes globales :", "`/help` -> donne cette liste.\n`/ping` -> donne le temps de " +
+                    "latence du bot.\n`/start` -> envoie un message qui permet de bien commencer dans un langage.\n"
                     , false)
-            .addField("Communication :", "`//devhelp` -> mentionne les membres ayant pris le rôle Dev'Helper" +
-                    ".\n`//ask` -> donne les informations pour bien poser une question.\n`//meetup` -> permet de " +
+            .addField("Communication :", "`/devhelp` -> mentionne les membres ayant pris le rôle Dev'Helper" +
+                    ".\n`/ask` -> donne les informations pour bien poser une question.\n`/meetup` -> permet de " +
                     "créer un meetup autour d'un sujet.\n\nLes channels d'aides vocaux sont créés automatiquement par" +
                     " le bot lors de la connexion au channel vocal : \"Votre channel d'aide\".", false)
             .addField("Développement:", "`//run` -> exécute du code directement depuis Discord.", false)
-            .addField("XP:", "`//rank` -> donne l'xp et le rang de la personne (mentionnable).\n`//leaderboard` -> " +
-                    "permet de voir le classement des membres du serveur en xp.\n`//askreward [mention de la personne" +
+            .addField("XP:", "`/rank` -> donne l'xp et le rang de la personne (mentionable).\n`/leaderboard` -> " +
+                    "permet de voir le classement des membres du serveur en xp.\n`/askreward [mention de la personne" +
                     " que vous avez aidée]` -> Si vous ou plusieurs personnes avez aidé quelqu'un à résoudre son " +
-                    "problème, vous pouvez lui demander une récompense (en xp) avec cette commande.\n`//givereward` " +
+                    "problème, vous pouvez lui demander une récompense (en xp) avec cette commande.\n`/givereward` " +
                     "-> Si une ou plusieurs personnes vous ont aidé à résoudre votre problème et que vous désirez lui" +
                     " donner une récompense (en xp), vous pouvez le faire avec cette commande. Les chiffres : pour " +
                     "10xp donnés 50xp reçus, ici le nombre d'xp est défini et inchangeable.", false)
-            .addField("Développeurs <-> Clients :", "`//mission` -> permet de gérer les missions créées" +
-                    ".\n`//freelance` permet de gérer le message freelance.\n\n`creationMissions` & " +
+            .addField("Développeurs <-> Clients :", "`/mission` -> permet de gérer les missions créées" +
+                    ".\n`/freelance` permet de gérer le message freelance.\n\n`creationMissions` & " +
                     "`creationFreeLance` -> ne se lancent pas comme des commandes classiques, une réaction dans le " +
                     "channel : <#" + Init.initial.paidMissions_channel.asString() + "> & <#" + Init.initial.freelance_channel.asString() + ">" +
                     " permet de commencer la commande.\n\n", false)
             .addField("Le site", "Le serveur Dev'Area possède aussi un site internet qui permet de gérer certaines " +
-                    "fonctionalités du serveur.\n\n   -> https://devarea.fr/", false)
+                    "fonctionnalités du serveur.\n\n   -> https://devarea.fr/", false)
             .color(ColorsUsed.just)
             .timestamp(Instant.now()).build();
     /*
-        Le message lors de l'help command pour les admins
+        Le message lors de la commande help pour les admins
      */
     public static final EmbedCreateSpec helpEmbedAdmin = EmbedCreateSpec.builder()
             .title("Voici la liste des commandes admin:")
-            .description("`//send` -> permet de faire envoyer des messages aux bots.\n`//stop` -> arrête le script du" +
+            .description("`/send` -> permet de faire envoyer des messages aux bots.\n`/stop` -> arrête le script du" +
                     " bot.")
             .color(ColorsUsed.just)
             .timestamp(Instant.now()).build();
@@ -182,10 +182,10 @@ public class TextMessage {
                     ".com/fr-fr/learn/paths/csharp-logic/\n\nLe .Net et Xamarin aka MAUI :\nhttps://docs.microsoft" +
                     ".com/fr-fr/learn/paths/build-dotnet-applications-csharp/\nhttps://docs.microsoft" +
                     ".com/fr-fr/learn/paths/build-mobile-apps-with-xamarin-forms/\n\nSources externes à Microsoft " +
-                    ":\nPar Mike dane => https://www.mikedane.com/programming-languages/csharp/\n\nPar Brackeyz(Setp " +
+                    ":\nPar Mike dane => https://www.mikedane.com/programming-languages/csharp/\n\nPar Brackeyz (8 " +
                     "vidéos courtes, c'est la première) => \nhttps://www.youtube.com/watch?v=N775KsWQVkw&t=1s\n\nSur " +
                     "OCR => https://openclassrooms.com/fr/courses/218202-apprenez-a-programmer-en-c-sur-net\n\nSur " +
-                    "LernCS => https://www.learncs.org/", false)
+                    "LearnCS => https://www.learncs.org/", false)
             .addField("Les outils", "Visual studio est l'outil de développement C# par excellence, il supporte et " +
                     "sublime la stack de technologie Microsoft au possible. JetBrains Rider est aussi un excellent " +
                     "outil de développement et totalement à niveau de VS.\nVisual studio code est plus proche d'un " +
@@ -249,7 +249,7 @@ public class TextMessage {
             .addField("IDE (logiciels simplifiant le développement)", "Les IDE sont des logiciels très puissant, qui " +
                     "rassemblent tous les outils permettant le développement.\n\nVisual Studio Code : https://code" +
                     ".visualstudio.com/\nWebStorm : https://www.jetbrains.com/fr-fr/webstorm/\nSublime Text : " +
-                    "http://www.sublimetext.com/\nAtom : https://atom.io/\nChoisissez celui qui vous fait le plus " +
+                    "https://www.sublimetext.com/\nAtom : https://atom.io/\nChoisissez celui qui vous fait le plus " +
                     "envie :)", false)
             .addField("Bonne Chance !", "Maintenant vous pouvez naviguer dans les tutos, cours, et vidéos pour " +
                     "apprendre l'HTML/CSS. Le serveur est là si vous rencontrez certains problèmes.", false)

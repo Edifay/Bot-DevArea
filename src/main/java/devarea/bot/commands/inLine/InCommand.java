@@ -8,8 +8,6 @@ import devarea.bot.presets.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 
@@ -31,7 +29,7 @@ public class InCommand extends ShortCommand implements SlashCommand {
                 text += "<@" + entry.getKey().asString() + "> : " + names[names.length - 1] + "\n";
             }
         } else
-            text = "Il n'y actuellement personnes avec des commandes en cour.";
+            text = "Il n'y a actuellement personne avec des commandes en cours.";
 
         this.replyEmbed(EmbedCreateSpec.builder()
                 .title("Voici toutes les personnes ayant des commandes actives.").description(text)

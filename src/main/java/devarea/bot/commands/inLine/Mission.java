@@ -8,7 +8,6 @@ import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
@@ -38,7 +37,7 @@ public class Mission extends LongCommand implements SlashCommand {
                 } else {
                     editEmbed(EmbedCreateSpec.builder()
                             .color(ColorsUsed.same)
-                            .title("Vous n'avez acutellement acune mission !").build());
+                            .title("Vous n'avez actuellement aucune mission !").build());
                     delete(false, this.message);
                     return end;
                 }
@@ -54,7 +53,7 @@ public class Mission extends LongCommand implements SlashCommand {
                         MissionsHandler.clearThisMission(ofMember.get(number));
                         editEmbed(EmbedCreateSpec.builder()
                                 .color(ColorsUsed.just)
-                                .title("Votre mission a bien été supprimé !").build());
+                                .title("Votre mission a bien été supprimée !").build());
                         delete(false, this.message);
                         return end;
                     }
@@ -96,7 +95,7 @@ public class Mission extends LongCommand implements SlashCommand {
     public ApplicationCommandRequest getSlashCommandDefinition() {
         return ApplicationCommandRequest.builder()
                 .name("mission")
-                .description("Permet de contrôler et gérer les missions possédé !")
+                .description("Permet de contrôler et gérer les missions possédées !")
                 .build();
     }
 }

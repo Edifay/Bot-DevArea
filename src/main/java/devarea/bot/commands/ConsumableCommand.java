@@ -8,19 +8,19 @@ import discord4j.core.object.entity.channel.TextChannel;
 
 public abstract class ConsumableCommand {
     protected Command command;
-    public Class commadClass;
+    public Class commandClass;
     public TextChannel channel;
     public Member member;
     public Message message;
     public ChatInputInteractionEvent chatInteraction;
 
     public ConsumableCommand(final Class commandClass, final TextChannel channel) {
-        this.commadClass = commandClass;
+        this.commandClass = commandClass;
         this.channel = channel;
     }
 
     public ConsumableCommand(final Class commandClass) {
-        this.commadClass = commandClass;
+        this.commandClass = commandClass;
     }
 
     protected abstract Command command();

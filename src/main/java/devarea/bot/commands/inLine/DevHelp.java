@@ -6,10 +6,7 @@ import devarea.bot.commands.SlashCommand;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
-import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 
 import java.util.ArrayList;
@@ -42,7 +39,7 @@ public class DevHelp extends ShortCommand implements SlashCommand {
     public ApplicationCommandRequest getSlashCommandDefinition() {
         return ApplicationCommandRequest.builder()
                 .name("devhelp")
-                .description("Commande qui permet d'envoyer un ping au developpeurs volontaires dans les channels entraides.")
+                .description("Commande qui permet d'envoyer un ping au développeurs volontaires dans les channels entraides.")
                 .build();
     }
 }

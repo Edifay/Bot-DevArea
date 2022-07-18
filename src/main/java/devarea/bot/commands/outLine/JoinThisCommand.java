@@ -9,8 +9,6 @@ import devarea.bot.presets.ColorsUsed;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 import discord4j.rest.util.Permission;
@@ -32,7 +30,7 @@ public class JoinThisCommand extends ShortCommand implements PermissionCommand, 
                     .description("Vous venez de vous log en tant que <@" + userId.asString() + ">")
                     .color(ColorsUsed.same).build(), false);
         } else
-            replyError("Vous devez mention la personne à la quelle vous voulez vous log.");
+            replyError("Vous devez mentionner la personne à laquelle vous voulez vous log.");
 
     }
 

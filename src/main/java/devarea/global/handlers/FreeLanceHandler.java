@@ -104,8 +104,8 @@ public class FreeLanceHandler {
             else
                 event.reply(InteractionApplicationCommandCallbackSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
-                                .title("Error !")
-                                .description("Vous avez déjà une page FreeLance utilisez la commande `//freelance` " +
+                                .title("Erreur !")
+                                .description("Vous avez déjà une page FreeLance, utilisez la commande `/freelance` " +
                                         "pour effectuer des modifications.")
                                 .color(ColorsUsed.wrong)
                                 .build())

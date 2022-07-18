@@ -31,9 +31,9 @@ public class RunHandler {
             return false;
         }
 
-        TextChannel channelHander = (TextChannel) ChannelCache.get(messageHandler.getChannelId().asString());
+        TextChannel channelHandler = (TextChannel) ChannelCache.get(messageHandler.getChannelId().asString());
 
-        if (channelHander == null) {
+        if (channelHandler == null) {
             return false;
         }
 
@@ -41,7 +41,7 @@ public class RunHandler {
                 new ConsumableCommand(Run.class) {
             @Override
             protected Command command() {
-                return new Run(MemberCache.get(messageHandler.getAuthor().get().getId().asString()), channelHander,
+                return new Run(MemberCache.get(messageHandler.getAuthor().get().getId().asString()), channelHandler,
                         messageHandler);
             }
         });

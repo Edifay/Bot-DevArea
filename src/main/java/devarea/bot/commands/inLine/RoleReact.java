@@ -10,7 +10,6 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
@@ -42,7 +41,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
             protected boolean onCall(Message message) {
                 editEmbed(EmbedCreateSpec.builder()
                         .title("Le Role")
-                        .description("Mentionnez le role que vous voulez ajouter.")
+                        .description("Mentionnez le rôle que vous voulez ajouter.")
                         .color(ColorsUsed.same).build());
                 delete(false, this.message);
                 return next;
@@ -59,7 +58,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
                         RolesReactsHandler.save();
                         atModif.addReaction(react.getEmoji()).subscribe();
                         this.setText(EmbedCreateSpec.builder()
-                                .title("Création du RoleReact réussi !")
+                                .title("Création du RoleReact réussie !")
                                 .color(ColorsUsed.just)
                                 .description("Vous avez bien créé un lien entre " + (react.getStringEmoji()) + " -> " +
                                         "<@&" + roleID.asString() + "> !").build());
@@ -76,7 +75,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
                         .title("Emoji")
-                        .description("Réagis a se message avec l'emoji que tu souhaite !")
+                        .description("Réagis à ce message avec l'émoji que tu souhaites !")
                         .color(ColorsUsed.just).build());
                 return next;
             }
@@ -101,7 +100,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
                         .title("Le message.")
-                        .description("Donnez-moi l'ID du message sur le quel vous voulez ajouter un roleReaction, " +
+                        .description("Donnez-moi l'ID du message sur lequel vous voulez ajouter un roleReaction, " +
                                 "ATTENTION vous devez vous trouver dans le channel du message !")
                         .color(ColorsUsed.same).build());
                 return next;
@@ -174,7 +173,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
                         removeTable[number].delete();
                         editEmbed(EmbedCreateSpec.builder()
                                 .title("Remove effectué !")
-                                .description("Vous avez bien supprimer le rolereact !")
+                                .description("Vous avez bien supprimé le rolereact !")
                                 .color(ColorsUsed.just).build());
                         delete(false, this.message);
                         return end;
@@ -193,7 +192,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
                 super.onFirstCall(MessageCreateSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Que voulez-vous faire ?")
-                                .description("`create` -> créer un nouveau rolereact !\n`remove` -> supprimer tout " +
+                                .description("`create` -> créer un nouveau rolereact !\n`remove` -> supprimer tous " +
                                         "les rolereact !")
                                 .color(ColorsUsed.same).build()
 

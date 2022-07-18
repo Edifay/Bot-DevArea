@@ -6,11 +6,8 @@ import devarea.bot.commands.outLine.JoinThisCommand;
 import devarea.bot.commands.outLine.LeftThisCommand;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
-import discord4j.core.object.command.ApplicationCommand;
 import discord4j.core.object.command.ApplicationCommandOption;
 import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
 import discord4j.core.spec.MessageCreateSpec;
@@ -24,7 +21,7 @@ public class Admin extends ShortCommand implements SlashCommand {
 
     static {
         commands = new HashMap<>();
-        setupBindedCommands();
+        setupBoundCommands();
     }
 
     private static final HashMap<String, ConsumableCommand> commands;
@@ -33,12 +30,12 @@ public class Admin extends ShortCommand implements SlashCommand {
         super(member, chatInteraction);
         member = MemberCache.get(chatInteraction.getInteraction().getMember().get().getId().asString());
         if (chatInteraction.getOption("sous-commande").isEmpty() || chatInteraction.getOption("sous-commande").get().getValue().isEmpty()) {
-            EmbedCreateSpec.Builder builer =
+            EmbedCreateSpec.Builder builder =
                     EmbedCreateSpec.builder().title("Voici les commandes disponibles :").color(ColorsUsed.same);
             AtomicReference<String> allCommands = new AtomicReference<>("");
             commands.forEach((str, com) -> allCommands.set(allCommands.get() + "- `" + str + "`\n"));
-            builer.description(allCommands.get());
-            reply(InteractionApplicationCommandCallbackSpec.builder().ephemeral(true).addEmbed(builer.build()).build());
+            builder.description(allCommands.get());
+            reply(InteractionApplicationCommandCallbackSpec.builder().ephemeral(true).addEmbed(builder.build()).build());
         } else {
             String firstArg = chatInteraction.getOption("sous-commande").get().getValue().get().asString();
             Member finalMember = member;
@@ -53,7 +50,7 @@ public class Admin extends ShortCommand implements SlashCommand {
         }
     }
 
-    public static void setupBindedCommands() {
+    public static void setupBoundCommands() {
         commands.put("join", new ConsumableCommand(JoinThisCommand.class) {
             @Override
             protected Command command() {
@@ -69,12 +66,12 @@ public class Admin extends ShortCommand implements SlashCommand {
     }
 
     public MessageCreateSpec getFirstMessage() {
-        EmbedCreateSpec.Builder builer =
+        EmbedCreateSpec.Builder builder =
                 EmbedCreateSpec.builder().title("Voici les commandes disponibles :").color(ColorsUsed.same);
         AtomicReference<String> allCommands = new AtomicReference<>("");
         commands.forEach((str, com) -> allCommands.set(allCommands.get() + "- `" + str + "`\n"));
-        builer.description(allCommands.get());
-        return MessageCreateSpec.builder().addEmbed(builer.build()).build();
+        builder.description(allCommands.get());
+        return MessageCreateSpec.builder().addEmbed(builder.build()).build();
     }
 
     public Admin() {
@@ -84,14 +81,14 @@ public class Admin extends ShortCommand implements SlashCommand {
     public ApplicationCommandRequest getSlashCommandDefinition() {
         return ApplicationCommandRequest.builder()
                 .name("admin")
-                .description("Commande dédier aux administrateur !")
+                .description("Commandes dédiées aux administrateurs !")
                 .addOption(ApplicationCommandOptionData.builder()
                         .name("sous-commande")
-                        .description("Dites nous quelle commande administrateur voulez vous utiliser.")
+                        .description("Dites nous quelle commande administrateur vous voulez utiliser.")
                         .type(ApplicationCommandOption.Type.STRING.getValue())
                         .required(false).build())
                 .addOption(ApplicationCommandOptionData.builder()
-                        .name("mention").description("Si vous utilisez une commande admin necessitant une mention.")
+                        .name("mention").description("Si vous utilisez une commande admin nécessitant une mention.")
                         .type(ApplicationCommandOption.Type.MENTIONABLE.getValue())
                         .required(false).build())
                 .build();

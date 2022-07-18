@@ -4,9 +4,6 @@ import devarea.bot.commands.ShortCommand;
 import devarea.bot.commands.SlashCommand;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
-import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 
 public class Stramis extends ShortCommand implements SlashCommand {
@@ -25,7 +22,7 @@ public class Stramis extends ShortCommand implements SlashCommand {
     public ApplicationCommandRequest getSlashCommandDefinition() {
         return ApplicationCommandRequest.builder()
                 .name("stramis")
-                .description("Les fautes de frappes de Stramis lui ont coûté cher ^^ !")
+                .description("Les fautes de frappe de Stramis lui ont coûté cher ^^ !")
                 .build();
     }
 }

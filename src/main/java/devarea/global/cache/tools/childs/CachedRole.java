@@ -35,7 +35,7 @@ public class CachedRole extends CachedObject<Role> {
 
         for (CachedMember member : MemberCache.cache().values())
             if (member.watch() == null)
-                System.err.println("ERROR !!!!!!!!!!!!! -> Le membre est null !");
+                System.err.println("ERROR: Member is null !");
             else if (member.watch().getRoleIds().contains(Snowflake.of(roleID)))
                 count++;
 

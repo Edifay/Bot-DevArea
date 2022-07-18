@@ -105,8 +105,7 @@ public class UserDataHandler {
         for (Map.Entry<String, UserData> userData : data.entrySet())
             if (!MemberCache.contain(userData.getKey())) {
                 System.out.println("Member Presence verification problem found : " + userData.getKey() + " is not " +
-                        "here " +
-                        "anymore !");
+                        "here anymore !");
                 dataAtRemove.add(userData.getKey());
             }
 

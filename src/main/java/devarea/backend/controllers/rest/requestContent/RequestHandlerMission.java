@@ -43,7 +43,7 @@ public class RequestHandlerMission {
                 MissionsHandler.clearThisMission(mission);
                 return new String[]{"deleted"};
             }
-            return new String[]{"mission_not_find"};
+            return new String[]{"mission_not_found"};
         } else
             return new String[]{"wrong_code"};
     }
@@ -53,7 +53,7 @@ public class RequestHandlerMission {
 
     public static boolean requestCreateMission(final ReceiveMission mission, final String code) {
         WebPrivateUserInfos infos = RequestHandlerAuth.get(code);
-        System.out.println("infos : " + infos);
+        System.out.println("Infos : " + infos);
         System.out.println("Can post : " + !cooldown_create_Mission.contains(code));
         if (infos != null && !cooldown_create_Mission.contains(code)) {
             cooldown_create_Mission.add(code);

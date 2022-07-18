@@ -8,8 +8,6 @@ import devarea.bot.commands.ShortCommand;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.*;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 
@@ -40,7 +38,7 @@ public class Auth extends ShortCommand implements SlashCommand {
         embeds.add(EmbedCreateSpec.builder()
                 .title("Authentification au site de Dev'area !")
                 .description("Si vous voulez retrouver le lien d'authentification vous pouvez exécuter la commande " +
-                        "`//auth` à nouveau !")
+                        "`/auth` à nouveau !")
                 .color(ColorsUsed.same)
                 .build());
         startAway(() -> {

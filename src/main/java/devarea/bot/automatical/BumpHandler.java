@@ -31,9 +31,9 @@ public class BumpHandler {
                         restartIfNotTheLast();
                         if (dateToBump - System.currentTimeMillis() > 0) {
                             if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est à nouveau " +
-                                    "disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes."))
+                                    "disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + " minutes."))
                                 edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                                                .description("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes.")
+                                                .description("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + " minutes.")
                                                 .color(ColorsUsed.wrong).build())
                                         .build());
                         } else if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est disponible " +
@@ -64,13 +64,13 @@ public class BumpHandler {
             dateToBump = System.currentTimeMillis() + (Integer.parseInt(coupes[3]) * 60000L);
             replace(MessageCreateSpec.builder()
                     .addEmbed(EmbedCreateSpec.builder()
-                            .description("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + "minutes.")
+                            .description("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + " minutes.")
                             .color(ColorsUsed.wrong).build()).build());
         } else if (event.getMessage().getEmbeds().get(0).getDescription().get().contains("effectué") || event.getMessage().getEmbeds().get(0).getDescription().get().contains("done!")) {
             dateToBump = System.currentTimeMillis() + (120 * 60000L);
             replace(MessageCreateSpec.builder()
                     .addEmbed(EmbedCreateSpec.builder()
-                            .description("Le bump est à nouveau disponible dans " + 120 + "minutes.")
+                            .description("Le bump est à nouveau disponible dans " + 120 + " minutes.")
                             .color(ColorsUsed.wrong).build()).build());
         }
     }

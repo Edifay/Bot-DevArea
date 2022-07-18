@@ -97,9 +97,7 @@ public class JoinCommand extends LongCommand {
                                 embeds.add(EmbedCreateSpec.builder()
                                         .title("Authentification au site de Dev'area !")
                                         .description("Si vous voulez retrouver le lien d'authentification vous pouvez" +
-                                                " " +
-                                                "exécuter la commande " +
-                                                "`//auth` à nouveau !")
+                                                " exécuter la commande `/auth` à nouveau !")
                                         .color(ColorsUsed.same)
                                         .build());
 
@@ -211,7 +209,7 @@ public class JoinCommand extends LongCommand {
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
-                                .title("Conseils de communications du code")
+                                .title("Conseils de communication du code")
                                 .description(TextMessage.rulesForSpeakCode)
                                 .color(ColorsUsed.just).build())
                         .addComponent(getYesButton())

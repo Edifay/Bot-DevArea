@@ -31,7 +31,7 @@ public class Ready {
     private static boolean already = false;
 
     public static void readyEventFonction() {
-        Init.client.updatePresence(ClientPresence.of(Status.ONLINE, ClientActivity.playing("//help | Dev'Area Server " +
+        Init.client.updatePresence(ClientPresence.of(Status.ONLINE, ClientActivity.playing("/help | Dev'Area Server " +
                 "!"))).subscribe();
         Init.devarea = Init.client.getGuildById(Init.initial.devarea).block();
         assert Init.devarea != null;

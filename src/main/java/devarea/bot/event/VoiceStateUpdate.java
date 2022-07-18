@@ -12,7 +12,7 @@ import discord4j.rest.util.PermissionSet;
 
 public class VoiceStateUpdate {
 
-    public static void VoiceStateUpdateFucntion(VoiceStateUpdateEvent event) {
+    public static void VoiceStateUpdateFunction(VoiceStateUpdateEvent event) {
         if (event.getCurrent().getUser().block().isBot())
             return;
 

@@ -202,7 +202,7 @@ public class Meetup extends LongCommand implements SlashCommand {
     public ApplicationCommandRequest getSlashCommandDefinition() {
         return ApplicationCommandRequest.builder()
                 .name("meetup")
-                .description("Permet de créer et de gérer ces meetups possédés.")
+                .description("Permet de créer et de gérer ses meetups possédés.")
                 .build();
     }
 }

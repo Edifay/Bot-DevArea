@@ -46,7 +46,7 @@ public abstract class Stape implements Cloneable {
 
     protected boolean onReceiveInteract(ButtonInteractionEvent event) {
         event.reply(InteractionApplicationCommandCallbackSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                .title("Error !")
+                .title("Erreur !")
                 .description("Votre entrée n'est pas valide !")
                 .color(ColorsUsed.wrong)
                 .build()).ephemeral(true).build()).subscribe();
@@ -82,7 +82,7 @@ public abstract class Stape implements Cloneable {
 
     protected Stape stape(int nb) throws Exception {
         if (nb < 0 || nb >= stapes.length) {
-            throw new Exception("Le numero de la stape n'est pas associe !");
+            throw new Exception("Le numéro de la stape n'est pas associé !");
         }
         return stapes[nb];
     }
@@ -115,8 +115,8 @@ public abstract class Stape implements Cloneable {
     }
 
     protected void sendErrorEntry() {
-        Command.sendError((TextChannel) ChannelCache.watch(this.message.getChannelId().asString()), "Votre entrée " +
-                "n'est pas valide !");
+        Command.sendError((TextChannel) ChannelCache.watch(this.message.getChannelId().asString()),
+                "Votre entrée n'est pas valide !");
     }
 
     protected void addYesEmoji() {

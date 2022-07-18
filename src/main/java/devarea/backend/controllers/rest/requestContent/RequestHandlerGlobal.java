@@ -3,7 +3,6 @@ package devarea.backend.controllers.rest.requestContent;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.backend.controllers.tools.userInfos.WebPrivateUserInfos;
-import devarea.backend.controllers.tools.userInfos.WebPublicUserInfos;
 import devarea.bot.Init;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.core.object.entity.Member;
@@ -21,16 +20,16 @@ import static devarea.bot.event.FunctionEvent.startAway;
 
 public class RequestHandlerGlobal {
 
-    public static ArrayList<String> couldown = new ArrayList<>();
+    public static ArrayList<String> cooldown = new ArrayList<>();
 
     public static String[] requestSendMessageToMember(String message_id, String message, String code) {
         WebPrivateUserInfos user = RequestHandlerAuth.get(code);
-        if (user != null && !couldown.contains(code)) {
-            couldown.add(code);
+        if (user != null && !cooldown.contains(code)) {
+            cooldown.add(code);
             startAway(() -> {
                 try {
                     Thread.sleep(5000);
-                    couldown.remove(code);
+                    cooldown.remove(code);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -49,8 +48,8 @@ public class RequestHandlerGlobal {
             }
             return new String[]{"send"};
         } else {
-            if (couldown.contains(code)) {
-                return new String[]{"couldown"};
+            if (cooldown.contains(code)) {
+                return new String[]{"cooldown"};
             } else {
                 return new String[]{"wrong_code"};
             }

@@ -4,8 +4,6 @@ import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.MessageCreateSpec;
 
-import java.util.function.Consumer;
-
 public abstract class FirstStape extends Stape {
 
     protected TextChannel textChannel;

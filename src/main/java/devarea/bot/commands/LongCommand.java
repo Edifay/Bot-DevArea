@@ -48,7 +48,7 @@ public abstract class LongCommand extends Command {
                 if (!message.getId().equals(this.lastMessage.getId())) {
                     deletedEmbed((TextChannel) ChannelCache.watch(message.getChannelId().asString()),
                             EmbedCreateSpec.builder()
-                                    .title("Error !")
+                                    .title("Erreur !")
                                     .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
                                     .color(ColorsUsed.wrong).build());
                     message.removeReaction(event.getEmoji(), event.getUserId()).subscribe();
@@ -73,7 +73,7 @@ public abstract class LongCommand extends Command {
                 if (!event.getMessage().getChannelId().equals(this.channel.getId())) {
                     startAway(() -> deletedEmbed((TextChannel) ChannelCache.watch(event.getMessage().getChannelId().asString()),
                             EmbedCreateSpec.builder()
-                                    .title("Error !")
+                                    .title("Erreur !")
                                     .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
                                     .color(ColorsUsed.wrong).build()
                     ));
@@ -96,7 +96,7 @@ public abstract class LongCommand extends Command {
             try {
                 if (!event.getMessage().get().getChannelId().equals(this.channel.getId())) {
                     event.reply(InteractionApplicationCommandCallbackSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                            .title("Error !")
+                            .title("Erreur !")
                             .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
                             .color(ColorsUsed.wrong).build()).ephemeral(true).build()).subscribe();
                     return;
@@ -115,13 +115,13 @@ public abstract class LongCommand extends Command {
         if (chatInteraction != null)
             chatInteraction.editReply(InteractionReplyEditSpec.builder()
                     .addEmbed(EmbedCreateSpec.builder()
-                            .title("Error !")
-                            .description("Vous avez annuler la commande")
+                            .title("Erreur !")
+                            .description("Vous avez annulé la commande")
                             .color(ColorsUsed.wrong)
                             .build())
                     .build()).subscribe();
         else
-            sendError("Vous avez annuler la commande !");
+            sendError("Vous avez annulé la commande !");
         delete(false, this.lastMessage);
         endCommand();
     }

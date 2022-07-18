@@ -29,7 +29,7 @@ public class MeetupStock implements Serializable {
     @JsonProperty
     private String attachment;
     @JsonProperty
-    private Boolean alreayMake = false;
+    private Boolean alreadyMade = false;
     @JsonProperty
     private MessageSeria message;
 
@@ -112,8 +112,8 @@ public class MeetupStock implements Serializable {
     public EmbedCreateSpec getEmbedVerif() {
         EmbedCreateSpec.Builder builder = EmbedCreateSpec.builder();
 
-        builder.author("Voici comment sera afficher le meetup ! Vous pouvez comfirmer yes ou annuler cancel le meetup" +
-                ".", Init.client.getSelf().block().getAvatarUrl(), Init.client.getSelf().block().getAvatarUrl());
+        builder.author("Voici comment sera afficher le meetup ! Vous pouvez confirmer (yes) ou annuler (cancel) le meetup.",
+                Init.client.getSelf().block().getAvatarUrl(), Init.client.getSelf().block().getAvatarUrl());
         if (this.name != null)
             builder.title(this.name);
         if (this.author != null) {
@@ -140,13 +140,13 @@ public class MeetupStock implements Serializable {
     }
 
     @JsonIgnore
-    public Boolean getAlreayMake() {
-        return this.alreayMake;
+    public Boolean getAlreadyMade() {
+        return this.alreadyMade;
     }
 
     @JsonIgnore
-    public void setAlreadyMake(final boolean bool) {
-        this.alreayMake = bool;
+    public void setAlreadyMade(final boolean bool) {
+        this.alreadyMade = bool;
     }
 
     @JsonIgnore

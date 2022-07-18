@@ -24,17 +24,17 @@ public class FreeLance extends LongCommand implements SlashCommand {
                 if (FreeLanceHandler.hasFreelance(FreeLance.this.member)) {
                     if (FreeLanceHandler.bumpFreeLance(FreeLance.this.member.getId().asString()))
                         editEmbed(EmbedCreateSpec.builder()
-                                .title("Le bump a effectué !")
+                                .title("Le bump a été effectué !")
                                 .color(ColorsUsed.just).build());
                     else
                         editEmbed(EmbedCreateSpec.builder()
-                                .title("Error")
+                                .title("Erreur !")
                                 .description("Vous devez attendre 24 heures entre chaque bump !")
                                 .color(ColorsUsed.wrong).build());
 
                 } else
                     editEmbed(EmbedCreateSpec.builder()
-                            .title("Error")
+                            .title("Erreur !")
                             .description("Vous ne possédez pas de freelance !")
                             .color(ColorsUsed.wrong).build());
                 delete(false, this.message);
@@ -58,7 +58,7 @@ public class FreeLance extends LongCommand implements SlashCommand {
                             .color(ColorsUsed.just).build());
                 } else {
                     editEmbed(EmbedCreateSpec.builder()
-                            .title("Error")
+                            .title("Erreur !")
                             .description("Vous n'avez pas de freelance !")
                             .color(ColorsUsed.wrong)
                             .build());
