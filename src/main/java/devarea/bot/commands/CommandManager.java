@@ -1,7 +1,6 @@
 package devarea.bot.commands;
 
 import devarea.Main;
-import devarea.bot.commands.inLine.Rank;
 import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
@@ -16,9 +15,11 @@ import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 import discord4j.rest.util.PermissionSet;
 import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
 import reactor.util.annotation.Nullable;
 
 import java.io.File;
@@ -52,6 +53,18 @@ public class CommandManager {
             @Override
             public Publisher<?> onChatInputInteraction(ChatInputInteractionEvent event) {
                 System.out.println(event.getCommandName());
+                if (actualCommands.containsKey(event.getInteraction().getMember().get().getId())) {
+                    event.reply(InteractionApplicationCommandCallbackSpec.builder()
+                            .ephemeral(true)
+                            .addEmbed(EmbedCreateSpec.builder()
+                                    .title("Erreur !")
+                                    .description("Vous êtes déjà actuellement dans une commande !")
+                                    .color(ColorsUsed.wrong)
+                                    .build())
+
+                            .build()).subscribe();
+                    return Mono.empty();
+                }
                 exe(event.getCommandName(), null, event);
                 return super.onChatInputInteraction(event);
             }
@@ -59,7 +72,7 @@ public class CommandManager {
 
         try {
 
-            System.out.println(Main.separator + "Loading commands :");
+            System.out.println("Loading commands :");
 
             ArrayList<String> names = getClassNamesFromPackage("devarea.bot.commands.inLine");
             if (names.size() == 0) {
@@ -98,14 +111,14 @@ public class CommandManager {
                 }
             }
             System.out.println();
-            System.out.println("Size of slash commands : " + slashCommands.size());
 
             Init.client.getRestClient().getApplicationService()
                     .bulkOverwriteGlobalApplicationCommand(Init.client.getRestClient().getApplicationId().block(),
                             slashCommands)
                     .subscribe();
 
-            System.out.println(classBound.size() + " commands loaded !");
+            System.out.println(slashCommands.size() + " slash commands on " + classBound.size() + " commands loaded " +
+                    "!\n" + Main.separator);
         } catch (IOException | URISyntaxException | ClassNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
@@ -192,9 +205,19 @@ public class CommandManager {
                         }
                         if (actualCommand instanceof LongCommand)
                             actualCommands.put(member_replaced.getId(), (LongCommand) actualCommand);
-                    } else
+                    } else if (message != null)
                         Command.sendError((TextChannel) ChannelCache.watch(message.getMessage().getChannelId().asString()), "Vous n'avez pas " +
                                 "la permission d'éxécuter cette commande !");
+                    else
+                        chatInteraction.reply(InteractionApplicationCommandCallbackSpec.builder()
+                                .ephemeral(true)
+                                .addEmbed(EmbedCreateSpec.builder()
+                                        .color(ColorsUsed.wrong)
+                                        .title("Erreur !")
+                                        .description("Vous n'avez pas la permission d'éxécuter cette commande !")
+                                        .build())
+                                .build()).subscribe();
+
 
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
@@ -250,7 +273,7 @@ public class CommandManager {
             Member member_replaced = logged_as.get(event.getUserId()) == null ? event.getMember().get() :
                     MemberCache.get(logged_as.get(event.getUserId()).asString());
             if (actualCommands.containsKey(member_replaced.getId())) {
-                actualCommands.get(member_replaced.getId()).nextStape(event);
+                actualCommands.get(member_replaced.getId()).nextStep(event);
                 return true;
             }
             return false;
@@ -263,7 +286,7 @@ public class CommandManager {
                     event.getMember().get() :
                     MemberCache.get(logged_as.get(event.getMessage().getAuthor().get().getId()).asString());
             if (actualCommands.containsKey(member_replaced.getId())) {
-                actualCommands.get(member_replaced.getId()).nextStape(event);
+                actualCommands.get(member_replaced.getId()).nextStep(event);
                 return true;
             }
             return false;
@@ -277,7 +300,7 @@ public class CommandManager {
                     event.getInteraction().getMember().get() :
                     MemberCache.get(logged_as.get(event.getInteraction().getMember().get().getId()).asString());
             if (actualCommands.containsKey(member_replaced.getId())) {
-                actualCommands.get(member_replaced.getId()).nextStape(event);
+                actualCommands.get(member_replaced.getId()).nextStep(event);
                 return true;
             }
             return false;

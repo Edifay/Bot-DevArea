@@ -8,7 +8,6 @@ import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
@@ -20,9 +19,8 @@ public class Mission extends LongCommand implements SlashCommand {
 
     public Mission(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
-        chatInteraction.deferReply().subscribe();
 
-        Stape deleteList = new EndStape() {
+        Step deleteList = new EndStep() {
             @Override
             protected boolean onCall(Message message) {
                 ofMember = MissionsHandler.getOf(member.getId());
@@ -36,10 +34,9 @@ public class Mission extends LongCommand implements SlashCommand {
                             .description(msg)
                             .footer("Vous pouvez annuler | cancel", null).build());
                 } else {
-                    editEmbed(EmbedCreateSpec.builder()
+                    endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
                             .color(ColorsUsed.same)
                             .title("Vous n'avez acutellement acune mission !").build());
-                    delete(false, this.message);
                     return end;
                 }
                 return next;
@@ -52,10 +49,9 @@ public class Mission extends LongCommand implements SlashCommand {
                     Integer number = Integer.parseInt(content);
                     if (number >= 0 && number < ofMember.size()) {
                         MissionsHandler.clearThisMission(ofMember.get(number));
-                        editEmbed(EmbedCreateSpec.builder()
+                        endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
                                 .color(ColorsUsed.just)
                                 .title("Votre mission a bien été supprimé !").build());
-                        delete(false, this.message);
                         return end;
                     }
                 } catch (Exception e) {
@@ -64,7 +60,7 @@ public class Mission extends LongCommand implements SlashCommand {
             }
         };
 
-        this.firstStape = new FirstStape(this.channel, deleteList) {
+        this.firstStape = new FirstStep(this.channel, deleteList) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()

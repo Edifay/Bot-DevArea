@@ -1,5 +1,7 @@
 package devarea.bot.commands.commandTools;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.bot.Init;
@@ -14,9 +16,14 @@ import java.util.HashMap;
 
 public class RoleReact {
 
+    @JsonProperty
     String reactionId;
+    @JsonProperty
     String isID;
+    @JsonProperty
     MessageSeria message;
+
+    public RoleReact(){}
 
     public RoleReact(Snowflake reactionId, Message message) {
         this.reactionId = reactionId.asString();
@@ -46,7 +53,9 @@ public class RoleReact {
         try {
             reactionId = map.get("reactionId");
             ObjectMapper mapper = new ObjectMapper();
-            String str = map.get("message").replace("=", "\":\"").replace(", ", "\", \"").replace("{", "{\"").replace("}", "\"}");
+            String str =
+                    map.get("message").replace("=", "\":\"").replace(", ", "\", \"").replace("{", "{\"").replace("}",
+                            "\"}");
             message = new MessageSeria(mapper.readValue(str, new TypeReference<HashMap<String, String>>() {
             }));
             isID = map.get("isID");
@@ -55,6 +64,7 @@ public class RoleReact {
         }
     }
 
+    @JsonIgnore
     public HashMap<String, String> getHashMap() {
         HashMap<String, String> stock = new HashMap<>();
         stock.put("reactionId", reactionId);
@@ -63,14 +73,17 @@ public class RoleReact {
         return stock;
     }
 
+    @JsonIgnore
     public boolean is(ReactionAddEvent event) {
         return message.equalsTo(new MessageSeria(event.getMessageId().asString(), event.getChannelId().asString())) && reactionId.equals(event.getEmoji().asCustomEmoji().isPresent() ? event.getEmoji().asCustomEmoji().get().getId().asString() : event.getEmoji().asUnicodeEmoji().get().getRaw());
     }
 
+    @JsonIgnore
     public boolean is(ReactionRemoveEvent event) {
         return message.equalsTo(new MessageSeria(event.getMessageId().asString(), event.getChannelId().asString())) && reactionId.equals(event.getEmoji().asCustomEmoji().isPresent() ? event.getEmoji().asCustomEmoji().get().getId().asString() : event.getEmoji().asUnicodeEmoji().get().getRaw());
     }
 
+    @JsonIgnore
     public ReactionEmoji getEmoji() {
         if (isID.equals("true")) {
             return ReactionEmoji.custom(Init.devarea.getGuildEmojiById(Snowflake.of(this.reactionId)).block());
@@ -79,18 +92,22 @@ public class RoleReact {
         }
     }
 
+    @JsonIgnore
     public boolean isID() {
         return this.isID.equals("true");
     }
 
+    @JsonIgnore
     public String getStringEmoji() {
         return this.isID() ? "<:ayy:" + this.reactionId + ">" : this.reactionId;
     }
 
+    @JsonIgnore
     public MessageSeria getMessageSeria() {
         return this.message;
     }
 
+    @JsonIgnore
     public void delete() {
         message.getMessage().removeReactions(this.getEmoji()).subscribe();
     }

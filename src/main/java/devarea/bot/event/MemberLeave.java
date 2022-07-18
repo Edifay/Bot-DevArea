@@ -19,8 +19,6 @@ public class MemberLeave {
             MemberCache.slash(memberLeaveEvent.getUser().getId().asString());
 
             CommandManager.left(memberLeaveEvent.getUser().getId());
-            if (FreeLanceHandler.hasFreelance(memberLeaveEvent.getUser().getId().asString()))
-                FreeLanceHandler.remove(FreeLanceHandler.getFreelance(memberLeaveEvent.getUser().getId().asString()));
             RequestHandlerAuth.left(memberLeaveEvent.getUser().getId().asString());
             UserDataHandler.left(memberLeaveEvent.getUser().getId().asString());
             ((TextChannel) ChannelCache.watch(Init.initial.logJoin_channel.asString()))

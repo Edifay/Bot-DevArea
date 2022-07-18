@@ -10,7 +10,7 @@ import discord4j.core.object.entity.Member;
 import java.util.ArrayList;
 import java.util.List;
 
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.global.utils.ThreadHandler.startAway;
 
 public class RequestHandlerMission {
 

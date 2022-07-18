@@ -4,6 +4,11 @@ import java.util.Objects;
 
 public abstract class CachedObject<T> {
 
+    /*
+        600000L -> 10min
+     */
+    private final static long CACHED_TIME = 600000L;
+
     protected String object_id;
     protected T object_cached;
     protected long last_fetch;
@@ -20,24 +25,40 @@ public abstract class CachedObject<T> {
         this.last_fetch = 0;
     }
 
+    /*
+        Get the value, fetch if needToBeFetch() and use cache if not.
+     */
     public T get() {
         if (this.object_cached == null || needToBeFetch())
             return fetch();
         return this.object_cached;
     }
 
+    /*
+        Return if the object cached is too old, defined by CACHED_TIME
+     */
     protected boolean needToBeFetch() {
-        return (System.currentTimeMillis() - this.last_fetch) > 600000;
+        return (System.currentTimeMillis() - this.last_fetch) > CACHED_TIME;
     }
 
+    /*
+        Bypass cache and force to fetch.
+        Need to be implemented, to fetch your own object !
+     */
     public abstract T fetch();
 
+    /*
+        Bypass needToBeFetch() and fetch if the object isn't null.
+     */
     public T watch() {
         if (this.object_cached == null)
             this.fetch();
         return this.object_cached;
     }
 
+    /*
+        Simulate a new fetch from an object
+     */
     public void use(final T object_cached, final String object_id) throws Exception {
         if (this.object_id.equals(object_id)) {
             this.object_cached = object_cached;
@@ -46,6 +67,9 @@ public abstract class CachedObject<T> {
             throw new Exception("Wrong member usage !");
     }
 
+    /*
+        Reset
+     */
     public void reset() {
         this.last_fetch = 0;
     }

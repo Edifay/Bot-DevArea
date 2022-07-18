@@ -19,10 +19,9 @@ public class MemberJoin {
     public static void memberJoinFunction(MemberJoinEvent event) {
         MemberCache.use(event.getMember());
 
-        if (channelJoin == null)
-            channelJoin = (TextChannel) ChannelCache.fetch(Init.initial.logJoin_channel.asString());
-        channelJoin.createMessage(msg -> msg.setContent(event.getMember().getDisplayName() + " a rejoint le serveur " +
-                "!")).subscribe();
+        ((TextChannel) ChannelCache.watch(Init.initial.logJoin_channel.asString()))
+                .createMessage(msg -> msg.setContent(event.getMember().getDisplayName() + " a rejoint le serveur !"))
+                .subscribe();
 
         XPHandler.addNewMember(event.getMember().getId());
 

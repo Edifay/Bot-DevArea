@@ -17,32 +17,30 @@ public class FreeLance extends LongCommand implements SlashCommand {
 
     public FreeLance(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
-        chatInteraction.deferReply().subscribe();
 
-        EndStape bumpStape = new EndStape() {
+        EndStep bumpStape = new EndStep() {
             protected boolean onCall(Message message) {
                 if (FreeLanceHandler.hasFreelance(FreeLance.this.member)) {
                     if (FreeLanceHandler.bumpFreeLance(FreeLance.this.member.getId().asString()))
-                        editEmbed(EmbedCreateSpec.builder()
+                        endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
                                 .title("Le bump a effectué !")
                                 .color(ColorsUsed.just).build());
                     else
-                        editEmbed(EmbedCreateSpec.builder()
+                        endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
                                 .title("Error")
                                 .description("Vous devez attendre 24 heures entre chaque bump !")
                                 .color(ColorsUsed.wrong).build());
 
                 } else
-                    editEmbed(EmbedCreateSpec.builder()
+                    endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
                             .title("Error")
                             .description("Vous ne possédez pas de freelance !")
                             .color(ColorsUsed.wrong).build());
-                delete(false, this.message);
                 return true;
             }
         };
 
-        EndStape deleteStape = new EndStape() {
+        EndStep deleteStape = new EndStep() {
             protected boolean onCall(Message message) {
                 if (FreeLanceHandler.hasFreelance(member)) {
                     devarea.bot.commands.commandTools.FreeLance free = FreeLanceHandler.getFreelance(member);
@@ -52,22 +50,21 @@ public class FreeLance extends LongCommand implements SlashCommand {
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
-                    editEmbed(EmbedCreateSpec.builder()
+                    endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
                             .title("Suppression")
                             .description("Votre freelance a bien été supprimé !")
                             .color(ColorsUsed.just).build());
                 } else {
-                    editEmbed(EmbedCreateSpec.builder()
+                    endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
                             .title("Error")
                             .description("Vous n'avez pas de freelance !")
                             .color(ColorsUsed.wrong)
                             .build());
                 }
-                delete(false, this.message);
                 return true;
             }
         };
-        this.firstStape = new FirstStape(this.channel, bumpStape, deleteStape) {
+        this.firstStape = new FirstStep(this.channel, bumpStape, deleteStape) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()

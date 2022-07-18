@@ -24,8 +24,8 @@ public class CreateFreeLance extends LongCommand {
     protected Message messageAtEdit;
     protected FreeLance freeLance;
     protected FreeLance.FieldSeria actualFied;
-    private Stape stapeAskForField = null;
-    private final Stape link;
+    private Step stepAskForField = null;
+    private final Step link;
 
 
     public CreateFreeLance(final Member member) {
@@ -36,7 +36,7 @@ public class CreateFreeLance extends LongCommand {
 
         this.createLocalChannel("creation de freelance", Init.initial.missions_category);
 
-        Stape validateAll = new EndStape() {
+        Step validateAll = new EndStep() {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder()
@@ -63,7 +63,7 @@ public class CreateFreeLance extends LongCommand {
                                     "devarea.fr")))
                             .build(), true))));
                     FreeLanceHandler.add(freeLance);
-                    FreeLanceHandler.update();
+                    FreeLanceHandler.updateBottomMessage();
                     return super.onReceiveInteract(event);
                 } else if (isNo(event)) {
                     return super.onReceiveInteract(event);
@@ -72,7 +72,7 @@ public class CreateFreeLance extends LongCommand {
             }
         };
 
-        Stape validateInfo = new Stape(validateAll) {
+        Step validateInfo = new Step(validateAll) {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder()
@@ -99,7 +99,7 @@ public class CreateFreeLance extends LongCommand {
             }
         };
 
-        Stape linkGetInfo = new Stape(validateInfo) {
+        Step linkGetInfo = new Step(validateInfo) {
             @Override
             protected boolean onCall(Message message) {
                 actualFied = new FreeLance.FieldSeria();
@@ -150,7 +150,7 @@ public class CreateFreeLance extends LongCommand {
             }
         };
 
-        link = new Stape(linkGetInfo, validateAll) {
+        link = new Step(linkGetInfo, validateAll) {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder()
@@ -178,7 +178,7 @@ public class CreateFreeLance extends LongCommand {
 
         ;
 
-        Stape keepField = new Stape() {
+        Step keepField = new Step() {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder()
@@ -197,15 +197,15 @@ public class CreateFreeLance extends LongCommand {
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event)) {
                     freeLance.addField(actualFied);
-                    return call(stapeAskForField);
+                    return call(stepAskForField);
                 } else if (isNo(event)) {
-                    return call(stapeAskForField);
+                    return call(stepAskForField);
                 }
                 return super.onReceiveInteract(event);
             }
         };
 
-        Stape getTemps = new Stape(keepField) {
+        Step getTemps = new Step(keepField) {
             @Override
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder().title("Temps de retour").description("Proposez un temps de retour " +
@@ -225,7 +225,7 @@ public class CreateFreeLance extends LongCommand {
             }
         };
 
-        Stape getPrice = new Stape(getTemps) {
+        Step getPrice = new Step(getTemps) {
             @Override
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder().title("Prix").description("Proposez un prix que vous pensez juste, " +
@@ -245,7 +245,7 @@ public class CreateFreeLance extends LongCommand {
             }
         };
 
-        Stape getDescriptionField = new Stape(getPrice) {
+        Step getDescriptionField = new Step(getPrice) {
             @Override
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder().title("L'offre").description("Description de l'offre, essayez de " +
@@ -266,7 +266,7 @@ public class CreateFreeLance extends LongCommand {
             }
         };
 
-        Stape createNewField = new Stape(getDescriptionField) {
+        Step createNewField = new Step(getDescriptionField) {
             @Override
             protected boolean onCall(Message message) {
                 actualFied = new FreeLance.FieldSeria();
@@ -294,7 +294,7 @@ public class CreateFreeLance extends LongCommand {
             }
         };
 
-        stapeAskForField = new Stape(createNewField, link) {
+        stepAskForField = new Step(createNewField, link) {
             @Override
             protected boolean onCall(Message message) {
                 EmbedCreateSpec.Builder builder =
@@ -339,7 +339,7 @@ public class CreateFreeLance extends LongCommand {
             }
         };
 
-        Stape getDescription = new Stape(stapeAskForField) {
+        Step getDescription = new Step(stepAskForField) {
             @Override
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder().title("Description").description("Donnez votre expérience dans le " +
@@ -376,7 +376,7 @@ public class CreateFreeLance extends LongCommand {
             }
         };
 
-        Stape getName = new Stape(getDescription) {
+        Step getName = new Step(getDescription) {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder()
@@ -415,7 +415,7 @@ public class CreateFreeLance extends LongCommand {
             }
         };
 
-        Stape showEmbed = new Stape(getName) {
+        Step showEmbed = new Step(getName) {
             @Override
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
@@ -449,7 +449,7 @@ public class CreateFreeLance extends LongCommand {
             }
         };
 
-        this.firstStape = new FirstStape(this.channel, showEmbed) {
+        this.firstStape = new FirstStep(this.channel, showEmbed) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()

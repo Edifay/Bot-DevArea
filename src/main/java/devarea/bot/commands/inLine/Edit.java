@@ -9,7 +9,6 @@ import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.InteractionReplyEditSpec;
 import discord4j.core.spec.MessageCreateSpec;
@@ -34,23 +33,19 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
 
     public Edit(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
-        chatInteraction.deferReply().subscribe();
 
-        Stape endStape = new EndStape() {
+        Step endStep = new EndStep() {
             @Override
             protected boolean onCall(Message message) {
-                chatInteraction.editReply(InteractionReplyEditSpec.builder()
-                        .addEmbed(EmbedCreateSpec.builder()
-                                .title("Votre message a été modifé !")
-                                .color(ColorsUsed.just).build())
-                        .build()).subscribe();
-                delete(false, this.message);
+                endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
+                        .title("Votre message a été modifé !")
+                        .color(ColorsUsed.just).build());
                 return end;
             }
         };
 
 
-        Stape getMessageEnd = new Stape(endStape) {
+        Step getMessageEnd = new Step(endStep) {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder()
@@ -77,7 +72,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
         };
 
 
-        Stape getEmbedColor = new Stape(endStape) {
+        Step getEmbedColor = new Step(endStep) {
             @Override
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
@@ -118,7 +113,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
             }
         };
 
-        Stape getDescriptionTitle = new Stape(getEmbedColor) {
+        Step getDescriptionTitle = new Step(getEmbedColor) {
             @Override
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
@@ -144,7 +139,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
             }
         };
 
-        Stape getEmbedTitle = new Stape(getDescriptionTitle) {
+        Step getEmbedTitle = new Step(getDescriptionTitle) {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder()
@@ -169,7 +164,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
             }
         };
 
-        Stape isEmbedOrText = new Stape(getMessageEnd, getEmbedTitle) {
+        Step isEmbedOrText = new Step(getMessageEnd, getEmbedTitle) {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder()
@@ -195,7 +190,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
 
         };
 
-        this.firstStape = new FirstStape(this.channel, isEmbedOrText) {
+        this.firstStape = new FirstStep(this.channel, isEmbedOrText) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder()

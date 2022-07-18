@@ -8,7 +8,7 @@ public class MessageDelete {
 
     public static void messageDeleteFunction(MessageDeleteEvent messageDeleted) {
         try {
-            if(messageDeleted.getMessage().isEmpty())
+            if (messageDeleted.getMessage().isEmpty())
                 return;
 
             final Message message = messageDeleted.getMessage().get();

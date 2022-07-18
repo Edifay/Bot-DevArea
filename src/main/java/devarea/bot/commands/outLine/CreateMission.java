@@ -2,10 +2,10 @@ package devarea.bot.commands.outLine;
 
 import devarea.bot.Init;
 import devarea.global.handlers.MissionsHandler;
-import devarea.bot.commands.EndStape;
-import devarea.bot.commands.FirstStape;
+import devarea.bot.commands.EndStep;
+import devarea.bot.commands.FirstStep;
 import devarea.bot.commands.LongCommand;
-import devarea.bot.commands.Stape;
+import devarea.bot.commands.Step;
 import devarea.bot.commands.commandTools.Mission;
 import devarea.bot.presets.ColorsUsed;
 import devarea.bot.presets.TextMessage;
@@ -16,7 +16,7 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
 
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.global.utils.ThreadHandler.startAway;
 
 public class CreateMission extends LongCommand {
 
@@ -30,7 +30,7 @@ public class CreateMission extends LongCommand {
 
         this.createLocalChannel("creation de mission", Init.initial.missions_category);
 
-        Stape niveauStape = new EndStape() {
+        Step niveauStep = new EndStep() {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder().addEmbed(TextMessage.missionNiveau).build());
@@ -51,7 +51,7 @@ public class CreateMission extends LongCommand {
             }
         };
 
-        Stape supportStape = new Stape(niveauStape) {
+        Step supportStep = new Step(niveauStep) {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder().addEmbed(TextMessage.missionSupport).build());
@@ -65,7 +65,7 @@ public class CreateMission extends LongCommand {
             }
         };
 
-        Stape langageStape = new Stape(supportStape) {
+        Step langageStep = new Step(supportStep) {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder().addEmbed(TextMessage.missionLangage).build());
@@ -79,7 +79,7 @@ public class CreateMission extends LongCommand {
             }
         };
 
-        Stape dateRetourStape = new Stape(langageStape) {
+        Step dateRetourStep = new Step(langageStep) {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder().addEmbed(TextMessage.missionDate).build());
@@ -93,7 +93,7 @@ public class CreateMission extends LongCommand {
             }
         };
 
-        Stape prixStage = new Stape(dateRetourStape) {
+        Step prixStage = new Step(dateRetourStep) {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder().addEmbed(TextMessage.missionPrix).build());
@@ -107,7 +107,7 @@ public class CreateMission extends LongCommand {
             }
         };
 
-        Stape description = new Stape(prixStage) {
+        Step description = new Step(prixStage) {
             @Override
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder().addEmbed(TextMessage.missionDescription).build());
@@ -121,7 +121,7 @@ public class CreateMission extends LongCommand {
             }
         };
 
-        this.firstStape = new FirstStape(this.channel, description) {
+        this.firstStape = new FirstStep(this.channel, description) {
             @Override
             public void onFirstCall(MessageCreateSpec spec) {
                 super.onFirstCall(MessageCreateSpec.builder().content("<@" + member.getId().asString() + ">,").addEmbed(TextMessage.missionTitle).build());

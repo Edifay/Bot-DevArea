@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static devarea.Main.developing;
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.global.utils.ThreadHandler.startAway;
 
 public class Ready {
 
@@ -57,7 +57,7 @@ public class Ready {
 
         MemberCache.use(Init.devarea.getMembers().buffer().blockLast().toArray(new Member[0]));
 
-        System.out.println("Fetch took : " + (System.currentTimeMillis() - ms) + "ms, " + MemberCache.cacheSize() +
+        System.out.print("Fetch took : " + (System.currentTimeMillis() - ms) + "ms, " + MemberCache.cacheSize() +
                 " members fetched !\n" + Main.separator);
         if (MemberCache.cacheSize() == 0)
             System.exit(0);
@@ -80,7 +80,7 @@ public class Ready {
 
         try {
             UserDataHandler.init();
-            startAway(RolesReactsHandler::load);
+            startAway(RolesReactsHandler::init);
             startAway(StatsHandler::start);
             startAway(MeetupHandler::init);
             startAway(XPHandler::init);

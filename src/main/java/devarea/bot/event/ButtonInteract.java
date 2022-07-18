@@ -13,8 +13,8 @@ public class ButtonInteract {
         try {
             if (event.getInteraction().getMember().isPresent())
                 MemberCache.use(event.getInteraction().getMember().get());
-            if (CommandManager.receiveInteract(event) || FreeLanceHandler.interact(event)
-                    || MissionsHandler.interact(event) || HelpRewardHandler.react(event)) ;
+            if (CommandManager.receiveInteract(event) || MissionsHandler.interact(event) || HelpRewardHandler.react(event))
+                ;
             event.deferEdit().subscribe(msg -> {
             }, err -> {
             });

@@ -3,7 +3,6 @@ package devarea.backend.controllers.rest.requestContent;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.backend.controllers.tools.userInfos.WebPrivateUserInfos;
-import devarea.backend.controllers.tools.userInfos.WebPublicUserInfos;
 import devarea.bot.Init;
 import devarea.bot.presets.ColorsUsed;
 import discord4j.core.object.entity.Member;
@@ -17,7 +16,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.global.utils.ThreadHandler.startAway;
 
 public class RequestHandlerGlobal {
 

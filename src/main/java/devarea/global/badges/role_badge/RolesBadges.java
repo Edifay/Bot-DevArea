@@ -26,7 +26,7 @@ public abstract class RolesBadges extends Badges {
         super(name, url_icon, description, local_icon);
     }
 
-    public static ArrayList<RolesBadges> getRolesBadges(final WebUserInfos user, final Member member_fetched) {
+    public static ArrayList<RolesBadges> getRolesBadges(final Member member_fetched) {
         ArrayList<RolesBadges> badges = new ArrayList<>();
 
         Set<Snowflake> roles = member_fetched.getRoleIds();

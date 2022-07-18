@@ -27,13 +27,12 @@ import discord4j.rest.util.PermissionSet;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.*;
 
 import static devarea.bot.commands.Command.delete;
 import static devarea.bot.commands.Command.send;
-import static devarea.bot.event.FunctionEvent.repeatEachMillis;
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.global.utils.ThreadHandler.*;
+import static devarea.bot.presets.TextMessage.*;
 
 public class MissionsHandler {
     /*
@@ -60,17 +59,24 @@ public class MissionsHandler {
         load();
 
         // Fetch message at the bottom
+        setupBottomMessage();
+
+        repeatEachMillis(() -> {
+            if (!Main.developing)
+                checkForUpdate();
+        }, 3600000, false);
+    }
+
+    /*
+        Setup the message at the Bottom of the channel
+     */
+    private static void setupBottomMessage() {
         missionChannel = (TextChannel) ChannelCache.fetch(Init.initial.paidMissions_channel.asString());
         Message currentAtBottom = missionChannel.getLastMessage().block();
         if (currentAtBottom.getEmbeds().size() == 0 || currentAtBottom.getEmbeds().get(0).getTitle().equals("Créer " +
                 "une mission."))
             sendLastMessage();
         else bottomMessage = currentAtBottom;
-
-        repeatEachMillis(() -> {
-            if (!Main.developing)
-                checkForUpdate();
-        }, 3600000, false);
     }
 
     /*
@@ -85,14 +91,7 @@ public class MissionsHandler {
         Send the message at the bottom of the channel
      */
     private static void sendLastMessage() {
-        bottomMessage = Command.send(missionChannel, MessageCreateSpec.builder()
-                        .addEmbed(EmbedCreateSpec.builder().color(ColorsUsed.same)
-                                .title("Créer une mission.")
-                                .description("Cliquez sur le bouton ci-dessous pour créer une mission !" +
-                                        "!\n\nVisionner les missions sur web -> " + Main.domainName + "missions")
-                                .build())
-                        .addComponent(ActionRow.of(Button.link(Main.domainName + "mission-creator", "devarea.fr"))).build(),
-                true);
+        bottomMessage = Command.send(missionChannel, missionBottomMessage, true);
     }
 
     /*
@@ -110,18 +109,8 @@ public class MissionsHandler {
     }
 
     /*
-        Add new mission
+        delete Mission and close missionsFollow who contain the member -> userID
      */
-    public static void add(Mission mission) {
-        // add on the top of the map
-        LinkedHashMap<String, Mission> temp = (LinkedHashMap<String, Mission>) missions.clone();
-        missions.clear();
-        missions.put(mission.getId(), mission);
-        missions.putAll(temp);
-
-        save();
-    }
-
     public static void left(String userID, Collection<Mission> userMissions) {
         for (Mission current : userMissions)
             clearThisMission(current);
@@ -158,7 +147,7 @@ public class MissionsHandler {
         if (!file.exists()) save();
         try {
 
-            // Load data
+            // Load config
             MissionHandlerData missionData = mapper.readValue(file, new TypeReference<>() {
             });
 
@@ -338,25 +327,11 @@ public class MissionsHandler {
         Snowflake member_react_id = event.getInteraction().getMember().get().getId();
         if (mission != null) {
             if (mission.getMemberId().equals(member_react_id.asString())) {
-                event.reply(InteractionApplicationCommandCallbackSpec.builder()
-                        .ephemeral(true)
-                        .addEmbed(EmbedCreateSpec.builder()
-                                .title("Error !")
-                                .description("Vous ne pouvez pas prendre votre propre mission !")
-                                .color(ColorsUsed.wrong)
-                                .build())
-                        .build()).subscribe();
+                event.reply(cannotFollowYourOwnMission).subscribe();
                 return true;
             }
             if (alreadyHaveAChannel(mission.getMemberId(), member_react_id.asString())) {
-                event.reply(InteractionApplicationCommandCallbackSpec.builder()
-                        .ephemeral(true)
-                        .addEmbed(EmbedCreateSpec.builder()
-                                .title("Error !")
-                                .description("Vous suivez déjà cette mission !")
-                                .color(ColorsUsed.wrong)
-                                .build())
-                        .build()).subscribe();
+                event.reply(alreadyFollowingThisMission).subscribe();
                 return true;
             }
             followThisMission(mission, member_react_id);
@@ -389,6 +364,29 @@ public class MissionsHandler {
         -> send basics information
      */
     private static void followThisMission(Mission mission, Snowflake member_react_id) {
+        // Create a channel
+        Set<PermissionOverwrite> set = getPermissionsOverrideCreatePrivateChannel(mission, member_react_id);
+        TextChannel channel = Init.devarea.createTextChannel(TextChannelCreateSpec.builder()
+                .parentId(Snowflake.of("964757205184299028"))
+                .name("Suivis de mission n°" + ++missionFollowId)
+                .permissionOverwrites(set)
+                .build()).block();
+
+        // Send basics information
+        int id = missionFollowId;
+        send(channel, missionFollowMissionPreview(mission), false);
+
+        Message message =
+                channel.createMessage(missionFollowedCreateMessageExplication(member_react_id, mission)).block();
+
+        missionsFollow.add(new MissionHandlerData.MissionFollow(id, new MessageSeria(message),
+                mission.getMemberId(), member_react_id.asString()));
+
+        save();
+    }
+
+    private static Set<PermissionOverwrite> getPermissionsOverrideCreatePrivateChannel(Mission mission,
+                                                                                       Snowflake member_react_id) {
         Set<PermissionOverwrite> set = new HashSet<>();
         set.add(PermissionOverwrite.forRole(Init.initial.rulesAccepted_role, PermissionSet.of(),
                 PermissionSet.of(Permission.VIEW_CHANNEL)));
@@ -403,48 +401,7 @@ public class MissionsHandler {
                 PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
         set.add(PermissionOverwrite.forRole(Snowflake.of("768383784571240509"),
                 PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
-
-        TextChannel channel = Init.devarea.createTextChannel(TextChannelCreateSpec.builder()
-                .parentId(Snowflake.of("964757205184299028"))
-                .name("Suivis de mission n°" + ++missionFollowId)
-                .permissionOverwrites(set)
-                .build()).block();
-        int id = missionFollowId;
-
-        send(channel, MessageCreateSpec.builder()
-                .addEmbed(EmbedCreateSpec.builder()
-                        .title(mission.getTitle())
-                        .description(mission.getDescriptionText() + "\n\nPrix: " + mission.getBudget() + "\nDate " +
-                                "de" +
-                                " retour: " + mission.getDeadLine() + "\nType de support: " + mission.getSupport()
-                                + "\nLangage: " + mission.getLanguage() + "\nNiveau estimé: " + mission.getNiveau())
-                        .color(ColorsUsed.just)
-                        .build())
-                .build(), false);
-
-        Message message = channel.createMessage(MessageCreateSpec.builder()
-                .content("<@" + member_react_id.asString() + "> -> <@" + mission.getMemberId() + ">")
-                .addEmbed(EmbedCreateSpec.builder()
-                        .title("Suivis de Mission !")
-                        .description("Bienvenue dans ce channel !\n\n" +
-                                "Ce channel a été créé car <@" + member_react_id.asString() + "> est intéressé " +
-                                "par la mission de <@" + mission.getMemberId() + ">." +
-                                "\n\nCe channel est dédié pour vous, ainsi qu'à la mise en place de la mission et" +
-                                " nous vous demandons de passer exclusivement par ce channel pour toute " +
-                                "discussion à propos de celle-ci." +
-                                "\n\nCeci a pour but d'augmenter la fiabilité des clients et des développeurs " +
-                                "pour qu'une mission puisse se passer de la meilleure des manières" +
-                                ".\nRèglementation des missions : <#768435208906735656>." +
-                                "\n\nVous pouvez clôturer ce channel à tout moment !")
-                        .color(ColorsUsed.same)
-                        .build())
-                .addComponent(ActionRow.of(Button.secondary("followMission_close", "Cloturer le channel")))
-                .build()).block();
-
-        missionsFollow.add(new MissionHandlerData.MissionFollow(id, new MessageSeria(message),
-                mission.getMemberId(), member_react_id.asString()));
-
-        save();
+        return set;
     }
 
     /*
@@ -458,17 +415,7 @@ public class MissionsHandler {
     }
 
     /*
-        Check if a dev and a client have already a follow channel !
-     */
-    public static boolean alreadyHaveAChannel(final String clientID, final String devID) {
-        for (MissionHandlerData.MissionFollow mission : missionsFollow)
-            if (mission.clientID.equals(clientID) && mission.devID.equals(devID))
-                return true;
-        return false;
-    }
-
-    /*
-        Act to delete a follow channel from interaction, transfer data to closeFollowedMission()
+        Act to delete a follow channel from interaction, variant of closeFollowedMission(String, MissionFollow)
      */
     public static boolean actionToCloseFollowedMission(final ButtonInteractionEvent event) {
         return closeFollowedMission(event.getInteraction().getMember().get().getId().asString(),
@@ -478,77 +425,66 @@ public class MissionsHandler {
     /*
         Main function to delete followed Mission
      */
-    private static boolean closeFollowedMission(String memberRequest, MissionHandlerData.MissionFollow mission) {
-        if (mission != null) {
+    private static boolean closeFollowedMission(String memberRequest, MissionHandlerData.MissionFollow missionFollow) {
+        if (missionFollow != null) {
 
-            send(((TextChannel) ChannelCache.watch(mission.messageSeria.getChannelID().asString())),
-                    MessageCreateSpec.builder()
-                            .addEmbed(EmbedCreateSpec.builder()
-                                    .title("Clôture du Suivis de mission.")
-                                    .description("La clôture du suivis a été éxécuté par : <@" + memberRequest + ">. " +
-                                            "Le suivis fermera dans 1 heure.")
-                                    .color(ColorsUsed.same)
-                                    .timestamp(Instant.now())
-                                    .build())
-                            .build(), false);
+            send(((TextChannel) ChannelCache.watch(missionFollow.messageSeria.getChannelID().asString())),
+                    missionFollowedCloseIn1Hour(memberRequest), false);
 
-            mission.messageSeria.getMessage().edit(MessageEditSpec.builder()
+            missionFollow.messageSeria.getMessage().edit(MessageEditSpec.builder()
                     .components(new ArrayList<>())
                     .build()).subscribe();
 
-            startAway(() -> {
+            startAwayIn(() -> {
 
-                try {
-                    Thread.sleep(3600000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
-                    missionsFollow.remove(mission);
+                missionsFollow.remove(missionFollow);
 
-                    Set<PermissionOverwrite> set = new HashSet<>();
-                    set.add(PermissionOverwrite.forRole(Init.initial.rulesAccepted_role, PermissionSet.of(),
-                            PermissionSet.of(Permission.VIEW_CHANNEL)));
-                    set.add(PermissionOverwrite.forRole(Init.devarea.getEveryoneRole().block().getId(),
-                            PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL)));
-                    set.add(PermissionOverwrite.forMember(Snowflake.of(mission.clientID), PermissionSet.of(),
-                            PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY,
-                                    Permission.SEND_MESSAGES)));
-                    set.add(PermissionOverwrite.forMember(Snowflake.of(mission.devID), PermissionSet.of(),
-                            PermissionSet.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY,
-                                    Permission.SEND_MESSAGES)));
-                    set.add(PermissionOverwrite.forRole(Snowflake.of("777782222920744990"),
-                            PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
-                    set.add(PermissionOverwrite.forRole(Snowflake.of("768383784571240509"),
-                            PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
+                Set<PermissionOverwrite> set = getPermissionOverwritesToHideChannel(missionFollow);
 
-                    ((TextChannel) ChannelCache.watch(mission.messageSeria.getChannelID().asString())).edit(TextChannelEditSpec.builder()
-                            .name("Closed n°" + mission.missionID)
-                            .permissionOverwrites(set)
-                            .build()).subscribe();
-                    EmbedCreateSpec embed = EmbedCreateSpec.builder()
-                            .title("Clôture du suivis n°" + mission.missionID + " !")
-                            .description("Le suivis de mission n°" + mission.missionID + " a été clôturé à la demande" +
-                                    " de <@" + memberRequest + ">.")
-                            .color(ColorsUsed.just)
-                            .build();
-                    startAway(() -> MemberCache.get(mission.clientID).getPrivateChannel().block().createMessage(embed).subscribe());
-                    startAway(() -> MemberCache.get(mission.devID).getPrivateChannel().block().createMessage(embed).subscribe());
+                // Rename channel and set Perms
+                ((TextChannel) ChannelCache.watch(missionFollow.messageSeria.getChannelID().asString())).edit(TextChannelEditSpec.builder()
+                        .name("Closed n°" + missionFollow.missionID)
+                        .permissionOverwrites(set)
+                        .build()).subscribe();
 
-                    save();
-                }
-            });
+                // Create the MP Embed
+                EmbedCreateSpec embed = EmbedCreateSpec.builder()
+                        .title("Clôture du suivis n°" + missionFollow.missionID + " !")
+                        .description("Le suivis de mission n°" + missionFollow.missionID + " a été clôturé à la " +
+                                "demande" +
+                                " de <@" + memberRequest + ">.")
+                        .color(ColorsUsed.just)
+                        .build();
+
+                startAway(() -> MemberCache.get(missionFollow.clientID).getPrivateChannel().block().createMessage(embed).subscribe());
+                startAway(() -> MemberCache.get(missionFollow.devID).getPrivateChannel().block().createMessage(embed).subscribe());
+
+                save();
+            }, 3600000L, false);
         }
         return false;
     }
 
     /*
-        Get the MissionFollow from a messageID
+        C'est moche putain !!!
+        Il faut que je trouve un moyen plus propre pour créer des permissions set ! Car ceux de base c'est vraiment
+        pas beau !
      */
-    public static MissionHandlerData.MissionFollow getMissionFollowByMessageID(final Snowflake messageID) {
-        for (MissionHandlerData.MissionFollow mission : missionsFollow)
-            if (mission.messageSeria.getMessageID().equals(messageID))
-                return mission;
-        return null;
+    private static Set<PermissionOverwrite> getPermissionOverwritesToHideChannel(MissionHandlerData.MissionFollow missionFollow) {
+        Set<PermissionOverwrite> set = new HashSet<>();
+        set.add(PermissionOverwrite.forRole(Init.initial.rulesAccepted_role, PermissionSet.of(),
+                PermissionSet.of(Permission.VIEW_CHANNEL)));
+        set.add(PermissionOverwrite.forRole(Init.devarea.getEveryoneRole().block().getId(), PermissionSet.of(),
+                PermissionSet.of(Permission.VIEW_CHANNEL)));
+        set.add(PermissionOverwrite.forMember(Snowflake.of(missionFollow.clientID), PermissionSet.of(),
+                PermissionSet.of(Permission.VIEW_CHANNEL)));
+        set.add(PermissionOverwrite.forMember(Snowflake.of(missionFollow.devID), PermissionSet.of(),
+                PermissionSet.of(Permission.VIEW_CHANNEL)));
+        set.add(PermissionOverwrite.forRole(Snowflake.of("777782222920744990"),
+                PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
+        set.add(PermissionOverwrite.forRole(Snowflake.of("768383784571240509"),
+                PermissionSet.of(Permission.VIEW_CHANNEL), PermissionSet.of()));
+        return set;
     }
 
     /*
@@ -557,34 +493,24 @@ public class MissionsHandler {
     public static Mission createMission(final String title, final String description, final String prix,
                                         final String dateRetour, final String langage, final String support,
                                         final String niveau, final Member member) {
+
         Mission createdMission = new Mission(title, description, prix, dateRetour, langage, support, niveau,
                 member.getId().asString(), null);
-        createdMission.setMessage(new MessageSeria(
-                Objects.requireNonNull(send((TextChannel) ChannelCache.watch(Init.initial.paidMissions_channel.asString()), MessageCreateSpec.builder()
+
+        Message missionMessage = send((TextChannel) ChannelCache.watch(Init.initial.paidMissions_channel.asString()),
+                MessageCreateSpec.builder()
                         .content("**Mission proposée par <@" + member.getId().asString() + "> :**")
-                        .addEmbed(EmbedCreateSpec.builder()
-                                .title(title)
-                                .description(description + "\n\nPrix: " + prix + "\nDate de retour: " + dateRetour +
-                                        "\nType de support: " + support + "\nLangage: " + langage + "\nNiveau estimé:" +
-                                        " " + niveau + "\n\nCette mission est posté par : " + "<@" + member.getId().asString() + ">.")
-                                .color(ColorsUsed.just)
-                                .author(member.getDisplayName(), member.getAvatarUrl(), member.getAvatarUrl())
-                                .timestamp(Instant.now())
-                                .build())
+                        .addEmbed(createdMission.getPrefabricatedEmbed())
                         .addComponent(ActionRow.of(Button.link(Main.domainName + "mission?id=" + createdMission.getId(),
                                 "devarea.fr"), Button.secondary("took_mission", "Prendre la mission")))
-                        .build(), true))
-        ));
+                        .build(),
+                true);
+
+        createdMission.setMessage(new MessageSeria(missionMessage));
+
         MissionsHandler.add(createdMission);
         MissionsHandler.updateMessage();
         return createdMission;
-    }
-
-    /*
-        Get mission by ID
-     */
-    public static Mission get(final String id) {
-        return missions.get(id);
     }
 
     /*
@@ -592,5 +518,48 @@ public class MissionsHandler {
      */
     public static String generateID() {
         return IDgenerator.generate(20);
+    }
+
+
+    // ------------------ UTILS ------------------
+
+    /*
+    Add new mission
+ */
+    public static void add(Mission mission) {
+        // add on the top of the map
+        LinkedHashMap<String, Mission> temp = (LinkedHashMap<String, Mission>) missions.clone();
+        missions.clear();
+        missions.put(mission.getId(), mission);
+        missions.putAll(temp);
+
+        save();
+    }
+
+    /*
+        Get mission by ID
+    */
+    public static Mission get(final String id) {
+        return missions.get(id);
+    }
+
+    /*
+        Get the MissionFollow from a messageID
+    */
+    public static MissionHandlerData.MissionFollow getMissionFollowByMessageID(final Snowflake messageID) {
+        for (MissionHandlerData.MissionFollow mission : missionsFollow)
+            if (mission.messageSeria.getMessageID().equals(messageID))
+                return mission;
+        return null;
+    }
+
+    /*
+    Check if a dev and a client have already a follow channel !
+ */
+    public static boolean alreadyHaveAChannel(final String clientID, final String devID) {
+        for (MissionHandlerData.MissionFollow mission : missionsFollow)
+            if (mission.clientID.equals(clientID) && mission.devID.equals(devID))
+                return true;
+        return false;
     }
 }

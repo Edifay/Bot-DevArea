@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.global.utils.ThreadHandler.startAway;
 
 public class EmbedLinkHandler {
     public final static String style = "https://devarea.fr/member-profile?member_id=";

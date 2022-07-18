@@ -5,8 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import devarea.backend.controllers.tools.WebMission;
+import devarea.bot.presets.ColorsUsed;
+import devarea.global.cache.MemberCache;
 import devarea.global.handlers.MissionsHandler;
+import discord4j.core.object.entity.Member;
+import discord4j.core.spec.EmbedCreateSpec;
 
+import java.time.Instant;
 import java.util.Objects;
 
 public class Mission {
@@ -215,5 +220,19 @@ public class Mission {
         if (o == null || getClass() != o.getClass()) return false;
         Mission mission = (Mission) o;
         return Objects.equals(title, mission.title) && Objects.equals(descriptionText, mission.descriptionText) && Objects.equals(budget, mission.budget) && Objects.equals(deadLine, mission.deadLine) && Objects.equals(language, mission.language) && Objects.equals(support, mission.support) && Objects.equals(niveau, mission.niveau) && Objects.equals(message, mission.message) && Objects.equals(memberId, mission.memberId);
+    }
+
+    @JsonIgnore
+    public EmbedCreateSpec getPrefabricatedEmbed(){
+        Member member = MemberCache.get(this.memberId);
+        return EmbedCreateSpec.builder()
+                .title(title)
+                .description(this.descriptionText + "\n\nPrix: " + this.budget + "\nDate de retour: " + this.deadLine +
+                        "\nType de support: " + this.support + "\nLangage: " + this.language + "\nNiveau estimé:" +
+                        " " + this.niveau + "\n\nCette mission est posté par : " + "<@" + this.memberId + ">.")
+                .color(ColorsUsed.just)
+                .author(member.getDisplayName(), member.getAvatarUrl(), member.getAvatarUrl())
+                .timestamp(Instant.now())
+                .build();
     }
 }

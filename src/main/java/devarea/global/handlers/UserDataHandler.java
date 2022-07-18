@@ -2,6 +2,7 @@ package devarea.global.handlers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import devarea.bot.commands.commandTools.FreeLance;
 import devarea.bot.commands.commandTools.Mission;
 import devarea.global.cache.MemberCache;
 import devarea.global.handlers.handlerData.UserData;
@@ -12,8 +13,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static devarea.bot.event.FunctionEvent.repeatEachMillis;
-import static devarea.bot.event.FunctionEvent.startAway;
+import static devarea.global.utils.ThreadHandler.repeatEachMillis;
+import static devarea.global.utils.ThreadHandler.startAway;
 
 public class UserDataHandler {
 
@@ -51,7 +52,6 @@ public class UserDataHandler {
      */
     private static void save() {
         try {
-            System.out.println("Saving !");
             mapper.writeValue(new File("userData.json"), data);
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,6 +91,7 @@ public class UserDataHandler {
     public static void left(String userID, boolean update) {
         XPHandler.removeMember(Snowflake.of(userID));
         MissionsHandler.left(userID, get(userID).missions.values());
+        FreeLanceHandler.left(userID);
 
         data.remove(userID);
         if (update)
@@ -168,6 +169,7 @@ public class UserDataHandler {
 
         updated();
     }
+
     /*
         Return the list of all missions from members
      */
@@ -179,4 +181,31 @@ public class UserDataHandler {
         return missions;
     }
 
+    /*
+        Return the LinkedHash of all freelances from members
+     */
+    public static HashMap<String, FreeLance> getFreelances() {
+        HashMap<String, FreeLance> freelances = new LinkedHashMap<>();
+        for (UserData current : data.values())
+            if (current.freeLance != null)
+                freelances.put(current.freeLance.getMemberId(), current.freeLance);
+        return freelances;
+    }
+
+
+    /*
+         Override all freelances and set new freelances List
+     */
+    public static void setFreelancesHashMap(HashMap<String, FreeLance> freelances) {
+        // Clear all freelances
+        for (UserData current : data.values())
+            if (current.freeLance != null)
+                current.freeLance = null;
+
+
+        for (FreeLance freelance : freelances.values())
+            data.get(freelance.getMemberId()).freeLance = freelance;
+
+        updated();
+    }
 }

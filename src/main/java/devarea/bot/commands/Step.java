@@ -18,18 +18,18 @@ import discord4j.core.spec.MessageEditSpec;
 
 import java.util.ArrayList;
 
-public abstract class Stape implements Cloneable {
+public abstract class Step implements Cloneable {
 
     public final static boolean end = true;
     public final static boolean next = false;
 
-    protected Stape[] stapes;
+    protected Step[] steps;
     protected Message message;
-    protected Stape called;
+    protected Step called;
 
-    public Stape(Stape... stapes) {
-        assert stapes.length != 0;
-        this.stapes = stapes;
+    public Step(Step... steps) {
+        assert steps.length != 0;
+        this.steps = steps;
     }
 
     protected abstract boolean onCall(Message message);
@@ -80,11 +80,11 @@ public abstract class Stape implements Cloneable {
             return this.called.receiveInteract(event);
     }
 
-    protected Stape stape(int nb) throws Exception {
-        if (nb < 0 || nb >= stapes.length) {
+    protected Step stape(int nb) throws Exception {
+        if (nb < 0 || nb >= steps.length) {
             throw new Exception("Le numero de la stape n'est pas associe !");
         }
-        return stapes[nb];
+        return steps[nb];
     }
 
     protected void setText(EmbedCreateSpec spec) {
@@ -95,9 +95,9 @@ public abstract class Stape implements Cloneable {
         this.message.edit(spec).subscribe();
     }
 
-    protected boolean call(Stape stape) {
+    protected boolean call(Step step) {
         try {
-            this.called = ((Stape) stape.clone());
+            this.called = ((Step) step.clone());
             return this.called.call(this.message);
         } catch (Exception e) {
             e.printStackTrace();

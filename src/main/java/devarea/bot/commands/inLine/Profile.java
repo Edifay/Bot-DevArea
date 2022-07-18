@@ -26,7 +26,7 @@ public class Profile extends ShortCommand implements SlashCommand {
             if (pinged == null)
                 pinged = member;
         }
-        chatInteraction.reply("**Profile de : " + pinged.getUsername() + " :**").subscribe();
+        chatInteraction.reply("**Profile de " + pinged.getUsername() + " :**").subscribe();
         EmbedLinkHandler.generateLinkEmbed(channel, new ArrayList<Member>(Collections.singleton(pinged)), true);
     }
 

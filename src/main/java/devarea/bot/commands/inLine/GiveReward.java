@@ -13,14 +13,11 @@ import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.event.domain.message.ReactionAddEvent;
-import discord4j.core.object.command.ApplicationCommandOption;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.*;
-import discord4j.discordjson.json.ApplicationCommandOptionData;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 
 import java.util.ArrayList;
@@ -38,15 +35,15 @@ public class GiveReward extends LongCommand implements SlashCommand {
             this.endCommand();
             return;
         }
-        chatInteraction.deferReply().subscribe();
+
         this.firstStape = getMessageCreateEventFirstStape(getEndStape(member));
         this.lastMessage = firstStape.getMessage();
     }
 
     public GiveReward(ButtonInteractionEvent event, Member target, Member helper) {
         super(target);
-        final EndStape endStape = getEndStape(target);
-        final Stape selectionStage = getSelectionHelpersStape(helper, endStape);
+        final EndStep endStape = getEndStape(target);
+        final Step selectionStage = getSelectionHelpersStape(helper, endStape);
         channel = (TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString());
         assert channel != null;
 
@@ -55,8 +52,8 @@ public class GiveReward extends LongCommand implements SlashCommand {
         this.lastMessage = firstStape.getMessage();
     }
 
-    private FirstStape getMessageCreateEventFirstStape(Stape... stapes) {
-        return new FirstStape(channel, stapes) {
+    private FirstStep getMessageCreateEventFirstStape(Step... steps) {
+        return new FirstStep(channel, steps) {
             @Override
             public void onFirstCall(MessageCreateSpec spec) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
@@ -83,7 +80,6 @@ public class GiveReward extends LongCommand implements SlashCommand {
                                             " il vous a déjà récompensé il y'a moins de deux heures")
                                     .build())
                             .build()).subscribe();
-                    delete(false, this.message);
                     return true;
                 }
 
@@ -112,8 +108,8 @@ public class GiveReward extends LongCommand implements SlashCommand {
 
     }
 
-    private FirstStape getReactionAddEventFirstStape(Member helper, Stape... stapes) {
-        return new FirstStape(channel, stapes) {
+    private FirstStep getReactionAddEventFirstStape(Member helper, Step... steps) {
+        return new FirstStep(channel, steps) {
             @Override
             public void onFirstCall(MessageCreateSpec spec) {
                 super.onFirstCall(MessageCreateSpec.builder()
@@ -142,8 +138,8 @@ public class GiveReward extends LongCommand implements SlashCommand {
         };
     }
 
-    private EndStape getEndStape(Member member) {
-        return new EndStape() {
+    private EndStep getEndStape(Member member) {
+        return new EndStep() {
             @Override
             protected boolean onCall(Message message) {
 
@@ -174,7 +170,6 @@ public class GiveReward extends LongCommand implements SlashCommand {
                                     .description(descript)
                                     .color(ColorsUsed.just).build())
                             .build()).subscribe();
-                    delete(false, this.message);
                 } else
                     setMessage(MessageEditSpec.builder()
                             .addEmbed(EmbedCreateSpec.builder()
@@ -188,9 +183,9 @@ public class GiveReward extends LongCommand implements SlashCommand {
         };
     }
 
-    private Stape getSelectionHelpersStape(Member helper, Stape... stapes) {
+    private Step getSelectionHelpersStape(Member helper, Step... steps) {
 
-        return new Stape(stapes) {
+        return new Step(steps) {
 
             @Override
             protected boolean onCall(Message message) {

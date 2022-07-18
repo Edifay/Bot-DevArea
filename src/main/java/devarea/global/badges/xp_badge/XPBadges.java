@@ -16,8 +16,8 @@ public abstract class XPBadges extends Badges {
         super(name, url_icon, "Ce membre est un membre " + description + " sur le serveur !", local_icon);
     }
 
-    public static XPBadges getXPBadgesOf(final WebUserInfos user, final Member member_fetched) {
-        int xpLastWeekCount = getXpCountOnLastWeek(user, member_fetched);
+    public static XPBadges getXPBadgesOf(final Member member_fetched) {
+        int xpLastWeekCount = getXpCountOnLastWeek(member_fetched);
         if (xpLastWeekCount > 100)
             return new ActiveMember_Badge();
         else if (xpLastWeekCount > 50)
@@ -29,9 +29,9 @@ public abstract class XPBadges extends Badges {
     }
 
 
-    private static int getXpCountOnLastWeek(final WebUserInfos user, final Member member_fetched) {
+    private static int getXpCountOnLastWeek(final Member member_fetched) {
         int count = 0;
-        final UserData userData = UserDataHandler.get(user.getId());
+        final UserData userData = UserDataHandler.get(member_fetched.getId().asString());
         LocalDateTime dateTime = LocalDateTime.now();
 
 
