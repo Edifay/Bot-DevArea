@@ -19,7 +19,8 @@ public class DevHelp extends ShortCommand implements SlashCommand {
 
     public DevHelp(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
-        if (channel.getName().equalsIgnoreCase("entraide")) {
+        if (channel.getCategoryId().isPresent() && channel.getCategoryId().get().equals(Snowflake.of(
+                "768783547908751380"))) {
             if (!timer.contains(this.channel.getId())) {
                 reply(InteractionApplicationCommandCallbackSpec.builder().content("<@" + this.member.getId().asString() + ">, a demandé de " +
                         "l'aide ! <@&" + Init.initial.devHelper_role.asString() + ">.").build(), false);
@@ -39,7 +40,8 @@ public class DevHelp extends ShortCommand implements SlashCommand {
     public ApplicationCommandRequest getSlashCommandDefinition() {
         return ApplicationCommandRequest.builder()
                 .name("devhelp")
-                .description("Commande qui permet d'envoyer un ping au développeurs volontaires dans les channels entraides.")
+                .description("Commande qui permet d'envoyer un ping au développeurs volontaires dans les channels " +
+                        "entraides.")
                 .build();
     }
 }

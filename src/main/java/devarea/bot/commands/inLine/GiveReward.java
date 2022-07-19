@@ -23,6 +23,8 @@ import discord4j.discordjson.json.ApplicationCommandRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static devarea.global.utils.ThreadHandler.startAwayIn;
+
 public class GiveReward extends LongCommand implements SlashCommand {
 
     final List<Snowflake> helpers = new ArrayList<>();
@@ -30,7 +32,8 @@ public class GiveReward extends LongCommand implements SlashCommand {
     public GiveReward(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
 
-        if (!channel.getName().contains("entraide")) {
+        if (channel.getCategoryId().isEmpty() || !channel.getCategoryId().get().equals(Snowflake.of(
+                "768783547908751380"))) {
             this.replyError("Vous ne pouvez utiliser cette commande que dans les channels d'entraide");
             this.endCommand();
             return;

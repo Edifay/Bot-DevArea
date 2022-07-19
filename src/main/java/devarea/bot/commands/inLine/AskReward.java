@@ -30,7 +30,8 @@ public class AskReward extends ShortCommand implements SlashCommand {
     public AskReward(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
 
-        if (!channel.getName().contains("entraide")) {
+        if (channel.getCategoryId().isEmpty() || !channel.getCategoryId().get().equals(Snowflake.of(
+                "768783547908751380"))) {
             this.replyError("Vous ne pouvez utiliser cette commande que dans les channels d'entraide");
             this.endCommand();
             return;
