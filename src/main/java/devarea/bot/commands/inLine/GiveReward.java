@@ -32,8 +32,7 @@ public class GiveReward extends LongCommand implements SlashCommand {
     public GiveReward(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
 
-        if (channel.getCategoryId().isEmpty() || !channel.getCategoryId().get().equals(Snowflake.of(
-                "768783547908751380"))) {
+        if (channel.getCategoryId().isEmpty() || !channel.getCategoryId().get().equals(Init.initial.assistance_category)) {
             this.replyError("Vous ne pouvez utiliser cette commande que dans les channels d'entraide");
             this.endCommand();
             return;

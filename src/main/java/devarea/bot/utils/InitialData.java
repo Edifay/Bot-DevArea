@@ -43,6 +43,7 @@ public class InitialData {
     public Snowflake join_category = null;
     public Snowflake missions_category = null;
     public Snowflake general_category = null;
+    public Snowflake assistance_category = null;
 
     // Roles
     public Snowflake rulesAccepted_role = null;
