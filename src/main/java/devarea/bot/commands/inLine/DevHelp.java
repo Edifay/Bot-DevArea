@@ -19,8 +19,7 @@ public class DevHelp extends ShortCommand implements SlashCommand {
 
     public DevHelp(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
-        if (channel.getCategoryId().isPresent() && channel.getCategoryId().get().equals(Snowflake.of(
-                "768783547908751380"))) {
+        if (channel.getCategoryId().isPresent() && channel.getCategoryId().get().equals(Init.initial.assistance_category)) {
             if (!timer.contains(this.channel.getId())) {
                 reply(InteractionApplicationCommandCallbackSpec.builder().content("<@" + this.member.getId().asString() + ">, a demandé de " +
                         "l'aide ! <@&" + Init.initial.devHelper_role.asString() + ">.").build(), false);
