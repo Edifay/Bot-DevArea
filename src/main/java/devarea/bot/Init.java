@@ -82,7 +82,7 @@ public class Init {
     }
 
     /*
-        Load configuration and setup the var -> initial
+        Load configuration and set up the var -> initial
      */
     private static void setupInitialConfig() {
         try {
@@ -103,7 +103,7 @@ public class Init {
             }
 
         } catch (Exception e) {
-            System.err.println("Une erreur c'est produite dans le chargement de configuration.json ! : \n" + e.getMessage());
+            System.err.println("Une erreur s'est produite dans le chargement de configuration.json ! : \n" + e.getMessage());
             System.exit(0);
         }
 
@@ -121,7 +121,7 @@ public class Init {
         client.getEventDispatcher().on(MemberLeaveEvent.class).subscribe(MemberLeave::memberLeaveFunction);
         client.getEventDispatcher().on(ReactionAddEvent.class).subscribe(ReactionAdd::reactionAddFunction);
         client.getEventDispatcher().on(ReactionRemoveEvent.class).subscribe(ReactionRemove::FunctionReactionRemoveEvent);
-        client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(VoiceStateUpdate::VoiceStateUpdateFucntion);
+        client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(VoiceStateUpdate::VoiceStateUpdateFunction);
         client.getEventDispatcher().on(ButtonInteractionEvent.class).subscribe(ButtonInteract::ButtonInteractFunction);
 
     }

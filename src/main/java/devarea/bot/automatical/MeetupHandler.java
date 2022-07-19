@@ -39,7 +39,7 @@ public class MeetupHandler {
                     Thread.sleep(60000);
                     Date date = new Date();
                     meetups.forEach(meetupStock -> {
-                        if (!meetupStock.getAlreayMake()) {
+                        if (!meetupStock.getAlreadyMade()) {
                             if (date.after(meetupStock.getDate())) {
                                 send((TextChannel) ChannelCache.watch(Init.initial.meetupAnnounce_channel.asString()),
                                         MessageCreateSpec.builder()
@@ -49,7 +49,7 @@ public class MeetupHandler {
                                         .parentId(Init.initial.general_category)
                                         .name("Meetup by " + MemberCache.get(meetupStock.getAuthor().asString()).getDisplayName())
                                         .build()).subscribe();
-                                meetupStock.setAlreadyMake(true);
+                                meetupStock.setAlreadyMade(true);
                                 save();
                             }
                         }

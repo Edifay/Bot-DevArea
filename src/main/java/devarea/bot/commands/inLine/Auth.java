@@ -38,7 +38,7 @@ public class Auth extends ShortCommand implements SlashCommand {
         embeds.add(EmbedCreateSpec.builder()
                 .title("Authentification au site de Dev'area !")
                 .description("Si vous voulez retrouver le lien d'authentification vous pouvez exécuter la commande " +
-                        "`//auth` à nouveau !")
+                        "`/auth` à nouveau !")
                 .color(ColorsUsed.same)
                 .build());
         startAway(() -> {

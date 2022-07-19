@@ -5,8 +5,8 @@ Bot discord pour Dev'Area
 Dev'Area
 ============
 
-> Ce serveur a été crée surtout pour les développeurs, ou ceux qui en cherchent. Dev'Area possède une communauté française (rare dans ce domaine) autour du développement. 
-> Tout le monde y est le bienvenue, débutants, intermédiaires et professionnels. Des salons sont disponibles pour aider les débutants, et pour les intermédiaires et 
+> Ce serveur a été créé surtout pour les développeurs, ou ceux qui en cherchent. Dev'Area possède une communauté française (rare dans ce domaine) autour du développement. 
+> Tout le monde y est le bienvenu, débutants, intermédiaires et professionnels. Des salons sont disponibles pour aider les débutants, et pour les intermédiaires et 
 > professionnels des channels sont créés pour parler autour de sujets plus ou moins complexes.
 Un bot spécialisé est là pour faciliter les échanges, si vous voulez suivre ou donner des cours, une commande spéciale est là pour ça.
 
@@ -18,7 +18,7 @@ Un bot spécialisé est là pour faciliter les échanges, si vous voulez suivre 
 
 ![bannierdic](https://user-images.githubusercontent.com/59512940/112747083-62891100-8fb3-11eb-9102-ea1466f9ecd5.png)
 
-> Pour ce qui est du code et des explications, il est pour l'instant à l'état brut sans explications, et sans commentaire. Le code est encore un peu brouillon et brut, mais  cela devrait au fur et à mesure du temps s'améliorer.
+> Pour ce qui est du code et des explications, il est pour l'instant à l'état brut sans explications, et sans commentaires. Le code est encore un peu brouillon et brut, mais cela devrait au fur et à mesure du temps s'améliorer.
 
 > Merci à vous !
 

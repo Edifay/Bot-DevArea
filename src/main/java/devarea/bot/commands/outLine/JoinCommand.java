@@ -97,9 +97,7 @@ public class JoinCommand extends LongCommand {
                                 embeds.add(EmbedCreateSpec.builder()
                                         .title("Authentification au site de Dev'area !")
                                         .description("Si vous voulez retrouver le lien d'authentification vous pouvez" +
-                                                " " +
-                                                "exécuter la commande " +
-                                                "`//auth` à nouveau !")
+                                                " exécuter la commande `/auth` à nouveau !")
                                         .color(ColorsUsed.same)
                                         .build());
 
@@ -157,7 +155,7 @@ public class JoinCommand extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
-                    return callStape(0);
+                    return callStep(0);
                 return super.onReceiveInteract(event);
             }
         };
@@ -175,7 +173,7 @@ public class JoinCommand extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
-                    return callStape(0);
+                    return callStep(0);
                 return super.onReceiveInteract(event);
             }
         };
@@ -201,7 +199,7 @@ public class JoinCommand extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
-                    return callStape(0);
+                    return callStep(0);
                 return super.onReceiveInteract(event);
             }
         };
@@ -211,7 +209,7 @@ public class JoinCommand extends LongCommand {
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
-                                .title("Conseils de communications du code")
+                                .title("Conseils de communication du code")
                                 .description(TextMessage.rulesForSpeakCode)
                                 .color(ColorsUsed.just).build())
                         .addComponent(getYesButton())
@@ -222,7 +220,7 @@ public class JoinCommand extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
-                    return callStape(0);
+                    return callStep(0);
                 return super.onReceiveInteract(event);
             }
         };
@@ -245,15 +243,15 @@ public class JoinCommand extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event)) {
-                    return callStape(0);
+                    return callStep(0);
                 } else if (isNo(event)) {
-                    return callStape(1);
+                    return callStep(1);
                 }
                 return super.onReceiveInteract(event);
             }
         };
 
-        this.firstStape = new FirstStep(this.channel, DevOrNeedDev) {
+        this.firstStep = new FirstStep(this.channel, DevOrNeedDev) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 startAway(() -> ((TextChannel) ChannelCache.watch("843823896222629888")).addMemberOverwrite(member.getId(), PermissionOverwrite.forMember(member.getId(), PermissionSet.of(), PermissionSet.of(Permission.VIEW_CHANNEL))).subscribe());
@@ -268,11 +266,11 @@ public class JoinCommand extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event))
-                    return callStape(0);
+                    return callStep(0);
                 return super.onReceiveInteract(event);
             }
         };
-        this.lastMessage = this.firstStape.getMessage();
+        this.lastMessage = this.firstStep.getMessage();
     }
 
 }

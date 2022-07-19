@@ -19,7 +19,7 @@ import static devarea.global.utils.ThreadHandler.startAway;
 public abstract class LongCommand extends Command {
 
     protected Message lastMessage;
-    protected FirstStep firstStape;
+    protected FirstStep firstStep;
     protected boolean isLocalChannel;
 
     public LongCommand() {
@@ -54,7 +54,7 @@ public abstract class LongCommand extends Command {
             }
 
             // Call the Step
-            if (this.firstStape.receiveReact(event)) {
+            if (this.firstStep.receiveReact(event)) {
                 this.endCommand();
             }
 
@@ -83,7 +83,7 @@ public abstract class LongCommand extends Command {
             }
 
             // Call the Step
-            if (this.firstStape.receiveMessage(event))
+            if (this.firstStep.receiveMessage(event))
                 this.endCommand();
 
             // Shadow
@@ -103,7 +103,7 @@ public abstract class LongCommand extends Command {
                 }
 
                 // Call the Step
-                if (this.firstStape.receiveInteract(event))
+                if (this.firstStep.receiveInteract(event))
                     this.endCommand();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -115,13 +115,13 @@ public abstract class LongCommand extends Command {
         if (chatInteraction != null)
             chatInteraction.editReply(InteractionReplyEditSpec.builder()
                     .addEmbed(EmbedCreateSpec.builder()
-                            .title("Error !")
-                            .description("Vous avez annuler la commande")
+                            .title("Erreur !")
+                            .description("Vous avez annulé la commande")
                             .color(ColorsUsed.wrong)
                             .build())
                     .build()).subscribe();
         else
-            sendError("Vous avez annuler la commande !");
+            sendError("Vous avez annulé la commande !");
         delete(false, this.lastMessage);
         endCommand();
     }
@@ -139,7 +139,7 @@ public abstract class LongCommand extends Command {
             }
         }
         if (chatInteraction != null)
-            delete(false, this.firstStape.message);
+            delete(false, this.firstStep.message);
         return super.endCommand();
     }
 
@@ -158,7 +158,7 @@ public abstract class LongCommand extends Command {
     private void sendErrorYouAreInCommand(String channelId) {
         startAway(() -> deletedEmbed((TextChannel) ChannelCache.watch(channelId),
                 EmbedCreateSpec.builder()
-                        .title("Error !")
+                        .title("Erreur !")
                         .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
                         .color(ColorsUsed.wrong).build()
         ));
@@ -170,7 +170,7 @@ public abstract class LongCommand extends Command {
      */
     private void sendErrorYourAreInCommand(ButtonInteractionEvent event) {
         event.reply(InteractionApplicationCommandCallbackSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                                .title("Error !")
+                                .title("Erreur !")
                                 .description("Vous avez une commande en cours dans <#" + this.channel.getId().asString() + ">")
                                 .color(ColorsUsed.wrong).build())
                         .ephemeral(true).build())

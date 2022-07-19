@@ -6,7 +6,6 @@ import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.global.handlers.UserDataHandler;
-import devarea.global.handlers.XPHandler;
 import devarea.bot.commands.CommandManager;
 import discord4j.core.event.domain.guild.MemberLeaveEvent;
 import discord4j.core.object.entity.channel.TextChannel;

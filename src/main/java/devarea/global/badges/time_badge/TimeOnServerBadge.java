@@ -14,7 +14,7 @@ public abstract class TimeOnServerBadge extends Badges {
 
     public TimeOnServerBadge(final String name, final String url, final String time_on_server,
                              final BufferedImage local_icon) {
-        super(name, url, "Vous etes un " + name + ", vous avez rejoin le serveur le " + time_on_server + ".",
+        super(name, url, "Ce membre a rejoint le serveur le " + time_on_server + ".",
                 local_icon);
     }
 

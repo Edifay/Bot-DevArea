@@ -38,7 +38,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
             @Override
             protected boolean onCall(Message message) {
                 endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
-                        .title("Votre message a été modifé !")
+                        .title("Votre message a été modifié !")
                         .color(ColorsUsed.just).build());
                 return end;
             }
@@ -51,7 +51,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                 setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Message !")
-                                .description("Donnez moi le contenu du message a remplacé !")
+                                .description("Donnez-moi le contenu du message à remplacer !")
                                 .color(ColorsUsed.same).build()
                         )
                         .components(getEmptyButton())
@@ -64,7 +64,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                 String content = event.getMessage().getContent();
                 if (!content.equals("")) {
                     atModif.edit(MessageEditSpec.builder().contentOrNull(content).build()).subscribe();
-                    return callStape(0);
+                    return callStep(0);
                 }
                 sendErrorEntry();
                 return next;
@@ -77,7 +77,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
                         .title("Couleur")
-                        .description("Donnez moi la couleur que vous voulez, il y en a 3 disponible : `just`, `same`," +
+                        .description("Donnez-moi la couleur que vous voulez, il y en a 3 disponible : `just`, `same`," +
                                 " `wrong`")
                         .color(color).build());
                 return next;
@@ -106,7 +106,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                                         .color(color)
                                         .build())
                                 .build()).subscribe();
-                        return callStape(0);
+                        return callStep(0);
                     }
                 }
                 return super.onReceiveMessage(event);
@@ -118,7 +118,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
                         .title("Description")
-                        .description("Donnez moi la description de votre embed")
+                        .description("Donnez-moi la description de votre embed")
                         .color(ColorsUsed.same).build());
                 return next;
             }
@@ -132,7 +132,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                             .title(title)
                             .description(description)
                             .build()).build()).subscribe();
-                    return callStape(0);
+                    return callStep(0);
                 }
                 sendErrorEntry();
                 return super.onReceiveMessage(event);
@@ -145,7 +145,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                 setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Titre")
-                                .description("Donnez moi le titre de votre embed")
+                                .description("Donnez-moi le titre de votre embed")
                                 .color(ColorsUsed.same).build())
                         .components(getEmptyButton())
                         .build());
@@ -157,7 +157,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                 String content = event.getMessage().getContent();
                 if (!content.equals("")) {
                     title = content;
-                    return callStape(0);
+                    return callStep(0);
                 }
                 sendErrorEntry();
                 return super.onReceiveMessage(event);
@@ -169,7 +169,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
             protected boolean onCall(Message message) {
                 setMessage(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
-                                .title("Type du message ?")
+                                .title("Type de message")
                                 .description("Votre message est-il un embed ?")
                                 .color(ColorsUsed.same).build()
                         )
@@ -181,16 +181,16 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (event.getCustomId().equals("yes")) {
-                    return callStape(1);
+                    return callStep(1);
                 } else if (event.getCustomId().equals("no")) {
-                    return callStape(0);
+                    return callStep(0);
                 }
                 return super.onReceiveInteract(event);
             }
 
         };
 
-        this.firstStape = new FirstStep(this.channel, isEmbedOrText) {
+        this.firstStep = new FirstStep(this.channel, isEmbedOrText) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder()
@@ -207,13 +207,13 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                 try {
                     atModif = this.textChannel.getMessageById(Snowflake.of(event.getMessage().getContent())).block();
                     if (atModif != null && atModif.getAuthor().get().getId().equals(Init.client.getSelfId()))
-                        return callStape(0);
+                        return callStep(0);
                 } catch (Exception e) {
                 }
                 return super.onReceiveMessage(event);
             }
         };
-        this.lastMessage = this.firstStape.getMessage();
+        this.lastMessage = this.firstStep.getMessage();
     }
 
     @Override

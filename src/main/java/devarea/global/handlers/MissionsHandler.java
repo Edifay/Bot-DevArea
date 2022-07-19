@@ -53,7 +53,7 @@ public class MissionsHandler {
                     .useLower(true));
 
     /*
-        Initialise MissinsHandler
+        Initialise MissionsHandler
      */
     public static void init() {
         load();
@@ -122,7 +122,7 @@ public class MissionsHandler {
     }
 
     /*
-        Remove with out deleting message
+        Remove without deleting message
      */
     public static void remove(Mission mission) {
         missions.remove(mission.getId(), mission);
@@ -242,7 +242,7 @@ public class MissionsHandler {
 
         if (current_mission != null) {
             if (event.getCustomId().equals("mission_yes")) {
-                sendMissionRevalidateSucessful(event, current_mission);
+                sendMissionRevalidateSuccessful(event, current_mission);
                 save();
             } else if (event.getCustomId().equals("mission_no")) {
                 sendMissionDeleteSuccessful(event, current_mission);
@@ -258,9 +258,9 @@ public class MissionsHandler {
      */
     private static void sendMissionDeleteSuccessful(ButtonInteractionEvent event, Mission current_mission) {
         ((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())).getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                        .title("Mission supprimé !")
+                        .title("Mission supprimée !")
                         .description("La mission : **" + current_mission.getTitle() + "**, a été " +
-                                "définitivement supprimé !")
+                                "définitivement supprimée !")
                         .color(ColorsUsed.just).build())
                 .components(new ArrayList<>())
                 .build()).block();
@@ -269,10 +269,10 @@ public class MissionsHandler {
     /*
         Message for mission_yes response
      */
-    private static void sendMissionRevalidateSucessful(ButtonInteractionEvent event, Mission current_mission) {
+    private static void sendMissionRevalidateSuccessful(ButtonInteractionEvent event, Mission current_mission) {
         ((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())).getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                        .title("Mission actualisé !")
-                        .description("La mission : **" + current_mission.getTitle() + "**, a été défini comme" +
+                        .title("Mission actualisée !")
+                        .description("La mission : **" + current_mission.getTitle() + "**, a été définie comme" +
                                 " valide pour encore 7 jours.\n\nVous recevrez une nouvelle demande de " +
                                 "validation dans 7 jours.")
                         .color(ColorsUsed.just).build())
@@ -291,8 +291,8 @@ public class MissionsHandler {
                 .addEmbed(EmbedCreateSpec.builder()
                         .title("Vérification de la validité d'une mission.")
                         .description("Vous avez une mission actuellement active !\n\nLe titre de cette mission est : " +
-                                "**" + mission.getTitle() + "**\n\nIl vous reste 3 jours pour nous comfirmer ou non " +
-                                "si cette mission est-elle toujours d'actualité ?\n\nSi oui : <:ayy:" + Init.idYes.getId().asString() + "> si non : <:ayy:" + Init.idNo.getId().asString() + ">.")
+                                "**" + mission.getTitle() + "**\n\nIl vous reste 3 jours pour nous confirmer ou non " +
+                                "si cette mission est toujours d'actualité.\n\nSi oui : <:ayy:" + Init.idYes.getId().asString() + "> si non : <:ayy:" + Init.idNo.getId().asString() + ">.")
                         .color(ColorsUsed.same).build())
                 .addComponent(ActionRow.of(Button.primary("mission_yes", ReactionEmoji.custom(Init.idYes)),
                         Button.primary("mission_no", ReactionEmoji.custom(Init.idNo))))
@@ -311,8 +311,8 @@ public class MissionsHandler {
         mission_member.getPrivateChannel().block().getMessageById(mission.getMessage_verification().getMessageID()).block()
                 .edit(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
-                                .title("Mission supprimé !")
-                                .description("Le délais des 3 jours a été expiré. La mission : **" + mission.getTitle() + "**, a été définitivement supprimé !")
+                                .title("Mission supprimée !")
+                                .description("Le délai des 3 jours a expiré. La mission : **" + mission.getTitle() + "**, a été définitivement supprimée !")
                                 .color(ColorsUsed.wrong).build())
                         .components(new ArrayList<>()).build())
                 .subscribe();
@@ -355,7 +355,7 @@ public class MissionsHandler {
             followThisMission(mission, member_react_id);
             return "Vous avez pris cette mission !";
         }
-        return "La mission n'a pas été trouvé !";
+        return "La mission n'a pas été trouvée !";
     }
 
     /*
@@ -405,7 +405,7 @@ public class MissionsHandler {
     }
 
     /*
-        Try to find a mission by a mission message !
+        Try to find a mission from a mission message !
      */
     public static Mission getMissionOfMessage(final Snowflake message_id) {
         for (Mission mission : missions.values())
@@ -427,7 +427,6 @@ public class MissionsHandler {
      */
     private static boolean closeFollowedMission(String memberRequest, MissionHandlerData.MissionFollow missionFollow) {
         if (missionFollow != null) {
-
             send(((TextChannel) ChannelCache.watch(missionFollow.messageSeria.getChannelID().asString())),
                     missionFollowedCloseIn1Hour(memberRequest), false);
 
@@ -449,10 +448,9 @@ public class MissionsHandler {
 
                 // Create the MP Embed
                 EmbedCreateSpec embed = EmbedCreateSpec.builder()
-                        .title("Clôture du suivis n°" + missionFollow.missionID + " !")
-                        .description("Le suivis de mission n°" + missionFollow.missionID + " a été clôturé à la " +
-                                "demande" +
-                                " de <@" + memberRequest + ">.")
+                        .title("Clôture du suivi n°" + missionFollow.missionID + " !")
+                        .description("Le suivi de mission n°" + missionFollow.missionID + " a été clôturé à la " +
+                                "demande de <@" + memberRequest + ">.")
                         .color(ColorsUsed.just)
                         .build();
 

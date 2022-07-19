@@ -39,7 +39,7 @@ public class DevHelp extends ShortCommand implements SlashCommand {
     public ApplicationCommandRequest getSlashCommandDefinition() {
         return ApplicationCommandRequest.builder()
                 .name("devhelp")
-                .description("Commande qui permet d'envoyer un ping au developpeurs volontaires dans les channels entraides.")
+                .description("Commande qui permet d'envoyer un ping au développeurs volontaires dans les channels entraides.")
                 .build();
     }
 }

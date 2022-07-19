@@ -40,7 +40,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
                         .title("Le Role")
-                        .description("Mentionnez le role que vous voulez ajouter.")
+                        .description("Mentionnez le rôle que vous voulez ajouter.")
                         .color(ColorsUsed.same).build());
                 return next;
             }
@@ -56,7 +56,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
                         RolesReactsHandler.save();
                         atModif.addReaction(react.getEmoji()).subscribe();
                         endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
-                                .title("Création du RoleReact réussi !")
+                                .title("Création du RoleReact réussie !")
                                 .color(ColorsUsed.just)
                                 .description("Vous avez bien créé un lien entre " + (react.getStringEmoji()) + " -> " +
                                         "<@&" + roleID.asString() + "> !").build());
@@ -73,7 +73,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
                         .title("Emoji")
-                        .description("Réagis a se message avec l'emoji que tu souhaite !")
+                        .description("Réagis à ce message avec l'émoji que tu souhaites !")
                         .color(ColorsUsed.just).build());
                 return next;
             }
@@ -88,7 +88,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
                     isID = "false";
                 }
 
-                return callStape(0);
+                return callStep(0);
             }
         };
 
@@ -98,7 +98,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder()
                         .title("Le message.")
-                        .description("Donnez-moi l'ID du message sur le quel vous voulez ajouter un roleReaction, " +
+                        .description("Donnez-moi l'ID du message sur lequel vous voulez ajouter un roleReaction, " +
                                 "ATTENTION vous devez vous trouver dans le channel du message !")
                         .color(ColorsUsed.same).build());
                 return next;
@@ -109,7 +109,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
                 try {
                     atModif = channel.getMessageById(Snowflake.of(event.getMessage().getContent())).block();
                     if (atModif != null && atModif.getAuthor().get().getId().equals(Init.client.getSelfId())) {
-                        return callStape(0);
+                        return callStep(0);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -143,7 +143,7 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
                         removeTable[number].delete();
                         endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
                                 .title("Remove effectué !")
-                                .description("Vous avez bien supprimer le rolereact !")
+                                .description("Vous avez bien supprimé le rolereact !")
                                 .color(ColorsUsed.just).build());
                         return end;
                     }
@@ -155,13 +155,13 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
         };
 
 
-        this.firstStape = new FirstStep(this.channel, firstStepCreate, firstStepRemove) {
+        this.firstStep = new FirstStep(this.channel, firstStepCreate, firstStepRemove) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Que voulez-vous faire ?")
-                                .description("`create` -> créer un nouveau rolereact !\n`remove` -> supprimer tout " +
+                                .description("`create` -> créer un nouveau rolereact !\n`remove` -> supprimer tous " +
                                         "les rolereact !")
                                 .color(ColorsUsed.same).build()
 
@@ -172,15 +172,15 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 String content = event.getMessage().getContent().toLowerCase(Locale.ROOT);
                 if (content.equals("create")) {
-                    return callStape(0);
+                    return callStep(0);
                 } else if (content.equals("remove")) {
-                    return callStape(1);
+                    return callStep(1);
                 }
                 sendErrorEntry();
                 return next;
             }
         };
-        this.lastMessage = this.firstStape.getMessage();
+        this.lastMessage = this.firstStep.getMessage();
     }
 
     @Override

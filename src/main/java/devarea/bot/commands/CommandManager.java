@@ -207,7 +207,7 @@ public class CommandManager {
                             actualCommands.put(member_replaced.getId(), (LongCommand) actualCommand);
                     } else if (message != null)
                         Command.sendError((TextChannel) ChannelCache.watch(message.getMessage().getChannelId().asString()), "Vous n'avez pas " +
-                                "la permission d'éxécuter cette commande !");
+                                "la permission d'exécuter cette commande !");
                     else
                         chatInteraction.reply(InteractionApplicationCommandCallbackSpec.builder()
                                 .ephemeral(true)
@@ -217,7 +217,6 @@ public class CommandManager {
                                         .description("Vous n'avez pas la permission d'éxécuter cette commande !")
                                         .build())
                                 .build()).subscribe();
-
 
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
@@ -248,7 +247,7 @@ public class CommandManager {
                 PermissionSet permissionSet = null;
                 try {
                     PermissionCommand defaultCommand =
-                            (PermissionCommand) command.commadClass.getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
+                            (PermissionCommand) command.commandClass.getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
                     permissionSet = defaultCommand.getPermissions();
                 } catch (NoSuchMethodException e) {
                 }
@@ -260,7 +259,7 @@ public class CommandManager {
                     }
                     return true;
                 }
-                Command.sendError(command.channel, "Vous n'avez pas la permission d'éxécuter cette commande !");
+                Command.sendError(command.channel, "Vous n'avez pas la permission d'exécuter cette commande !");
             } catch (Exception e) {
                 e.printStackTrace();
             }

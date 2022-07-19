@@ -46,7 +46,7 @@ public class XPHandler {
     }
 
     /*
-        Setup the loop to add xp to member current in a voice channel !
+        Set up the loop to add xp to member current in a voice channel !
      */
     private static void setupVoiceXpEarn() {
         repeatEachMillis(() -> {
@@ -58,7 +58,7 @@ public class XPHandler {
                     boolean memberEarnXpVoiceStatus = currentXpEarnVoiceStatus.containsKey(member.getId());
 
                     if (!memberEarnXpVoiceStatus || currentXpEarnVoiceStatus.get(member.getId()) <= 90) {
-                        // Adding xp and apply couldown and maxXpEarnInvVoice count
+                        // Adding xp and apply cooldown and maxXpEarnInvVoice count
                         addXpToMember(member, false);
                         currentXpEarnVoiceStatus.put(member.getId(), memberEarnXpVoiceStatus ?
                                 currentXpEarnVoiceStatus.get(member.getId()) + 1 : 1);
@@ -145,7 +145,7 @@ public class XPHandler {
 
             UserDataHandler.addOneToXpGainHistory(member.getId().asString(), value);
 
-            // setup couldown xp earn
+            // setup cooldown xp earn
             if (withTimer) {
                 memberInCouldDown.add(member.getId());
                 startAwayIn(() -> removeSafely(member), 6000, false);
@@ -220,12 +220,12 @@ public class XPHandler {
         if (end > xp.size()) end = xp.size();
 
         WebXPMember[] atReturn = new WebXPMember[end - start];
-        int setted = 0;
+        int set = 0;
         int i = 0;
         for (Map.Entry<Snowflake, Integer> random : xp.entrySet()) {
             if (i >= start && i < end) {
-                atReturn[setted] = new WebXPMember(random.getKey().asString(), random.getValue(), i);
-                setted++;
+                atReturn[set] = new WebXPMember(random.getKey().asString(), random.getValue(), i);
+                set++;
             }
             i++;
         }

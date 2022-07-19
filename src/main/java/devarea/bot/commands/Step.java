@@ -46,7 +46,7 @@ public abstract class Step implements Cloneable {
 
     protected boolean onReceiveInteract(ButtonInteractionEvent event) {
         event.reply(InteractionApplicationCommandCallbackSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                .title("Error !")
+                .title("Erreur !")
                 .description("Votre entrée n'est pas valide !")
                 .color(ColorsUsed.wrong)
                 .build()).ephemeral(true).build()).subscribe();
@@ -80,9 +80,9 @@ public abstract class Step implements Cloneable {
             return this.called.receiveInteract(event);
     }
 
-    protected Step stape(int nb) throws Exception {
+    protected Step step(int nb) throws Exception {
         if (nb < 0 || nb >= steps.length) {
-            throw new Exception("Le numero de la stape n'est pas associe !");
+            throw new Exception("Le numéro du step n'est pas associé !");
         }
         return steps[nb];
     }
@@ -105,9 +105,9 @@ public abstract class Step implements Cloneable {
         return next;
     }
 
-    protected boolean callStape(int nb) {
+    protected boolean callStep(int nb) {
         try {
-            return this.call(stape(nb));
+            return this.call(step(nb));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -115,8 +115,8 @@ public abstract class Step implements Cloneable {
     }
 
     protected void sendErrorEntry() {
-        Command.sendError((TextChannel) ChannelCache.watch(this.message.getChannelId().asString()), "Votre entrée " +
-                "n'est pas valide !");
+        Command.sendError((TextChannel) ChannelCache.watch(this.message.getChannelId().asString()),
+                "Votre entrée n'est pas valide !");
     }
 
     protected void addYesEmoji() {

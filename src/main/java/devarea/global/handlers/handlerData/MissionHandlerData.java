@@ -2,10 +2,8 @@ package devarea.global.handlers.handlerData;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import devarea.bot.commands.commandTools.MessageSeria;
-import devarea.bot.commands.commandTools.Mission;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 public class MissionHandlerData {
     @JsonProperty("mission_follow_id")

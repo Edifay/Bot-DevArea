@@ -2,7 +2,6 @@ package devarea.bot.automatical;
 
 import devarea.bot.presets.ColorsUsed;
 import devarea.global.cache.MemberCache;
-import devarea.bot.Init;
 import devarea.bot.commands.Command;
 import devarea.bot.commands.CommandManager;
 import devarea.bot.commands.ConsumableCommand;
@@ -11,11 +10,9 @@ import devarea.bot.commands.commandTools.HelpReward;
 import devarea.bot.utils.MemberUtil;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
-import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.Embed;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
 
@@ -63,7 +60,7 @@ public class HelpRewardHandler {
                     .ephemeral(true)
                     .addEmbed(EmbedCreateSpec.builder()
                             .color(ColorsUsed.wrong)
-                            .title("Error !")
+                            .title("Erreur !")
                             .description("Vous ne pouvez pas réagir à ce message !")
                             .build())
                     .build()).subscribe();

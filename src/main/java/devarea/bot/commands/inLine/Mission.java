@@ -36,7 +36,7 @@ public class Mission extends LongCommand implements SlashCommand {
                 } else {
                     endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
                             .color(ColorsUsed.same)
-                            .title("Vous n'avez acutellement acune mission !").build());
+                            .title("Vous n'avez actuellement aucune mission !").build());
                     return end;
                 }
                 return next;
@@ -51,7 +51,7 @@ public class Mission extends LongCommand implements SlashCommand {
                         MissionsHandler.clearThisMission(ofMember.get(number));
                         endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
                                 .color(ColorsUsed.just)
-                                .title("Votre mission a bien été supprimé !").build());
+                                .title("Votre mission a bien été supprimée !").build());
                         return end;
                     }
                 } catch (Exception e) {
@@ -60,7 +60,7 @@ public class Mission extends LongCommand implements SlashCommand {
             }
         };
 
-        this.firstStape = new FirstStep(this.channel, deleteList) {
+        this.firstStep = new FirstStep(this.channel, deleteList) {
             @Override
             public void onFirstCall(MessageCreateSpec deleteThisVariableAndSetYourOwnMessage) {
                 super.onFirstCall(MessageCreateSpec.builder().addEmbed(EmbedCreateSpec.builder()
@@ -78,7 +78,7 @@ public class Mission extends LongCommand implements SlashCommand {
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 String content = event.getMessage().getContent();
                 if (content.equalsIgnoreCase("delete")) {
-                    return callStape(0);
+                    return callStep(0);
                 }
                 return super.onReceiveMessage(event);
             }
@@ -92,7 +92,7 @@ public class Mission extends LongCommand implements SlashCommand {
     public ApplicationCommandRequest getSlashCommandDefinition() {
         return ApplicationCommandRequest.builder()
                 .name("mission")
-                .description("Permet de contrôler et gérer les missions possédé !")
+                .description("Permet de contrôler et gérer les missions possédées !")
                 .build();
     }
 }

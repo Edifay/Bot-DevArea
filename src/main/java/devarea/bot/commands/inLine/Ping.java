@@ -5,8 +5,6 @@ import devarea.bot.presets.ColorsUsed;
 import devarea.bot.commands.ShortCommand;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 
@@ -36,7 +34,7 @@ public class Ping extends ShortCommand implements SlashCommand {
     public ApplicationCommandRequest getSlashCommandDefinition() {
         return ApplicationCommandRequest.builder()
                 .name("ping")
-                .description("Permet de tester la latente du bot !")
+                .description("Permet de tester la latence du bot !")
                 .build();
     }
 }

@@ -61,7 +61,7 @@ public class EmbedLinkHandler {
             } else if (!occur.isBlank())
                 other = true;
 
-        // Delete message if contain only links
+        // Delete message if it contains only links
         if (!other)
             Command.delete(false, event.getMessage());
 
