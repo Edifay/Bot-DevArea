@@ -51,12 +51,14 @@ public class Boilerplate {
     private static final Pattern CSHARP_ISVALID = Pattern.compile("\\bclass\\b");
     private static final Pattern PHP_ISVALID = Pattern.compile("<\\?php\\b");
     private static final Pattern GO_ISVALID = Pattern.compile("\\bmain\\b");
+    private static final Pattern RUST_ISVALID = Pattern.compile("\\bmain\\b");
 
     private static final Pattern JAVA_ISIMPORT = Pattern.compile("^import\\b", Pattern.MULTILINE);
     private static final Pattern CPP_ISIMPORT = Pattern.compile("^#include\\b", Pattern.MULTILINE);
-    private static final Pattern CSHARP_ISIMPORT = Pattern.compile("^*using\\b", Pattern.MULTILINE);
+    private static final Pattern CSHARP_ISIMPORT = Pattern.compile("^using\\b", Pattern.MULTILINE);
     private static final Pattern PHP_ISIMPORT = null;
     private static final Pattern GO_ISIMPORT = Pattern.compile("^import\\b", Pattern.MULTILINE);
+    private static final Pattern RUST_ISIMPORT = Pattern.compile("^use\\b", Pattern.MULTILINE);
 
     private static final Pattern REPLACE_IMPORTS = Pattern.compile("^(\\s*)%IMPORTS%", Pattern.MULTILINE);
     private static final Pattern REPLACE_CODE = Pattern.compile("^(\\s*)%CODE%", Pattern.MULTILINE);
@@ -68,6 +70,7 @@ public class Boilerplate {
             case "C#" -> injectCode(CSHARP_TEMPLATE, CSHARP_ISVALID, CSHARP_ISIMPORT, code);
             case "PHP" -> injectCode(PHP_TEMPLATE, PHP_ISVALID, PHP_ISIMPORT, code);
             case "Go" -> injectCode(GO_TEMPLATE, GO_ISVALID, GO_ISIMPORT, code);
+            case "Rust" -> injectCode(RUST_TEMPLATE, RUST_ISVALID, RUST_ISIMPORT, code);
             default -> code;
         };
     }
