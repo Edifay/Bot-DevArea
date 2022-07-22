@@ -22,8 +22,10 @@ public class MessageCreate {
             if (message.getMessage().getAuthor().isEmpty())
                 return;
 
-            if (message.getMessage().getAuthor().get().getId().equals(Snowflake.of("302050872383242240")))
-                BumpHandler.getDisboardMessage(message);
+            if (message.getMessage().getAuthor().get().getId().equals(Init.initial.disboard_bot)) {
+                BumpHandler.checkBumpAvailable();
+                return;
+            }
 
             if (message.getMessage().getAuthor().get().isBot() || message.getMessage().getAuthor().get().getId().equals(Init.client.getSelfId()))
                 return;
@@ -34,8 +36,10 @@ public class MessageCreate {
             } else
                 MemberCache.use(message.getMember().get());
 
-            if (message.getMessage().getChannelId().equals(Init.initial.bump_channel) && !message.getMessage().getAuthor().get().getId().equals(Snowflake.of("302050872383242240")))
-                BumpHandler.messageInChannel(message);
+            if (message.getMessage().getChannelId().equals(Init.initial.bump_channel)) {
+                message.getMessage().delete().subscribe();
+                return;
+            }
 
             startAway(() -> XPHandler.addXpToMember(message.getMember().get()));
             if (!message.getMessage().getContent().toLowerCase(Locale.ROOT).startsWith("//admin") && CommandManager.receiveMessage(message))

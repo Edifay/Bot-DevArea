@@ -52,6 +52,9 @@ public class InitialData {
     public Snowflake pingMeetup_role = null;
     public Snowflake devHelper_role = null;
 
+    // Bots
+    public Snowflake disboard_bot = null;
+
     // Assets
     public HashMap<String, String> assetsImages = null;
 
