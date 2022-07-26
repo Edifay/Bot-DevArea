@@ -3,6 +3,7 @@ package devarea.judge;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.judge.core.ResponseBuilder;
 import devarea.judge.core.config.Config;
+import devarea.judge.core.io.Boilerplate;
 import devarea.judge.core.io.Client;
 
 import java.io.File;
@@ -76,9 +77,11 @@ public class JudgeManager {
             throw new JudgeException("Le langage " + submission.getLanguage() + " n'est pas supporté.");
         }
 
+        String sourceCode = Boilerplate.addBoilerplate(language.getName(), submission.getCode());
+
         Map<String, String> entity = new HashMap<>();
         entity.put(LANGUAGE_ID, language.getId());
-        entity.put(SOURCE_CODE, encode(submission.getCode()));
+        entity.put(SOURCE_CODE, encode(sourceCode));
         entity.put(ARGUMENTS, submission.getArgs());
         entity.put(STDIN, encode(submission.getStdin()));
 
