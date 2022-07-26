@@ -39,6 +39,7 @@ import java.util.jar.JarFile;
 import static devarea.bot.commands.Command.delete;
 import static devarea.bot.commands.Command.sendError;
 import static devarea.bot.presets.TextMessage.commandNotFound;
+import static devarea.global.utils.ThreadHandler.startAway;
 
 public class CommandManager {
 
@@ -65,7 +66,7 @@ public class CommandManager {
                             .build()).subscribe();
                     return Mono.empty();
                 }
-                exe(event.getCommandName(), null, event);
+                startAway(() -> exe(event.getCommandName(), null, event));
                 return super.onChatInputInteraction(event);
             }
         }).subscribe();
@@ -170,67 +171,66 @@ public class CommandManager {
 
     public static void exe(String command, @Nullable final MessageCreateEvent message,
                            @Nullable final ChatInputInteractionEvent chatInteraction) {
-        synchronized (actualCommands) {
-            command = command.toLowerCase(Locale.ROOT);
-            if (classBound.containsKey(command)) {
+        command = command.toLowerCase(Locale.ROOT);
+        if (classBound.containsKey(command)) {
+            try {
+                Member member_command = message != null ? message.getMember().get() :
+                        chatInteraction.getInteraction().getMember().get();
+                Member member_replaced = logged_as.get(member_command.getId()) == null ? member_command :
+                        MemberCache.get(logged_as.get(member_command.getId()).asString());
+                System.out.println("The command " + command + " is executed !");
+                PermissionSet permissionSet = null;
                 try {
-                    Member member_command = message != null ? message.getMember().get() :
-                            chatInteraction.getInteraction().getMember().get();
-                    Member member_replaced = logged_as.get(member_command.getId()) == null ? member_command :
-                            MemberCache.get(logged_as.get(member_command.getId()).asString());
-                    System.out.println("The command " + command + " is executed !");
-                    PermissionSet permissionSet = null;
-                    try {
-                        PermissionCommand defaultCommand =
-                                (PermissionCommand) classBound.get(command).getDeclaringClass().getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
-                        permissionSet = defaultCommand.getPermissions();
-                    } catch (NoSuchMethodException ignored) {
-                    }
-
-                    if (permissionSet == null || containPerm(permissionSet,
-                            member_command.getBasePermissions().block())) {
-                        Command actualCommand;
-                        if (message != null) {
-                            if (classBound.get(command).getParameterCount() == 2) {
-                                sendError((TextChannel) ChannelCache.get(message.getMessage().getChannelId().asString()), "Cette commande à migré vers les ``slash`` commandes !");
-                                return;
-                            } else
-                                actualCommand = (Command) classBound.get(command).newInstance(member_replaced,
-                                        ChannelCache.get(message.getMessage().getChannelId().asString()),
-                                        message.getMessage());
-
-                        } else {
-                            actualCommand = (Command) classBound.get(command).newInstance(member_replaced,
-                                    chatInteraction);
-                        }
-                        if (actualCommand instanceof LongCommand)
-                            actualCommands.put(member_replaced.getId(), (LongCommand) actualCommand);
-                    } else if (message != null)
-                        Command.sendError((TextChannel) ChannelCache.watch(message.getMessage().getChannelId().asString()), "Vous n'avez pas " +
-                                "la permission d'exécuter cette commande !");
-                    else
-                        chatInteraction.reply(InteractionApplicationCommandCallbackSpec.builder()
-                                .ephemeral(true)
-                                .addEmbed(EmbedCreateSpec.builder()
-                                        .color(ColorsUsed.wrong)
-                                        .title("Erreur !")
-                                        .description("Vous n'avez pas la permission d'éxécuter cette commande !")
-                                        .build())
-                                .build()).subscribe();
-
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
+                    PermissionCommand defaultCommand =
+                            (PermissionCommand) classBound.get(command).getDeclaringClass().getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
+                    permissionSet = defaultCommand.getPermissions();
+                } catch (NoSuchMethodException ignored) {
                 }
-            } else
-                Command.deletedEmbed((TextChannel) ChannelCache.watch(message.getMessage().getChannelId().asString())
-                        , EmbedCreateSpec.builder()
-                                .title("Erreur !")
-                                .description(commandNotFound)
-                                .color(ColorsUsed.wrong).build());
 
-            if (Init.initial.vanish)
-                delete(false, message.getMessage());
-        }
+                if (permissionSet == null || containPerm(permissionSet,
+                        member_command.getBasePermissions().block())) {
+                    Command actualCommand;
+                    if (message != null) {
+                        if (classBound.get(command).getParameterCount() == 2) {
+                            sendError((TextChannel) ChannelCache.get(message.getMessage().getChannelId().asString()),
+                                    "Cette commande à migré vers les ``slash`` commandes !");
+                            return;
+                        } else
+                            actualCommand = (Command) classBound.get(command).newInstance(member_replaced,
+                                    ChannelCache.get(message.getMessage().getChannelId().asString()),
+                                    message.getMessage());
+
+                    } else {
+                        actualCommand = (Command) classBound.get(command).newInstance(member_replaced,
+                                chatInteraction);
+                    }
+                    if (actualCommand instanceof LongCommand)
+                        actualCommands.put(member_replaced.getId(), (LongCommand) actualCommand);
+                } else if (message != null)
+                    Command.sendError((TextChannel) ChannelCache.watch(message.getMessage().getChannelId().asString()), "Vous n'avez pas " +
+                            "la permission d'exécuter cette commande !");
+                else
+                    chatInteraction.reply(InteractionApplicationCommandCallbackSpec.builder()
+                            .ephemeral(true)
+                            .addEmbed(EmbedCreateSpec.builder()
+                                    .color(ColorsUsed.wrong)
+                                    .title("Erreur !")
+                                    .description("Vous n'avez pas la permission d'éxécuter cette commande !")
+                                    .build())
+                            .build()).subscribe();
+
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        } else
+            Command.deletedEmbed((TextChannel) ChannelCache.watch(message.getMessage().getChannelId().asString())
+                    , EmbedCreateSpec.builder()
+                            .title("Erreur !")
+                            .description(commandNotFound)
+                            .color(ColorsUsed.wrong).build());
+
+        if (Init.initial.vanish)
+            delete(false, message.getMessage());
 
     }
 
@@ -239,110 +239,90 @@ public class CommandManager {
     }
 
     public static boolean addManualCommand(Member member, ConsumableCommand command, final boolean force_join) {
-        synchronized (actualCommands) {
+        try {
+            Member member_command = member;
+            Member member_replaced = logged_as.containsKey(member_command.getId()) ?
+                    MemberCache.get(logged_as.get(member_command.getId()).asString()) : member_command;
+            PermissionSet permissionSet = null;
             try {
-                Member member_command = member;
-                Member member_replaced = logged_as.containsKey(member_command.getId()) ?
-                        MemberCache.get(logged_as.get(member_command.getId()).asString()) : member_command;
-                PermissionSet permissionSet = null;
-                try {
-                    PermissionCommand defaultCommand =
-                            (PermissionCommand) command.commandClass.getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
-                    permissionSet = defaultCommand.getPermissions();
-                } catch (NoSuchMethodException e) {
-                }
-                if (permissionSet == null || containPerm(permissionSet, member_command.getBasePermissions().block())) {
-                    if (!actualCommands.containsKey(member_replaced.getId()) || force_join) {
-                        command.setMember(member_replaced);
-                        if (command.getCommand(false) instanceof LongCommand)
-                            actualCommands.put(member_replaced.getId(), (LongCommand) command.getCommand(true));
-                    }
-                    return true;
-                }
-                Command.sendError(command.channel, "Vous n'avez pas la permission d'exécuter cette commande !");
-            } catch (Exception e) {
-                e.printStackTrace();
+                PermissionCommand defaultCommand =
+                        (PermissionCommand) command.commandClass.getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
+                permissionSet = defaultCommand.getPermissions();
+            } catch (NoSuchMethodException e) {
             }
-            return false;
+            if (permissionSet == null || containPerm(permissionSet, member_command.getBasePermissions().block())) {
+                if (!actualCommands.containsKey(member_replaced.getId()) || force_join) {
+                    command.setMember(member_replaced);
+                    if (command.getCommand(false) instanceof LongCommand)
+                        actualCommands.put(member_replaced.getId(), (LongCommand) command.getCommand(true));
+                }
+                return true;
+            }
+            Command.sendError(command.channel, "Vous n'avez pas la permission d'exécuter cette commande !");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return false;
     }
 
     public static boolean react(ReactionAddEvent event) {
-        synchronized (actualCommands) {
-            Member member_replaced = logged_as.get(event.getUserId()) == null ? event.getMember().get() :
-                    MemberCache.get(logged_as.get(event.getUserId()).asString());
-            if (actualCommands.containsKey(member_replaced.getId())) {
-                actualCommands.get(member_replaced.getId()).nextStep(event);
-                return true;
-            }
-            return false;
+        Member member_replaced = logged_as.get(event.getUserId()) == null ? event.getMember().get() :
+                MemberCache.get(logged_as.get(event.getUserId()).asString());
+        if (actualCommands.containsKey(member_replaced.getId())) {
+            actualCommands.get(member_replaced.getId()).nextStep(event);
+            return true;
         }
+        return false;
     }
 
     public static boolean receiveMessage(MessageCreateEvent event) {
-        synchronized (actualCommands) {
-            Member member_replaced = logged_as.get(event.getMessage().getAuthor().get().getId()) == null ?
-                    event.getMember().get() :
-                    MemberCache.get(logged_as.get(event.getMessage().getAuthor().get().getId()).asString());
-            if (actualCommands.containsKey(member_replaced.getId())) {
-                actualCommands.get(member_replaced.getId()).nextStep(event);
-                return true;
-            }
-            return false;
+        Member member_replaced = logged_as.get(event.getMessage().getAuthor().get().getId()) == null ?
+                event.getMember().get() :
+                MemberCache.get(logged_as.get(event.getMessage().getAuthor().get().getId()).asString());
+        if (actualCommands.containsKey(member_replaced.getId())) {
+            actualCommands.get(member_replaced.getId()).nextStep(event);
+            return true;
         }
+        return false;
     }
 
     public static boolean receiveInteract(ButtonInteractionEvent event) {
-        synchronized (actualCommands) {
-            if (event.getInteraction().getMember().isEmpty()) return false;
-            Member member_replaced = logged_as.get(event.getInteraction().getMember().get().getId()) == null ?
-                    event.getInteraction().getMember().get() :
-                    MemberCache.get(logged_as.get(event.getInteraction().getMember().get().getId()).asString());
-            if (actualCommands.containsKey(member_replaced.getId())) {
-                actualCommands.get(member_replaced.getId()).nextStep(event);
-                return true;
-            }
-            return false;
+        if (event.getInteraction().getMember().isEmpty()) return false;
+        Member member_replaced = logged_as.get(event.getInteraction().getMember().get().getId()) == null ?
+                event.getInteraction().getMember().get() :
+                MemberCache.get(logged_as.get(event.getInteraction().getMember().get().getId()).asString());
+        if (actualCommands.containsKey(member_replaced.getId())) {
+            actualCommands.get(member_replaced.getId()).nextStep(event);
+            return true;
         }
+        return false;
     }
 
     public static boolean hasCommand(Snowflake memberId) {
-        synchronized (actualCommands) {
-            return actualCommands.containsKey(memberId);
-        }
+        return actualCommands.containsKey(memberId);
     }
 
     public static boolean hasCommand(LongCommand command) {
-        synchronized (actualCommands) {
-            return actualCommands.containsValue(command);
-        }
+        return actualCommands.containsValue(command);
     }
 
     public static void removeCommand(Snowflake memberId) {
-        synchronized (actualCommands) {
-            actualCommands.remove(memberId);
-        }
+        actualCommands.remove(memberId);
     }
 
     public static void removeCommand(Snowflake memberId, Command command) {
-        synchronized (actualCommands) {
-            if (actualCommands.containsValue(command))
-                actualCommands.remove(memberId);
-        }
+        if (actualCommands.containsValue(command))
+            actualCommands.remove(memberId);
     }
 
     public static void left(Snowflake id) {
-        synchronized (actualCommands) {
-            if (actualCommands.containsKey(id)) {
-                actualCommands.get(id).endCommand();
-            }
+        if (actualCommands.containsKey(id)) {
+            actualCommands.get(id).endCommand();
         }
     }
 
     public static int size() {
-        synchronized (actualCommands) {
-            return actualCommands.size();
-        }
+        return actualCommands.size();
     }
 
     /*
@@ -350,9 +330,7 @@ public class CommandManager {
      */
     @Deprecated
     public static Map<Snowflake, LongCommand> getMap() {
-        synchronized (actualCommands) {
-            return actualCommands;
-        }
+        return actualCommands;
     }
 
     public static LongCommand getCommandOf(Snowflake id) {

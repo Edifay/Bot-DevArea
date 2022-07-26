@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import static devarea.global.utils.ThreadHandler.startAway;
+
 public class Init {
     public static final File initialDataFile = new File("configuration.json");
 
@@ -114,15 +116,15 @@ public class Init {
         Setup all events when all init are done.
      */
     public static void setupEventDispatcher() {
-        client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(MessageCreate::messageCreateFunction);
-        client.getEventDispatcher().on(MessageUpdateEvent.class).subscribe(MessageUpdate::messageUpdateFunction);
-        client.getEventDispatcher().on(MessageDeleteEvent.class).subscribe(MessageDelete::messageDeleteFunction);
-        client.getEventDispatcher().on(MemberJoinEvent.class).subscribe(MemberJoin::memberJoinFunction);
-        client.getEventDispatcher().on(MemberLeaveEvent.class).subscribe(MemberLeave::memberLeaveFunction);
-        client.getEventDispatcher().on(ReactionAddEvent.class).subscribe(ReactionAdd::reactionAddFunction);
-        client.getEventDispatcher().on(ReactionRemoveEvent.class).subscribe(ReactionRemove::FunctionReactionRemoveEvent);
-        client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(VoiceStateUpdate::VoiceStateUpdateFunction);
-        client.getEventDispatcher().on(ButtonInteractionEvent.class).subscribe(ButtonInteract::ButtonInteractFunction);
+        client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(messageCreateEvent -> startAway(() -> MessageCreate.messageCreateFunction(messageCreateEvent)));
+        client.getEventDispatcher().on(MessageUpdateEvent.class).subscribe(messageUpdateEvent -> startAway(() -> MessageUpdate.messageUpdateFunction(messageUpdateEvent)));
+        client.getEventDispatcher().on(MessageDeleteEvent.class).subscribe(messageDeleteEvent -> startAway(() -> MessageDelete.messageDeleteFunction(messageDeleteEvent)));
+        client.getEventDispatcher().on(MemberJoinEvent.class).subscribe(memberJoinEvent -> startAway(() -> MemberJoin.memberJoinFunction(memberJoinEvent)));
+        client.getEventDispatcher().on(MemberLeaveEvent.class).subscribe(memberLeaveEvent -> startAway(() -> MemberLeave.memberLeaveFunction(memberLeaveEvent)));
+        client.getEventDispatcher().on(ReactionAddEvent.class).subscribe(reactionAddEvent -> startAway(() -> ReactionAdd.reactionAddFunction(reactionAddEvent)));
+        client.getEventDispatcher().on(ReactionRemoveEvent.class).subscribe(reactionRemoveEvent -> startAway(() -> ReactionRemove.FunctionReactionRemoveEvent(reactionRemoveEvent)));
+        client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(voiceStateUpdateEvent -> startAway(() -> VoiceStateUpdate.VoiceStateUpdateFunction(voiceStateUpdateEvent)));
+        client.getEventDispatcher().on(ButtonInteractionEvent.class).subscribe(buttonInteractionEvent -> startAway(() -> ButtonInteract.ButtonInteractFunction(buttonInteractionEvent)));
 
     }
 
