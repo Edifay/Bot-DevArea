@@ -11,6 +11,7 @@ import devarea.bot.presets.ColorsUsed;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
@@ -30,9 +31,12 @@ public class Stop extends ShortCommand implements PermissionCommand, SlashComman
         XPHandler.stop();
         FreeLanceHandler.stop();
         UserDataHandler.updated();
-        replyEmbed(EmbedCreateSpec.builder()
-                .title(stopCommand)
-                .color(ColorsUsed.wrong).build(), false);
+        chatInteraction.reply(InteractionApplicationCommandCallbackSpec.builder()
+                .ephemeral(true)
+                .addEmbed(EmbedCreateSpec.builder()
+                        .title(stopCommand)
+                        .color(ColorsUsed.wrong).build())
+                .build()).block();
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
         for (Thread t : threadSet)
             if (!t.equals(Thread.currentThread()))
