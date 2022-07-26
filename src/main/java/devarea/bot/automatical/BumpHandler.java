@@ -1,101 +1,100 @@
 package devarea.bot.automatical;
 
 import devarea.bot.Init;
-import devarea.global.cache.ChannelCache;
 import devarea.bot.commands.Command;
 import devarea.bot.presets.ColorsUsed;
-import discord4j.core.event.domain.message.MessageCreateEvent;
+import devarea.global.cache.ChannelCache;
+import discord4j.common.util.Snowflake;
+import discord4j.common.util.TimestampFormat;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
-import discord4j.core.spec.MessageEditSpec;
+
+import java.time.Duration;
+import java.time.Instant;
 
 public class BumpHandler {
 
-    private static long dateToBump;
-    private static Message message;
-    private static TextChannel channel;
+    private static final long BUMP_DELAY = 7200000;
+
+    private static final TextChannel bumpChannel = (TextChannel) ChannelCache.watch(Init.initial.bump_channel.asString());
+    private static Thread thread;
+    private static Message botMessage;
 
     public static void init() {
-        channel = (TextChannel) ChannelCache.watch(Init.initial.bump_channel.asString());
-        message = Command.sendEmbed(channel, EmbedCreateSpec.builder()
-                .color(ColorsUsed.wrong)
-                .description("Le bot vient de s'initialiser utilisez la commande `/bump`, pour lancer le compte à " +
-                        "rebours.").build(), true);
-        new Thread(() -> {
-            try {
-                while (true) {
-                    Thread.sleep(60000);
-                    try {
-                        restartIfNotTheLast();
-                        if (dateToBump - System.currentTimeMillis() > 0) {
-                            if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est à nouveau " +
-                                    "disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + " minutes."))
-                                edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                                                .description("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + " minutes.")
-                                                .color(ColorsUsed.wrong).build())
-                                        .build());
-                        } else if (!message.getEmbeds().get(0).getDescription().get().equals("Le bump est disponible " +
-                                "avec la commande `/bump`.") && !message.getEmbeds().get(0).getDescription().get().equals("Le bot vient de s'initialiser utilisez la commande `/bump`, pour lancer le compte à rebours."))
-                            replace(MessageCreateSpec.builder()
-                                    .addEmbed(EmbedCreateSpec.builder()
-                                            .description("Le bump est disponible avec la commande `/bump`.")
-                                            .color(ColorsUsed.same).build()).build());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (InterruptedException ignored) {
-            }
-        }).start();
-    }
+        if (bumpChannel != null) {
+            botMessage = bumpChannel.getMessagesBefore(Snowflake.of(Instant.now()))
+                    .skipUntil(message -> message.getAuthor().isPresent()
+                                          && message.getAuthor().get().getId().equals(Init.client.getSelfId()))
+                    .blockFirst();
 
-    public synchronized static void getDisboardMessage(MessageCreateEvent event) {
-        if (!event.getMessage().getChannelId().equals(channel.getId()))
-            return;
-
-        String[] coupes = event.getMessage().getEmbeds().get(0).getDescription().get().split(" ");
-
-        if (coupes.length == 0)
-            return;
-
-        if (coupes[1].equalsIgnoreCase("attendez")) {
-            dateToBump = System.currentTimeMillis() + (Integer.parseInt(coupes[3]) * 60000L);
-            replace(MessageCreateSpec.builder()
-                    .addEmbed(EmbedCreateSpec.builder()
-                            .description("Le bump est à nouveau disponible dans " + (int) ((dateToBump - System.currentTimeMillis()) / 60000L) + " minutes.")
-                            .color(ColorsUsed.wrong).build()).build());
-        } else if (event.getMessage().getEmbeds().get(0).getDescription().get().contains("effectué") || event.getMessage().getEmbeds().get(0).getDescription().get().contains("done!")) {
-            dateToBump = System.currentTimeMillis() + (120 * 60000L);
-            replace(MessageCreateSpec.builder()
-                    .addEmbed(EmbedCreateSpec.builder()
-                            .description("Le bump est à nouveau disponible dans " + 120 + " minutes.")
-                            .color(ColorsUsed.wrong).build()).build());
+            checkBumpAvailable();
         }
     }
+    private synchronized static void sendBumpMessage(Instant instant) {
+        boolean available = instant.isBefore(Instant.now());
 
-    private synchronized static void replace(final MessageCreateSpec spec) {
-        Command.delete(false, message);
-        message = Command.send(channel, spec, true);
+        EmbedCreateSpec spec = available ?
+                EmbedCreateSpec.builder()
+                        .color(ColorsUsed.same)
+                        .description("Le bump est disponible avec la commande `/bump`.")
+                        .build() :
+                EmbedCreateSpec.builder()
+                        .color(ColorsUsed.wrong)
+                        .description("Le bump est à nouveau disponible " + TimestampFormat.RELATIVE_TIME.format(instant) + ".")
+                        .build();
+
+        if (botMessage != null) {
+            botMessage.delete().subscribe();
+        }
+        botMessage = Command.send(bumpChannel, MessageCreateSpec.create().withEmbeds(spec), true);
+
+        waitUntilBumpAvailable(instant);
     }
 
-    private synchronized static void edit(final MessageEditSpec spec) {
-        message = message.edit(spec).block();
+    public static void checkBumpAvailable() {
+        if (thread != null && thread.isAlive()) {
+            thread.interrupt();
+        }
+        sendBumpMessage(nextBump());
     }
 
-    public static void messageInChannel(MessageCreateEvent event) {
-        if (!event.getMessage().getContent().equalsIgnoreCase("/bump"))
-            restartIfNotTheLast();
+    private static boolean isDisboardBump(Message message) {
+        return message.getAuthor().isPresent()
+               && message.getAuthor().get().getId().equals(Init.initial.disboard_bot)
+               && message.getInteraction().isPresent()
+               && message.getInteraction().get().getName().equals("bump");
     }
 
-    private static void restartIfNotTheLast() {
-        channel = (TextChannel) ChannelCache.fetch(Init.initial.bump_channel.asString());
-        if (!channel.getLastMessageId().get().equals(message.getId())) {
-            replace(MessageCreateSpec.builder()
-                    .addEmbed(EmbedCreateSpec.builder()
-                            .description(message.getEmbeds().get(0).getDescription().get())
-                            .color(message.getEmbeds().get(0).getColor().get()).build()).build());
+    private static Instant nextBump() {
+        Message disboardMessage = latestDisboardMessage();
+        long latestBump = BUMP_DELAY - (disboardMessage != null ?
+                Duration.between(disboardMessage.getTimestamp(), Instant.now()).toMillis() : 0);
+        return Instant.now().plusMillis(latestBump);
+    }
+    private synchronized static Message latestDisboardMessage() {
+        if (bumpChannel == null) {
+            return null;
+        }
+        Snowflake now = Snowflake.of(Instant.now());
+        return bumpChannel.getMessagesBefore(now)
+                .skipUntil(BumpHandler::isDisboardBump)
+                .blockFirst();
+    }
+
+    private static void waitUntilBumpAvailable(Instant instant) {
+        long millis = Duration.between(Instant.now(), instant).toMillis();
+        if (millis >= 0) {
+            thread = new Thread(() -> {
+                try {
+                    Thread.sleep(millis);
+                    sendBumpMessage(nextBump());
+                } catch (InterruptedException ignored) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+            thread.start();
         }
     }
 }
