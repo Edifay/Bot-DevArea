@@ -13,12 +13,17 @@ import discord4j.core.spec.MessageCreateSpec;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.TemporalAmount;
+import java.util.concurrent.TimeUnit;
 
 public class BumpHandler {
-
+    /*
+        7200000ms -> 2hours
+     */
     private static final long BUMP_DELAY = 7200000;
 
-    private static final TextChannel bumpChannel = (TextChannel) ChannelCache.watch(Init.initial.bump_channel.asString());
+    private static final TextChannel bumpChannel =
+            (TextChannel) ChannelCache.watch(Init.initial.bump_channel.asString());
     private static Thread thread;
     private static Message botMessage;
 
@@ -26,12 +31,13 @@ public class BumpHandler {
         if (bumpChannel != null) {
             botMessage = bumpChannel.getMessagesBefore(Snowflake.of(Instant.now()))
                     .skipUntil(message -> message.getAuthor().isPresent()
-                                          && message.getAuthor().get().getId().equals(Init.client.getSelfId()))
+                            && message.getAuthor().get().getId().equals(Init.client.getSelfId()))
                     .blockFirst();
 
             checkBumpAvailable();
         }
     }
+
     private synchronized static void sendBumpMessage(Instant instant) {
         boolean available = instant.isBefore(Instant.now());
 
@@ -62,9 +68,10 @@ public class BumpHandler {
 
     private static boolean isDisboardBump(Message message) {
         return message.getAuthor().isPresent()
-               && message.getAuthor().get().getId().equals(Init.initial.disboard_bot)
-               && message.getInteraction().isPresent()
-               && message.getInteraction().get().getName().equals("bump");
+                && message.getAuthor().get().getId().equals(Init.initial.disboard_bot)
+                && message.getInteraction().isPresent()
+                && message.getInteraction().get().getName().equals("bump")
+                || message.getTimestamp().isBefore(Instant.now().minusMillis(BUMP_DELAY));
     }
 
     private static Instant nextBump() {
@@ -73,6 +80,7 @@ public class BumpHandler {
                 Duration.between(disboardMessage.getTimestamp(), Instant.now()).toMillis() : 0);
         return Instant.now().plusMillis(latestBump);
     }
+
     private synchronized static Message latestDisboardMessage() {
         if (bumpChannel == null) {
             return null;
@@ -91,7 +99,7 @@ public class BumpHandler {
                     Thread.sleep(millis);
                     sendBumpMessage(nextBump());
                 } catch (InterruptedException ignored) {
-                    Thread.currentThread().interrupt();
+
                 }
             });
             thread.start();

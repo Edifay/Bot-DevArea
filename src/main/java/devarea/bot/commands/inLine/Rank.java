@@ -28,7 +28,6 @@ public class Rank extends ShortCommand implements SlashCommand {
 
     public Rank(final Member member, final ChatInputInteractionEvent event) {
         super(member, event);
-        System.out.println("Member : " + member);
         Member pinged = member;
         try {
             if (event.getOption("membre").isPresent() && event.getOption("membre").get().getValue().isPresent()) {
