@@ -1,9 +1,9 @@
 package devarea.bot.commands.inLine;
 
 import devarea.bot.Init;
+import devarea.bot.commands.ShortCommand;
 import devarea.bot.commands.SlashCommand;
 import devarea.bot.presets.TextMessage;
-import devarea.bot.commands.ShortCommand;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.spec.InteractionFollowupCreateSpec;

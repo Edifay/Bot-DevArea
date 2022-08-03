@@ -1,13 +1,12 @@
 package devarea.bot.event;
 
-import devarea.bot.automatical.EmbedLinkHandler;
-import devarea.bot.automatical.ThreadCreator;
-import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.BumpHandler;
-import devarea.global.handlers.XPHandler;
+import devarea.bot.automatical.EmbedLinkHandler;
+import devarea.bot.automatical.ThreadCreator;
 import devarea.bot.commands.CommandManager;
-import discord4j.common.util.Snowflake;
+import devarea.global.cache.MemberCache;
+import devarea.global.handlers.XPHandler;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.spec.MessageCreateSpec;
 

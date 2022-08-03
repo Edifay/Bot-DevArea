@@ -1,10 +1,8 @@
 package devarea.global.badges.success_badge;
 
-import devarea.global.handlers.UserDataHandler;
 import devarea.global.badges.Badges;
-import devarea.backend.controllers.tools.userInfos.WebUserInfos;
+import devarea.global.handlers.UserDataHandler;
 import discord4j.core.object.entity.Member;
-import org.springframework.lang.Nullable;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

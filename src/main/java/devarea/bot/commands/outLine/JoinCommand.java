@@ -2,14 +2,12 @@ package devarea.bot.commands.outLine;
 
 import devarea.Main;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
-import devarea.bot.commands.*;
-import devarea.global.cache.ChannelCache;
-import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
+import devarea.bot.commands.ShortCommand;
 import devarea.bot.presets.ColorsUsed;
 import devarea.bot.presets.TextMessage;
-import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
-import discord4j.core.object.PermissionOverwrite;
+import devarea.global.cache.ChannelCache;
+import devarea.global.cache.MemberCache;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.PrivateChannel;
@@ -17,8 +15,6 @@ import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
-import discord4j.rest.util.Permission;
-import discord4j.rest.util.PermissionSet;
 
 import java.util.ArrayList;
 

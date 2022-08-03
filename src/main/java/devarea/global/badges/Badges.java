@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import devarea.global.badges.role_badge.RolesBadges;
 import devarea.global.badges.success_badge.SuccessBadge;
-import devarea.backend.controllers.tools.userInfos.WebUserInfos;
 import devarea.global.badges.time_badge.TimeOnServerBadge;
 import devarea.global.badges.xp_badge.XPBadges;
 import discord4j.core.object.entity.Member;
-import reactor.util.annotation.Nullable;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

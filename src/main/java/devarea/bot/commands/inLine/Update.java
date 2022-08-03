@@ -1,10 +1,10 @@
 package devarea.bot.commands.inLine;
 
-import devarea.bot.commands.SlashCommand;
-import devarea.global.handlers.StatsHandler;
 import devarea.bot.commands.PermissionCommand;
 import devarea.bot.commands.ShortCommand;
+import devarea.bot.commands.SlashCommand;
 import devarea.bot.presets.ColorsUsed;
+import devarea.global.handlers.StatsHandler;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.spec.EmbedCreateSpec;

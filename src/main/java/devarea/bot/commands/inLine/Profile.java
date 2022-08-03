@@ -2,10 +2,10 @@ package devarea.bot.commands.inLine;
 
 import devarea.Main;
 import devarea.bot.automatical.EmbedLinkHandler;
+import devarea.bot.commands.ShortCommand;
 import devarea.bot.commands.SlashCommand;
 import devarea.bot.presets.ColorsUsed;
 import devarea.global.cache.MemberCache;
-import devarea.bot.commands.ShortCommand;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.command.ApplicationCommandOption;
 import discord4j.core.object.component.ActionRow;
@@ -13,14 +13,11 @@ import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
-import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandOptionData;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class Profile extends ShortCommand implements SlashCommand {
 
@@ -37,12 +34,12 @@ public class Profile extends ShortCommand implements SlashCommand {
             ByteArrayInputStream image_stream = EmbedLinkHandler.generateImageStreamForMember(pinged);
             chatInteraction.reply(InteractionApplicationCommandCallbackSpec.builder()
                     .addEmbed(EmbedCreateSpec.builder()
-                            .title("Profil de : " + member.getDisplayName())
+                            .title("Profil de : " + pinged.getDisplayName())
                             .image("attachment://profil.png")
                             .color(ColorsUsed.same)
                             .build())
                     .addFile("profil.png", image_stream)
-                    .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + member.getId().asString(), "devarea.fr")))
+                    .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + pinged.getId().asString(), "devarea.fr")))
                     .build()).subscribe();
         } catch (IOException e) {
             throw new RuntimeException(e);

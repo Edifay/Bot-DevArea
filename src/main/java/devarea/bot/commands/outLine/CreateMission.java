@@ -1,7 +1,6 @@
 package devarea.bot.commands.outLine;
 
 import devarea.bot.Init;
-import devarea.global.handlers.MissionsHandler;
 import devarea.bot.commands.EndStep;
 import devarea.bot.commands.FirstStep;
 import devarea.bot.commands.LongCommand;
@@ -9,6 +8,7 @@ import devarea.bot.commands.Step;
 import devarea.bot.commands.commandTools.Mission;
 import devarea.bot.presets.ColorsUsed;
 import devarea.bot.presets.TextMessage;
+import devarea.global.handlers.MissionsHandler;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;

@@ -1,6 +1,5 @@
 package devarea.global.badges.time_badge;
 
-import devarea.backend.controllers.tools.userInfos.WebUserInfos;
 import devarea.global.badges.Badges;
 import discord4j.core.object.entity.Member;
 

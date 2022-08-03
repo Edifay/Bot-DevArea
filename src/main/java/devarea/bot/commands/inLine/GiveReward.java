@@ -1,14 +1,14 @@
 package devarea.bot.commands.inLine;
 
-import devarea.bot.commands.*;
-import devarea.global.cache.ChannelCache;
-import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.HelpRewardHandler;
-import devarea.global.handlers.XPHandler;
+import devarea.bot.commands.*;
 import devarea.bot.commands.commandTools.HelpReward;
 import devarea.bot.presets.ColorsUsed;
 import devarea.bot.utils.MemberUtil;
+import devarea.global.cache.ChannelCache;
+import devarea.global.cache.MemberCache;
+import devarea.global.handlers.XPHandler;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
@@ -17,13 +17,14 @@ import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
-import discord4j.core.spec.*;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.InteractionReplyEditSpec;
+import discord4j.core.spec.MessageCreateSpec;
+import discord4j.core.spec.MessageEditSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static devarea.global.utils.ThreadHandler.startAwayIn;
 
 public class GiveReward extends LongCommand implements SlashCommand {
 

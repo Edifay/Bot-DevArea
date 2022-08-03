@@ -2,9 +2,9 @@ package devarea.backend.controllers.rest.requestContent;
 
 import devarea.backend.controllers.tools.WebMission;
 import devarea.backend.controllers.tools.userInfos.WebPrivateUserInfos;
+import devarea.bot.commands.commandTools.Mission;
 import devarea.global.cache.MemberCache;
 import devarea.global.handlers.MissionsHandler;
-import devarea.bot.commands.commandTools.Mission;
 import discord4j.core.object.entity.Member;
 
 import java.util.ArrayList;

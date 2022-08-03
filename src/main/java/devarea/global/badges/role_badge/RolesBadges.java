@@ -1,7 +1,6 @@
 package devarea.global.badges.role_badge;
 
 import devarea.global.badges.Badges;
-import devarea.backend.controllers.tools.userInfos.WebUserInfos;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 

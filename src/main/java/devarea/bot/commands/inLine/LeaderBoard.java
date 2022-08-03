@@ -1,9 +1,9 @@
 package devarea.bot.commands.inLine;
 
+import devarea.bot.commands.ShortCommand;
 import devarea.bot.commands.SlashCommand;
 import devarea.bot.presets.ColorsUsed;
 import devarea.global.handlers.XPHandler;
-import devarea.bot.commands.ShortCommand;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;

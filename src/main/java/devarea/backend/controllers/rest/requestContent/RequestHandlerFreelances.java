@@ -2,8 +2,8 @@ package devarea.backend.controllers.rest.requestContent;
 
 import devarea.backend.controllers.tools.WebFreelance;
 import devarea.backend.controllers.tools.userInfos.WebUserInfos;
-import devarea.global.handlers.FreeLanceHandler;
 import devarea.bot.commands.commandTools.FreeLance;
+import devarea.global.handlers.FreeLanceHandler;
 
 import java.util.ArrayList;
 

@@ -2,8 +2,8 @@ package devarea.bot.commands.inLine;
 
 import devarea.bot.Init;
 import devarea.bot.commands.*;
-import devarea.global.handlers.MissionsHandler;
 import devarea.bot.presets.ColorsUsed;
+import devarea.global.handlers.MissionsHandler;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;

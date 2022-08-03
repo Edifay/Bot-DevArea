@@ -1,6 +1,5 @@
 package devarea.global.badges.xp_badge;
 
-import devarea.backend.controllers.tools.userInfos.WebUserInfos;
 import devarea.global.badges.Badges;
 import devarea.global.handlers.UserDataHandler;
 import devarea.global.handlers.handlerData.UserData;

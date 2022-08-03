@@ -1,22 +1,22 @@
 package devarea.bot.event;
 
 import devarea.Main;
-import devarea.bot.commands.CommandManager;
-import devarea.global.handlers.UserDataHandler;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
+import devarea.bot.Init;
+import devarea.bot.automatical.BumpHandler;
+import devarea.bot.automatical.MeetupHandler;
+import devarea.bot.automatical.RolesReactsHandler;
+import devarea.bot.commands.CommandManager;
+import devarea.bot.presets.ColorsUsed;
 import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
-import devarea.bot.Init;
-import devarea.bot.automatical.*;
-import devarea.bot.presets.ColorsUsed;
-import devarea.global.handlers.FreeLanceHandler;
-import devarea.global.handlers.MissionsHandler;
-import devarea.global.handlers.StatsHandler;
-import devarea.global.handlers.XPHandler;
+import devarea.global.handlers.*;
 import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.channel.TextChannel;
-import discord4j.core.object.presence.*;
+import discord4j.core.object.presence.ClientActivity;
+import discord4j.core.object.presence.ClientPresence;
+import discord4j.core.object.presence.Status;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 

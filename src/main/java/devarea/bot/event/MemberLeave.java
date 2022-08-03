@@ -1,12 +1,11 @@
 package devarea.bot.event;
 
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
-import devarea.global.handlers.FreeLanceHandler;
+import devarea.bot.Init;
+import devarea.bot.commands.CommandManager;
 import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
-import devarea.bot.Init;
 import devarea.global.handlers.UserDataHandler;
-import devarea.bot.commands.CommandManager;
 import discord4j.core.event.domain.guild.MemberLeaveEvent;
 import discord4j.core.object.entity.channel.TextChannel;
 

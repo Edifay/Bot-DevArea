@@ -3,10 +3,9 @@ package devarea.backend.controllers.rest;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
 import devarea.backend.controllers.tools.WebFreelance;
 import devarea.backend.controllers.tools.userInfos.WebUserInfos;
-import devarea.global.handlers.FreeLanceHandler;
 import devarea.bot.commands.commandTools.FreeLance;
+import devarea.global.handlers.FreeLanceHandler;
 import org.springframework.web.bind.annotation.*;
-
 
 import static devarea.backend.controllers.rest.requestContent.RequestHandlerFreelances.requestFreelancePreview;
 import static devarea.backend.controllers.rest.requestContent.RequestHandlerFreelances.requestSetFreelance;

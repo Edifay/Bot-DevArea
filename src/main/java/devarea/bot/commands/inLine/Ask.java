@@ -1,13 +1,12 @@
 package devarea.bot.commands.inLine;
 
+import devarea.bot.commands.ShortCommand;
 import devarea.bot.commands.SlashCommand;
 import devarea.bot.presets.ColorsUsed;
-import devarea.bot.commands.ShortCommand;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
-import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 
 public class Ask extends ShortCommand implements SlashCommand {

@@ -3,15 +3,15 @@ package devarea.backend.controllers.tools.userInfos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import devarea.global.handlers.UserDataHandler;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerMission;
 import devarea.backend.controllers.tools.WebFreelance;
 import devarea.backend.controllers.tools.WebMission;
 import devarea.global.badges.Badges;
+import devarea.global.cache.MemberCache;
 import devarea.global.handlers.FreeLanceHandler;
 import devarea.global.handlers.MissionsHandler;
+import devarea.global.handlers.UserDataHandler;
 import devarea.global.handlers.XPHandler;
-import devarea.global.cache.MemberCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Member;
 

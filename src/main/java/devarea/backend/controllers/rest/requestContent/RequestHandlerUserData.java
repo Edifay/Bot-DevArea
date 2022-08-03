@@ -1,8 +1,8 @@
 package devarea.backend.controllers.rest.requestContent;
 
-import devarea.global.handlers.UserDataHandler;
 import devarea.backend.controllers.tools.userInfos.WebPrivateUserInfos;
 import devarea.backend.controllers.tools.userInfos.WebPublicUserInfos;
+import devarea.global.handlers.UserDataHandler;
 
 public class RequestHandlerUserData {
 
