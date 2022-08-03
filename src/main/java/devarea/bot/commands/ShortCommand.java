@@ -10,16 +10,15 @@ public abstract class ShortCommand extends Command {
         super();
     }
 
+    public ShortCommand(Member member) {
+        super(member);
+    }
+
     public ShortCommand(final Member member, final TextChannel channel) {
         super(member, channel);
     }
 
     public ShortCommand(final Member member, ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
-    }
-
-    @Override
-    protected Boolean endCommand() {
-        return super.endCommand();
     }
 }

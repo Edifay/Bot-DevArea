@@ -1,6 +1,7 @@
 package devarea.bot.event;
 
 import devarea.bot.automatical.EmbedLinkHandler;
+import devarea.bot.automatical.ThreadCreator;
 import devarea.global.cache.MemberCache;
 import devarea.bot.Init;
 import devarea.bot.automatical.BumpHandler;
@@ -49,6 +50,7 @@ public class MessageCreate {
                 CommandManager.exe(message.getMessage().getContent().substring(Init.initial.prefix.length()).split(
                         "\\s", 2)[0], message, null);
 
+            ThreadCreator.newMessage(message);
             EmbedLinkHandler.onReceive(message);
         } catch (
                 Exception e) {

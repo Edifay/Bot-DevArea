@@ -35,7 +35,6 @@ public class InCommand extends ShortCommand implements SlashCommand {
                 .title("Voici toutes les personnes ayant des commandes actives.").description(text)
                 .color(ColorsUsed.same)
                 .timestamp(Instant.now()).build(), false);
-        this.endCommand();
     }
 
     @Override

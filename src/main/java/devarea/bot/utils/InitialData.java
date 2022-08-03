@@ -2,6 +2,7 @@ package devarea.bot.utils;
 
 import discord4j.common.util.Snowflake;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InitialData {
@@ -54,6 +55,9 @@ public class InitialData {
 
     // Bots
     public Snowflake disboard_bot = null;
+
+    // ThreadCreator list
+    public ArrayList<Snowflake> channelsThreadCreator = new ArrayList<>();
 
     // Assets
     public HashMap<String, String> assetsImages = null;

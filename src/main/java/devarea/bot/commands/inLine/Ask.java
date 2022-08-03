@@ -6,21 +6,20 @@ import devarea.bot.commands.ShortCommand;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 
 public class Ask extends ShortCommand implements SlashCommand {
     public Ask(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
-        chatInteraction.reply("**Ne demande pas pour demander, demande !**").subscribe();
-        send(MessageCreateSpec.builder()
-                .addFile("image_ask.png", this.getClass().getResourceAsStream("/assets/image_ask.png"))
+        chatInteraction.reply(InteractionApplicationCommandCallbackSpec.builder()
                 .addEmbed(EmbedCreateSpec.builder()
+                        .title("Ne demande pas pour demander, demande !")
                         .description("https://dontasktoask.com/")
-                        .image("attachment://image_ask.png")
+                        .image("https://devarea.fr/assets/images/image_ask.png")
                         .color(ColorsUsed.same).build()
-                ).build(), false);
-        this.endCommand();
+                ).build()).subscribe();
     }
 
     public Ask() {

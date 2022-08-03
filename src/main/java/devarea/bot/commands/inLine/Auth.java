@@ -52,7 +52,6 @@ public class Auth extends ShortCommand implements SlashCommand {
                         .build()).subscribe();
             }
         });
-        this.endCommand();
     }
 
     public Auth() {

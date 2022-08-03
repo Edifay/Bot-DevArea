@@ -3,12 +3,14 @@ package devarea.bot.commands.inLine;
 import devarea.bot.Init;
 import devarea.bot.commands.*;
 import devarea.bot.presets.ColorsUsed;
+import devarea.global.cache.ChannelCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.InteractionReplyEditSpec;
 import discord4j.core.spec.MessageCreateSpec;
@@ -23,6 +25,8 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
     String title = "";
     String description = "";
     Color color = ColorsUsed.same;
+
+    boolean send = false;
 
     public Edit(PermissionCommand permissionCommand) {
         super();
@@ -99,13 +103,23 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                         find = true;
                     }
                     if (find) {
-                        atModif.edit(MessageEditSpec.builder()
-                                .addEmbed(EmbedCreateSpec.builder()
-                                        .title(title)
-                                        .description(description)
-                                        .color(color)
-                                        .build())
-                                .build()).subscribe();
+                        if (send)
+                            send(((TextChannel) ChannelCache.get(event.getMessage().getChannelId().asString())),
+                                    MessageCreateSpec.builder()
+                                            .addEmbed(EmbedCreateSpec.builder()
+                                                    .title(title)
+                                                    .description(description)
+                                                    .color(color)
+                                                    .build())
+                                            .build(), false);
+                        else
+                            atModif.edit(MessageEditSpec.builder()
+                                    .addEmbed(EmbedCreateSpec.builder()
+                                            .title(title)
+                                            .description(description)
+                                            .color(color)
+                                            .build())
+                                    .build()).subscribe();
                         return callStep(0);
                     }
                 }
@@ -128,10 +142,6 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                 String content = event.getMessage().getContent();
                 if (!content.equals("")) {
                     description = content;
-                    atModif.edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
-                            .title(title)
-                            .description(description)
-                            .build()).build()).subscribe();
                     return callStep(0);
                 }
                 sendErrorEntry();
@@ -197,18 +207,24 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Quel message voulez-vous modifier ?")
                                 .description("Donnez-moi l'id du message a modifier, ATTENTION ce message doit être " +
-                                        "dans le channel de cette commande !")
+                                        "dans le channel de cette commande ! Ou `send` pour créer un nouveau message !")
                                 .color(ColorsUsed.same).build()
                         ).build());
             }
 
             @Override
             protected boolean onReceiveMessage(MessageCreateEvent event) {
-                try {
-                    atModif = this.textChannel.getMessageById(Snowflake.of(event.getMessage().getContent())).block();
-                    if (atModif != null && atModif.getAuthor().get().getId().equals(Init.client.getSelfId()))
-                        return callStep(0);
-                } catch (Exception e) {
+                if (event.getMessage().getContent().equals("send")) {
+                    send = true;
+                    return callStep(0);
+                } else {
+                    try {
+                        atModif =
+                                this.textChannel.getMessageById(Snowflake.of(event.getMessage().getContent())).block();
+                        if (atModif != null && atModif.getAuthor().get().getId().equals(Init.client.getSelfId()))
+                            return callStep(0);
+                    } catch (Exception e) {
+                    }
                 }
                 return super.onReceiveMessage(event);
             }

@@ -23,6 +23,8 @@ public abstract class Command {
     protected TextChannel channel;
     protected ChatInputInteractionEvent chatInteraction;
 
+    protected Thread deletedCommandThread;
+
     public Command() {
         this.member = null;
     }
@@ -40,11 +42,6 @@ public abstract class Command {
         this.member = member;
         this.channel = (TextChannel) ChannelCache.get(chatInteraction.getInteraction().getChannelId().asString());
         this.chatInteraction = chatInteraction;
-    }
-
-    protected Boolean endCommand() {
-        CommandManager.removeCommand(this.member.getId(), this);
-        return true;
     }
 
 
@@ -80,23 +77,6 @@ public abstract class Command {
         return send(MessageCreateSpec.builder().addEmbed(spec).build(), block);
     }
 
-
-    protected void deletedCommand(final long millis, final Runnable runnable) {
-        new Thread(() -> {
-            try {
-                Thread.sleep(millis);
-            } catch (InterruptedException e) {
-            } finally {
-                runnable.run();
-                this.endCommand();
-            }
-        }).start();
-    }
-
-    protected void deletedCommand(final long millis) {
-        this.deletedCommand(millis, () -> {
-        });
-    }
 
     public static Message send(final TextChannel channel, final MessageCreateSpec spec, boolean block) {
         try {

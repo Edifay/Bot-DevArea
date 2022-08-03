@@ -29,7 +29,6 @@ public class DevHelp extends ShortCommand implements SlashCommand {
                 replyError("La commande devhelp n'est disponible que toutes les 30 minutes.");
         } else
             replyError("Uniquement les channels d'entraide acceptent cette commande.");
-        this.endCommand();
     }
 
     public DevHelp() {

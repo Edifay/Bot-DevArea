@@ -26,7 +26,6 @@ public class Update extends ShortCommand implements PermissionCommand, SlashComm
                 .title("Update !")
                 .description("Les stats ont été update en " + (System.currentTimeMillis() - ms) + "ms.")
                 .color(ColorsUsed.just).build(), false);
-        this.endCommand();
     }
 
 

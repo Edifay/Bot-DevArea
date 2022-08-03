@@ -39,7 +39,6 @@ public class Run extends ShortCommand {
 
         if (content.isBlank()) {
             RunHandler.sendResponse(message, TextMessage.runCommandExplain, false);
-            this.endCommand();
             return;
         }
 
@@ -49,7 +48,6 @@ public class Run extends ShortCommand {
             } catch (JudgeException e) {
                 this.sendError(e.getMessage());
             }
-            this.endCommand();
             return;
         }
 
@@ -81,7 +79,6 @@ public class Run extends ShortCommand {
             this.sendError("La commande n'est pas correctement formatée ! `" + Init.initial.prefix +
                            "run` pour voir comment utiliser cette commande.");
         }
-        this.endCommand();
     }
 
     private EmbedCreateSpec embedListLanguages() throws JudgeException {

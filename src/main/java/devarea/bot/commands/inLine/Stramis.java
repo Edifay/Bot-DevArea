@@ -15,7 +15,6 @@ public class Stramis extends ShortCommand implements SlashCommand {
     public Stramis(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
         chatInteraction.reply("https://tenor.com/view/happy-tgif-drinking-drunk-dance-gif-5427975").subscribe();
-        this.endCommand();
     }
 
     @Override

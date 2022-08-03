@@ -28,7 +28,6 @@ public class LeaderBoard extends ShortCommand implements SlashCommand {
                 .title("LeaderBoard !")
                 .color(ColorsUsed.same)
                 .description(text).build(), false);
-        this.endCommand();
     }
 
     public LeaderBoard() {

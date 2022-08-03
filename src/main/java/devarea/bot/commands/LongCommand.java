@@ -22,6 +22,11 @@ public abstract class LongCommand extends Command {
     protected FirstStep firstStep;
     protected boolean isLocalChannel;
 
+    /*
+        600000ms -> 10min
+     */
+    protected long AUTO_CLOSE_TIME = 600000L;
+
     public LongCommand() {
         super();
     }
@@ -29,17 +34,20 @@ public abstract class LongCommand extends Command {
     public LongCommand(final Member member) {
         super(member);
         this.isLocalChannel = false;
+        this.deletedCommand(AUTO_CLOSE_TIME);
     }
 
     public LongCommand(final Member member, final TextChannel channel) {
         super(member, channel);
         this.isLocalChannel = false;
+        this.deletedCommand(AUTO_CLOSE_TIME);
     }
 
     public LongCommand(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
         chatInteraction.deferReply().subscribe();
         this.isLocalChannel = false;
+        this.deletedCommand(AUTO_CLOSE_TIME);
     }
 
     public void nextStep(final ReactionAddEvent event) {
@@ -126,21 +134,44 @@ public abstract class LongCommand extends Command {
         endCommand();
     }
 
-    @Override
-    protected Boolean endCommand() {
-        if (this.isLocalChannel) {
-            try {
-                this.channel.delete().subscribe(chanl -> {
+    protected void deletedCommand(final long millis, final Runnable runnable) {
+        if (this.deletedCommandThread != null && this.deletedCommandThread.isAlive())
+            this.deletedCommandThread.interrupt();
 
-                }, error -> {
-                    System.err.println("ERROR: Le localChannel n'a pas pu être supprimé !");
-                });
-            } catch (Exception e) {
+        this.deletedCommandThread = new Thread(() -> {
+            try {
+                Thread.sleep(millis);
+                runnable.run();
+                this.removeTrace();
+            } catch (InterruptedException e) {
             }
-        }
-        if (chatInteraction != null)
-            delete(false, this.firstStep.message);
-        return super.endCommand();
+        });
+        this.deletedCommandThread.start();
+    }
+
+    protected void deletedCommand(final long millis) {
+        this.deletedCommand(millis, () -> {
+        });
+    }
+
+    protected void endCommand() {
+        startAway(() -> {
+            if (this.isLocalChannel) {
+                try {
+                    this.channel.delete().subscribe(chanl -> {
+
+                    }, error -> {
+                        System.err.println("ERROR: Le localChannel n'a pas pu être supprimé !");
+                    });
+                } catch (Exception e) {
+                }
+            }
+            if (this.deletedCommandThread != null && this.deletedCommandThread.isAlive())
+                this.deletedCommandThread.interrupt();
+            if (chatInteraction != null)
+                delete(false, this.firstStep.message);
+            CommandManager.removeCommand(this.member.getId(), this);
+        });
     }
 
     @Override

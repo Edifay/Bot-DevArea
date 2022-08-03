@@ -14,6 +14,7 @@ jar {
 }
 
 repositories {
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     mavenCentral()
 }
 
@@ -23,7 +24,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-devtools'
 
-    implementation 'com.discord4j:discord4j-core:3.2.2'
+    implementation 'com.discord4j:discord4j-core:3.3.0-SNAPSHOT'
 
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.9.0'
     implementation group: 'org.json', name: 'json', version: '20211205'

@@ -10,6 +10,7 @@ import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.command.ApplicationCommandOption;
 import discord4j.core.object.entity.Member;
 import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandOptionData;
 import discord4j.discordjson.json.ApplicationCommandRequest;
@@ -39,7 +40,6 @@ public class Rank extends ShortCommand implements SlashCommand {
         } finally {
             if (!XPHandler.haveBeenSet(pinged.getId())) {
                 replyError("Ce membre n'a pas encore parlé !");
-                this.endCommand();
             } else {
 
                 try {
@@ -86,19 +86,17 @@ public class Rank extends ShortCommand implements SlashCommand {
 
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     ImageIO.write(img, "png", outputStream);
-                    Member finalPinged = pinged;
-                    event.reply("**Voici l'XP de " + pinged.getUsername() + "** :").subscribe();
-                    this.send(MessageCreateSpec.builder()
+                    event.reply(InteractionApplicationCommandCallbackSpec.builder()
                             .addFile("xp.png", new ByteArrayInputStream(outputStream.toByteArray()))
                             .addEmbed(EmbedCreateSpec.builder()
-                                    .color(ColorsUsed.just)
-                                    .image("attachment://xp.png").build()
-                            ).build(), false);
+                                    .title("XP de " + member.getDisplayName())
+                                    .color(ColorsUsed.same)
+                                    .image("attachment://xp.png").build())
+                            .build()).subscribe();
                 } catch (IOException | FontFormatException e) {
                     e.printStackTrace();
                 }
             }
-            this.endCommand();
         }
     }
 

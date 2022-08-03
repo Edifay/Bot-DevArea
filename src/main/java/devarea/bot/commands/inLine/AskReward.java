@@ -32,13 +32,11 @@ public class AskReward extends ShortCommand implements SlashCommand {
 
         if (channel.getCategoryId().isEmpty() || !channel.getCategoryId().get().equals(Init.initial.assistance_category)) {
             this.replyError("Vous ne pouvez utiliser cette commande que dans les channels d'entraide");
-            this.endCommand();
             return;
         }
 
         if (chatInteraction.getOption("mention").isEmpty() && chatInteraction.getOption("mention").get().getValue().isEmpty()) {
             this.replyError("Veuillez mentionner la personne que vous avez aidée");
-            this.endCommand();
             return;
         }
 
@@ -48,7 +46,6 @@ public class AskReward extends ShortCommand implements SlashCommand {
 
         if (member.equals(target)) {
             this.replyError("Veuillez mentionner une autre personne que vous-même");
-            this.endCommand();
             return;
         }
 
@@ -59,7 +56,6 @@ public class AskReward extends ShortCommand implements SlashCommand {
         if (!(HelpRewardHandler.canSendReward(member, tmpList))) {
             this.replyError("Vous avez déjà récompensé cette personne ou il vous a déjà récompensé il y a moins de " +
                     "deux heures");
-            this.endCommand();
             return;
         }
 
@@ -75,7 +71,6 @@ public class AskReward extends ShortCommand implements SlashCommand {
                         .description(String.format(descriptionText, targetMentionText, authorMentionText))
                         .color(ColorsUsed.same).build())
                 .build());
-        this.endCommand();
     }
 
     @Override

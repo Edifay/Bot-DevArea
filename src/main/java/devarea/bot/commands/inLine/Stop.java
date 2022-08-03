@@ -42,7 +42,6 @@ public class Stop extends ShortCommand implements PermissionCommand, SlashComman
             if (!t.equals(Thread.currentThread()))
                 t.interrupt();
         Init.client.logout().block();
-        this.endCommand();
         System.exit(0);
     }
 

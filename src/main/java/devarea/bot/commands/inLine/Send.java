@@ -31,7 +31,6 @@ public class Send extends ShortCommand implements PermissionCommand, SlashComman
                 .ephemeral(true)
                 .content("Votre message a bien été envoyé !")
                 .build()).subscribe();
-        this.endCommand();
     }
 
     @Override

@@ -13,8 +13,6 @@ import discord4j.core.spec.MessageCreateSpec;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.TemporalAmount;
-import java.util.concurrent.TimeUnit;
 
 public class BumpHandler {
     /*
@@ -47,7 +45,7 @@ public class BumpHandler {
                         .description("Le bump est disponible avec la commande `/bump`.")
                         .build() :
                 EmbedCreateSpec.builder()
-                        .color(ColorsUsed.wrong)
+                        .color(ColorsUsed.same)
                         .description("Le bump est à nouveau disponible " + TimestampFormat.RELATIVE_TIME.format(instant) + ".")
                         .build();
 

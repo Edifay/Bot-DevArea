@@ -24,7 +24,6 @@ public class Help extends ShortCommand implements SlashCommand {
                     .addEmbed(TextMessage.helpEmbedAdmin)
                     .build()).subscribe();
         }
-        this.endCommand();
     }
 
 
