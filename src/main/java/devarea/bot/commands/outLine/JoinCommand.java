@@ -87,7 +87,8 @@ public class JoinCommand extends ShortCommand {
 
         ((TextChannel) ChannelCache.watch(Init.initial.general_channel.asString()))
                 .createMessage(msg -> msg
-                        .setContent("<@" + member.getId().asString() + "> vient de rejoindre le serveur !"))
+                        .setContent("<@" + member.getId().asString() +
+                                "> vient de rejoindre le serveur ! Pour en savoir plus sur le serveur <#1004324078531907594> \uD83D\uDE09 !"))
                 .subscribe();
 
 /*

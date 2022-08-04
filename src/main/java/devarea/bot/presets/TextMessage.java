@@ -113,7 +113,7 @@ public class TextMessage {
                     " permet de commencer la commande.\n\n", false)
             .addField("Le site", "Le serveur Dev'Area possède aussi un site internet qui permet de gérer certaines " +
                     "fonctionnalités du serveur.\n\n   -> https://devarea.fr/", false)
-            .color(ColorsUsed.just)
+            .color(ColorsUsed.same)
             .timestamp(Instant.now()).build();
     /*
         Le message lors de la commande help pour les admins
@@ -122,7 +122,7 @@ public class TextMessage {
             .title("Voici la liste des commandes admin:")
             .description("`/send` -> permet de faire envoyer des messages aux bots.\n`/stop` -> arrête le script du" +
                     " bot.")
-            .color(ColorsUsed.just)
+            .color(ColorsUsed.same)
             .timestamp(Instant.now()).build();
     /*
         Le message lors de la commande start pour le java

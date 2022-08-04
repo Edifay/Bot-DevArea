@@ -3,14 +3,19 @@ package devarea.bot.commands.inLine;
 import devarea.bot.Init;
 import devarea.bot.commands.ShortCommand;
 import devarea.bot.commands.SlashCommand;
+import devarea.global.cache.ChannelCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
+import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
+import discord4j.rest.util.AllowedMentions;
 
 import java.util.ArrayList;
 
+import static devarea.global.utils.ThreadHandler.startAway;
 import static devarea.global.utils.ThreadHandler.startAwayIn;
 
 public class DevHelp extends ShortCommand implements SlashCommand {
@@ -21,8 +26,19 @@ public class DevHelp extends ShortCommand implements SlashCommand {
         super(member, chatInteraction);
         if (channel.getCategoryId().isPresent() && channel.getCategoryId().get().equals(Init.initial.assistance_category)) {
             if (!timer.contains(this.channel.getId())) {
-                reply(InteractionApplicationCommandCallbackSpec.builder().content("<@" + this.member.getId().asString() + ">, a demandé de " +
-                        "l'aide ! <@&" + Init.initial.devHelper_role.asString() + ">.").build(), false);
+                startAway(() -> {
+                    chatInteraction.deferReply().block();
+                    chatInteraction.deleteReply().subscribe();
+                });
+                ((TextChannel) ChannelCache.watch(chatInteraction.getInteraction().getChannelId().asString())).createMessage(
+                        MessageCreateSpec.builder()
+                                .allowedMentions(AllowedMentions.builder()
+                                        .allowRole(Init.initial.devHelper_role)
+                                        .allowUser(member.getId())
+                                        .build())
+                                .content("<@" + this.member.getId().asString() + ">, a demandé de " +
+                                        "l'aide ! <@&" + Init.initial.devHelper_role.asString() + ">.").build()
+                ).subscribe();
                 timer.add(this.channel.getId());
                 startAwayIn(() -> timer.remove(channel.getId()), 1800000, false);
             } else

@@ -12,6 +12,7 @@ import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.core.event.domain.guild.MemberLeaveEvent;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
+import discord4j.core.event.domain.interaction.SelectMenuInteractionEvent;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.*;
 import discord4j.core.object.entity.Guild;
@@ -127,6 +128,7 @@ public class Init {
         client.getEventDispatcher().on(ReactionRemoveEvent.class).subscribe(reactionRemoveEvent -> startAway(() -> ReactionRemove.FunctionReactionRemoveEvent(reactionRemoveEvent)));
         client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(voiceStateUpdateEvent -> startAway(() -> VoiceStateUpdate.VoiceStateUpdateFunction(voiceStateUpdateEvent)));
         client.getEventDispatcher().on(ButtonInteractionEvent.class).subscribe(buttonInteractionEvent -> startAway(() -> ButtonInteract.ButtonInteractFunction(buttonInteractionEvent)));
+        client.getEventDispatcher().on(SelectMenuInteractionEvent.class).subscribe(selectMenuInteractionEvent -> startAway(() -> SelectMenuInteraction.SelectMenuInteractionFunction(selectMenuInteractionEvent)));
 
     }
 

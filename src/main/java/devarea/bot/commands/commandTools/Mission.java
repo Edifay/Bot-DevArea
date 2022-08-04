@@ -230,7 +230,7 @@ public class Mission {
                 .description(this.descriptionText + "\n\nPrix: " + this.budget + "\nDate de retour: " + this.deadLine +
                         "\nType de support: " + this.support + "\nLangage: " + this.language + "\nNiveau estimé:" +
                         " " + this.niveau + "\n\nCette mission est posté par : " + "<@" + this.memberId + ">.")
-                .color(ColorsUsed.just)
+                .color(ColorsUsed.same)
                 .author(member.getDisplayName(), member.getAvatarUrl(), member.getAvatarUrl())
                 .timestamp(Instant.now())
                 .build();

@@ -136,7 +136,7 @@ public class Run extends ShortCommand {
 
         EmbedCreateSpec.Builder embed = EmbedCreateSpec.builder()
                 .author(author, null, member.getAvatarUrl())
-                .color(response.getStatusId() == ID_ACCEPTED ? ColorsUsed.just : ColorsUsed.wrong);
+                .color(response.getStatusId() == ID_ACCEPTED ? ColorsUsed.same : ColorsUsed.wrong);
 
         embedCodeOutput(embed, response.getMessage(), response.getStdout(), response.getStderr(), response.getCompileOutput());
 
