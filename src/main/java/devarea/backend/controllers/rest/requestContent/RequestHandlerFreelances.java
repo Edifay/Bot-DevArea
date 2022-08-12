@@ -23,21 +23,20 @@ public class RequestHandlerFreelances {
             WebUserInfos infos = RequestHandlerAuth.get(code);
             if (FreeLanceHandler.hasFreelance(infos.getId())) {
                 FreeLance current = FreeLanceHandler.getFreelance(infos.getId());
-                FreeLanceHandler.remove(current);
 
                 freelance.member_id = infos.getId();
 
                 FreeLance newOne = new FreeLance(freelance);
                 newOne.setLast_bump(current.getLast_bump());
                 newOne.setMessage(current.getMessage());
-                FreeLanceHandler.add(newOne);
+                FreeLanceHandler.putFreelance(newOne);
 
                 newOne.edit();
             } else {
                 freelance.member_id = infos.getId();
 
                 FreeLance newOne = new FreeLance(freelance);
-                FreeLanceHandler.add(newOne);
+                FreeLanceHandler.putFreelance(newOne);
 
                 newOne.send();
             }

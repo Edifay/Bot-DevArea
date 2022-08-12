@@ -183,7 +183,7 @@ public class FreeLanceHandler {
     /*
         Add a new freelance, if a member had already a freelance it override it !
     */
-    public static void add(FreeLance freelance) {
+    public static void putFreelance(FreeLance freelance) {
         freeLances.put(freelance.getMemberId(), freelance);
         save();
     }

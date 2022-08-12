@@ -64,7 +64,7 @@ public class CreateFreeLance extends LongCommand {
                             .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + member.getId() + "&open=1",
                                     "devarea.fr")))
                             .build(), true))));
-                    FreeLanceHandler.add(freeLance);
+                    FreeLanceHandler.putFreelance(freeLance);
                     FreeLanceHandler.updateBottomMessage();
                     return super.onReceiveInteract(event);
                 } else if (isNo(event)) {

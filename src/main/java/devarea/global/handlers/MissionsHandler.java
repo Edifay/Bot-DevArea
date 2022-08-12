@@ -22,6 +22,7 @@ import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.*;
+import discord4j.discordjson.possible.Possible;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 
@@ -151,15 +152,15 @@ public class MissionsHandler {
             MissionHandlerData missionData = mapper.readValue(file, new TypeReference<>() {
             });
 
-            // Load Missions From UserDataHandler
-            UserDataHandler.getMissionList().forEach((mission) -> missions.put(mission.getId(), mission));
-            List<Map.Entry<String, Mission>> entries =
-                    new ArrayList<>(missions.entrySet());
+            // Load Missions From UserDataHandler and sorting it.
+            List<Map.Entry<String, Mission>> temporalListBeforeSort = new ArrayList<>();
+            UserDataHandler.getMissionList().forEach((mission) -> temporalListBeforeSort.add(Map.entry(mission.getId(), mission)));
 
-            entries.sort((a, b) -> Long.compare(b.getValue().getCreatedAt(), a.getValue().getCreatedAt()));
+            temporalListBeforeSort.sort((a, b) -> Long.compare(b.getValue().getCreatedAt(),
+                    a.getValue().getCreatedAt()));
 
             // Set to MissionsHandler
-            for (Map.Entry<String, Mission> entry : entries)
+            for (Map.Entry<String, Mission> entry : temporalListBeforeSort)
                 missions.put(entry.getKey(), entry.getValue());
 
             missionFollowId = missionData.missionFollowId;
@@ -240,6 +241,8 @@ public class MissionsHandler {
             if (mission.getMessage_verification() != null && mission.getMessage_verification().getMessageID().equals(event.getMessageId()))
                 current_mission = mission;
 
+        System.out.println("Mission : " + current_mission);
+
         if (current_mission != null) {
             if (event.getCustomId().equals("mission_yes")) {
                 sendMissionRevalidateSuccessful(event, current_mission);
@@ -257,12 +260,13 @@ public class MissionsHandler {
         Message for mission_no response
      */
     private static void sendMissionDeleteSuccessful(ButtonInteractionEvent event, Mission current_mission) {
-        ((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())).getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
+        // This action is private channel ChannelCache cannot be used !
+        event.getInteraction().getChannel().block().getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
                         .title("Mission supprimée !")
                         .description("La mission : **" + current_mission.getTitle() + "**, a été " +
                                 "définitivement supprimée !")
                         .color(ColorsUsed.just).build())
-                .components(new ArrayList<>())
+                .components(Possible.of(Optional.of(new ArrayList<>())))
                 .build()).block();
     }
 
@@ -270,13 +274,14 @@ public class MissionsHandler {
         Message for mission_yes response
      */
     private static void sendMissionRevalidateSuccessful(ButtonInteractionEvent event, Mission current_mission) {
-        ((TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString())).getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
+        // This action is private channel ChannelCache cannot be used !
+        event.getInteraction().getChannel().block().getMessageById(current_mission.getMessage_verification().getMessageID()).block().edit(MessageEditSpec.builder().addEmbed(EmbedCreateSpec.builder()
                         .title("Mission actualisée !")
                         .description("La mission : **" + current_mission.getTitle() + "**, a été définie comme" +
                                 " valide pour encore 7 jours.\n\nVous recevrez une nouvelle demande de " +
                                 "validation dans 7 jours.")
                         .color(ColorsUsed.just).build())
-                .components(new ArrayList<>())
+                .components(Possible.of(Optional.of(new ArrayList<>())))
                 .build()).block();
         current_mission.update();
         current_mission.setMessage_verification(null);
@@ -312,7 +317,8 @@ public class MissionsHandler {
                 .edit(MessageEditSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Mission supprimée !")
-                                .description("Le délai des 3 jours a expiré. La mission : **" + mission.getTitle() + "**, a été définitivement supprimée !")
+                                .description("Le délai des 3 jours a expiré. La mission : **" + mission.getTitle() +
+                                        "**, a été définitivement supprimée !")
                                 .color(ColorsUsed.wrong).build())
                         .components(new ArrayList<>()).build())
                 .subscribe();
