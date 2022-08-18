@@ -88,7 +88,7 @@ public class Rank extends ShortCommand implements SlashCommand {
                     event.reply(InteractionApplicationCommandCallbackSpec.builder()
                             .addFile("xp.png", new ByteArrayInputStream(outputStream.toByteArray()))
                             .addEmbed(EmbedCreateSpec.builder()
-                                    .title("XP de " + member.getDisplayName())
+                                    .title("XP de " + pinged.getDisplayName())
                                     .color(ColorsUsed.same)
                                     .image("attachment://xp.png").build())
                             .build()).subscribe();
