@@ -4,6 +4,7 @@ import devarea.Main;
 import devarea.backend.controllers.rest.requestContent.RequestHandlerAuth;
 import devarea.bot.Init;
 import devarea.bot.automatical.BumpHandler;
+import devarea.bot.automatical.EventMembers;
 import devarea.bot.automatical.MeetupHandler;
 import devarea.bot.automatical.RolesReactsHandler;
 import devarea.bot.commands.CommandManager;
@@ -19,6 +20,7 @@ import discord4j.core.object.presence.ClientPresence;
 import discord4j.core.object.presence.Status;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
+import jdk.jfr.Event;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -84,6 +86,7 @@ public class Ready {
             startAway(StatsHandler::start);
             startAway(MeetupHandler::init);
             startAway(XPHandler::init);
+            startAway(EventMembers::init);
             if (!developing)
                 startAway(BumpHandler::init);
             startAway(MissionsHandler::init);

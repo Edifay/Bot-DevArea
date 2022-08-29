@@ -12,6 +12,7 @@ import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.MessageCreateSpec;
+import discord4j.rest.util.AllowedMentions;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -153,6 +154,7 @@ public class FreeLanceHandler {
         return Command.send((TextChannel) ChannelCache.watch(Init.initial.freelance_channel.asString()),
                 MessageCreateSpec.builder()
                         .content("**Freelance de <@" + freeLance.getMemberId() + "> :**")
+                        .allowedMentions(AllowedMentions.suppressAll())
                         .addEmbed(freeLance.getEmbed())
                         .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + freeLance.getMemberId() +
                                         "&open=1",

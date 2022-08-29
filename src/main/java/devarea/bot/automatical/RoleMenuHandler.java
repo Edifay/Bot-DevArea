@@ -9,7 +9,7 @@ import static devarea.bot.commands.inLine.RoleMenu.SELECTOR;
 
 public class RoleMenuHandler {
 
-    public static void onReceiveMenuSelect(SelectMenuInteractionEvent event) {
+    public static boolean onReceiveMenuSelect(SelectMenuInteractionEvent event) {
         if (event.getCustomId().equals("roleMenu")) {
             System.out.println("values : " + event.getValues());
 
@@ -40,7 +40,9 @@ public class RoleMenuHandler {
                     .ephemeral(true)
                     .content("Vous avez ajouté " + addedRoles + " vous avez enlevé " + removeRoles + " !")
                     .build()).subscribe();
+            return true;
         }
+        return false;
     }
 
 }

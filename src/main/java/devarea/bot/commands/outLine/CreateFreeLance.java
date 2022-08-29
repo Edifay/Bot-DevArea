@@ -18,6 +18,7 @@ import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
+import discord4j.rest.util.AllowedMentions;
 
 import java.util.Objects;
 
@@ -60,6 +61,7 @@ public class CreateFreeLance extends LongCommand {
                 if (isYes(event)) {
                     freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) ChannelCache.watch(Init.initial.freelance_channel.asString()), MessageCreateSpec.builder()
                             .content("**Freelance de <@" + freeLance.getMemberId() + "> :**")
+                            .allowedMentions(AllowedMentions.suppressAll())
                             .addEmbed(freeLance.getEmbed())
                             .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + member.getId() + "&open=1",
                                     "devarea.fr")))

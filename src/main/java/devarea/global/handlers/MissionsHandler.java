@@ -23,6 +23,7 @@ import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.*;
 import discord4j.discordjson.possible.Possible;
+import discord4j.rest.util.AllowedMentions;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 
@@ -504,6 +505,7 @@ public class MissionsHandler {
         Message missionMessage = send((TextChannel) ChannelCache.watch(Init.initial.paidMissions_channel.asString()),
                 MessageCreateSpec.builder()
                         .content("**Mission proposée par <@" + member.getId().asString() + "> :**")
+                        .allowedMentions(AllowedMentions.suppressAll())
                         .addEmbed(createdMission.getPrefabricatedEmbed())
                         .addComponent(ActionRow.of(Button.link(Main.domainName + "mission?id=" + createdMission.getId(),
                                 "devarea.fr"), Button.secondary("took_mission", "Prendre la mission")))
