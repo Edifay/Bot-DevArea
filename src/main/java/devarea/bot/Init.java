@@ -3,22 +3,30 @@ package devarea.bot;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import devarea.Main;
+import devarea.bot.commands.CommandManager;
 import devarea.bot.event.*;
+import devarea.bot.presets.ColorsUsed;
 import devarea.bot.utils.InitialData;
 import devarea.global.utils.SnowflakeModuleSerializer;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
+import discord4j.core.event.ReactiveEventAdapter;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.core.event.domain.guild.MemberLeaveEvent;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.interaction.SelectMenuInteractionEvent;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.*;
 import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.GuildEmoji;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
 import discord4j.gateway.intent.IntentSet;
+import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -129,7 +137,30 @@ public class Init {
         client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(voiceStateUpdateEvent -> startAway(() -> VoiceStateUpdate.VoiceStateUpdateFunction(voiceStateUpdateEvent)));
         client.getEventDispatcher().on(ButtonInteractionEvent.class).subscribe(buttonInteractionEvent -> startAway(() -> ButtonInteract.ButtonInteractFunction(buttonInteractionEvent)));
         client.getEventDispatcher().on(SelectMenuInteractionEvent.class).subscribe(selectMenuInteractionEvent -> startAway(() -> SelectMenuInteraction.SelectMenuInteractionFunction(selectMenuInteractionEvent)));
+        setupSlashCommands();
+    }
 
+    private static void setupSlashCommands() {
+        Init.client.on(new ReactiveEventAdapter() {
+            @Override
+            public Publisher<?> onChatInputInteraction(ChatInputInteractionEvent event) {
+                System.out.println(event.getCommandName());
+                if (CommandManager.hasCommand(event.getInteraction().getMember().get().getId())) {
+                    event.reply(InteractionApplicationCommandCallbackSpec.builder()
+                            .ephemeral(true)
+                            .addEmbed(EmbedCreateSpec.builder()
+                                    .title("Erreur !")
+                                    .description("Vous êtes déjà actuellement dans une commande !")
+                                    .color(ColorsUsed.wrong)
+                                    .build())
+
+                            .build()).subscribe();
+                    return Mono.empty();
+                }
+                startAway(() -> CommandManager.exe(event.getCommandName(), null, event));
+                return super.onChatInputInteraction(event);
+            }
+        }).subscribe();
     }
 
     /*

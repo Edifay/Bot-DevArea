@@ -43,42 +43,21 @@ import static devarea.global.utils.ThreadHandler.startAway;
 
 public class CommandManager {
 
+    // Command name bound to the Constructor
     private static final Map<String, Constructor> classBound = new HashMap<>();
 
+    // Member ID bound to the alive Command
     private static final Map<Snowflake, LongCommand> actualCommands = new HashMap<>();
 
+    // Member ID bound to another Member ID
     private static final Map<Snowflake, Snowflake> logged_as = new HashMap<>();
 
     public static void init() {
-        Init.client.on(new ReactiveEventAdapter() {
-            @Override
-            public Publisher<?> onChatInputInteraction(ChatInputInteractionEvent event) {
-                System.out.println(event.getCommandName());
-                if (actualCommands.containsKey(event.getInteraction().getMember().get().getId())) {
-                    event.reply(InteractionApplicationCommandCallbackSpec.builder()
-                            .ephemeral(true)
-                            .addEmbed(EmbedCreateSpec.builder()
-                                    .title("Erreur !")
-                                    .description("Vous êtes déjà actuellement dans une commande !")
-                                    .color(ColorsUsed.wrong)
-                                    .build())
-
-                            .build()).subscribe();
-                    return Mono.empty();
-                }
-                startAway(() -> exe(event.getCommandName(), null, event));
-                return super.onChatInputInteraction(event);
-            }
-        }).subscribe();
-
         try {
-
             System.out.println("Loading commands :");
 
-            ArrayList<String> names = getClassNamesFromPackage("devarea.bot.commands.inLine");
-            if (names.size() == 0) {
-                names = getClassNamesFromPackage("BOOT-INF.classes.devarea.bot.commands.inLine");
-            }
+            ArrayList<String> names = getClassNamesFromAnySources();
+
             System.out.println("Class name found : " + Arrays.toString(names.toArray()));
 
             List<ApplicationCommandRequest> slashCommands = new ArrayList<>();
@@ -88,18 +67,10 @@ public class CommandManager {
                     final String newName = className.startsWith("/") ? className.substring(1) : className;
                     System.out.print(className + "->" + newName + " | ");
                     Class<?> currentClass = Class.forName("devarea.bot.commands.inLine." + newName);
-                    if (Arrays.stream(currentClass.getConstructors())
-                            .anyMatch(constructor -> constructor.getGenericParameterTypes().length == 3
-                                    && constructor.getGenericParameterTypes()[0].equals(Member.class)
-                                    && constructor.getGenericParameterTypes()[1].equals(TextChannel.class)
-                                    && constructor.getGenericParameterTypes()[2].equals(Message.class))) {
-
+                    if (isMessageCommandConstructor(currentClass)) {
                         classBound.put(newName.toLowerCase(Locale.ROOT), currentClass.getConstructor(Member.class,
                                 TextChannel.class, Message.class));
-                    } else if (Arrays.stream(currentClass.getConstructors())
-                            .anyMatch(constructor -> constructor.getGenericParameterTypes().length == 2
-                                    && constructor.getGenericParameterTypes()[0].equals(Member.class)
-                                    && constructor.getGenericParameterTypes()[1].equals(ChatInputInteractionEvent.class))) {
+                    } else if (isSlashCommandConstructor(currentClass)) {
                         classBound.put(newName.toLowerCase(Locale.ROOT), currentClass.getConstructor(Member.class,
                                 ChatInputInteractionEvent.class));
                         // If is slash command add it to the collection !
@@ -120,13 +91,40 @@ public class CommandManager {
 
             System.out.println(slashCommands.size() + " slash commands on " + classBound.size() + " commands loaded " +
                     "!\n" + Main.separator);
-        } catch (IOException | URISyntaxException | ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
             System.err.println("The SlashCommand need an empty constructor to work !\n\n" + e.getMessage());
         } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static ArrayList<String> getClassNamesFromAnySources() {
+        ArrayList<String> names = null;
+        try {
+            names = getClassNamesFromPackage("devarea.bot.commands.inLine");
+            if (names.size() == 0)
+                names = getClassNamesFromPackage("BOOT-INF.classes.devarea.bot.commands.inLine");
+        } catch (IOException | URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        return names;
+    }
+
+    private static boolean isSlashCommandConstructor(Class<?> currentClass) {
+        return Arrays.stream(currentClass.getConstructors())
+                .anyMatch(constructor -> constructor.getGenericParameterTypes().length == 2
+                        && constructor.getGenericParameterTypes()[0].equals(Member.class)
+                        && constructor.getGenericParameterTypes()[1].equals(ChatInputInteractionEvent.class));
+    }
+
+    private static boolean isMessageCommandConstructor(Class<?> currentClass) {
+        return Arrays.stream(currentClass.getConstructors())
+                .anyMatch(constructor -> constructor.getGenericParameterTypes().length == 3
+                        && constructor.getGenericParameterTypes()[0].equals(Member.class)
+                        && constructor.getGenericParameterTypes()[1].equals(TextChannel.class)
+                        && constructor.getGenericParameterTypes()[2].equals(Message.class));
     }
 
     public static ArrayList<String> getClassNamesFromPackage(String packageName) throws IOException,
