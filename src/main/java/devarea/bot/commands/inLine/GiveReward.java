@@ -26,6 +26,8 @@ import discord4j.discordjson.json.ApplicationCommandRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static devarea.global.utils.ThreadHandler.startAway;
+
 public class GiveReward extends LongCommand implements SlashCommand {
 
     final List<Snowflake> helpers = new ArrayList<>();
@@ -35,7 +37,20 @@ public class GiveReward extends LongCommand implements SlashCommand {
 
         if (channel.getCategoryId().isEmpty() || !channel.getCategoryId().get().equals(Init.initial.assistance_category)) {
             this.replyError("Vous ne pouvez utiliser cette commande que dans les channels d'entraide");
-            this.endCommand();
+            startAway(() -> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
+                        .title("Error !")
+                        .description("Vous ne pouvez pas exécuter cette commande dans ce channel ! \n\nDisponible " +
+                                "uniquement dans les channels d'entraide !")
+                        .color(ColorsUsed.wrong)
+                        .build());
+                this.endCommand();
+            });
             return;
         }
 

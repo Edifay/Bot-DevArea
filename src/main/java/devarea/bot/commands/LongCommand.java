@@ -168,7 +168,7 @@ public abstract class LongCommand extends Command {
             }
             if (this.deletedCommandThread != null && this.deletedCommandThread.isAlive())
                 this.deletedCommandThread.interrupt();
-            if (chatInteraction != null)
+            if (chatInteraction != null && this.firstStep != null)
                 delete(false, this.firstStep.message);
             CommandManager.removeCommand(this.member.getId(), this);
         });
