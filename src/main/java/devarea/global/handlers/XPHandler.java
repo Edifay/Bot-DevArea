@@ -11,7 +11,7 @@ import devarea.global.cache.MemberCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.VoiceState;
 import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 
@@ -156,7 +156,7 @@ public class XPHandler {
     private static void verifyIfNextLevelReach(Member member, Integer value) {
         if (XPHandler.getLevelForXp(xp.get(member.getId())) < XPHandler.getLevelForXp(xp.get(member.getId()) + value))
             startAway(() -> {
-                Command.send((TextChannel) ChannelCache.watch(Init.initial.command_channel.asString()),
+                Command.send((GuildMessageChannel) ChannelCache.watch(Init.initial.command_channel.asString()),
                         MessageCreateSpec.builder()
                                 .content("<@" + member.getId().asString() + ">")
                                 .addEmbed(EmbedCreateSpec.builder()

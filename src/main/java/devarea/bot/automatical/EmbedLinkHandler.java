@@ -12,7 +12,7 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.component.ActionRow;
 import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 
@@ -68,10 +68,10 @@ public class EmbedLinkHandler {
         if (members.size() == 0)
             return;
 
-        generateLinkEmbed((TextChannel) ChannelCache.watch(event.getMessage().getChannelId().asString()), members);
+        generateLinkEmbed((GuildMessageChannel) ChannelCache.watch(event.getMessage().getChannelId().asString()), members);
     }
 
-    public static void generateLinkEmbed(TextChannel channel, ArrayList<Member> members) {
+    public static void generateLinkEmbed(GuildMessageChannel channel, ArrayList<Member> members) {
         long ms = System.currentTimeMillis();
         for (Member member : members) {
             startAway(() -> {

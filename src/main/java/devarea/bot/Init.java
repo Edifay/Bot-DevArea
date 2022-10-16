@@ -21,7 +21,7 @@ import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.*;
 import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.GuildEmoji;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
 import discord4j.gateway.intent.IntentSet;
@@ -48,7 +48,7 @@ public class Init {
     public static Guild devarea;
     public static GuildEmoji idYes, idNo, idLoading;
 
-    public static TextChannel logChannel;
+    public static GuildMessageChannel logChannel;
 
     /*
         Setup dynamic assets from initalData

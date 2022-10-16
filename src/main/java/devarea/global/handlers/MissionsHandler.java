@@ -19,6 +19,7 @@ import discord4j.core.object.component.ActionRow;
 import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.*;
@@ -44,7 +45,7 @@ public class MissionsHandler {
 
     private static LinkedHashMap<String, Mission> missions = new LinkedHashMap<>();
     private static ArrayList<MissionHandlerData.MissionFollow> missionsFollow = new ArrayList<>();
-    private static TextChannel missionChannel;
+    private static GuildMessageChannel missionChannel;
     private static int missionFollowId = 0;
     /*
         ID generator
@@ -73,7 +74,7 @@ public class MissionsHandler {
         Setup the message at the Bottom of the channel
      */
     private static void setupBottomMessage() {
-        missionChannel = (TextChannel) ChannelCache.fetch(Init.initial.paidMissions_channel.asString());
+        missionChannel = (GuildMessageChannel) ChannelCache.fetch(Init.initial.paidMissions_channel.asString());
         Message currentAtBottom = missionChannel.getLastMessage().block();
         if (currentAtBottom.getEmbeds().size() == 0 || currentAtBottom.getEmbeds().get(0).getTitle().equals("Créer " +
                 "une mission."))
@@ -373,7 +374,7 @@ public class MissionsHandler {
     private static void followThisMission(Mission mission, Snowflake member_react_id) {
         // Create a channel
         Set<PermissionOverwrite> set = getPermissionsOverrideCreatePrivateChannel(mission, member_react_id);
-        TextChannel channel = Init.devarea.createTextChannel(TextChannelCreateSpec.builder()
+        GuildMessageChannel channel = Init.devarea.createTextChannel(TextChannelCreateSpec.builder()
                 .parentId(Snowflake.of("964757205184299028"))
                 .name("Suivis de mission n°" + ++missionFollowId)
                 .permissionOverwrites(set)
@@ -434,7 +435,7 @@ public class MissionsHandler {
      */
     private static boolean closeFollowedMission(String memberRequest, MissionHandlerData.MissionFollow missionFollow) {
         if (missionFollow != null) {
-            send(((TextChannel) ChannelCache.watch(missionFollow.messageSeria.getChannelID().asString())),
+            send(((GuildMessageChannel) ChannelCache.watch(missionFollow.messageSeria.getChannelID().asString())),
                     missionFollowedCloseIn1Hour(memberRequest), false);
 
             missionFollow.messageSeria.getMessage().edit(MessageEditSpec.builder()
@@ -502,7 +503,7 @@ public class MissionsHandler {
         Mission createdMission = new Mission(title, description, prix, dateRetour, langage, support, niveau,
                 member.getId().asString(), null);
 
-        Message missionMessage = send((TextChannel) ChannelCache.watch(Init.initial.paidMissions_channel.asString()),
+        Message missionMessage = send((GuildMessageChannel) ChannelCache.watch(Init.initial.paidMissions_channel.asString()),
                 MessageCreateSpec.builder()
                         .content("**Mission proposée par <@" + member.getId().asString() + "> :**")
                         .allowedMentions(AllowedMentions.suppressAll())

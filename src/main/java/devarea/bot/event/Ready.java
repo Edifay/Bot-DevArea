@@ -14,13 +14,12 @@ import devarea.global.cache.MemberCache;
 import devarea.global.handlers.*;
 import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.object.presence.ClientActivity;
 import discord4j.core.object.presence.ClientPresence;
 import discord4j.core.object.presence.Status;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
-import jdk.jfr.Event;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -38,7 +37,7 @@ public class Ready {
         Init.devarea = Init.client.getGuildById(Init.initial.devarea).block();
         assert Init.devarea != null;
         startAway(() -> {
-            Init.logChannel = (TextChannel) ChannelCache.watch(Init.initial.log_channel.asString());
+            Init.logChannel = (GuildMessageChannel) ChannelCache.watch(Init.initial.log_channel.asString());
 
             Button button = Button.primary("id_1", "Le button");
 

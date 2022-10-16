@@ -7,7 +7,7 @@ import devarea.global.cache.ChannelCache;
 import discord4j.common.util.Snowflake;
 import discord4j.common.util.TimestampFormat;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 
@@ -20,8 +20,8 @@ public class BumpHandler {
      */
     private static final long BUMP_DELAY = 7200000;
 
-    private static final TextChannel bumpChannel =
-            (TextChannel) ChannelCache.watch(Init.initial.bump_channel.asString());
+    private static final GuildMessageChannel bumpChannel =
+            (GuildMessageChannel) ChannelCache.watch(Init.initial.bump_channel.asString());
     private static Thread thread;
     private static Message botMessage;
 

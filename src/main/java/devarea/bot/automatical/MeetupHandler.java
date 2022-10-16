@@ -12,7 +12,7 @@ import devarea.global.cache.MemberCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
@@ -44,7 +44,7 @@ public class MeetupHandler {
                     meetups.forEach(meetupStock -> {
                         if (!meetupStock.getAlreadyMade()) {
                             if (date.after(meetupStock.getDate())) {
-                                send((TextChannel) ChannelCache.watch(Init.initial.meetupAnnounce_channel.asString()),
+                                send((GuildMessageChannel) ChannelCache.watch(Init.initial.meetupAnnounce_channel.asString()),
                                         MessageCreateSpec.builder()
                                                 .content("Un meetup a commencé avec sujet :\n\n " + meetupStock.getName() + "\n\n<@&" + Init.initial.pingMeetup_role.asString() + ">").build()
                                         , false);
@@ -88,7 +88,7 @@ public class MeetupHandler {
     }
 
     public static void addMeetupAtValide(MeetupStock meetup) {
-        Message message = send((TextChannel) ChannelCache.watch(Init.initial.meetupVerif_channel.asString()),
+        Message message = send((GuildMessageChannel) ChannelCache.watch(Init.initial.meetupVerif_channel.asString()),
                 meetup.getEmbed().build(), true);
         meetup.setMessage(new MessageSeria(message));
         meetups.add(meetup);
@@ -124,7 +124,7 @@ public class MeetupHandler {
                     startAway(() -> Command.delete(false, meetup.getMessage().getMessage()));
 
                     Message message =
-                            send((TextChannel) ChannelCache.watch(Init.initial.meetupAnnounce_channel.asString()),
+                            send((GuildMessageChannel) ChannelCache.watch(Init.initial.meetupAnnounce_channel.asString()),
                                     meetup.getEmbed().build(), true);
                     addYes(message);
                     meetup.setMessage(new MessageSeria(message));

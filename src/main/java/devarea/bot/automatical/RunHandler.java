@@ -9,7 +9,7 @@ import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
@@ -34,7 +34,8 @@ public class RunHandler {
             return false;
         }
 
-        TextChannel channelHandler = (TextChannel) ChannelCache.get(messageHandler.getChannelId().asString());
+        GuildMessageChannel channelHandler =
+                (GuildMessageChannel) ChannelCache.get(messageHandler.getChannelId().asString());
 
         if (channelHandler == null) {
             return false;
@@ -63,7 +64,7 @@ public class RunHandler {
             return false;
         }
 
-        TextChannel channel = (TextChannel) ChannelCache.get(message.getChannelId().asString());
+        GuildMessageChannel channel = (GuildMessageChannel) ChannelCache.get(message.getChannelId().asString());
         Command.delete(false, channel.getMessageById(replyId).block());
         return true;
     }
@@ -80,7 +81,7 @@ public class RunHandler {
      */
     public static void sendResponse(Message message, EmbedCreateSpec spec, boolean edit) {
         Snowflake replyId = latestMessages.get(message.getId());
-        TextChannel channel = (TextChannel) ChannelCache.get(message.getChannelId().asString());
+        GuildMessageChannel channel = (GuildMessageChannel) ChannelCache.get(message.getChannelId().asString());
         Message reply;
 
         if (channel == null) {

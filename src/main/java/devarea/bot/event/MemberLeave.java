@@ -7,7 +7,7 @@ import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
 import devarea.global.handlers.UserDataHandler;
 import discord4j.core.event.domain.guild.MemberLeaveEvent;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 
 public class MemberLeave {
 
@@ -19,7 +19,7 @@ public class MemberLeave {
             CommandManager.left(memberLeaveEvent.getUser().getId());
             RequestHandlerAuth.left(memberLeaveEvent.getUser().getId().asString());
             UserDataHandler.left(memberLeaveEvent.getUser().getId().asString());
-            ((TextChannel) ChannelCache.watch(Init.initial.logJoin_channel.asString()))
+            ((GuildMessageChannel) ChannelCache.watch(Init.initial.logJoin_channel.asString()))
                     .createMessage(msg -> msg.setContent(memberLeaveEvent.getMember().get().getDisplayName() + " a " +
                             "quitté le serveur !")).subscribe();
         } catch (Exception e) {

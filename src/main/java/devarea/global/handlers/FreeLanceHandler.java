@@ -10,7 +10,7 @@ import discord4j.core.object.component.ActionRow;
 import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.rest.util.AllowedMentions;
 
@@ -32,7 +32,7 @@ public class FreeLanceHandler {
     private static Message bottomMessage;
     private static LinkedHashMap<String, FreeLance> freeLances = new LinkedHashMap<>();
 
-    private static TextChannel freelanceChannel;
+    private static GuildMessageChannel freelanceChannel;
 
     /*
         This is a temporary Array don't save anything here. Used for the cooldown of bumps !
@@ -46,7 +46,7 @@ public class FreeLanceHandler {
         try {
             load();
 
-            freelanceChannel = (TextChannel) ChannelCache.fetch(Init.initial.freelance_channel.asString());
+            freelanceChannel = (GuildMessageChannel) ChannelCache.fetch(Init.initial.freelance_channel.asString());
 
             if (freelanceChannel == null) {
                 System.err.println("Le channel freelance n'a pas pu être trouvé !");
@@ -151,7 +151,7 @@ public class FreeLanceHandler {
         Send the message of the freelance param
      */
     public static Message sendFreelanceMessage(final FreeLance freeLance) {
-        return Command.send((TextChannel) ChannelCache.watch(Init.initial.freelance_channel.asString()),
+        return Command.send((GuildMessageChannel) ChannelCache.watch(Init.initial.freelance_channel.asString()),
                 MessageCreateSpec.builder()
                         .content("**Freelance de <@" + freeLance.getMemberId() + "> :**")
                         .allowedMentions(AllowedMentions.suppressAll())

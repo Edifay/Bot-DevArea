@@ -10,16 +10,16 @@ import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
 import devarea.global.handlers.XPHandler;
 import discord4j.core.event.domain.guild.MemberJoinEvent;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 
 public class MemberJoin {
 
-    private static TextChannel channelJoin;
+    private static GuildMessageChannel channelJoin;
 
     public static void memberJoinFunction(MemberJoinEvent event) {
         MemberCache.use(event.getMember());
 
-        ((TextChannel) ChannelCache.watch(Init.initial.logJoin_channel.asString()))
+        ((GuildMessageChannel) ChannelCache.watch(Init.initial.logJoin_channel.asString()))
                 .createMessage(msg -> msg.setContent(event.getMember().getDisplayName() + " a rejoint le serveur !"))
                 .subscribe();
 
