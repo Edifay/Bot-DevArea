@@ -8,7 +8,7 @@ import devarea.bot.presets.TextMessage;
 import devarea.judge.*;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.EmbedCreateSpec;
 
@@ -28,7 +28,7 @@ public class Run extends ShortCommand {
     final static String ZERO_WIDTH_SPACE = "\u200b";
     final static int ID_ACCEPTED = 3;
 
-    public Run(final Member member, final TextChannel channel, final Message message) {
+    public Run(final Member member, final GuildMessageChannel channel, final Message message) {
         super(member, channel);
 
         String content = message.getContent().substring((Init.initial.prefix + "run").length());

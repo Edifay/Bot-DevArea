@@ -4,17 +4,17 @@ import devarea.global.cache.ChannelCache;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 
 public abstract class ConsumableCommand {
     protected Command command;
     public Class commandClass;
-    public TextChannel channel;
+    public GuildMessageChannel channel;
     public Member member;
     public Message message;
     public ChatInputInteractionEvent chatInteraction;
 
-    public ConsumableCommand(final Class commandClass, final TextChannel channel) {
+    public ConsumableCommand(final Class commandClass, final GuildMessageChannel channel) {
         this.commandClass = commandClass;
         this.channel = channel;
     }
@@ -32,7 +32,7 @@ public abstract class ConsumableCommand {
         return this.command;
     }
 
-    public Command getCommand(final TextChannel channel) {
+    public Command getCommand(final GuildMessageChannel channel) {
         this.channel = channel;
         if (this.command == null) {
             this.command = command();
@@ -40,7 +40,7 @@ public abstract class ConsumableCommand {
         return this.command;
     }
 
-    public void setChannel(TextChannel channel) {
+    public void setChannel(GuildMessageChannel channel) {
         this.channel = channel;
     }
 
@@ -50,7 +50,7 @@ public abstract class ConsumableCommand {
 
     public void setMessageEvent(Message message, Member member) {
         this.message = message;
-        this.channel = (TextChannel) ChannelCache.get(message.getChannelId().asString());
+        this.channel = (GuildMessageChannel) ChannelCache.get(message.getChannelId().asString());
         this.member = member;
     }
 

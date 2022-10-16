@@ -10,7 +10,7 @@ import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
@@ -103,7 +103,7 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
                     }
                     if (find) {
                         if (send)
-                            send(((TextChannel) ChannelCache.get(event.getMessage().getChannelId().asString())),
+                            send(((GuildMessageChannel) ChannelCache.get(event.getMessage().getChannelId().asString())),
                                     MessageCreateSpec.builder()
                                             .addEmbed(EmbedCreateSpec.builder()
                                                     .title(title)

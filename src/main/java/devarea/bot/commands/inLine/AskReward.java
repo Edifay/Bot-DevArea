@@ -13,6 +13,8 @@ import discord4j.core.object.command.ApplicationCommandOption;
 import discord4j.core.object.component.ActionRow;
 import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.ThreadChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
@@ -22,6 +24,8 @@ import discord4j.discordjson.json.ApplicationCommandRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static devarea.bot.commands.inLine.DevHelp.listOfForums;
+
 
 public class AskReward extends ShortCommand implements SlashCommand {
     public AskReward() {
@@ -30,7 +34,7 @@ public class AskReward extends ShortCommand implements SlashCommand {
     public AskReward(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
 
-        if (channel.getCategoryId().isEmpty() || !channel.getCategoryId().get().equals(Init.initial.assistance_category)) {
+        if (channel instanceof ThreadChannel && ((ThreadChannel) channel).getParentId().isPresent() && listOfForums.contains(((ThreadChannel) channel).getParentId().get().asString()) || channel instanceof TextChannel && ((TextChannel) channel).getCategoryId().isPresent() && ((TextChannel) channel).getCategoryId().get().equals(Init.initial.assistance_category)) {
             this.replyError("Vous ne pouvez utiliser cette commande que dans les channels d'entraide");
             return;
         }

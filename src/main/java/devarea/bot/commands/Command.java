@@ -9,7 +9,8 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.PermissionOverwrite;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.spec.*;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
@@ -20,7 +21,7 @@ import java.util.Set;
 public abstract class Command {
 
     protected final Member member;
-    protected TextChannel channel;
+    protected GuildMessageChannel channel;
     protected ChatInputInteractionEvent chatInteraction;
 
     protected Thread deletedCommandThread;
@@ -33,14 +34,14 @@ public abstract class Command {
         this.member = member;
     }
 
-    public Command(final Member member, final TextChannel channel) {
+    public Command(final Member member, final GuildMessageChannel channel) {
         this.member = member;
         this.channel = channel;
     }
 
     public Command(final Member member, final ChatInputInteractionEvent chatInteraction) {
         this.member = member;
-        this.channel = (TextChannel) ChannelCache.get(chatInteraction.getInteraction().getChannelId().asString());
+        this.channel = (GuildMessageChannel) ChannelCache.get(chatInteraction.getInteraction().getChannelId().asString());
         this.chatInteraction = chatInteraction;
     }
 
@@ -78,7 +79,7 @@ public abstract class Command {
     }
 
 
-    public static Message send(final TextChannel channel, final MessageCreateSpec spec, boolean block) {
+    public static Message send(final GuildMessageChannel channel, final MessageCreateSpec spec, boolean block) {
         try {
             try {
                 if (block)
@@ -114,7 +115,7 @@ public abstract class Command {
         return bool;
     }
 
-    public static Message sendEmbed(final TextChannel channel, final EmbedCreateSpec spec, boolean block) {
+    public static Message sendEmbed(final GuildMessageChannel channel, final EmbedCreateSpec spec, boolean block) {
         return send(channel, MessageCreateSpec.builder().addEmbed(spec).build(), block);
     }
 
@@ -144,14 +145,14 @@ public abstract class Command {
                 .color(ColorsUsed.wrong).build());
     }
 
-    public static Message sendError(final TextChannel channel, final String error) {
+    public static Message sendError(final GuildMessageChannel channel, final String error) {
         return deletedEmbed(channel, EmbedCreateSpec.builder()
                 .title("Erreur !")
                 .description(error)
                 .color(ColorsUsed.wrong).build());
     }
 
-    public static Message deletedMessage(final TextChannel channel, final MessageCreateSpec spec) {
+    public static Message deletedMessage(final GuildMessageChannel channel, final MessageCreateSpec spec) {
         final Message atDelete = send(channel, spec, true);
         new Thread(() -> {
             try {
@@ -163,7 +164,7 @@ public abstract class Command {
         return atDelete;
     }
 
-    public static Message deletedEmbed(final TextChannel channel, final EmbedCreateSpec spec) {
+    public static Message deletedEmbed(final GuildMessageChannel channel, final EmbedCreateSpec spec) {
         return deletedMessage(channel, MessageCreateSpec.builder().addEmbed(spec).build());
     }
 

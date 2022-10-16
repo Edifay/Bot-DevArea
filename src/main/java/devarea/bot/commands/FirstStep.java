@@ -1,14 +1,14 @@
 package devarea.bot.commands;
 
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.spec.MessageCreateSpec;
 
 public abstract class FirstStep extends Step {
 
-    protected TextChannel textChannel;
+    protected GuildMessageChannel textChannel;
 
-    public FirstStep(TextChannel textChannel, Step... steps) {
+    public FirstStep(GuildMessageChannel textChannel, Step... steps) {
         super(steps);
         this.textChannel = textChannel;
         onFirstCall(null);

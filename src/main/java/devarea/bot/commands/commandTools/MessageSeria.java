@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import devarea.global.cache.ChannelCache;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class MessageSeria implements Serializable {
 
     @JsonIgnore
     public Message getMessage() {
-        return ((TextChannel) ChannelCache.get(idChannel)).getMessageById(Snowflake.of(this.idMessage)).block();
+        return ((GuildMessageChannel) ChannelCache.get(idChannel)).getMessageById(Snowflake.of(this.idMessage)).block();
     }
 
     @JsonIgnore

@@ -2,7 +2,7 @@ package devarea.bot.commands;
 
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 
 public abstract class ShortCommand extends Command {
 
@@ -14,7 +14,7 @@ public abstract class ShortCommand extends Command {
         super(member);
     }
 
-    public ShortCommand(final Member member, final TextChannel channel) {
+    public ShortCommand(final Member member, final GuildMessageChannel channel) {
         super(member, channel);
     }
 

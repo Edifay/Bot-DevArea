@@ -15,7 +15,9 @@ import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.ThreadChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.InteractionReplyEditSpec;
@@ -26,6 +28,7 @@ import discord4j.discordjson.json.ApplicationCommandRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static devarea.bot.commands.inLine.DevHelp.listOfForums;
 import static devarea.global.utils.ThreadHandler.startAway;
 
 public class GiveReward extends LongCommand implements SlashCommand {
@@ -35,7 +38,7 @@ public class GiveReward extends LongCommand implements SlashCommand {
     public GiveReward(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
 
-        if (channel.getCategoryId().isEmpty() || !channel.getCategoryId().get().equals(Init.initial.assistance_category)) {
+        if (channel instanceof ThreadChannel && ((ThreadChannel) channel).getParentId().isPresent() && listOfForums.contains(((ThreadChannel) channel).getParentId().get().asString()) || channel instanceof TextChannel && ((TextChannel) channel).getCategoryId().isPresent() && ((TextChannel) channel).getCategoryId().get().equals(Init.initial.assistance_category)) {
             this.replyError("Vous ne pouvez utiliser cette commande que dans les channels d'entraide");
             startAway(() -> {
                 try {
@@ -62,7 +65,7 @@ public class GiveReward extends LongCommand implements SlashCommand {
         super(target);
         final EndStep endStep = getEndStep(target);
         final Step selectionStage = getSelectionHelpersStep(helper, endStep);
-        channel = (TextChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString());
+        channel = (GuildMessageChannel) ChannelCache.watch(event.getInteraction().getChannelId().asString());
         assert channel != null;
 
         delete(false, event.getInteraction().getMessage().get());

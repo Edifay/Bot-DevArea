@@ -12,7 +12,7 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Attachment;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
@@ -139,7 +139,7 @@ public class Meetup extends LongCommand implements SlashCommand {
                 canDelete = MeetupHandler.getMeetupsFrom(member.getId());
                 AtomicInteger a = new AtomicInteger();
                 canDelete.forEach(meetupStock -> {
-                    Command.deletedMessage((TextChannel) ChannelCache.watch(test.getChannelId().asString()),
+                    Command.deletedMessage((GuildMessageChannel) ChannelCache.watch(test.getChannelId().asString()),
                             meetupStock.getEmbed().content("**" + a.get() + ":**").build());
                     a.getAndIncrement();
                 });

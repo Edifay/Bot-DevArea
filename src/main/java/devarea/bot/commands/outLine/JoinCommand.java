@@ -10,8 +10,8 @@ import devarea.global.cache.ChannelCache;
 import devarea.global.cache.MemberCache;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.object.entity.channel.PrivateChannel;
-import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
@@ -74,7 +74,7 @@ public class JoinCommand extends ShortCommand {
         } catch (Exception e) {
         }
 
-        startAway(() -> ((TextChannel) ChannelCache.watch(Init.initial.welcome_channel.asString()))
+        startAway(() -> ((GuildMessageChannel) ChannelCache.watch(Init.initial.welcome_channel.asString()))
                 .createMessage(MessageCreateSpec.builder()
                         .addEmbed(EmbedCreateSpec.builder()
                                 .title("Salut ! " + member.getTag() + ", bienvenue sur **Dev'Area**, amuse " +
@@ -85,7 +85,7 @@ public class JoinCommand extends ShortCommand {
                                 .build())
                         .build()).subscribe());
 
-        ((TextChannel) ChannelCache.watch(Init.initial.general_channel.asString()))
+        ((GuildMessageChannel) ChannelCache.watch(Init.initial.general_channel.asString()))
                 .createMessage(msg -> msg
                         .setContent("<@" + member.getId().asString() +
                                 "> vient de rejoindre le serveur ! Pour en savoir plus sur le serveur <#1004324078531907594> \uD83D\uDE09 !"))

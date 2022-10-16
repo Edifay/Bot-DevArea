@@ -14,7 +14,7 @@ import discord4j.core.object.component.ActionRow;
 import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
@@ -233,7 +233,7 @@ public class FreeLance implements Comparable {
     }
 
     public void send() {
-        this.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) ChannelCache.watch(Init.initial.freelance_channel.asString()), MessageCreateSpec.builder()
+        this.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((GuildMessageChannel) ChannelCache.watch(Init.initial.freelance_channel.asString()), MessageCreateSpec.builder()
                 .content("**Freelance de <@" + this.memberId + "> :**")
                 .addEmbed(this.getEmbed())
                 .addComponent(ActionRow.of(Button.link(Main.domainName + "member-profile?member_id=" + this.memberId + "&open=1",

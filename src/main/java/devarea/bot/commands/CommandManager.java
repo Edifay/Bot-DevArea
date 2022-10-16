@@ -12,7 +12,7 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
 import discord4j.discordjson.json.ApplicationCommandRequest;
@@ -73,7 +73,7 @@ public class CommandManager {
 
                 // Setup Constructor
                 if (isMessageCommandConstructor(currentClass)) {
-                    constructor = currentClass.getConstructor(Member.class, TextChannel.class, Message.class);
+                    constructor = currentClass.getConstructor(Member.class, GuildMessageChannel.class, Message.class);
                 } else if (isSlashCommandConstructor(currentClass)) {
                     constructor = currentClass.getConstructor(Member.class, ChatInputInteractionEvent.class);
 
@@ -137,7 +137,7 @@ public class CommandManager {
         Check if the class (param) contain a MessageCommand Constructor
      */
     private static boolean isMessageCommandConstructor(Class<?> currentClass) {
-        return Arrays.stream(currentClass.getConstructors()).anyMatch(constructor -> constructor.getGenericParameterTypes().length == 3 && constructor.getGenericParameterTypes()[0].equals(Member.class) && constructor.getGenericParameterTypes()[1].equals(TextChannel.class) && constructor.getGenericParameterTypes()[2].equals(Message.class));
+        return Arrays.stream(currentClass.getConstructors()).anyMatch(constructor -> constructor.getGenericParameterTypes().length == 3 && constructor.getGenericParameterTypes()[0].equals(Member.class) && constructor.getGenericParameterTypes()[1].equals(GuildMessageChannel.class) && constructor.getGenericParameterTypes()[2].equals(Message.class));
     }
 
     /*
@@ -164,7 +164,7 @@ public class CommandManager {
                     if (message != null) { // if the event is a MessageCreateEvent
 
                         if (classBound.get(command).getParameterCount() == 2) { // If constructor is SlashCommand
-                            sendError((TextChannel) ChannelCache.get(message.getMessage().getChannelId().asString()),
+                            sendError((GuildMessageChannel) ChannelCache.get(message.getMessage().getChannelId().asString()),
                                     "Cette commande à migré vers les ``slash`` commandes !");
                         } else // If the constructor is MessageCreateEvent
                             // Creating command for MessageCommands
@@ -179,7 +179,7 @@ public class CommandManager {
 
 
                     if (executedCommand == null) {
-                        sendError((TextChannel) ChannelCache.get(message.getMessage().getChannelId().asString()),
+                        sendError((GuildMessageChannel) ChannelCache.get(message.getMessage().getChannelId().asString()),
                                 "Aucun constructeur de commande n'a été trouvé pour votre appel de commande !");
                         return;
                     }
@@ -190,7 +190,7 @@ public class CommandManager {
 
                 } else { // Don't have perm to exe the command
                     if (message != null)
-                        Command.sendError((TextChannel) ChannelCache.watch(message.getMessage().getChannelId().asString()), "Vous n'avez pas " + "la permission d'exécuter cette commande !");
+                        Command.sendError((GuildMessageChannel) ChannelCache.watch(message.getMessage().getChannelId().asString()), "Vous n'avez pas " + "la permission d'exécuter cette commande !");
                     else
                         chatInteraction.reply(InteractionApplicationCommandCallbackSpec.builder().ephemeral(true).addEmbed(EmbedCreateSpec.builder().color(ColorsUsed.wrong).title("Erreur !").description("Vous n'avez pas la permission d'éxécuter cette commande !").build()).build()).subscribe();
                 }
@@ -199,7 +199,7 @@ public class CommandManager {
             }
 
         } else
-            Command.deletedEmbed((TextChannel) ChannelCache.watch(message.getMessage().getChannelId().asString()),
+            Command.deletedEmbed((GuildMessageChannel) ChannelCache.watch(message.getMessage().getChannelId().asString()),
                     EmbedCreateSpec.builder().title("Erreur !").description(commandNotFound).color(ColorsUsed.wrong).build());
 
         if (Init.initial.vanish) delete(false, message.getMessage());

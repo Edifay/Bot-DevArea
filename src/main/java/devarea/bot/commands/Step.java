@@ -10,7 +10,7 @@ import discord4j.core.object.component.ActionRow;
 import discord4j.core.object.component.Button;
 import discord4j.core.object.component.LayoutComponent;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.InteractionApplicationCommandCallbackSpec;
@@ -115,7 +115,7 @@ public abstract class Step implements Cloneable {
     }
 
     protected void sendErrorEntry() {
-        Command.sendError((TextChannel) ChannelCache.watch(this.message.getChannelId().asString()),
+        Command.sendError((GuildMessageChannel) ChannelCache.watch(this.message.getChannelId().asString()),
                 "Votre entrée n'est pas valide !");
     }
 

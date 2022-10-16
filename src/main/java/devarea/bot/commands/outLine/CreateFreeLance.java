@@ -14,7 +14,7 @@ import discord4j.core.object.component.ActionRow;
 import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.core.spec.MessageEditSpec;
@@ -59,7 +59,7 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onReceiveInteract(ButtonInteractionEvent event) {
                 if (isYes(event)) {
-                    freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((TextChannel) ChannelCache.watch(Init.initial.freelance_channel.asString()), MessageCreateSpec.builder()
+                    freeLance.setMessage(new MessageSeria(Objects.requireNonNull(Command.send((GuildMessageChannel) ChannelCache.watch(Init.initial.freelance_channel.asString()), MessageCreateSpec.builder()
                             .content("**Freelance de <@" + freeLance.getMemberId() + "> :**")
                             .allowedMentions(AllowedMentions.suppressAll())
                             .addEmbed(freeLance.getEmbed())
