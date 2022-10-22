@@ -58,6 +58,9 @@ public class CommandManager {
 
             List<ApplicationCommandRequest> slashCommands = new ArrayList<>();
 
+
+            // Setup Commands
+
             for (String className : names) {
 
                 if (className.contains("$")) // Don't bound anonymous or statics classes.
@@ -80,7 +83,6 @@ public class CommandManager {
                     // If is slash command add it to the collection !
                     if (Arrays.asList(currentClass.getInterfaces()).contains(SlashCommand.class))
                         slashCommands.add(((SlashCommand) currentClass.getConstructor().newInstance()).getSlashCommandDefinition());
-
                 }
 
                 // Bounding constructor to the className
@@ -89,7 +91,6 @@ public class CommandManager {
                 else
                     System.err.println("\nImpossibilité de charger la commande : " + "devarea.bot.commands" +
                             ".inLine" + "." + patchedName);
-
 
             }
 
@@ -230,14 +231,17 @@ public class CommandManager {
                 chatInteraction.getInteraction().getMember().get();
     }
 
+
+
     public static boolean addManualCommand(Member member, ConsumableCommand command) {
         return addManualCommand(member, command, false);
     }
 
+    // Add a command with out event with ConsumableCommand.
     public static boolean addManualCommand(Member member, ConsumableCommand command, final boolean force_join) {
         try {
             Member member_replaced = getMemberIdentity(member);
-            if (havePermissionToExecute(command.command.getClass().getDeclaringClass(), member)) {
+            if (havePermissionToExecute(command.commandClass, member)) {
 
                 if (!currentCommands.containsKey(member_replaced.getId()) || force_join) {
 
@@ -257,6 +261,7 @@ public class CommandManager {
         return false;
     }
 
+    // receive a reaction and dispatch it to LongCommand
     public static boolean react(ReactionAddEvent event) {
         Member member_replaced = getMemberIdentity(event.getMember().get());
         if (currentCommands.containsKey(member_replaced.getId())) {
@@ -266,6 +271,7 @@ public class CommandManager {
         return false;
     }
 
+    // receive a message and dispatch it to LongCommand
     public static boolean receiveMessage(MessageCreateEvent event) {
         Member member_replaced = getMemberIdentity(event.getMember().get());
         if (currentCommands.containsKey(member_replaced.getId())) {
@@ -275,6 +281,7 @@ public class CommandManager {
         return false;
     }
 
+    // receive an interaction and dispatch it to LongCommand
     public static boolean receiveInteract(ButtonInteractionEvent event) {
         if (event.getInteraction().getMember().isEmpty()) return false;
 

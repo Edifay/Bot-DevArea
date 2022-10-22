@@ -3,6 +3,7 @@ package devarea.bot.event;
 import devarea.bot.Init;
 import devarea.bot.automatical.BumpHandler;
 import devarea.bot.automatical.EmbedLinkHandler;
+import devarea.bot.automatical.MessageReactor;
 import devarea.bot.automatical.ThreadCreator;
 import devarea.bot.commands.CommandManager;
 import devarea.global.cache.MemberCache;
@@ -51,6 +52,7 @@ public class MessageCreate {
 
             ThreadCreator.newMessage(message);
             EmbedLinkHandler.onReceive(message);
+            MessageReactor.onMessage(message);
         } catch (
                 Exception e) {
             e.printStackTrace();
