@@ -14,10 +14,6 @@ import discord4j.rest.util.PermissionSet;
 
 public class Update extends ShortCommand implements PermissionCommand, SlashCommand {
 
-    public Update(PermissionCommand permissionCommand) {
-        super();
-    }
-
     public Update(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
         final long ms = System.currentTimeMillis();

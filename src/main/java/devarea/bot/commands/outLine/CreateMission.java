@@ -22,6 +22,9 @@ public class CreateMission extends LongCommand {
 
     protected Mission mission;
 
+    public CreateMission(){
+    }
+
     public CreateMission(final Member member) {
         super(member);
         this.mission = new Mission();

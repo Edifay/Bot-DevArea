@@ -19,7 +19,7 @@ public class MessageReactor {
                 "hey") || messageContain(event, "bonjour") || messageContain(event, "hello")) {
             event.getMessage().addReaction(ReactionEmoji.unicode("👋")).subscribe();
         }
-        if (messageContain(event, "pour quoi") || messageContain(event, "pourquoi") || messageContain(event, "comment"
+        if (messageContain(event, "pour quoi") || messageContain(event, "pourquoi") || messageContain(event, "comment "
         )) {
             event.getMessage().addReaction(ReactionEmoji.unicode("🤔")).subscribe();
         }

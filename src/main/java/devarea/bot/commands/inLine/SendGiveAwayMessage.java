@@ -18,10 +18,6 @@ public class SendGiveAwayMessage extends ShortCommand implements SlashCommand, P
         super();
     }
 
-    public SendGiveAwayMessage(PermissionCommand permissionCommand) {
-        super();
-    }
-
     public SendGiveAwayMessage(final Member member, final ChatInputInteractionEvent event) {
         super(member, event);
         event.reply(InteractionApplicationCommandCallbackSpec.builder()

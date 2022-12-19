@@ -12,8 +12,7 @@ import discord4j.rest.util.PermissionSet;
 
 public class LeftThisCommand extends ShortCommand implements PermissionCommand {
 
-    public LeftThisCommand(PermissionCommand comm) {
-        super();
+    public LeftThisCommand(){
     }
 
     public LeftThisCommand(Member member, final ChatInputInteractionEvent chatInteraction) {
@@ -31,6 +30,6 @@ public class LeftThisCommand extends ShortCommand implements PermissionCommand {
 
     @Override
     public PermissionSet getPermissions() {
-        return new JoinThisCommand(() -> null).getPermissions();
+        return new JoinThisCommand().getPermissions();
     }
 }

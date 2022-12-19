@@ -28,10 +28,6 @@ public class RoleReact extends LongCommand implements PermissionCommand, SlashCo
     String isID;
     devarea.bot.commands.commandTools.RoleReact[] removeTable;
 
-    public RoleReact(PermissionCommand permissionCommand) {
-        super();
-    }
-
     public RoleReact(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
 

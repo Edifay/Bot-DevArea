@@ -20,10 +20,6 @@ import discord4j.rest.util.PermissionSet;
 
 public class SetupEventMembers extends ShortCommand implements SlashCommand, PermissionCommand {
 
-    public SetupEventMembers(PermissionCommand permissionCommand) {
-        super();
-    }
-
     public SetupEventMembers() {
         super();
     }

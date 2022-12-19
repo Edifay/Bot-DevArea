@@ -16,10 +16,6 @@ import discord4j.rest.util.PermissionSet;
 
 public class Send extends ShortCommand implements PermissionCommand, SlashCommand {
 
-    public Send(PermissionCommand permissionCommand) {
-        super();
-    }
-
     public Send(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
         final String strMessage = chatInteraction.getOption("message").get().getValue().get().asString();

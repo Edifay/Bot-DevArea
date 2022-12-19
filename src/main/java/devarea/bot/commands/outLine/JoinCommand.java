@@ -22,6 +22,9 @@ import static devarea.global.utils.ThreadHandler.startAway;
 
 public class JoinCommand extends ShortCommand {
 
+    public JoinCommand() {
+    }
+
     public JoinCommand(Member member) {
         super(member);
         this.member.addRole(Init.initial.rulesAccepted_role).subscribe();

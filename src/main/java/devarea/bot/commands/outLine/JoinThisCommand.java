@@ -16,8 +16,7 @@ import discord4j.rest.util.PermissionSet;
 
 public class JoinThisCommand extends ShortCommand implements PermissionCommand, SlashCommand {
 
-    public JoinThisCommand(PermissionCommand p) {
-        super();
+    public JoinThisCommand(){
     }
 
     public JoinThisCommand(Member member, final ChatInputInteractionEvent chatInteraction) {

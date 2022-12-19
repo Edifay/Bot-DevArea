@@ -49,19 +49,21 @@ public class CommandManager {
     private static final Map<Snowflake, Snowflake> logged_as = new HashMap<>();
 
     public static void init() {
-        try {
-            System.out.println("Loading commands :");
 
-            ArrayList<String> names = getClassNamesFromAnySources();
+        System.out.println("Loading commands :");
 
-            System.out.println("Class names found : " + Arrays.toString(names.toArray()));
+        ArrayList<String> names = getClassNamesFromAnySources();
 
-            List<ApplicationCommandRequest> slashCommands = new ArrayList<>();
+        System.out.println("Class names found : " + Arrays.toString(names.toArray()));
+
+        List<ApplicationCommandRequest> slashCommands = new ArrayList<>();
 
 
-            // Setup Commands
+        // Setup Commands
 
-            for (String className : names) {
+        for (String className : names) {
+
+            try {
 
                 if (className.contains("$")) // Don't bound anonymous or statics classes.
                     continue;
@@ -92,24 +94,25 @@ public class CommandManager {
                     System.err.println("\nImpossibilité de charger la commande : " + "devarea.bot.commands" +
                             ".inLine" + "." + patchedName);
 
+            } catch (NoSuchMethodException e) {
+                System.err.println("The SlashCommand need an empty constructor to be initialized !\n" + e.getMessage() + "\n\n");
+            } catch (IllegalAccessException | InstantiationException | InvocationTargetException |
+                     ClassNotFoundException e) {
+                e.printStackTrace();
             }
 
-            System.out.println();
-
-            // update Bot SlashCommands Bot Application
-            Init.client.getRestClient().getApplicationService()
-                    .bulkOverwriteGlobalApplicationCommand(Init.client.getRestClient().getApplicationId().block(),
-                            slashCommands).subscribe();
-
-            System.out.println(slashCommands.size() + " slash commands on " + classBound.size() + " commands loaded " + "!\n" + Main.separator);
-
-
-        } catch (NoSuchMethodException e) {
-            System.err.println("The SlashCommand need an empty constructor to be initialized !\n\n" + e.getMessage());
-        } catch (IllegalAccessException | InstantiationException | InvocationTargetException |
-                 ClassNotFoundException e) {
-            e.printStackTrace();
         }
+
+        System.out.println();
+
+        // update Bot SlashCommands Bot Application
+        Init.client.getRestClient().getApplicationService()
+                .bulkOverwriteGlobalApplicationCommand(Init.client.getRestClient().getApplicationId().block(),
+                        slashCommands).subscribe();
+
+        System.out.println(slashCommands.size() + " slash commands on " + classBound.size() + " commands loaded " + "!\n" + Main.separator);
+
+
     }
 
     /*
@@ -209,28 +212,23 @@ public class CommandManager {
 
     private static boolean havePermissionToExecute(Class<?> command, Member member_execute) {
         try {
-            try {
-                PermissionCommand defaultCommand =
-                        (PermissionCommand) command.getConstructor(PermissionCommand.class).newInstance((PermissionCommand) () -> null);
-                PermissionSet permissionSet = defaultCommand.getPermissions();
-
-                return containPerm(permissionSet, member_execute.getBasePermissions().block());
-            } catch (NoSuchMethodException ignored) {
-                // No perm needed
+            if (command.getConstructor().newInstance() instanceof PermissionCommand defaultCommand)
+                return containPerm(defaultCommand.getPermissions(), member_execute.getBasePermissions().block());
+            else
                 return true;
-            }
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+
+        } catch (InstantiationException | InvocationTargetException | IllegalAccessException |
+                 NoSuchMethodException e) {
             e.printStackTrace();
-            // Couldn't load perms !
-            return false;
+            System.err.println("Empty constructor doesn't exist ! Or PermissionCommand cannot be reached.");
         }
+        return false;
     }
 
     private static Member getExecuteMember(MessageCreateEvent message, ChatInputInteractionEvent chatInteraction) {
         return message != null ? message.getMember().get() :
                 chatInteraction.getInteraction().getMember().get();
     }
-
 
 
     public static boolean addManualCommand(Member member, ConsumableCommand command) {
@@ -241,6 +239,7 @@ public class CommandManager {
     public static boolean addManualCommand(Member member, ConsumableCommand command, final boolean force_join) {
         try {
             Member member_replaced = getMemberIdentity(member);
+
             if (havePermissionToExecute(command.commandClass, member)) {
 
                 if (!currentCommands.containsKey(member_replaced.getId()) || force_join) {

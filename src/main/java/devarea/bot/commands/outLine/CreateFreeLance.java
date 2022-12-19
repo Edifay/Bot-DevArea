@@ -31,6 +31,11 @@ public class CreateFreeLance extends LongCommand {
     private final Step link;
 
 
+    public CreateFreeLance() {
+        link = null;
+    }
+
+
     public CreateFreeLance(final Member member) {
         super(member);
         this.freeLance = new FreeLance();
@@ -213,7 +218,7 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder().title("Temps de retour").description("Proposez un temps de retour " +
-                        "viable. Si vous n'avez pas de temps de retour précis tapez `empty`.")
+                                "viable. Si vous n'avez pas de temps de retour précis tapez `empty`.")
                         .color(ColorsUsed.same)
                         .footer("Vous pouvez annuler | cancel", null).build());
                 return false;
@@ -235,7 +240,7 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder().title("Prix").description("Proposez un prix que vous pensez juste, " +
-                        "vous pouvez préciser que cela est variable. Si vous n'avez pas de prix tapez `empty`.")
+                                "vous pouvez préciser que cela est variable. Si vous n'avez pas de prix tapez `empty`.")
                         .color(ColorsUsed.same)
                         .footer("Vous pouvez annuler | cancel", null).build());
                 return false;
@@ -257,8 +262,8 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder().title("L'offre").description("Description de l'offre, essayez de " +
-                        "donner de nombreux détails, attention le Prix, et le Temps de retour de l'offre vous seront " +
-                        "demandés après.")
+                                "donner de nombreux détails, attention le Prix, et le Temps de retour de l'offre vous seront " +
+                                "demandés après.")
                         .color(ColorsUsed.same)
                         .footer("Vous pouvez annuler | cancel", null).build());
                 return false;
@@ -352,7 +357,7 @@ public class CreateFreeLance extends LongCommand {
             @Override
             protected boolean onCall(Message message) {
                 setText(EmbedCreateSpec.builder().title("Description").description("Donnez votre expérience dans le " +
-                        "milieu / diplôme (Brevet, Bac, études supérieures) etc...")
+                                "milieu / diplôme (Brevet, Bac, études supérieures) etc...")
                         .color(ColorsUsed.same)
                         .footer("Vous pouvez annuler | cancel", null).build());
                 return false;

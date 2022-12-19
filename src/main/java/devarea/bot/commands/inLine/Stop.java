@@ -22,10 +22,6 @@ import static devarea.bot.presets.TextMessage.stopCommand;
 
 public class Stop extends ShortCommand implements PermissionCommand, SlashCommand {
 
-    public Stop(PermissionCommand permissionCommand) {
-        super();
-    }
-
     public Stop(final Member member, final ChatInputInteractionEvent chatInteraction) {
         super(member, chatInteraction);
         XPHandler.stop();

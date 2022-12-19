@@ -53,7 +53,7 @@ public class RoleMenu extends LongCommand implements SlashCommand, PermissionCom
             protected boolean onReceiveMessage(MessageCreateEvent event) {
                 try {
                     if (event.getMessage().getRoleMentionIds().stream().findFirst().isPresent()) {
-                        roleIDS =  event.getMessage().getRoleMentionIds();
+                        roleIDS = event.getMessage().getRoleMentionIds();
 
                         endEditMessageForChatInteractionLongCommand(EmbedCreateSpec.builder()
                                 .title("Création du RoleMenu réussie !")

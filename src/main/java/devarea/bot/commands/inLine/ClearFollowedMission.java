@@ -21,10 +21,6 @@ public class ClearFollowedMission extends ShortCommand implements SlashCommand, 
         super();
     }
 
-    public ClearFollowedMission(PermissionCommand permissionCommand) {
-        super();
-    }
-
     public ClearFollowedMission(final Member member, final ChatInputInteractionEvent chatInteraction) {
         chatInteraction.reply(InteractionApplicationCommandCallbackSpec.builder()
                 .ephemeral(true)

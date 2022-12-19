@@ -27,10 +27,6 @@ public class Edit extends LongCommand implements PermissionCommand, SlashCommand
 
     boolean send = false;
 
-    public Edit(PermissionCommand permissionCommand) {
-        super();
-    }
-
     public Edit() {
     }
 
