@@ -15,3 +15,5 @@ err.txt
 auth.json
 OAuth2_secret.secret
 judge.properties
+save/*
+/save/
