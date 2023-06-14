@@ -1,3 +1,7 @@
+# Ceci est un legacy-repo. Il n'est plus maintenu et ne possède pas les nouveaux ajouts.
+
+-> [Lien vers la V2](https://github.com/Edifay/Bot_DevArea_2.0)
+
 Bot discord pour Dev'Area
 ============
 > Voici le bot discord du serveur Dev'Area.
